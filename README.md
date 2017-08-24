@@ -2,6 +2,7 @@
 
 在任何非 MIUI 设备上体验小米系统级推送。
 
+![](https://raw.githubusercontent.com/Trumeet/MiPushFramework/master/art/screenshot.png)
 
 
 ## 什么是小米系统级推送，为什么会有这个项目
@@ -87,7 +88,9 @@
 - [ ] 对每个应用，用户可以选择启用/停止它们的推送服务
 - [ ] 在注册推送时，用户可以拒绝它们
 
+## 感谢
 
+* @Rachel030219 提供文件
 
 # License
 
