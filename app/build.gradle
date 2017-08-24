@@ -1,0 +1,26 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
+    defaultConfig {
+        applicationId "com.xiaomi.xmsf"
+        minSdkVersion 14
+        targetSdkVersion 26
+        // XMPush sdk requires XMPushService not exported, but sdk will start exported XMPushService after
+        // XMSF version code 106. SDK will also check version code must >= 105.
+        versionCode 105
+        versionName "0.1.Alpha"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}

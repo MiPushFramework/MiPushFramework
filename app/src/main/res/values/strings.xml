@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">XiaomiPushServiceFramework</string>
+    <string name="descr">這是一個可以讓任何ROM都能享受小米系統級推送的開源項目。更多詳情請點按訪問項目主頁：MiPushFramework。\n歡迎參與進來，請務必遵守開源協議！！\nPowered by @Trumeet</string>
+    <string name="preference_version">當前版本：%1$s，為最初版本，還有許多問題沒有修復，一些功能也將在後續加入，請關注項目動態</string>
+</resources>
