@@ -49,12 +49,14 @@
 
 * 小巧，APK 仅 350K
 * 简单，安装非常简单，无需 Root、Xposed、ROM 支持
+* 使用后，其他应用的`XMPushService`会自动禁用，就像在 MIUI
+* `XMPushService`禁用后，还能保证推送。
 
 
 
 ## 开始使用
 
-安装步骤非常简单~~（目前）~~：
+安装步骤非常简单 ~~（目前）~~：
 
 * 前往 Release 标签，下载最新的 Release APK
 * 安装到手机
