@@ -1,8 +1,13 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.DeviceDefault.Light.DarkActionBar">
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="AppTheme.Wizard" parent="@style/SuwThemeMaterial.Light">
+        <item name="colorPrimaryDark">@color/suw_color_accent_light</item>
+        <item name="android:statusBarColor" tools:ignore="NewApi">@color/suw_color_accent_light</item>
     </style>
 
 </resources>

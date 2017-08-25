@@ -1,5 +1,54 @@
 <resources>
     <string name="app_name">XiaomiPushServiceFramework</string>
+
+    <string name="loading">请稍后</string>
+    <string name="enable">启用</string>
+    <string name="success">成功了</string>
+    <string name="fail">失败</string>
+
+    <!-- Preference -->
     <string name="descr">這是一個可以讓任何ROM都能享受小米系統級推送的開源項目。更多詳情請點按訪問項目主頁：MiPushFramework。\n歡迎參與進來，請務必遵守開源協議！！\nPowered by @Trumeet</string>
     <string name="preference_version">當前版本：%1$s，為最初版本，還有許多問題沒有修復，一些功能也將在後續加入，請關注項目動態</string>
+
+    <!-- Wizard -->
+    <string name="wizard_descr"><![CDATA[這是一個可以讓任何ROM都能享受小米系統級推送的開源項目。更多詳情請點按訪問項目主頁：<a href="https://github.com/Trumeet/MiPushFramework">MiPushFramework</a>]]></string>
+    <string name="wizard_title_check_running">检查运行状态</string>
+    <string name="wizard_descr_check_running">我们正在自动检查推送服务是否正常运行，这至多需要二十秒的时间</string>
+    <string name="wizard_descr_check_running_ok">成功！服务正在运行中。您应该无需执行任何特殊操作了。</string>
+    <string name="wizard_descr_check_running_fail">检查过程中出现了一些问题：服务并没有运行。可能是您设备上的一些工具或系统阻止了它的启动，我们接下来将尝试解除这些限制。</string>
+
+    <string name="wizard_title_start_fail">服务启动失败</string>
+    <string name="service_not_running_faq">
+        <![CDATA[
+            <b>如果你的设备安装了 绿色守护、黑域 等优化工具</b>
+            <br />请将本应用加入白名单。
+            <br /><b>如果你使用了绿色守护的处方功能</b>
+            <br />请禁用带有 <b>XMPushService</b> 等带有阻止启动小米推送服务和广播的处方
+            <br /><b>如果你的 ROM 是国产 ROM（如 Flyme、EMUI、魔趣）</b>
+            <br />请到后台管理等功能设置处将本应用加入白名单
+            <br /><br /><b>更多问题？</b>
+            <br />请提交 Issue：<a href="https://github.com/Trumeet/MiPushFramework">点击前往 GitHub 页面</a>
+        ]]>
+    </string>
+    <string name="wizard_title_check_app_support">检查应用支持</string>
+    <string name="wizard_descr_check_app_support">本步骤将检查设备上使用小米推送的应用是否可以收到推送</string>
+    <string name="app_support_ok">√ 如果应用请求，应该可以收到</string>
+    <string name="app_support_fail_can_fix">× 无法收到，点按修复</string>
+    <string name="app_support_fail">× 无法收到推送</string>
+    <string name="app_support_no_apps">本机没有使用小米推送的应用，您今后可能会使用这些应用，我们将会代替它进行后台推送。</string>
+    <string name="app_support_result">这些应用使用了小米推送：</string>
+
+    <string name="fix_push_title">尝试修复</string>
+    <string name="fix_push_descr">是否尝试修复 %1$s 的小米推送功能？</string>
+
+    <string name="wizard_title_doze_whitelist">移除电池优化</string>
+    <string name="wizard_descr_doze_whitelist">当对本应用启用电池优化后，将无法保持推送。请点按 下一页 请求去除优化</string>
+
+    <string name="wizard_title_run_in_background">允许后台活动</string>
+    <string name="wizard_descr_run_in_background">在 Android O 及更高版本，您需要前往 应用详情 -> 电量 -> 允许后台活动 允许在后台运行。点按 下一页 前往设置</string>
+
+    <string name="wizard_title_fake_build">修改 Build.prop 深度伪装MIUI</string>
+    <string name="wizard_descr_fake_build">某些应用（如京东、摩拜单车等）会使用自己的逻辑判断是否是 MIUI，如果是才启用小米推送，否则仍会使用其他推送方式驻留后台。这种判断逻辑通常是解析 build.prop。我们尝试通过向 build.prop 插入一些代表 MIUI 的键值对进行伪装，让这些应用使用小米推送。（需要 Root，执行完毕需重启）</string>
+
+    <string name="wizard_descr_finish">大功告成！您可以开始使用了</string>
 </resources>
