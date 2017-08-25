@@ -7,8 +7,15 @@
     <string name="fail">失败</string>
 
     <!-- Preference -->
-    <string name="descr">這是一個可以讓任何ROM都能享受小米系統級推送的開源項目。更多詳情請點按訪問項目主頁：MiPushFramework。\n歡迎參與進來，請務必遵守開源協議！！\nPowered by @Trumeet</string>
-    <string name="preference_version">當前版本：%1$s，為最初版本，還有許多問題沒有修復，一些功能也將在後續加入，請關注項目動態</string>
+    <string name="preference_title">推送设定</string>
+
+    <!-- Message when change enable status -->
+    <string name="msg_enable">已启用，应用程序可以接收和注册推送服务</string>
+    <string name="msg_disable">已停用，应用均无法接收和新注册推送</string>
+
+    <!-- About -->
+    <string name="about_descr"><![CDATA[這是一個可以讓任何ROM都能享受小米系統級推送的開源項目。更多詳情請點按訪問項目主頁：<a href="https://github.com/Trumeet/MiPushFramework">MiPushFramework</a>。\n歡迎參與進來，請務必遵守開源協議！！\nPowered by @Trumeet]]></string>
+    <string name="action_about">关于</string>
 
     <!-- Wizard -->
     <string name="wizard_descr"><![CDATA[這是一個可以讓任何ROM都能享受小米系統級推送的開源項目。更多詳情請點按訪問項目主頁：<a href="https://github.com/Trumeet/MiPushFramework">MiPushFramework</a>]]></string>

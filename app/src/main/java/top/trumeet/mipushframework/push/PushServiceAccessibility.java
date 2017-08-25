@@ -1,7 +1,6 @@
 package top.trumeet.mipushframework.push;
 
 import android.annotation.TargetApi;
-import android.app.ActivityManager;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -9,13 +8,8 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.util.Log;
 
-import com.xiaomi.push.service.XMPushService;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.List;
-
-import static android.content.Context.ACTIVITY_SERVICE;
 
 /**
  * Created by Trumeet on 2017/8/25.
@@ -24,40 +18,6 @@ import static android.content.Context.ACTIVITY_SERVICE;
 
 public class PushServiceAccessibility {
     private static final String TAG = "Accessibility";
-
-    /**
-     * Check push service is running
-     * @see com.xiaomi.push.service.XMPushService
-     * @param context context param
-     * @return is running
-     */
-    public static boolean isRunning (Context context) {
-        ActivityManager activityManager = (ActivityManager)
-                context.getSystemService(ACTIVITY_SERVICE);
-        List<ActivityManager.RunningServiceInfo> list =
-                activityManager.getRunningServices(Integer.MAX_VALUE);
-        for (ActivityManager.RunningServiceInfo info :
-                list) {
-            String pkg = info.service.getPackageName();
-            String clz = info.service.getClassName();
-            Log.d(TAG, "process -> " + info.process);
-            Log.d(TAG, "package -> " + pkg);
-            Log.d(TAG, "className -> " + clz);
-            Log.d(TAG, "started -> "
-                    + info.started);
-            if (context.getPackageName().equals(pkg)) {
-                if (!pkg.equals(context.getPackageName()) ||
-                        !clz.equals(XMPushService.class.getName()) ||
-                        !info.started) {
-                    Log.e(TAG, "SERVICE NOT RUNNING! PLZ CHECK YOUR ROM OR REPORT AN ISSUE!");
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
     /**
      * Check this app is in system doze whitelist.

@@ -6,6 +6,11 @@ package top.trumeet.mipushframework;
  */
 
 public final class Constants {
+    /**
+     * Default app log tag
+     */
+    public static final String TAG = "Xiaomi";
+
     public static final String WIZARD_SP_NAME = "wizard";
     public static final String KEY_SHOW_WIZARD = "show_wizard";
 
@@ -17,4 +22,22 @@ public final class Constants {
     public static final int CHECK_RUNNING_TIMES = 20;
 
     public static final String ACTION_RECEIVE_MESSAGE = "com.xiaomi.mipush.RECEIVE_MESSAGE";
+
+    /**
+     * Enable push.
+     * @see top.trumeet.mipushframework.push.PushController
+     */
+    public static final String KEY_ENABLE_PUSH = "enable_push";
+
+    /**
+     * XMPush APP id
+     * @see top.trumeet.mipushframework.push.PushController
+     */
+    public static String APP_ID = "1000271";
+
+    /**
+     * XMPush APP key
+     * @see top.trumeet.mipushframework.push.PushController
+     */
+    public static String APP_KEY = "420100086271";
 }

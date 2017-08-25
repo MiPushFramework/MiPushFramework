@@ -88,6 +88,7 @@
         <activity android:name="top.trumeet.mipushframework.wizard.FinishWizardActivity"
             android:theme="@style/AppTheme.Wizard" />
 
-        <activity android:name="top.trumeet.mipushframework.settings.MainActivity" />
+        <activity android:name="top.trumeet.mipushframework.settings.MainActivity"
+            android:label="@string/preference_title"/>
     </application>
 </manifest>

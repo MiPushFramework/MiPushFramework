@@ -16,7 +16,7 @@ import com.android.setupwizardlib.view.NavigationBar;
 import com.xiaomi.xmsf.R;
 
 import top.trumeet.mipushframework.Constants;
-import top.trumeet.mipushframework.push.PushServiceAccessibility;
+import top.trumeet.mipushframework.push.PushController;
 import top.trumeet.mipushframework.wizard.support.CheckAppSupportActivity;
 
 /**
@@ -89,11 +89,16 @@ public class CheckRunningStatusActivity extends AppCompatActivity implements Nav
 
         @Override
         protected Boolean doInBackground (Void... params) {
+            if (!PushController.isAllEnable(CheckRunningStatusActivity.this)) {
+                Log.w(TAG, "Service not enable, start it now!");
+                PushController.setServiceEnable(true, CheckRunningStatusActivity.this);
+                SystemClock.sleep(1000);
+            }
             // Because some tools will kill service later after it starts.
             // So we have to check it too much times.
             for (int i = 0; i < Constants.CHECK_RUNNING_TIMES; i ++) {
                 Log.d(TAG, "Loop -> " + i);
-                if (!PushServiceAccessibility.isRunning(CheckRunningStatusActivity.this)) {
+                if (!PushController.isServiceRunning(CheckRunningStatusActivity.this)) {
                     return false;
                 }
                 SystemClock.sleep(1000);
