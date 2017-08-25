@@ -10,9 +10,11 @@ import com.xiaomi.mipush.sdk.PushMessageReceiver;
 import com.xiaomi.xmsf.push.service.MyLog;
 import com.xiaomi.xmsf.push.service.XMAccountManager;
 
+import static top.trumeet.mipushframework.Constants.TAG;
+
 public class MiuiPushMessageReceiver extends PushMessageReceiver {
     public void onCommandResult(Context context, MiPushCommandMessage miPushCommandMessage) {
-        Log.d("MiuiPushMessageReceiver", "onCommandResult");
+        Log.d(TAG, "onCommandResult");
         if (miPushCommandMessage.getResultCode() == 0) {
             String command = miPushCommandMessage.getCommand();
             if (miPushCommandMessage.getCommandArguments().size() > 0 && "register".equals(command)) {
@@ -26,7 +28,7 @@ public class MiuiPushMessageReceiver extends PushMessageReceiver {
 
     public void onReceiveMessage(Context context, MiPushMessage miPushMessage) {
         String str = (String) miPushMessage.getExtra().get("miui_package_name");
-        Log.d("MiuiPushMessageReceiver", "onReceiveMessage -> " + str);
+        Log.d(TAG, "onReceiveMessage -> " + str);
         if (str != null && !str.trim().isEmpty()) {
             Intent intent = new Intent();
             intent.setPackage(str);
@@ -37,6 +39,7 @@ public class MiuiPushMessageReceiver extends PushMessageReceiver {
                 return;
             }
             intent.setAction("com.xiaomi.mipush.miui.RECEIVE_MESSAGE");
+            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
             context.sendBroadcast(intent);
         }
     }
