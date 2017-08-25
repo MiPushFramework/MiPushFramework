@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">XiaomiPushServiceFramework</string>
+    <string name="app_name">小米推送服务</string>
 
     <string name="loading">请稍后</string>
     <string name="enable">启用</string>

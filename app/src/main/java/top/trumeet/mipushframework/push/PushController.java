@@ -2,9 +2,11 @@ package top.trumeet.mipushframework.push;
 
 import android.app.ActivityManager;
 import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Process;
 import android.preference.PreferenceManager;
@@ -12,6 +14,7 @@ import android.util.Log;
 
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.xiaomi.push.service.XMPushService;
+import com.xiaomi.xmsf.push.service.receivers.BootReceiver;
 
 import java.util.List;
 
@@ -99,6 +102,7 @@ public class PushController {
     public static void setAllEnable (boolean enable, Context context) {
         setPrefsEnable(enable, context);
         setServiceEnable(enable, context);
+        setBootReceiverEnable(enable, context);
     }
 
     /**
@@ -142,5 +146,14 @@ public class PushController {
             }
         }
         return false;
+    }
+
+    private static void setBootReceiverEnable (boolean enable, Context context) {
+        context.getPackageManager()
+                .setComponentEnabledSetting(new ComponentName(context,
+                                BootReceiver.class),
+                        enable ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP);
     }
 }
