@@ -8,6 +8,9 @@
 
     <!-- Preference -->
     <string name="preference_title">推送设定</string>
+    <string name="main_event">记录</string>
+    <string name="main_apps">应用</string>
+    <string name="main_settings">设定</string>
 
     <!-- Message when change enable status -->
     <string name="msg_enable">已启用，应用程序可以接收和注册推送服务</string>

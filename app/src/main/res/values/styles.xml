@@ -10,4 +10,8 @@
         <item name="android:statusBarColor" tools:ignore="NewApi">@color/suw_color_accent_light</item>
     </style>
 
+    <style name="Widget.Design.BottomNavigationView" parent="">
+        <item name="itemBackground">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+
 </resources>

@@ -1,6 +1,11 @@
 package top.trumeet.mipushframework.settings;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
@@ -25,23 +30,59 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar()
-                .setDisplayHomeAsUpEnabled(true);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(android.R.id.content,
-                            new EventFragment())
-                    .commitAllowingStateLoss();
-        }
+        setContentView(R.layout.activity_main);
+
+        final BottomNavigationView bottomNavigationView =
+                findViewById(R.id.bottom_nav);
+        final ViewPager viewPager = findViewById(R.id.viewPager);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                bottomNavigationView
+                        .getMenu()
+                        .getItem(position)
+                        .setChecked(true);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+            @Override
+            public Fragment getItem(int position) {
+                switch (position) {
+                    case 0 :
+                        return new EventFragment();
+                        // TODO
+                    default:
+                        return null;
+                }
+            }
+
+            @Override
+            public int getCount() {
+                return 1; // TODO
+            }
+        });
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                viewPager.setCurrentItem(item.getOrder());
+                return true;
+            }
+        });
     }
 
     @Override
     public boolean onOptionsItemSelected (MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        } else if (item.getItemId() == R.id.action_about) {
+        if (item.getItemId() == R.id.action_about) {
             TextView textView = new TextView(this);
             int padding = (int) getResources()
                     .getDimension(android.support.v7.appcompat.R.dimen.abc_dialog_padding_material);

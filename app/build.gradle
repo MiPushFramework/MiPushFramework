@@ -28,10 +28,16 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.github.AndroidSnippet:SetupWizardLibCompat:0.1'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation('com.github.AndroidSnippet:SetupWizardLibCompat:0.1', {
+        exclude group: 'com.android.support'
+    })
     // GreenDao
-    compile 'org.greenrobot:greendao:3.2.2'
+    implementation 'org.greenrobot:greendao:3.2.2'
     // Recycler
-    implementation 'me.drakeet.multitype:multitype:3.3.0'
+    implementation('me.drakeet.multitype:multitype:3.3.0', {
+        exclude group: 'com.android.support'
+    })
+    implementation 'com.android.support:recyclerview-v7:26.0.1'
+    implementation 'com.android.support:appcompat-v7:26.0.1'
 }
