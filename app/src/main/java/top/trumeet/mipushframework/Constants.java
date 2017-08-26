@@ -40,4 +40,15 @@ public final class Constants {
      * @see top.trumeet.mipushframework.push.PushController
      */
     public static String APP_KEY = "420100086271";
+
+    /**
+     * Every page item count
+     * @see top.trumeet.mipushframework.event.EventFragment
+     */
+    public static final int PAGE_SIZE = 20;
+
+    /**
+     * Package name extra when register push {@link com.xiaomi.xmsf.push.service.XMPushService}
+     */
+    public static final String EXTRA_MI_PUSH_PACKAGE = "mipush_app_package";
 }

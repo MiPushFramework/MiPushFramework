@@ -2,10 +2,9 @@ package com.xiaomi.xmsf.push.service;
 
 import android.util.Log;
 
+import static top.trumeet.mipushframework.Constants.TAG;
+
 public abstract class MyLog {
-    //private static final Logger LOGGER = Logger.getLogger("PushService");
-    // 不用 Logger，用 android.util.Log
-    private static final String TAG = "PushService";
 
     public static void m17e(String str) {
         Log.e(TAG, str);

@@ -58,4 +58,41 @@
     <string name="wizard_descr_fake_build">某些应用（如京东、摩拜单车等）会使用自己的逻辑判断是否是 MIUI，如果是才启用小米推送，否则仍会使用其他推送方式驻留后台。这种判断逻辑通常是解析 build.prop。我们尝试通过向 build.prop 插入一些代表 MIUI 的键值对进行伪装，让这些应用使用小米推送。（需要 Root，执行完毕需重启）</string>
 
     <string name="wizard_descr_finish">大功告成！您可以开始使用了</string>
+
+    <!-- Event -->
+    <string name="event_register">注册推送（初始化）</string>
+    <string name="event_push_message">推送通知：\n%1$s\n%2$s</string>
+    <string name="event_push_command">透传命令</string>
+
+    <string name="event_status">%1$s·%2$s</string>
+    <string name="status_ok">成功</string>
+    <string name="status_deny_disable">禁用推送，已拒绝</string>
+    <string name="status_deny_user">被您拒绝</string>
+
+    <!-- Date parse -->
+    <eat-comment />
+    <!-- Date format -->
+    <!-- Just, < 1 min -->
+    <string name="date_just">Just Now</string>
+    <!-- 1 Minute ago, >= 1 Minute, < 60 Minutes -->
+    <plurals name="date_minutes">
+        <item quantity="one">Minute</item>
+        <item quantity="other">Minutes</item>
+    </plurals>
+    <!-- 1 Hours ago, >= 1 hour, < 24 hours -->
+    <plurals name="date_hours">
+        <item quantity="one">Hour</item>
+        <item quantity="other">Hours</item>
+    </plurals>
+    <!-- 1 Day ago, >= 1 day, < days -->
+    <plurals name="date_days">
+        <item quantity="one">Day</item>
+        <item quantity="other">Days</item>
+    </plurals>
+    <!-- For non-just and non-long format -->
+    <string name="date_format_normal">%1$s %2$s ago</string>
+    <!-- For Just format -->
+    <string name="date_format_just">%1$s</string>
+    <!-- For Long ago format -->
+    <string name="date_format_long">%1$s</string>
 </resources>

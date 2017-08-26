@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 26
@@ -19,9 +20,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    greendao{
+        schemaVersion 1
+        daoPackage 'top.trumeet.mipushframework.db'
+        targetGenDir 'src/main/java'
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.github.AndroidSnippet:SetupWizardLibCompat:0.1'
+    // GreenDao
+    compile 'org.greenrobot:greendao:3.2.2'
+    // Recycler
+    implementation 'me.drakeet.multitype:multitype:3.3.0'
 }

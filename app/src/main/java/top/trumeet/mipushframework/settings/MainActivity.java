@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.xiaomi.xmsf.R;
 
+import top.trumeet.mipushframework.event.EventFragment;
 import top.trumeet.mipushframework.push.PushController;
 
 /**
@@ -26,6 +27,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar()
                 .setDisplayHomeAsUpEnabled(true);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(android.R.id.content,
+                            new EventFragment())
+                    .commitAllowingStateLoss();
+        }
     }
 
     @Override
