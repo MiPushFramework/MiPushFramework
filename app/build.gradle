@@ -21,7 +21,7 @@ android {
         }
     }
     greendao{
-        schemaVersion 1
+        schemaVersion 2
         daoPackage 'top.trumeet.mipushframework.db'
         targetGenDir 'src/main/java'
     }

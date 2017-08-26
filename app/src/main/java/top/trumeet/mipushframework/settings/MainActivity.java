@@ -21,6 +21,7 @@ import com.xiaomi.xmsf.R;
 
 import top.trumeet.mipushframework.event.EventFragment;
 import top.trumeet.mipushframework.push.PushController;
+import top.trumeet.mipushframework.register.RegisteredApplicationFragment;
 
 /**
  * Main settings activity
@@ -60,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
                 switch (position) {
                     case 0 :
                         return new EventFragment();
+                    case 1 :
+                        return new RegisteredApplicationFragment();
                         // TODO
                     default:
                         return null;
@@ -68,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public int getCount() {
-                return 1; // TODO
+                return 2; // TODO
             }
         });
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
