@@ -1,23 +1,9 @@
 package com.xiaomi.xmsf.push.service.receivers;
 
-import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
-
-import com.xiaomi.mipush.sdk.MiPushCommandMessage;
-import com.xiaomi.mipush.sdk.MiPushMessage;
 import com.xiaomi.mipush.sdk.PushMessageReceiver;
-import com.xiaomi.xmsf.push.service.MyLog;
-import com.xiaomi.xmsf.push.service.XMAccountManager;
 
-import top.trumeet.mipushframework.event.Event;
-import top.trumeet.mipushframework.event.EventDB;
-import top.trumeet.mipushframework.event.notification.NotificationInfo;
-
-import static top.trumeet.mipushframework.Constants.TAG;
-
-// TODO: May not working? XMPush sdk will send broadcast to target application..
 public class MiuiPushMessageReceiver extends PushMessageReceiver {
+    /*
     public void onCommandResult(Context context, MiPushCommandMessage miPushCommandMessage) {
         Log.d(TAG, "onCommandResult");
         if (miPushCommandMessage.getResultCode() == 0) {
@@ -32,7 +18,7 @@ public class MiuiPushMessageReceiver extends PushMessageReceiver {
     }
 
     public void onReceiveMessage(Context context, MiPushMessage miPushMessage) {
-        String str = (String) miPushMessage.getExtra().get("miui_package_name");
+        String str = miPushMessage.getExtra().get("miui_package_name");
         Log.d(TAG, "onReceiveMessage -> " + str);
         if (str != null && !str.trim().isEmpty()) {
             EventDB.insertEvent(str, Event.Type.PUSH_MESSAGE,
@@ -53,4 +39,5 @@ public class MiuiPushMessageReceiver extends PushMessageReceiver {
             context.sendBroadcast(intent);
         }
     }
+    */
 }

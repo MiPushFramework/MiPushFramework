@@ -6,7 +6,6 @@ import com.xiaomi.xmsf.R;
 
 import java.util.Date;
 
-import top.trumeet.mipushframework.event.notification.NotificationInfo;
 import top.trumeet.mipushframework.utils.BaseAppsBinder;
 import top.trumeet.mipushframework.utils.ParseUtils;
 
@@ -33,17 +32,9 @@ public class EventItemBinder extends BaseAppsBinder<Event> {
                 text = holder.itemView.getContext()
                         .getString(R.string.event_register);
                 break;
-            case Event.Type.PUSH_MESSAGE :
-                NotificationInfo info = item.getNotificationInfo();
-                text = info != null ? holder.itemView.getContext()
-                        .getString(R.string.event_push_message,
-                                info.getTitle(), info.getText()) :
-                        holder.itemView.getContext()
-                                .getString(R.string.event_push_message, "", "");
-                break;
-            case Event.Type.PUSH_COMMAND:
+            case Event.Type.RECEIVE_PUSH:
                 text = holder.itemView.getContext()
-                        .getString(R.string.event_push_command);
+                        .getString(R.string.event_push);
                 break;
             default:
                 text = null;

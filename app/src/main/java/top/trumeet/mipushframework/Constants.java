@@ -11,6 +11,8 @@ public final class Constants {
      */
     public static final String TAG = "Xiaomi";
 
+    public static final String TAG_CONDOM= Constants.TAG + "-Condom";
+
     public static final String WIZARD_SP_NAME = "wizard";
     public static final String KEY_SHOW_WIZARD = "show_wizard";
 
@@ -22,6 +24,8 @@ public final class Constants {
     public static final int CHECK_RUNNING_TIMES = 20;
 
     public static final String ACTION_RECEIVE_MESSAGE = "com.xiaomi.mipush.RECEIVE_MESSAGE";
+    public static final String ACTION_MESSAGE_ARRIVED = "com.xiaomi.mipush.MESSAGE_ARRIVED";
+    public static final String ACTION_ERROR = "com.xiaomi.mipush.ERROR";
 
     /**
      * Enable push.

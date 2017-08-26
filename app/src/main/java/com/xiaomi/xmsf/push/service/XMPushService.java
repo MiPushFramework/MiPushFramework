@@ -36,7 +36,6 @@ public class XMPushService extends IntentService {
             startService(intent2);
             result = Event.ResultType.OK;
         }
-        EventDB.insertEvent(pkg, Event.Type.REGISTER, result
-                , null, this);
+        EventDB.insertEvent(pkg, Event.Type.REGISTER, result, this);
     }
 }

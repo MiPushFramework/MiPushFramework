@@ -38,6 +38,9 @@ dependencies {
     implementation('me.drakeet.multitype:multitype:3.3.0', {
         exclude group: 'com.android.support'
     })
+    // Support
     implementation 'com.android.support:recyclerview-v7:26.0.1'
     implementation 'com.android.support:appcompat-v7:26.0.1'
+    // 保♂险♂套
+    compile 'com.oasisfeng.condom:library:1.2.0'
 }

@@ -14,7 +14,6 @@ import java.util.List;
 
 import top.trumeet.mipushframework.Constants;
 import top.trumeet.mipushframework.db.EventDao;
-import top.trumeet.mipushframework.event.notification.NotificationInfo;
 
 import static top.trumeet.mipushframework.Constants.TAG;
 
@@ -37,13 +36,10 @@ public class EventDB {
 
     public static long insertEvent (String pkg, @Event.Type int type,
                                     @Event.ResultType int result,
-                                    @Nullable NotificationInfo notificationInfo,
                                     Context context) {
         Log.d(TAG, "insertEvent!");
         Event event = new Event(null, pkg, type, getUTC().getTime()
                 , result);
-        if (notificationInfo != null && type != Event.Type.PUSH_MESSAGE)
-            event.setNotificationInfo(notificationInfo);
         return insertEvent(event, context);
     }
 

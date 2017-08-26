@@ -10,8 +10,14 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Process;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.oasisfeng.condom.CondomContext;
+import com.oasisfeng.condom.CondomOptions;
+import com.oasisfeng.condom.OutboundJudge;
+import com.oasisfeng.condom.OutboundType;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.xiaomi.push.service.XMPushService;
 import com.xiaomi.xmsf.push.service.receivers.BootReceiver;
@@ -19,11 +25,14 @@ import com.xiaomi.xmsf.push.service.receivers.BootReceiver;
 import java.util.List;
 
 import top.trumeet.mipushframework.Constants;
+import top.trumeet.mipushframework.event.Event;
+import top.trumeet.mipushframework.event.EventDB;
 
 import static android.content.Context.ACTIVITY_SERVICE;
 import static top.trumeet.mipushframework.Constants.APP_ID;
 import static top.trumeet.mipushframework.Constants.APP_KEY;
 import static top.trumeet.mipushframework.Constants.TAG;
+import static top.trumeet.mipushframework.Constants.TAG_CONDOM;
 
 /**
  * Created by Trumeet on 2017/8/25.
@@ -82,9 +91,9 @@ public class PushController {
      */
     public static void setServiceEnable (boolean enable, Context context) {
         if (enable && isAppMainProc(context)) {
-            MiPushClient.registerPush(context, APP_ID, APP_KEY);
+            MiPushClient.registerPush(wrapContext(context), APP_ID, APP_KEY);
         } else {
-            MiPushClient.unregisterPush(context);
+            MiPushClient.unregisterPush(wrapContext(context));
             // Force stop and disable services.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 JobScheduler scheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
@@ -155,5 +164,53 @@ public class PushController {
                         enable ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                         PackageManager.DONT_KILL_APP);
+    }
+
+    public static Context wrapContext (final Context context) {
+        return CondomContext.wrap(context, TAG_CONDOM, buildOptions(context, TAG_CONDOM));
+    }
+
+    private static CondomOptions sOptions;
+
+    public static CondomOptions buildOptions (final Context context, final String TAG) {
+        if (sOptions != null)
+            return sOptions;
+        sOptions = new CondomOptions()
+                .setOutboundJudge(new OutboundJudge() {
+                    @Override
+                    public boolean shouldAllow(@NonNull OutboundType type, @Nullable Intent intent, @NonNull String target_package) {
+                        Log.d(TAG, "shouldAllow ->" + type.toString());
+                        if (type == OutboundType.START_SERVICE ||
+                                type == OutboundType.BIND_SERVICE) {
+                            Log.i(TAG, "Allowed start or bind service: " + intent);
+                            return true;
+                        }
+                        if (type == OutboundType.BROADCAST) {
+                            if (intent == null) {
+                                Log.e(TAG, "Not allowed broadcast with null intent: " + target_package);
+                                return false;
+                            }
+
+                            if (intent.getAction().equals(Constants.ACTION_MESSAGE_ARRIVED) ||
+                                    intent.getAction().equals(Constants.ACTION_ERROR) ||
+                                    intent.getAction().equals(Constants.ACTION_RECEIVE_MESSAGE)) {
+                                Log.d(TAG, "Handle message broadcast: " + intent);
+                                // Try add flags?
+                                intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                                Log.w(TAG, "onReceiveMessage -> " + target_package);
+                                EventDB.insertEvent(target_package, Event.Type.RECEIVE_PUSH,
+                                        Event.ResultType.OK, context);
+                                return true;
+                            }
+                            Log.e(TAG, "Not allowed broadcast: " + intent);
+                            return false;
+                        }
+
+                        // Deny something will crash...
+                        Log.w(TAG, "Allowed: " + intent + ", pkg=" + target_package);
+                        return true;
+                    }
+                });
+        return sOptions;
     }
 }

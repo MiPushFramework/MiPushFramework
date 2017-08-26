@@ -63,9 +63,8 @@
     <string name="wizard_descr_finish">大功告成！您可以开始使用了</string>
 
     <!-- Event -->
-    <string name="event_register">注册推送（初始化）</string>
-    <string name="event_push_message">推送通知：\n%1$s\n%2$s</string>
-    <string name="event_push_command">透传命令</string>
+    <string name="event_register">注册推送</string>
+    <string name="event_push">收到推送</string>
 
     <string name="event_status">%1$s·%2$s</string>
     <string name="status_ok">成功</string>
