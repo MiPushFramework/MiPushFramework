@@ -51,6 +51,8 @@
 * 简单，安装非常简单，无需 Root、Xposed、ROM 支持
 * 使用后，其他应用的`XMPushService`会自动禁用，就像在 MIUI
 * `XMPushService`禁用后，还能保证推送。
+* 更多设置项，可以针对每一款应用设置不同的推送权限（尚未完成)
+* 完整事件记录，可以监控每个应用的 注册和推送
 
 
 
@@ -88,16 +90,18 @@
 ## TODO
 
 - [ ] 缺一个图标
-- [ ] 对每个应用，用户可以选择启用/停止它们的推送服务
+- [ ] 对每个应用，用户可以选择管理它们的推送权限（注册和接收）
 - [ ] 在注册推送时，用户可以拒绝它们
 - [X] 设置向导
 - [X] 统一的推送控制
 - [X] 通过修改 build.prop 达到伪装 MIUI 的效果（主要是应对京东等内建判断的应用）
 - [X] 开机启动
+- [X] 推送和注册日志
 
 ## 感谢
 
 * @Rachel030219 提供文件
+* Android Open Source Project, MultiType, greenDao, SetupWizardLibCompat, Condom
 
 # License
 
