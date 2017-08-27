@@ -111,5 +111,10 @@
         <activity android:name="top.trumeet.mipushframework.permissions.ManagePermissionsActivity"
             android:label="@string/action_edit_permission"
             android:configChanges="screenLayout|screenSize|orientation"/>
+
+        <activity android:name="top.trumeet.mipushframework.auth.AuthActivity"
+            android:theme="@style/Theme.Transparent"
+            android:excludeFromRecents="true"
+            android:configChanges="screenLayout|screenSize|orientation"/>
     </application>
 </manifest>

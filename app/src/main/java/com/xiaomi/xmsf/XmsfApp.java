@@ -1,8 +1,10 @@
 package com.xiaomi.xmsf;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.github.yuweiguocn.library.greendao.MigrationHelper;
@@ -14,11 +16,16 @@ import com.xiaomi.xmsf.push.service.MiuiPushActivateService;
 
 import org.greenrobot.greendao.database.Database;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import top.trumeet.mipushframework.auth.AuthActivity;
 import top.trumeet.mipushframework.db.DaoMaster;
 import top.trumeet.mipushframework.db.DaoSession;
 import top.trumeet.mipushframework.db.EventDao;
 import top.trumeet.mipushframework.db.RegisteredApplicationDao;
 import top.trumeet.mipushframework.push.PushController;
+import top.trumeet.mipushframework.register.RegisteredApplication;
 
 import static top.trumeet.mipushframework.Constants.TAG;
 import static top.trumeet.mipushframework.Constants.TAG_CONDOM;
@@ -72,6 +79,64 @@ public class XmsfApp extends Application {
             MiuiPushActivateService.awakePushActivateService(PushController.wrapContext(this)
                     , "com.xiaomi.xmsf.push.SCAN");
         }
+        
+        // XiaomiPush sdk will register push many times.
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            private Set<String> mAuthPackages = new HashSet<>(0);
+            
+            @Override
+            public void onActivityCreated(Activity activity, Bundle bundle) {
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+                if (activity.getClass().getName().equals(AuthActivity.class.getName())) {
+                    if (activity.getIntent().hasExtra(AuthActivity.EXTRA_REGISTERED_APPLICATION)) {
+                        RegisteredApplication application = activity.getIntent()
+                                .getParcelableExtra(AuthActivity.EXTRA_REGISTERED_APPLICATION);
+                        if (mAuthPackages.contains(application.getPackageName())) {
+                            // Double
+                            Log.w(TAG, "Handle double request: " + application.getPackageName());
+                            activity.finish();
+                        } else {
+                            Log.w(TAG, "Registering auth progress");
+                            mAuthPackages.add(application.getPackageName());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+                if (activity.getClass().getName().equals(AuthActivity.class.getName())) {
+                    if (activity.getIntent().hasExtra(AuthActivity.EXTRA_REGISTERED_APPLICATION)) {
+                        RegisteredApplication application = activity.getIntent()
+                                .getParcelableExtra(AuthActivity.EXTRA_REGISTERED_APPLICATION);
+                        mAuthPackages.remove(application.getPackageName());
+                    }
+                }
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+
+            }
+        });
     }
 
     public DaoSession getDaoSession() {

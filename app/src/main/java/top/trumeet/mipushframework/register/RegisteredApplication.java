@@ -1,5 +1,7 @@
 package top.trumeet.mipushframework.register;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.IntDef;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -27,8 +29,51 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
  */
 
 @Entity
-public class RegisteredApplication {
-    @IntDef({Type.ASK, Type.ALLOW, Type.DENY})
+public class RegisteredApplication implements Parcelable {
+    protected RegisteredApplication(Parcel in) {
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readLong();
+        }
+        packageName = in.readString();
+        type = in.readInt();
+        allowReceivePush = in.readByte() != 0;
+        allowReceiveRegisterResult = in.readByte() != 0;
+    }
+
+    public static final Creator<RegisteredApplication> CREATOR = new Creator<RegisteredApplication>() {
+        @Override
+        public RegisteredApplication createFromParcel(Parcel in) {
+            return new RegisteredApplication(in);
+        }
+
+        @Override
+        public RegisteredApplication[] newArray(int size) {
+            return new RegisteredApplication[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        if (id == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeLong(id);
+        }
+        parcel.writeString(packageName);
+        parcel.writeInt(type);
+        parcel.writeByte((byte) (allowReceivePush ? 1 : 0));
+        parcel.writeByte((byte) (allowReceiveRegisterResult ? 1 : 0));
+    }
+
+    @IntDef({Type.ASK, Type.ALLOW, Type.DENY, Type.ALLOW_ONCE})
     @Retention(SOURCE)
     @Target({ElementType.PARAMETER, ElementType.TYPE,
             ElementType.FIELD, ElementType.METHOD})
@@ -36,6 +81,7 @@ public class RegisteredApplication {
         int ASK = 0;
         int ALLOW = 2;
         int DENY = 3;
+        int ALLOW_ONCE = -1;
     }
 
     @Id

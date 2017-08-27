@@ -120,4 +120,10 @@
         <item>2</item>
         <item>3</item>
     </string-array>
+
+    <!-- Auth -->
+    <string name="auth_message"><![CDATA[要允许 <b>%1$s</b> 推送消息吗？]]></string>
+    <string name="allow">允许</string>
+    <string name="deny">拒绝</string>
+    <string name="allow_once">允许一次</string>
 </resources>
