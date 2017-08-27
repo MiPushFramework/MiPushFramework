@@ -90,7 +90,7 @@
 
 ## TODO
 
-- [ ] 缺一个图标
+- [X] 缺一个图标
 - [X] 对每个应用，用户可以选择管理它们的推送权限（注册和接收）
 - [X] 在注册推送时，用户可以拒绝它们
 - [X] 设置向导
@@ -98,11 +98,13 @@
 - [X] 通过修改 build.prop 达到伪装 MIUI 的效果（主要是应对京东等内建判断的应用）
 - [X] 开机启动
 - [X] 推送和注册日志
+- [ ] 设置页面
 
 ## 感谢
 
 * @Rachel030219 提供文件
 * Android Open Source Project, MultiType, greenDao, SetupWizardLibCompat, Condom, MaterialPreference，GreenDaoUpgradeHelper
+* 酷安 @PzHown @lmnm011223 @`苏沐晨风丶`（未采纳） 提供图标
 
 # License
 
