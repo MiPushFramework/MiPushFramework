@@ -5,6 +5,7 @@
     <string name="enable">启用</string>
     <string name="success">成功了</string>
     <string name="fail">失败</string>
+    <string name="apply">应用</string>
 
     <!-- Preference -->
     <string name="preference_title">推送设定</string>
@@ -97,4 +98,25 @@
     <string name="date_format_just">%1$s</string>
     <!-- For Long ago format -->
     <string name="date_format_long">%1$s</string>
+
+    <!-- Permission -->
+    <string name="action_edit_permission">修改权限</string>
+    <string name="permissions">权限</string>
+    <string name="permission_allow_register">注册推送</string>
+    <string name="permission_allow_receive">接收消息（及透传）</string>
+    
+    <string name="permission_register_type">注册方式</string>
+    <string name="register_type_allow">允许，自动注册</string>
+    <string name="register_type_deny">阻止注册</string>
+    <string name="register_type_ask">询问（默认）</string>
+    <string-array name="register_types">
+        <item>@string/register_type_ask</item>
+        <item>@string/register_type_allow</item>
+        <item>@string/register_type_deny</item>
+    </string-array>
+    <string-array name="register_entries" translatable="false">
+        <item>0</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 </resources>

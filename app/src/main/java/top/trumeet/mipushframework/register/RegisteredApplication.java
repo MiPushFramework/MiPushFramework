@@ -49,11 +49,16 @@ public class RegisteredApplication {
     @Property(nameInDb = "type")
     private int type = Type.ASK;
 
-    @Generated(hash = 1647835259)
-    public RegisteredApplication(Long id, String packageName, int type) {
+    @Property(nameInDb = "allow_receive_push")
+    private boolean allowReceivePush;
+
+    @Generated(hash = 700603434)
+    public RegisteredApplication(Long id, String packageName, int type,
+            boolean allowReceivePush) {
         this.id = id;
         this.packageName = packageName;
         this.type = type;
+        this.allowReceivePush = allowReceivePush;
     }
 
     @Generated(hash = 1216470554)
@@ -84,5 +89,11 @@ public class RegisteredApplication {
         this.type = type;
     }
 
+    public void setAllowReceivePush(boolean allowReceivePush) {
+        this.allowReceivePush = allowReceivePush;
+    }
 
+    public boolean getAllowReceivePush() {
+        return this.allowReceivePush;
+    }
 }

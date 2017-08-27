@@ -27,6 +27,8 @@ import java.util.List;
 import top.trumeet.mipushframework.Constants;
 import top.trumeet.mipushframework.event.Event;
 import top.trumeet.mipushframework.event.EventDB;
+import top.trumeet.mipushframework.register.RegisterDB;
+import top.trumeet.mipushframework.register.RegisteredApplication;
 
 import static android.content.Context.ACTIVITY_SERVICE;
 import static top.trumeet.mipushframework.Constants.APP_ID;
@@ -194,13 +196,25 @@ public class PushController {
                             if (intent.getAction().equals(Constants.ACTION_MESSAGE_ARRIVED) ||
                                     intent.getAction().equals(Constants.ACTION_ERROR) ||
                                     intent.getAction().equals(Constants.ACTION_RECEIVE_MESSAGE)) {
-                                Log.d(TAG, "Handle message broadcast: " + intent);
-                                // Try add flags?
-                                intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                                Log.w(TAG, "onReceiveMessage -> " + target_package);
-                                EventDB.insertEvent(target_package, Event.Type.RECEIVE_PUSH,
-                                        Event.ResultType.OK, context);
-                                return true;
+                                Log.d(TAG, "Handle message broadcast: " + intent + ", " +
+                                target_package);
+                                RegisteredApplication application = RegisterDB.registerApplication(target_package,
+                                        false, context);
+                                if (application == null) {
+                                    Log.w(TAG, "Not registered application: " + target_package);
+                                } else if (application.getAllowReceivePush()) {
+                                    Log.i(TAG, "Allow message");
+                                    // Try add flags?
+                                    intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                                    EventDB.insertEvent(target_package, Event.Type.RECEIVE_PUSH,
+                                            Event.ResultType.OK, context);
+                                    return true;
+                                } else {
+                                    Log.w(TAG, "Not allow message");
+                                    EventDB.insertEvent(target_package, Event.Type.RECEIVE_PUSH,
+                                            Event.ResultType.DENY_USER, context);
+                                    return false;
+                                }
                             }
                             Log.e(TAG, "Not allowed broadcast: " + intent);
                             return false;

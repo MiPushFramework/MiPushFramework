@@ -6,12 +6,12 @@ android {
     buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId "com.xiaomi.xmsf"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 26
         // XMPush sdk requires XMPushService not exported, but sdk will start exported XMPushService after
         // XMSF version code 106. SDK will also check version code must >= 105.
         versionCode 105
-        versionName "0.2.Alpha"
+        versionName "0.3.Alpha"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -21,7 +21,7 @@ android {
         }
     }
     greendao{
-        schemaVersion 2
+        schemaVersion 3
         daoPackage 'top.trumeet.mipushframework.db'
         targetGenDir 'src/main/java'
     }
@@ -43,4 +43,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.0.1'
     // 保♂险♂套
     compile 'com.oasisfeng.condom:library:1.2.0'
+    // Preference
+    implementation 'moe.shizuku.preference:preference:2.0.2'
+    implementation 'moe.shizuku.preference:preference-switchcompat:2.0.2'
 }

@@ -2,7 +2,13 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="@style/Theme.AppCompat.Light">
-        <!-- Customize your theme here. -->
+        <item name="preferenceTheme">@style/AppTheme.PreferenceTheme</item>
+    </style>
+
+    <style name="AppTheme.PreferenceTheme" parent="PreferenceThemeOverlay">
+        <!-- Only need this on pre-Lollipop -->
+        <item name="accentColorCompat">?colorAccent</item>
+        <item name="switchPreferenceCompatStyle">@style/Preference.SwitchPreferenceCompat</item>
     </style>
 
     <style name="AppTheme.Wizard" parent="@style/SuwThemeMaterial.Light">

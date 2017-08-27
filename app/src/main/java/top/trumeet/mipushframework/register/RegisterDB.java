@@ -38,11 +38,18 @@ public class RegisterDB {
                 .build().list();
     }
 
+    public static void update (RegisteredApplication application,
+                               Context context) {
+        getDao(context)
+                .update(application);
+    }
+
     private static RegisteredApplication create (String pkg,
                                                  Context context) {
         RegisteredApplication registeredApplication =
                 new RegisteredApplication(null, pkg
-                        , RegisteredApplication.Type.ASK);
+                        , RegisteredApplication.Type.ASK,
+                        true /* Allow push */);
         getDao(context)
                 .insert(registeredApplication);
         return registeredApplication;

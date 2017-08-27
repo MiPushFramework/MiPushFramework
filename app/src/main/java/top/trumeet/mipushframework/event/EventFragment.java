@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -48,6 +49,9 @@ public class EventFragment extends Fragment {
         view.setLayoutManager(new LinearLayoutManager(getActivity(),
                 LinearLayoutManager.VERTICAL, false));
         view.setAdapter(mAdapter);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(view.getContext(),
+                LinearLayoutManager.VERTICAL);
+        view.addItemDecoration(dividerItemDecoration);
         view.setOnScrollListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
