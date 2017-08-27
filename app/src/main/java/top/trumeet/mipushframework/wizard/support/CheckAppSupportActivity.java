@@ -88,8 +88,8 @@ public class CheckAppSupportActivity extends AppCompatActivity implements Naviga
                                     Toast.makeText(CheckAppSupportActivity.this,
                                             success ? R.string.success : R.string.fail,
                                             Toast.LENGTH_SHORT).show();
-                                    // TODO: not modified?
-                                    mResult.set(i, CheckSupportUtils.check(supportStatus.pkgName,
+                                    mResult.set(i - 3 /* Index, there are 2 headers */
+                                            , CheckSupportUtils.check(supportStatus.pkgName,
                                             getPackageManager()));
                                     mAdapter.notifyDataSetChanged();
                                 }
