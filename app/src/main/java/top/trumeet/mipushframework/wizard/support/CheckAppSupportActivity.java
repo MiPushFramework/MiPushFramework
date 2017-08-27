@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.android.setupwizardlib.SetupWizardListLayout;
 import com.android.setupwizardlib.view.NavigationBar;
+import com.xiaomi.xmsf.BuildConfig;
 import com.xiaomi.xmsf.R;
 
 import java.util.ArrayList;
@@ -154,6 +155,9 @@ public class CheckAppSupportActivity extends AppCompatActivity implements Naviga
                             PackageManager.GET_RECEIVERS | PackageManager.GET_DISABLED_COMPONENTS);
             List<SupportStatus> supportStatuses = new ArrayList<>(packageInfos.size());
             for (PackageInfo info : packageInfos) {
+                if (info.packageName.equals(BuildConfig.APPLICATION_ID)) {
+                    continue;
+                }
                 SupportStatus supportStatus = CheckSupportUtils
                         .check(info, getPackageManager());
                 if (supportStatus != null) {
