@@ -66,6 +66,7 @@ public class ManagePermissionsActivity extends AppCompatActivity {
 
     @Override
     public void onConfigurationChanged (Configuration configuration) {
+        super.onConfigurationChanged(configuration);
     }
 
     private class LoadTask extends AsyncTask<Void, Void, RegisteredApplication> {
