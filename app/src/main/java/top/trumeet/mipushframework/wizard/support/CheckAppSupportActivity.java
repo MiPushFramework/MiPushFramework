@@ -117,7 +117,13 @@ public class CheckAppSupportActivity extends AppCompatActivity implements Naviga
 
     @Override
     public void onNavigateNext() {
-        startActivity(new Intent(this, CheckDozeActivity.class));
+        if (getIntent().getBooleanExtra(Constants.EXTRA_FINISH_ON_NEXT,
+                false)) {
+            finish();
+        } else {
+            startActivity(new Intent(this
+                    , CheckDozeActivity.class));
+        }
     }
 
     private class CheckAppSupportTask extends AsyncTask<Void, Void, List<SupportStatus>> {

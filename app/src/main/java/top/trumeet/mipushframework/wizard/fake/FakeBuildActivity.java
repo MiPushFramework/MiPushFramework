@@ -17,6 +17,7 @@ import com.android.setupwizardlib.SetupWizardLayout;
 import com.android.setupwizardlib.view.NavigationBar;
 import com.xiaomi.xmsf.R;
 
+import top.trumeet.mipushframework.Constants;
 import top.trumeet.mipushframework.wizard.FinishWizardActivity;
 
 /**
@@ -86,8 +87,13 @@ public class FakeBuildActivity extends AppCompatActivity implements NavigationBa
     }
 
     private void nextPage () {
-        startActivity(new Intent(this,
-                FinishWizardActivity.class));
+        if (getIntent().getBooleanExtra(Constants.EXTRA_FINISH_ON_NEXT,
+                false)) {
+            finish();
+        } else {
+            startActivity(new Intent(this,
+                    FinishWizardActivity.class));
+        }
     }
 
     @Override
@@ -133,6 +139,11 @@ public class FakeBuildActivity extends AppCompatActivity implements NavigationBa
         protected void onPostExecute (Boolean result) {
             super.onPostExecute(result);
             if (result) {
+                if (getIntent().getBooleanExtra(Constants.EXTRA_FINISH_ON_NEXT,
+                        false)) {
+                    Toast.makeText(FakeBuildActivity.this, R.string.toast_fake_build_already_enable
+                            , Toast.LENGTH_SHORT).show();
+                }
                 nextPage();
             } else {
                 mWizard.setHeaderText(R.string.wizard_title_fake_build);

@@ -16,6 +16,7 @@ import com.android.setupwizardlib.SetupWizardLayout;
 import com.android.setupwizardlib.view.NavigationBar;
 import com.xiaomi.xmsf.R;
 
+import top.trumeet.mipushframework.Constants;
 import top.trumeet.mipushframework.push.PushServiceAccessibility;
 
 /**
@@ -66,7 +67,12 @@ public class CheckDozeActivity extends AppCompatActivity implements NavigationBa
     }
 
     private void nextPage () {
-        startActivity(new Intent(this,
-                CheckRunInBackgroundActivity.class));
+        if (getIntent().getBooleanExtra(Constants.EXTRA_FINISH_ON_NEXT,
+                false)) {
+            finish();
+        } else {
+            startActivity(new Intent(this,
+                    CheckRunInBackgroundActivity.class));
+        }
     }
 }

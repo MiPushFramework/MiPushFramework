@@ -63,9 +63,21 @@ public class CheckRunningStatusActivity extends AppCompatActivity implements Nav
 
     @Override
     public void onNavigateNext() {
-        startActivity(new Intent(this,
-                mResult ? CheckAppSupportActivity.class :
-                        StartFailFAQActivity.class));
+        if (getIntent().getBooleanExtra(Constants.EXTRA_FINISH_ON_NEXT,
+                false)) {
+            finish();
+        } else {
+            if (mResult) {
+                if (getIntent().getBooleanExtra(Constants.EXTRA_FINISH_ON_NEXT,
+                        false)) {
+                    finish();
+                } else {
+                    startActivity(new Intent(this, CheckAppSupportActivity.class));
+                }
+            } else {
+                startActivity(new Intent(this, StartFailFAQActivity.class));
+            }
+        }
     }
 
     private class CheckRunningTask extends AsyncTask<Void, Void, Boolean> {
@@ -97,7 +109,7 @@ public class CheckRunningStatusActivity extends AppCompatActivity implements Nav
             // Because some tools will kill service later after it starts.
             // So we have to check it too much times.
             for (int i = 0; i < Constants.CHECK_RUNNING_TIMES; i ++) {
-                Log.d(TAG, "Loop -> " + i);
+                //Log.d(TAG, "Loop -> " + i);
                 if (!PushController.isServiceRunning(CheckRunningStatusActivity.this)) {
                     return false;
                 }

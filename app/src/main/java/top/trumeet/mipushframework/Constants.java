@@ -70,4 +70,10 @@ public final class Constants {
      * Push result type. {@link Constants#EXTRA_MESSAGE_TYPE}
      */
     public static final int MESSAGE_TYPE_PUSH = 1;
+
+    /**
+     * Use in wizard, finish activity when user click NEXT,
+     * not go next page.
+     */
+    public static final String EXTRA_FINISH_ON_NEXT = "top.trumeet.xmsf.EXTRA_FINISH_ON_NEXT";
 }

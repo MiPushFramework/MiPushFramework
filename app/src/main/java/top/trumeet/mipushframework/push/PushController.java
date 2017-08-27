@@ -141,11 +141,11 @@ public class PushController {
                 list) {
             String pkg = info.service.getPackageName();
             String clz = info.service.getClassName();
-            Log.d(TAG, "process -> " + info.process);
-            Log.d(TAG, "package -> " + pkg);
-            Log.d(TAG, "className -> " + clz);
-            Log.d(TAG, "started -> "
-                    + info.started);
+            //Log.d(TAG, "process -> " + info.process);
+            //Log.d(TAG, "package -> " + pkg);
+            //Log.d(TAG, "className -> " + clz);
+            //Log.d(TAG, "started -> "
+            //        + info.started);
             if (context.getPackageName().equals(pkg)) {
                 if (!pkg.equals(context.getPackageName()) ||
                         !clz.equals(XMPushService.class.getName()) ||

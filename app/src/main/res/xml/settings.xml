@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/settings_deploy">
+        <Preference
+            android:title="@string/settings_app_support"
+            android:summary="@string/settings_app_support_summary">
+            <intent
+                android:targetPackage="com.xiaomi.xmsf"
+                android:targetClass="top.trumeet.mipushframework.wizard.support.CheckAppSupportActivity" >
+                <extra
+                    android:name="top.trumeet.xmsf.EXTRA_FINISH_ON_NEXT"
+                    android:value="true"/>
+            </intent>
+        </Preference>
+        <Preference
+            android:title="@string/settings_fake_build"
+            android:summary="@string/settings_fake_build_summary">
+            <intent
+                android:targetPackage="com.xiaomi.xmsf"
+                android:targetClass="top.trumeet.mipushframework.wizard.fake.FakeBuildActivity" >
+                <extra
+                    android:name="top.trumeet.xmsf.EXTRA_FINISH_ON_NEXT"
+                    android:value="true"/>
+            </intent>
+        </Preference>
+        <Preference
+            android:key="key_check_service"
+            android:title="@string/settings_check_service"
+            android:summary="@string/settings_check_service_summary">
+            <intent
+                android:targetPackage="com.xiaomi.xmsf"
+                android:targetClass="top.trumeet.mipushframework.wizard.CheckRunningStatusActivity">
+                <extra
+                    android:name="top.trumeet.xmsf.EXTRA_FINISH_ON_NEXT"
+                    android:value="true"/>
+            </intent>
+        </Preference>
+        <Preference
+            android:key="key_remove_doze"
+            android:title="@string/settings_skip_doze"
+            android:summary="@string/settings_skip_doze_summary" >
+            <intent
+                android:targetPackage="com.xiaomi.xmsf"
+                android:targetClass="top.trumeet.mipushframework.wizard.CheckDozeActivity">
+                <extra
+                    android:name="top.trumeet.xmsf.EXTRA_FINISH_ON_NEXT"
+                    android:value="true"/>
+            </intent>
+        </Preference>
+    </PreferenceCategory>
+</PreferenceScreen>

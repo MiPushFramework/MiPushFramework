@@ -63,7 +63,8 @@ public class MainActivity extends AppCompatActivity {
                         return new EventFragment();
                     case 1 :
                         return new RegisteredApplicationFragment();
-                        // TODO
+                    case 2 :
+                        return new SettingsFragment();
                     default:
                         return null;
                 }
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public int getCount() {
-                return 2; // TODO
+                return 3;
             }
         });
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
