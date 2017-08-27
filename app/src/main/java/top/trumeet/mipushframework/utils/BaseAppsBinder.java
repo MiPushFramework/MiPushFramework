@@ -127,12 +127,14 @@ public abstract class BaseAppsBinder<T> extends ItemViewBinder<T, BaseAppsBinder
         public TextView title;
         public TextView summary;
         public TextView text2;
+        public TextView status;
         ViewHolder (View itemView) {
             super(itemView);
             icon = itemView.findViewById(android.R.id.icon);
             title = itemView.findViewById(android.R.id.title);
             summary = itemView.findViewById(android.R.id.summary);
             text2 = itemView.findViewById(android.R.id.text2);
+            status = itemView.findViewById(R.id.text_status);
         }
     }
 }

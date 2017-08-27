@@ -68,7 +68,6 @@
     <string name="event_register">注册推送</string>
     <string name="event_push">收到推送</string>
 
-    <string name="event_status">%1$s·%2$s</string>
     <string name="status_ok">成功</string>
     <string name="status_deny_disable">禁用推送，已拒绝</string>
     <string name="status_deny_user">被您拒绝</string>

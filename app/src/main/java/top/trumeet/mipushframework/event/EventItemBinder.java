@@ -60,11 +60,10 @@ public class EventItemBinder extends BaseAppsBinder<Event> {
                 status = "";
                 break;
         }
-        holder.text2.setText(holder.itemView.getContext()
-        .getString(R.string.event_status,
-                status,
+        holder.text2.setText(
                 ParseUtils.getFriendlyDateString(new Date(item.getDate()),
-                        EventDB.getUTC(), holder.itemView.getContext())));
+                        EventDB.getUTC(), holder.itemView.getContext()));
+        holder.status.setText(status);
     }
 
 }
