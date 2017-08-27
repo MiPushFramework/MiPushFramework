@@ -59,7 +59,7 @@
     <string name="wizard_descr_run_in_background">在 Android O 及更高版本，您需要前往 应用详情 -> 电量 -> 允许后台活动 允许在后台运行。点按 下一页 前往设置</string>
 
     <string name="wizard_title_fake_build">修改 Build.prop 深度伪装MIUI</string>
-    <string name="wizard_descr_fake_build">某些应用（如京东、摩拜单车等）会使用自己的逻辑判断是否是 MIUI，如果是才启用小米推送，否则仍会使用其他推送方式驻留后台。这种判断逻辑通常是解析 build.prop。我们尝试通过向 build.prop 插入一些代表 MIUI 的键值对进行伪装，让这些应用使用小米推送。（需要 Root，执行完毕需重启）</string>
+    <string name="wizard_descr_fake_build">某些应用（如京东、摩拜单车等）会使用自己的逻辑判断是否是 MIUI，如果是才启用小米推送，否则仍会使用其他推送方式驻留后台。这种判断逻辑通常是解析 build.prop。我们尝试通过向 build.prop 插入一些代表 MIUI 的键值对进行伪装，让这些应用使用小米推送。此步骤会影响OTA，我们会自动将当前的 build.prop 备份到 /system/build.prop_（当前时间）.bak，您可以按需手动恢复。（需要 Root，执行完毕需重启）</string>
     <string name="toast_fake_build_already_enable">您已开启该项设置，暂不提供恢复选项，您可以手动恢复 build.prop</string>
 
     <string name="wizard_descr_finish">大功告成！您可以开始使用了</string>

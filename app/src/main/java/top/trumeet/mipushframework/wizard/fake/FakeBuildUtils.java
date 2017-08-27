@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -88,6 +89,7 @@ final class FakeBuildUtils {
 
     public static boolean insertMiui () {
         boolean result = mount("rw", "/system");
+        result |= backup();
         result |= insert("# Fake MIUI build by XiaomiPushServiceFramework.");
         for (String s : MIUI_KEYS.keySet()) {
             String value;
@@ -121,5 +123,10 @@ final class FakeBuildUtils {
         builder.append(" ");
         builder.append(point);
         return exec(builder.toString());
+    }
+
+    private static boolean backup () {
+        return exec("cp /system/build.prop \"/system/build.prop_" +
+        new Date().toGMTString() + ".bak\"");
     }
 }
