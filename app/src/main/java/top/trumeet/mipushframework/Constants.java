@@ -55,4 +55,19 @@ public final class Constants {
      * Package name extra when register push {@link com.xiaomi.xmsf.push.service.XMPushService}
      */
     public static final String EXTRA_MI_PUSH_PACKAGE = "mipush_app_package";
+
+    /**
+     * Message type extra when receive push
+     */
+    public static final String EXTRA_MESSAGE_TYPE = "message_type";
+
+    /**
+     * Register push result type. {@link Constants#EXTRA_MESSAGE_TYPE}
+     */
+    public static final int MESSAGE_TYPE_REGISTER_RESULT = 3;
+
+    /**
+     * Push result type. {@link Constants#EXTRA_MESSAGE_TYPE}
+     */
+    public static final int MESSAGE_TYPE_PUSH = 1;
 }

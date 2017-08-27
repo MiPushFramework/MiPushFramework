@@ -101,7 +101,7 @@
 ## 感谢
 
 * @Rachel030219 提供文件
-* Android Open Source Project, MultiType, greenDao, SetupWizardLibCompat, Condom, MaterialPreference
+* Android Open Source Project, MultiType, greenDao, SetupWizardLibCompat, Condom, MaterialPreference，GreenDaoUpgradeHelper
 
 # License
 

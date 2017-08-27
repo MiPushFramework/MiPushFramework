@@ -201,6 +201,17 @@ public class ManagePermissionsActivity extends AppCompatActivity {
             getString(R.string.permission_allow_receive),
                     category);
 
+            addItem(mApplicationItem.getAllowReceiveRegisterResult(),
+                    new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object newValue) {
+                            mApplicationItem.setAllowReceiveRegisterResult(((Boolean)newValue));
+                            return true;
+                        }
+                    },
+                    getString(R.string.permission_allow_receive_register_result),
+                    category);
+
             setPreferenceScreen(screen);
         }
 

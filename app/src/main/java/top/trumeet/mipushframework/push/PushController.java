@@ -20,6 +20,7 @@ import com.oasisfeng.condom.OutboundJudge;
 import com.oasisfeng.condom.OutboundType;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.xiaomi.push.service.XMPushService;
+import com.xiaomi.xmsf.BuildConfig;
 import com.xiaomi.xmsf.push.service.receivers.BootReceiver;
 
 import java.util.List;
@@ -197,27 +198,50 @@ public class PushController {
                                     intent.getAction().equals(Constants.ACTION_ERROR) ||
                                     intent.getAction().equals(Constants.ACTION_RECEIVE_MESSAGE)) {
                                 Log.d(TAG, "Handle message broadcast: " + intent + ", " +
-                                target_package);
+                                        target_package);
                                 RegisteredApplication application = RegisterDB.registerApplication(target_package,
                                         false, context);
                                 if (application == null) {
                                     Log.w(TAG, "Not registered application: " + target_package);
-                                } else if (application.getAllowReceivePush()) {
-                                    Log.i(TAG, "Allow message");
-                                    // Try add flags?
-                                    intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                                    EventDB.insertEvent(target_package, Event.Type.RECEIVE_PUSH,
-                                            Event.ResultType.OK, context);
                                     return true;
-                                } else {
-                                    Log.w(TAG, "Not allow message");
-                                    EventDB.insertEvent(target_package, Event.Type.RECEIVE_PUSH,
-                                            Event.ResultType.DENY_USER, context);
-                                    return false;
                                 }
+                                if (BuildConfig.DEBUG) {
+                                    // TODO: Always false?
+                                    Log.d(TAG, "hasExtra: " +
+                                            intent.hasExtra(Constants.EXTRA_MESSAGE_TYPE));
+                                }
+                                int messageType = intent.getIntExtra(Constants.EXTRA_MESSAGE_TYPE
+                                        , Constants.MESSAGE_TYPE_PUSH);
+                                Log.d(TAG, "messageType: " + messageType);
+                                switch (messageType) {
+                                    case Constants.MESSAGE_TYPE_PUSH:
+                                        if (application.getAllowReceivePush()) {
+                                            Log.i(TAG, "Allow message");
+                                            // Try add flags?
+                                            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                                            EventDB.insertEvent(target_package, Event.Type.RECEIVE_PUSH,
+                                                    Event.ResultType.OK, context);
+                                            return true;
+                                        } else {
+                                            Log.w(TAG, "Not allow message");
+                                            EventDB.insertEvent(target_package, Event.Type.RECEIVE_PUSH,
+                                                    Event.ResultType.DENY_USER, context);
+                                            return false;
+                                        }
+                                    case Constants.MESSAGE_TYPE_REGISTER_RESULT:
+                                        if (application.getAllowReceiveRegisterResult()) {
+                                            Log.i(TAG, "Allow callback register result");
+                                            // Try add flags?
+                                            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                                            return true;
+                                        } else {
+                                            Log.w(TAG, "Not allow callback register result");
+                                            return false;
+                                        }
+                                }
+                                Log.e(TAG, "Not allowed broadcast: " + intent);
+                                return false;
                             }
-                            Log.e(TAG, "Not allowed broadcast: " + intent);
-                            return false;
                         }
 
                         // Deny something will crash...

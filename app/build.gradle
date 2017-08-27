@@ -21,7 +21,7 @@ android {
         }
     }
     greendao{
-        schemaVersion 3
+        schemaVersion 4
         daoPackage 'top.trumeet.mipushframework.db'
         targetGenDir 'src/main/java'
     }
@@ -34,6 +34,7 @@ dependencies {
     })
     // GreenDao
     implementation 'org.greenrobot:greendao:3.2.2'
+    compile 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.0.0'
     // Recycler
     implementation('me.drakeet.multitype:multitype:3.3.0', {
         exclude group: 'com.android.support'

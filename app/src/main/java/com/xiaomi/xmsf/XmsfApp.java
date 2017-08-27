@@ -2,8 +2,10 @@ package com.xiaomi.xmsf;
 
 import android.app.Application;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.github.yuweiguocn.library.greendao.MigrationHelper;
 import com.oasisfeng.condom.CondomOptions;
 import com.oasisfeng.condom.CondomProcess;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
@@ -14,6 +16,8 @@ import org.greenrobot.greendao.database.Database;
 
 import top.trumeet.mipushframework.db.DaoMaster;
 import top.trumeet.mipushframework.db.DaoSession;
+import top.trumeet.mipushframework.db.EventDao;
+import top.trumeet.mipushframework.db.RegisteredApplicationDao;
 import top.trumeet.mipushframework.push.PushController;
 
 import static top.trumeet.mipushframework.Constants.TAG;
@@ -38,9 +42,11 @@ public class XmsfApp extends Application {
         CondomOptions options = buildOptions(this, TAG_CONDOM + "_PROCESS");
         CondomProcess.installExceptDefaultProcess(this,
                 options);
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "db");
-        Database db = helper.getWritableDb();
-        daoSession = new DaoMaster(db).newSession();
+        MigrationHelper.DEBUG = true;
+        MySQLiteOpenHelper helper = new MySQLiteOpenHelper(this, "db",
+                null);
+        daoSession = new DaoMaster(helper.getWritableDatabase())
+        .newSession();
         LoggerInterface newLogger = new LoggerInterface() {
             @Override
             public void setTag(String tag) {
@@ -75,5 +81,26 @@ public class XmsfApp extends Application {
     public static DaoSession getDaoSession (Context context) {
         return ((XmsfApp)context.getApplicationContext())
                 .getDaoSession();
+    }
+
+    public class MySQLiteOpenHelper extends DaoMaster.OpenHelper {
+        public MySQLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
+            super(context, name, factory);
+        }
+        @Override
+        public void onUpgrade(Database db, int oldVersion, int newVersion) {
+            MigrationHelper.migrate(db, new MigrationHelper.ReCreateAllTableListener() {
+
+                @Override
+                public void onCreateAllTables(Database db, boolean ifNotExists) {
+                    DaoMaster.createAllTables(db, ifNotExists);
+                }
+
+                @Override
+                public void onDropAllTables(Database db, boolean ifExists) {
+                    DaoMaster.dropAllTables(db, ifExists);
+                }
+            }, EventDao.class, RegisteredApplicationDao.class);
+        }
     }
 }

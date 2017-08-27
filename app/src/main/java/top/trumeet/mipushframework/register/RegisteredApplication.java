@@ -52,13 +52,17 @@ public class RegisteredApplication {
     @Property(nameInDb = "allow_receive_push")
     private boolean allowReceivePush;
 
-    @Generated(hash = 700603434)
+    @Property(nameInDb = "allow_receive_register_result")
+    private boolean allowReceiveRegisterResult;
+
+    @Generated(hash = 188204741)
     public RegisteredApplication(Long id, String packageName, int type,
-            boolean allowReceivePush) {
+            boolean allowReceivePush, boolean allowReceiveRegisterResult) {
         this.id = id;
         this.packageName = packageName;
         this.type = type;
         this.allowReceivePush = allowReceivePush;
+        this.allowReceiveRegisterResult = allowReceiveRegisterResult;
     }
 
     @Generated(hash = 1216470554)
@@ -95,5 +99,13 @@ public class RegisteredApplication {
 
     public boolean getAllowReceivePush() {
         return this.allowReceivePush;
+    }
+
+    public boolean getAllowReceiveRegisterResult() {
+        return this.allowReceiveRegisterResult;
+    }
+
+    public void setAllowReceiveRegisterResult(boolean allowReceiveRegisterResult) {
+        this.allowReceiveRegisterResult = allowReceiveRegisterResult;
     }
 }

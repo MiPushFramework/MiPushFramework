@@ -28,6 +28,7 @@ public class RegisteredApplicationDao extends AbstractDao<RegisteredApplication,
         public final static Property PackageName = new Property(1, String.class, "packageName", false, "pkg");
         public final static Property Type = new Property(2, int.class, "type", false, "type");
         public final static Property AllowReceivePush = new Property(3, boolean.class, "allowReceivePush", false, "allow_receive_push");
+        public final static Property AllowReceiveRegisterResult = new Property(4, boolean.class, "allowReceiveRegisterResult", false, "allow_receive_register_result");
     }
 
 
@@ -46,7 +47,8 @@ public class RegisteredApplicationDao extends AbstractDao<RegisteredApplication,
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
                 "\"pkg\" TEXT UNIQUE ," + // 1: packageName
                 "\"type\" INTEGER NOT NULL ," + // 2: type
-                "\"allow_receive_push\" INTEGER NOT NULL );"); // 3: allowReceivePush
+                "\"allow_receive_push\" INTEGER NOT NULL ," + // 3: allowReceivePush
+                "\"allow_receive_register_result\" INTEGER NOT NULL );"); // 4: allowReceiveRegisterResult
     }
 
     /** Drops the underlying database table. */
@@ -70,6 +72,7 @@ public class RegisteredApplicationDao extends AbstractDao<RegisteredApplication,
         }
         stmt.bindLong(3, entity.getType());
         stmt.bindLong(4, entity.getAllowReceivePush() ? 1L: 0L);
+        stmt.bindLong(5, entity.getAllowReceiveRegisterResult() ? 1L: 0L);
     }
 
     @Override
@@ -87,6 +90,7 @@ public class RegisteredApplicationDao extends AbstractDao<RegisteredApplication,
         }
         stmt.bindLong(3, entity.getType());
         stmt.bindLong(4, entity.getAllowReceivePush() ? 1L: 0L);
+        stmt.bindLong(5, entity.getAllowReceiveRegisterResult() ? 1L: 0L);
     }
 
     @Override
@@ -100,7 +104,8 @@ public class RegisteredApplicationDao extends AbstractDao<RegisteredApplication,
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // packageName
             cursor.getInt(offset + 2), // type
-            cursor.getShort(offset + 3) != 0 // allowReceivePush
+            cursor.getShort(offset + 3) != 0, // allowReceivePush
+            cursor.getShort(offset + 4) != 0 // allowReceiveRegisterResult
         );
         return entity;
     }
@@ -111,6 +116,7 @@ public class RegisteredApplicationDao extends AbstractDao<RegisteredApplication,
         entity.setPackageName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setType(cursor.getInt(offset + 2));
         entity.setAllowReceivePush(cursor.getShort(offset + 3) != 0);
+        entity.setAllowReceiveRegisterResult(cursor.getShort(offset + 4) != 0);
      }
     
     @Override

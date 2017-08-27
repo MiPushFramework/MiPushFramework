@@ -20,7 +20,10 @@
         android:name=".XmsfApp"
         android:persistent="true"
         android:allowBackup="false"
-        android:supportsRtl="true">
+        android:supportsRtl="true"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:replace="android:allowBackup">
+
         <service android:name="com.xiaomi.xmsf.push.service.XMPushService"
             android:exported="true"/>
         <service android:name="com.xiaomi.push.service.XMPushService"
