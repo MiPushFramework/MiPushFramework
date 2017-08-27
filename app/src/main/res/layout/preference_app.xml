@@ -18,7 +18,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="@dimen/listPreferredItemPaddingStart"
-    android:paddingRight="@dimen/listPreferredItemPaddingEnd">
+    android:paddingRight="@dimen/listPreferredItemPaddingEnd"
+    android:foreground="?attr/selectableItemBackground">
 
     <include layout="@layout/app_item" />
 

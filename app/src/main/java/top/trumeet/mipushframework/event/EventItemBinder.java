@@ -1,11 +1,14 @@
 package top.trumeet.mipushframework.event;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.view.View;
 
 import com.xiaomi.xmsf.R;
 
 import java.util.Date;
 
+import top.trumeet.mipushframework.permissions.ManagePermissionsActivity;
 import top.trumeet.mipushframework.utils.BaseAppsBinder;
 import top.trumeet.mipushframework.utils.ParseUtils;
 
@@ -24,7 +27,7 @@ public class EventItemBinder extends BaseAppsBinder<Event> {
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull Event item) {
+    protected void onBindViewHolder(final @NonNull ViewHolder holder, final @NonNull Event item) {
         fillData(item.getPkg(), holder);
         String text;
         switch (item.getType()) {
@@ -64,6 +67,17 @@ public class EventItemBinder extends BaseAppsBinder<Event> {
                 ParseUtils.getFriendlyDateString(new Date(item.getDate()),
                         EventDB.getUTC(), holder.itemView.getContext()));
         holder.status.setText(status);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                holder.itemView.getContext()
+                        .startActivity(new Intent(holder.itemView.getContext(),
+                                ManagePermissionsActivity.class)
+                                .putExtra(ManagePermissionsActivity.EXTRA_PACKAGE_NAME,
+                                        item.getPkg()));
+            }
+        });
     }
 
 }

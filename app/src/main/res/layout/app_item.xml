@@ -21,7 +21,7 @@
     android:paddingTop="16dp"
     android:paddingBottom="16dp"
     android:gravity="top"
-    android:columnCount="3"
+    android:columnCount="2"
     android:duplicateParentState="true">
 
     <ImageView
