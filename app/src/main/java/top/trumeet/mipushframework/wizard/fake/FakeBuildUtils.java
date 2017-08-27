@@ -22,6 +22,10 @@ final class FakeBuildUtils {
 
     static {
         MIUI_KEYS = new HashMap<>(1);
+
+        // MIUI build.prop pivotal keys
+        MIUI_KEYS.put("ro.miui.ui.version.name", String.class);
+        MIUI_KEYS.put("ro.miui.ui.version.code", Integer.class);
         MIUI_KEYS.put("ro.miui.ui.version.name", String.class);
     }
 
