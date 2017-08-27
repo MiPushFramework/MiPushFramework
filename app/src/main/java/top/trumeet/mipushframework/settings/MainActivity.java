@@ -44,6 +44,15 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
+                bottomNavigationView.getMenu()
+                        .getItem(0)
+                        .setChecked(false);
+                bottomNavigationView.getMenu()
+                        .getItem(1)
+                        .setChecked(false);
+                bottomNavigationView.getMenu()
+                        .getItem(2)
+                        .setChecked(false);
                 bottomNavigationView
                         .getMenu()
                         .getItem(position)
@@ -82,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+        viewPager.setCurrentItem(1);
     }
 
     @Override
