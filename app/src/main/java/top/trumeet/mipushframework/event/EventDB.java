@@ -41,22 +41,29 @@ public class EventDB {
 
     public static List<Event> query (@Nullable Integer skip,
                                      @Nullable Integer limit,
+                                     @Nullable String pkg,
                                      Context context) {
         QueryBuilder<Event> queryBuilder = getDao(context).queryBuilder();
         if (skip != null)
             queryBuilder.offset(skip);
         if (limit != null)
             queryBuilder.limit(limit);
+        if (pkg != null)
+            queryBuilder.where(EventDao.Properties.Pkg.eq(pkg));
         return queryBuilder.orderDesc(EventDao.Properties.Date).
                 build().list();
     }
 
     public static List<Event> query (int page, Context context) {
+        return query(null, page, context);
+    }
+
+    public static List<Event> query (String pkg, int page, Context context) {
         int skip;
         int limit;
         skip = Constants.PAGE_SIZE * (page - 1);
         limit = skip + Constants.PAGE_SIZE;
-        return query(skip, limit, context);
+        return query(skip, limit, pkg, context);
     }
 
     public static Date getUTC (Date date) {

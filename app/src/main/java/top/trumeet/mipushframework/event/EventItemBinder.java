@@ -21,9 +21,10 @@ import top.trumeet.mipushframework.utils.ParseUtils;
 
 public class EventItemBinder extends BaseAppsBinder<Event> {
 
-
-    EventItemBinder() {
+    private boolean clickEnabled = true;
+    EventItemBinder(boolean clickEnabled) {
         super();
+        this.clickEnabled = clickEnabled;
     }
 
     @Override
@@ -68,16 +69,18 @@ public class EventItemBinder extends BaseAppsBinder<Event> {
                         EventDB.getUTC(), holder.itemView.getContext()));
         holder.status.setText(status);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                holder.itemView.getContext()
-                        .startActivity(new Intent(holder.itemView.getContext(),
-                                ManagePermissionsActivity.class)
-                                .putExtra(ManagePermissionsActivity.EXTRA_PACKAGE_NAME,
-                                        item.getPkg()));
-            }
-        });
+        if (clickEnabled) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    holder.itemView.getContext()
+                            .startActivity(new Intent(holder.itemView.getContext(),
+                                    ManagePermissionsActivity.class)
+                                    .putExtra(ManagePermissionsActivity.EXTRA_PACKAGE_NAME,
+                                            item.getPkg()));
+                }
+            });
+        }
     }
 
 }

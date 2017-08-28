@@ -118,5 +118,7 @@
                 android:resource="@xml/filepaths" />
         </provider>
         <service android:name="com.xiaomi.xmsf.push.service.MiuiPushActivateService" android:exported="true" />
+        <activity android:name="top.trumeet.mipushframework.event.RecentActivityActivity"
+            android:label="@string/recent_activity_title" />
     </application>
 </manifest>

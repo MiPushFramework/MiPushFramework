@@ -1,8 +1,10 @@
 package top.trumeet.mipushframework.permissions;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -19,6 +21,7 @@ import moe.shizuku.preference.PreferenceFragment;
 import moe.shizuku.preference.PreferenceScreen;
 import moe.shizuku.preference.SimpleMenuPreference;
 import moe.shizuku.preference.SwitchPreferenceCompat;
+import top.trumeet.mipushframework.event.RecentActivityActivity;
 import top.trumeet.mipushframework.register.RegisterDB;
 import top.trumeet.mipushframework.register.RegisteredApplication;
 
@@ -183,7 +186,20 @@ public class ManagePermissionsActivity extends AppCompatActivity {
             updateRegisterType(mApplicationItem.getType(),
                     preferenceRegisterMode);
 
+            Preference viewRecentActivityPreference = new Preference(getActivity());
+            viewRecentActivityPreference.setTitle(R.string.recent_activity_view);
+            viewRecentActivityPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    startActivity(new Intent(getActivity(),
+                            RecentActivityActivity.class)
+                    .setData(Uri.parse(mApplicationItem.getPackageName())));
+                    return true;
+                }
+            });
+
             screen.addPreference(preferenceRegisterMode);
+            screen.addPreference(viewRecentActivityPreference);
 
             PreferenceCategory category = new PreferenceCategory(getActivity(), null, moe.shizuku.preference.R.attr.preferenceCategoryStyle,
                     R.style.Preference_Category_Material);

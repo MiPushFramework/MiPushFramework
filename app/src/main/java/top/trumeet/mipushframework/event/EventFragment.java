@@ -26,6 +26,9 @@ import top.trumeet.mipushframework.utils.OnLoadMoreListener;
  */
 
 public class EventFragment extends Fragment {
+    private static final String EXTRA_TARGET_PACKAGE = EventFragment.class
+            .getName() + ".EXTRA_TARGET_PACKAGE";
+
     private MultiTypeAdapter mAdapter;
     private Logger logger = LoggerFactory.getLogger(EventFragment.class);
 
@@ -33,14 +36,25 @@ public class EventFragment extends Fragment {
      * Already load page
      */
     private int mLoadPage;
+    private String mTargetPackage;
 
     private LoadTask mLoadTask;
+
+    public static EventFragment newInstance (String targetPackage) {
+        EventFragment fragment = new EventFragment();
+        Bundle args = new Bundle();
+        args.putString(EXTRA_TARGET_PACKAGE, targetPackage);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mTargetPackage = getArguments() == null ? null :
+                getArguments().getString(EXTRA_TARGET_PACKAGE);
         mAdapter = new MultiTypeAdapter();
-        mAdapter.register(Event.class, new EventItemBinder());
+        mAdapter.register(Event.class, new EventItemBinder(mTargetPackage == null));
     }
 
     @Nullable
@@ -94,7 +108,7 @@ public class EventFragment extends Fragment {
 
         @Override
         protected List<Event> doInBackground(Integer... integers) {
-            return EventDB.query(mTargetPage,
+            return EventDB.query(mTargetPackage, mTargetPage,
                     getActivity());
         }
 
