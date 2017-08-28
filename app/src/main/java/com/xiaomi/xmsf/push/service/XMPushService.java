@@ -45,6 +45,7 @@ public class XMPushService extends IntentService {
                     Intent authIntent = new Intent(this, AuthActivity.class);
                     authIntent.putExtra(AuthActivity.EXTRA_REGISTERED_APPLICATION,
                             application);
+                    authIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(authIntent);
                     // Don't save event there, auth activity will call back.
                     return;
