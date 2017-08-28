@@ -108,7 +108,7 @@ final class CheckSupportUtils {
             if (filter != null && filter.hasAction(Constants.ACTION_RECEIVE_MESSAGE)) {
                 boolean enabled = packageManager.getComponentEnabledSetting(new ComponentName(
                         activityInfo.packageName, activityInfo.name
-                )) != PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
+                )) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
                 Log.i(TAG, "Handle receiver: " + activityInfo.name +
                 "; enabled: " + enabled);
                 return enabled;
