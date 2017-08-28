@@ -1,25 +1,29 @@
-# Add project specific ProGuard rules here.
-# By default, the flags in this file are appended to flags specified
-# in C:\Users\Trumeet\AppData\Local\Android\Sdk/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the proguardFiles
-# directive in build.gradle.
+### greenDAO 3
+-keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
+public static java.lang.String TABLENAME;
+}
+-keep class **$Properties
+
+# If you do not use SQLCipher:
+-dontwarn org.greenrobot.greendao.database.**
+# If you do not use RxJava:
+-dontwarn rx.**
+
+# Logback for Android
 #
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# Tested on the following *.gradle dependencies
+#
+#    compile 'org.slf4j:slf4j-api:1.7.7'
+#    compile 'com.github.tony19:logback-android-core:1.1.1-3'
+#    compile 'com.github.tony19:logback-android-classic:1.1.1-3'
+#
 
-# Add any project specific keep options here:
+-keep class ch.qos.** { *; }
+-keep class org.slf4j.** { *; }
+-keepattributes *Annotation*
+-dontwarn ch.qos.logback.core.net.*
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
-
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
-
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# MiPush
+-keepclasseswithmembernames class com.xiaomi.**{*;}
+-keep public class * extends com.xiaomi.mipush.sdk.PushMessageReceiver
+-dontwarn android.app.Notification
