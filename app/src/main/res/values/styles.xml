@@ -9,6 +9,14 @@
         <!-- Only need this on pre-Lollipop -->
         <item name="accentColorCompat">?colorAccent</item>
         <item name="switchPreferenceCompatStyle">@style/Preference.SwitchPreferenceCompat</item>
+        <item name="simpleMenuPreferenceStyle">@style/SimpleMenuPreference</item>
+    </style>
+
+    <style name="SimpleMenuPreference" parent="Preference.SimpleMenuPreference">
+        <item name="popupStyle">@style/SimpleMenuPreference.Popup</item>
+    </style>
+    <style name="SimpleMenuPreference.Popup" parent="Preference.SimpleMenuPreference.Popup">
+        <item name="listElevation">40dp</item>
     </style>
 
     <style name="AppTheme.Wizard" parent="@style/SuwThemeMaterial.Light">

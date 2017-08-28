@@ -13,11 +13,11 @@ import android.view.MenuItem;
 
 import com.xiaomi.xmsf.R;
 
-import moe.shizuku.preference.DropDownPreference;
 import moe.shizuku.preference.Preference;
 import moe.shizuku.preference.PreferenceCategory;
 import moe.shizuku.preference.PreferenceFragment;
 import moe.shizuku.preference.PreferenceScreen;
+import moe.shizuku.preference.SimpleMenuPreference;
 import moe.shizuku.preference.SwitchPreferenceCompat;
 import top.trumeet.mipushframework.register.RegisterDB;
 import top.trumeet.mipushframework.register.RegisteredApplication;
@@ -164,10 +164,10 @@ public class ManagePermissionsActivity extends AppCompatActivity {
             }
             screen.addPreference(appPreference);
 
-            final DropDownPreference preferenceRegisterMode =
-                    new DropDownPreference(getActivity(),
-                            null, moe.shizuku.preference.R.attr.dropDownPreferenceStyle,
-                            R.style.Preference_DropDownPreference);
+            final SimpleMenuPreference preferenceRegisterMode =
+                    new SimpleMenuPreference(getActivity(),
+                            null, moe.shizuku.preference.simplemenu.R.attr.simpleMenuPreferenceStyle,
+                            R.style.SimpleMenuPreference);
             preferenceRegisterMode.setEntries(R.array.register_types);
             preferenceRegisterMode.setEntryValues(R.array.register_entries);
             preferenceRegisterMode.setTitle(R.string.permission_register_type);
@@ -216,7 +216,7 @@ public class ManagePermissionsActivity extends AppCompatActivity {
         }
 
         private void updateRegisterType (@RegisteredApplication.Type int type,
-                                         DropDownPreference preference) {
+                                         SimpleMenuPreference preference) {
             int index = 0;
             switch (type) {
                 case RegisteredApplication.Type.ALLOW:
