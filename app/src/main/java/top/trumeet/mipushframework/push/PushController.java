@@ -18,6 +18,7 @@ import com.oasisfeng.condom.CondomContext;
 import com.oasisfeng.condom.CondomOptions;
 import com.oasisfeng.condom.OutboundJudge;
 import com.oasisfeng.condom.OutboundType;
+import com.oasisfeng.condom.kit.NullDeviceIdKit;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.xiaomi.push.service.XMPushService;
 import com.xiaomi.xmsf.BuildConfig;
@@ -170,7 +171,10 @@ public class PushController {
     }
 
     public static Context wrapContext (final Context context) {
-        return CondomContext.wrap(context, TAG_CONDOM, buildOptions(context, TAG_CONDOM));
+        return CondomContext.wrap(context, TAG_CONDOM, buildOptions(context
+                , TAG_CONDOM)
+                // TODO: Condom process not support null device kit
+        .addKit(new NullDeviceIdKit()));
     }
 
     private static CondomOptions sOptions;

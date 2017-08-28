@@ -2,16 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    compileSdkVersion rootProject.ext.targetSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
         applicationId "com.xiaomi.xmsf"
-        minSdkVersion 16
-        targetSdkVersion 26
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         // XMPush sdk requires XMPushService not exported, but sdk will start exported XMPushService after
         // XMSF version code 106. SDK will also check version code must >= 105.
-        versionCode 105
-        versionName "0.3.Alpha"
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resConfigs "zh"
     }
@@ -68,10 +68,10 @@ dependencies {
         exclude group: 'com.android.support'
     })
     // Support
-    implementation 'com.android.support:recyclerview-v7:26.0.1'
-    implementation 'com.android.support:appcompat-v7:26.0.1'
+    implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
+    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
     // 保♂险♂套
-    compile 'com.oasisfeng.condom:library:1.2.0'
+    compile project(':condom')
     // Preference
     implementation 'moe.shizuku.preference:preference:2.0.2'
     implementation 'moe.shizuku.preference:preference-switchcompat:2.0.2'
