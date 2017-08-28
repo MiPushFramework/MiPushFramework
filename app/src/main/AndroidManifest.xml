@@ -31,9 +31,6 @@
         <service android:name="com.xiaomi.mipush.sdk.PushMessageHandler"
             android:enabled="true" android:exported="true" />
         <service android:name="com.xiaomi.mipush.sdk.MessageHandleService"/>
-        <!--
-        <service android:name=".push.service.trace.MiPushRelayTraceService" />
-        -->
         <service
             android:name="com.xiaomi.push.service.XMJobService"
             android:enabled="true"
@@ -69,7 +66,6 @@
                 <action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED" />
             </intent-filter>
         </receiver>
-        <service android:name="com.xiaomi.xmsf.push.service.MiuiPushActivateService" android:exported="true" />
 
         <activity android:name="top.trumeet.mipushframework.wizard.WelcomeActivity"
             android:theme="@style/AppTheme.Wizard"
@@ -110,5 +106,21 @@
         <activity android:name="top.trumeet.mipushframework.auth.AuthActivity"
             android:theme="@style/Theme.Transparent"
             android:configChanges="screenLayout|screenSize|orientation"/>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="top.trumeet.mipushframework.fileprovider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+        <receiver android:name=".push.service.receivers.AccountChangedReceiver">
+            <intent-filter>
+                <action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.xiaomi.xmsf.push.service.MiuiPushActivateService" android:exported="true" />
     </application>
 </manifest>

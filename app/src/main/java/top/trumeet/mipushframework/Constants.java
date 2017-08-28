@@ -1,11 +1,17 @@
 package top.trumeet.mipushframework;
 
+import android.content.Context;
+
 /**
  * Created by Trumeet on 2017/8/24.
  * Constants
  */
 
 public final class Constants {
+    private Constants () {
+        throw new UnsupportedOperationException("What are U doing");
+    }
+
     /**
      * Default app log tag
      */
@@ -76,4 +82,12 @@ public final class Constants {
      * not go next page.
      */
     public static final String EXTRA_FINISH_ON_NEXT = "top.trumeet.xmsf.EXTRA_FINISH_ON_NEXT";
+
+    /**
+     * Application log file, use {@link Context#getCacheDir()} as
+     * prefix.
+     */
+    public static final String LOG_FILE = "/log/file.log";
+
+    public static final String AUTHORITY_FILE_PROVIDER = "top.trumeet.mipushframework.fileprovider";
 }

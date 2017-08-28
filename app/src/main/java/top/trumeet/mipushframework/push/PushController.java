@@ -12,7 +12,6 @@ import android.os.Process;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.oasisfeng.condom.CondomContext;
 import com.oasisfeng.condom.CondomOptions;
@@ -23,6 +22,9 @@ import com.xiaomi.mipush.sdk.MiPushClient;
 import com.xiaomi.push.service.XMPushService;
 import com.xiaomi.xmsf.BuildConfig;
 import com.xiaomi.xmsf.push.service.receivers.BootReceiver;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -35,7 +37,6 @@ import top.trumeet.mipushframework.register.RegisteredApplication;
 import static android.content.Context.ACTIVITY_SERVICE;
 import static top.trumeet.mipushframework.Constants.APP_ID;
 import static top.trumeet.mipushframework.Constants.APP_KEY;
-import static top.trumeet.mipushframework.Constants.TAG;
 import static top.trumeet.mipushframework.Constants.TAG_CONDOM;
 
 /**
@@ -44,6 +45,12 @@ import static top.trumeet.mipushframework.Constants.TAG_CONDOM;
  */
 
 public class PushController {
+    private static Logger logger;
+    
+    static {
+        logger = LoggerFactory.getLogger(PushController.class);
+    }
+    
     private static SharedPreferences getPrefs (Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
     }
@@ -142,16 +149,16 @@ public class PushController {
                 list) {
             String pkg = info.service.getPackageName();
             String clz = info.service.getClassName();
-            //Log.d(TAG, "process -> " + info.process);
-            //Log.d(TAG, "package -> " + pkg);
-            //Log.d(TAG, "className -> " + clz);
-            //Log.d(TAG, "started -> "
+            //logger.debug("process -> " + info.process);
+            //logger.debug("package -> " + pkg);
+            //logger.debug("className -> " + clz);
+            //logger.debug("started -> "
             //        + info.started);
             if (context.getPackageName().equals(pkg)) {
                 if (!pkg.equals(context.getPackageName()) ||
                         !clz.equals(XMPushService.class.getName()) ||
                         !info.started) {
-                    Log.e(TAG, "SERVICE NOT RUNNING! PLZ CHECK YOUR ROM OR REPORT AN ISSUE!");
+                    logger.error( "SERVICE NOT RUNNING! PLZ CHECK YOUR ROM OR REPORT AN ISSUE!");
                     return false;
                 } else {
                     return true;
@@ -186,70 +193,71 @@ public class PushController {
                 .setOutboundJudge(new OutboundJudge() {
                     @Override
                     public boolean shouldAllow(@NonNull OutboundType type, @Nullable Intent intent, @NonNull String target_package) {
-                        Log.d(TAG, "shouldAllow ->" + type.toString());
+                        logger.debug("shouldAllow ->" + type.toString());
                         if (type == OutboundType.START_SERVICE ||
                                 type == OutboundType.BIND_SERVICE) {
-                            Log.i(TAG, "Allowed start or bind service: " + intent);
+                            logger.info("Allowed start or bind service: " + intent);
                             return true;
                         }
                         if (type == OutboundType.BROADCAST) {
                             if (intent == null) {
-                                Log.e(TAG, "Not allowed broadcast with null intent: " + target_package);
+                                logger.error( "Not allowed broadcast with null intent: " + target_package);
                                 return false;
                             }
 
                             if (intent.getAction().equals(Constants.ACTION_MESSAGE_ARRIVED) ||
                                     intent.getAction().equals(Constants.ACTION_ERROR) ||
                                     intent.getAction().equals(Constants.ACTION_RECEIVE_MESSAGE)) {
-                                Log.d(TAG, "Handle message broadcast: " + intent + ", " +
+                                logger.debug("Handle message broadcast: " + intent + ", " +
                                         target_package);
                                 RegisteredApplication application = RegisterDB.registerApplication(target_package,
                                         false, context);
                                 if (application == null) {
-                                    Log.w(TAG, "Not registered application: " + target_package);
+                                    logger.warn("Not registered application: " + target_package);
                                     return true;
                                 }
                                 if (BuildConfig.DEBUG) {
                                     // TODO: Always false?
-                                    Log.d(TAG, "hasExtra: " +
+                                    logger.debug("hasExtra: " +
                                             intent.hasExtra(Constants.EXTRA_MESSAGE_TYPE));
                                 }
                                 int messageType = intent.getIntExtra(Constants.EXTRA_MESSAGE_TYPE
                                         , Constants.MESSAGE_TYPE_PUSH);
-                                Log.d(TAG, "messageType: " + messageType);
+                                logger.debug("messageType: " + messageType);
                                 switch (messageType) {
                                     case Constants.MESSAGE_TYPE_PUSH:
                                         if (application.getAllowReceivePush()) {
-                                            Log.i(TAG, "Allow message");
+                                            logger.info("Allow message");
                                             // Try add flags?
                                             intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                                            intent.setPackage(target_package);
                                             EventDB.insertEvent(target_package, Event.Type.RECEIVE_PUSH,
                                                     Event.ResultType.OK, context);
                                             return true;
                                         } else {
-                                            Log.w(TAG, "Not allow message");
+                                            logger.warn("Not allow message");
                                             EventDB.insertEvent(target_package, Event.Type.RECEIVE_PUSH,
                                                     Event.ResultType.DENY_USER, context);
                                             return false;
                                         }
                                     case Constants.MESSAGE_TYPE_REGISTER_RESULT:
                                         if (application.getAllowReceiveRegisterResult()) {
-                                            Log.i(TAG, "Allow callback register result");
+                                            logger.info("Allow callback register result");
                                             // Try add flags?
                                             intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                                             return true;
                                         } else {
-                                            Log.w(TAG, "Not allow callback register result");
+                                            logger.warn("Not allow callback register result");
                                             return false;
                                         }
                                 }
-                                Log.e(TAG, "Not allowed broadcast: " + intent);
+                                logger.error( "Not allowed broadcast: " + intent);
                                 return false;
                             }
                         }
 
                         // Deny something will crash...
-                        Log.w(TAG, "Allowed: " + intent + ", pkg=" + target_package);
+                        logger.warn("Allowed: " + intent + ", pkg=" + target_package);
                         return true;
                     }
                 });

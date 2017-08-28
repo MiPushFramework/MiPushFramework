@@ -1,6 +1,7 @@
 package top.trumeet.mipushframework.utils;
 
-import android.util.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
@@ -207,10 +208,11 @@ public final class ShellUtils {
      * @return success
      */
     public static boolean exec (String command) {
-        Log.d("Shell", "Exec:" + command);
+        Logger logger = LoggerFactory.getLogger("Shell");
+        logger.debug("Exec:" + command);
         ShellUtils.CommandResult result = ShellUtils.execCmd(command, true, true);
-        Log.d("Shell", "SuccessMsg:" + result.successMsg);
-        Log.d("Shell", "ErrMsg:" + result.errorMsg);
+        logger.debug("SuccessMsg:" + result.successMsg);
+        logger.debug("ErrMsg:" + result.errorMsg);
         return result.isSuccess();
     }
 }

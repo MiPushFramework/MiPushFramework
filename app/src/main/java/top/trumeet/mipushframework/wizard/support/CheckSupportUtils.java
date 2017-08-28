@@ -9,10 +9,12 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.xiaomi.mipush.sdk.PushMessageReceiver;
 import com.xiaomi.push.service.XMPushService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import top.trumeet.mipushframework.Constants;
 
@@ -23,7 +25,7 @@ import top.trumeet.mipushframework.Constants;
  */
 
 final class CheckSupportUtils {
-    private static final String TAG = "CheckSupportUtils";
+    private Logger logger = LoggerFactory.getLogger("CheckSupportUtils");
 
     /**
      * Check package is support MiPush.
@@ -32,13 +34,19 @@ final class CheckSupportUtils {
      */
     @Nullable
     public static SupportStatus check (PackageInfo info, PackageManager manager) {
+        return new CheckSupportUtils()
+                .checkNonStatic(info, manager);
+    }
+    
+    @Nullable
+    private SupportStatus checkNonStatic (PackageInfo info, PackageManager manager) {
         String pkg = info.packageName;
         if (!hasMiPushService(info)) {
-            Log.e(TAG, "Pkg " + pkg + " not have push service!");
+            logger.error("Pkg " + pkg + " not have push service!");
             return null;
         }
         boolean receiverSupport = customReceiverPass(info, manager);
-        Log.d(TAG, "Pkg " + pkg + " support receiver: " + receiverSupport);
+        logger.debug("Pkg " + pkg + " support receiver: " + receiverSupport);
         if (receiverSupport) {
             return new SupportStatus(pkg, SupportStatus.Status.OK);
         } else {
@@ -71,11 +79,11 @@ final class CheckSupportUtils {
      * @param info Package Info
      * @return has push service
      */
-    private static boolean hasMiPushService (PackageInfo info) {
+    private boolean hasMiPushService (PackageInfo info) {
         if (info.services == null)
             return false;
         for (ServiceInfo serviceInfo : info.services) {
-            Log.d(TAG, "Service name -> " + serviceInfo.name);
+            logger.debug("Service name -> " + serviceInfo.name);
             if (XMPushService.class.getName().equals(serviceInfo.name)) {
                 return true;
             }
@@ -92,7 +100,7 @@ final class CheckSupportUtils {
      * @return enable status. If this package not have custom receiver, will
      * still returns true.
      */
-    private static boolean customReceiverPass (PackageInfo info, PackageManager packageManager) {
+    private boolean customReceiverPass (PackageInfo info, PackageManager packageManager) {
         //if (info.receivers == null)
         //    return true;
         Intent intent = new Intent();
@@ -109,12 +117,12 @@ final class CheckSupportUtils {
                 boolean enabled = packageManager.getComponentEnabledSetting(new ComponentName(
                         activityInfo.packageName, activityInfo.name
                 )) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
-                Log.i(TAG, "Handle receiver: " + activityInfo.name +
+                logger.info("Handle receiver: " + activityInfo.name +
                 "; enabled: " + enabled);
                 return enabled;
             }
         }
-        Log.d(TAG, "Not found custom message receiver in " + info.packageName);
+        logger.debug("Not found custom message receiver in " + info.packageName);
         // Not found
         return true;
     }

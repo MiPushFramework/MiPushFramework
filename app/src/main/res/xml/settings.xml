@@ -49,4 +49,11 @@
             </intent>
         </Preference>
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/settings_debug">
+        <Preference
+            android:key="key_get_log"
+            android:title="@string/settings_get_log"
+            android:summary="@string/settings_get_log_summary" />
+    </PreferenceCategory>
 </PreferenceScreen>

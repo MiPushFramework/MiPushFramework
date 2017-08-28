@@ -3,9 +3,9 @@ package com.xiaomi.xmsf.push.service.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
-import static top.trumeet.mipushframework.Constants.TAG;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Trumeet on 2017/8/25.
@@ -13,9 +13,10 @@ import static top.trumeet.mipushframework.Constants.TAG;
  */
 
 public class BootReceiver extends BroadcastReceiver {
+    private Logger logger = LoggerFactory.getLogger(BootReceiver.class);
     @Override
     public void onReceive(Context context, Intent intent) {
         // Only wake up app
-        Log.i(TAG, "boot");
+        logger.debug("boot");
     }
 }

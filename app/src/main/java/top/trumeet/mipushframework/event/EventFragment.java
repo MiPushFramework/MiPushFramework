@@ -7,18 +7,18 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
 import top.trumeet.mipushframework.utils.OnLoadMoreListener;
-
-import static top.trumeet.mipushframework.Constants.TAG;
 
 /**
  * Created by Trumeet on 2017/8/26.
@@ -27,6 +27,7 @@ import static top.trumeet.mipushframework.Constants.TAG;
 
 public class EventFragment extends Fragment {
     private MultiTypeAdapter mAdapter;
+    private Logger logger = LoggerFactory.getLogger(EventFragment.class);
 
     /**
      * Already load page
@@ -68,7 +69,7 @@ public class EventFragment extends Fragment {
     }
 
     private void loadPage () {
-        Log.d(TAG, "loadPage");
+        logger.debug("loadPage");
         if (mLoadTask != null && !mLoadTask.isCancelled())
             return;
         mLoadTask = new LoadTask(mLoadPage + 1);

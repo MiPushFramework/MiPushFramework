@@ -2,7 +2,6 @@ package top.trumeet.mipushframework.event;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.xiaomi.xmsf.XmsfApp;
 
@@ -14,8 +13,6 @@ import java.util.List;
 
 import top.trumeet.mipushframework.Constants;
 import top.trumeet.mipushframework.db.EventDao;
-
-import static top.trumeet.mipushframework.Constants.TAG;
 
 /**
  * Created by Trumeet on 2017/8/26.
@@ -37,7 +34,6 @@ public class EventDB {
     public static long insertEvent (String pkg, @Event.Type int type,
                                     @Event.ResultType int result,
                                     Context context) {
-        Log.d(TAG, "insertEvent!");
         Event event = new Event(null, pkg, type, getUTC().getTime()
                 , result);
         return insertEvent(event, context);

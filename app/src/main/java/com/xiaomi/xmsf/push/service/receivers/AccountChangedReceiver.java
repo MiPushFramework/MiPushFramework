@@ -3,6 +3,7 @@ package com.xiaomi.xmsf.push.service.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
 import com.xiaomi.xmsf.push.service.MiuiPushActivateService;
 import com.xiaomi.xmsf.push.service.XMAccountManager;
 
