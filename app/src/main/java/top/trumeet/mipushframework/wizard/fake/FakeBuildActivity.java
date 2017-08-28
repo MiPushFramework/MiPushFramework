@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SwitchCompat;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,12 +26,10 @@ import top.trumeet.mipushframework.wizard.FinishWizardActivity;
  */
 
 public class FakeBuildActivity extends AppCompatActivity implements NavigationBar.NavigationBarListener {
-    private SwitchCompat mSwitch;
     private LinearLayout mLayout;
     private SetupWizardLayout mWizard;
 
     private CheckTask mCheckTask;
-    private ModifyTask mModifyTask;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,18 +48,7 @@ public class FakeBuildActivity extends AppCompatActivity implements NavigationBa
 
     @Override
     public void onNavigateNext() {
-        if (mModifyTask != null && !mModifyTask.isCancelled()) {
-            mModifyTask.cancel(true);
-            mModifyTask = null;
-        }
-        if (mSwitch != null)  {
-            if (mSwitch.isChecked()) {
-                mModifyTask = new ModifyTask();
-                mModifyTask.execute();
-            } else {
-                nextPage();
-            }
-        }
+        nextPage();
     }
 
     private void initContent () {
@@ -71,16 +58,14 @@ public class FakeBuildActivity extends AppCompatActivity implements NavigationBa
         }
         TextView textView = new TextView(this);
         textView.setText(Html.fromHtml(getString(R.string.wizard_descr_fake_build)));
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+
         int padding = (int) getResources().getDimension(R.dimen.suw_glif_margin_sides);
 
         mLayout = new LinearLayout(this);
         mLayout.setOrientation(LinearLayout.VERTICAL);
 
-        mSwitch = new SwitchCompat(this);
-        mSwitch.setText(R.string.enable);
-
         mLayout.addView(textView);
-        mLayout.addView(mSwitch);
 
         mLayout.setPadding(padding, padding, padding, padding);
         mWizard.addView(mLayout);
@@ -99,10 +84,6 @@ public class FakeBuildActivity extends AppCompatActivity implements NavigationBa
     @Override
     public void onStart () {
         super.onStart();
-        if (mModifyTask != null && !mModifyTask.isCancelled()) {
-            mModifyTask.cancel(true);
-            mModifyTask = null;
-        }
         if (mCheckTask != null && !mCheckTask.isCancelled()) {
             mCheckTask.cancel(true);
             mCheckTask = null;
@@ -149,27 +130,6 @@ public class FakeBuildActivity extends AppCompatActivity implements NavigationBa
                 mWizard.setHeaderText(R.string.wizard_title_fake_build);
                 initContent();
             }
-        }
-    }
-
-    private class ModifyTask extends BaseAsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(Void... voids) {
-            return FakeBuildUtils.insertMiui();
-        }
-
-        @Override
-        protected void onPostExecute (Boolean result) {
-            super.onPostExecute(result);
-            if (result) nextPage();
-            else {
-                mWizard.setHeaderText(R.string.wizard_title_fake_build);
-                initContent();
-            }
-            Toast.makeText(FakeBuildActivity.this,
-                    result ? R.string.success : R.string.fail,
-                    Toast.LENGTH_SHORT).show();
         }
     }
 }
