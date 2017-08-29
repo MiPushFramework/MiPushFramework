@@ -51,6 +51,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import top.trumeet.hook.FakeManifestUtils;
+
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH;
@@ -285,6 +287,13 @@ public class CondomContext extends ContextWrapper {
 
 
 	class CondomPackageManager extends PackageManagerWrapper {
+		@Override public PackageInfo getPackageInfo(String packageName, int flags) throws NameNotFoundException {
+			PackageInfo info = super.getPackageInfo(packageName, flags);
+			if (getPackageName().equals(packageName)) {
+				return FakeManifestUtils.buildFakePackageInfo(info);
+			}
+			return info;
+		}
 
 		@Override public List<ResolveInfo> queryBroadcastReceivers(final Intent intent, final int flags) {
 			return mCondom.proceedQuery(OutboundType.QUERY_RECEIVERS, intent, new CondomCore.WrappedValueProcedure<List<ResolveInfo>>() { @Override public List<ResolveInfo> proceed() {
