@@ -79,7 +79,10 @@ public class CheckAppSupportActivity extends AppCompatActivity implements Naviga
                 .setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
-                        final SupportStatus supportStatus = ((SupportStatus)adapterView.getItemAtPosition(i));
+                        Object o = adapterView.getItemAtPosition(i);
+                        if (!(o instanceof SupportStatus))
+                            return;
+                        final SupportStatus supportStatus = (SupportStatus)o;
                         if (supportStatus.status == SupportStatus.Status.FAIL_CAN_FIX) {
                             FixDialogFragment fixDialogFragment = FixDialogFragment.newInstance(supportStatus.pkgName);
                             fixDialogFragment.setCallback(new FixDialogFragment.Callback() {
