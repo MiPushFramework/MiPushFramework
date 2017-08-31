@@ -147,4 +147,12 @@
     <!-- Recent Activity -->
     <string name="recent_activity_view">查看近期活动</string>
     <string name="recent_activity_title">近期活动</string>
+
+    <!-- Update -->
+    <string name="action_update">检查更新</string>
+    <string name="update_none">您正在使用最新版本</string>
+    <string name="update_progress">正在检查更新</string>
+    <string name="update_available">更新可用：%1$s</string>
+    <string name="action_download_update">前往下载页</string>
+    <string name="action_check_again">重新检查</string>
 </resources>

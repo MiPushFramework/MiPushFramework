@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.setupwizardlib.GlifLayout
+    android:id="@+id/layout"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:actionview="http://schemas.android.com/apk/res-auto"
+    android:icon="@drawable/ic_system_update_black_24dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:theme="@style/SuwThemeGlif.Light">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@android:id/text1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:layout_marginLeft="@dimen/suw_glif_margin_sides"
+            android:layout_marginStart="@dimen/suw_glif_margin_sides"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
+        <LinearLayout
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <top.trumeet.mipushframework.update.ActionView
+                android:id="@+id/action_download"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                actionview:icon="@drawable/ic_file_download_black_24dp"
+                actionview:text="@string/action_download_update"/>
+            <top.trumeet.mipushframework.update.ActionView
+                android:id="@+id/action_again"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                actionview:icon="@drawable/ic_refresh_black_24dp"
+                actionview:text="@string/action_check_again"/>
+        </LinearLayout>
+    </LinearLayout>
+</com.android.setupwizardlib.GlifLayout>

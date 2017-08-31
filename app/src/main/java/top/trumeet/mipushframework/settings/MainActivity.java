@@ -1,5 +1,6 @@
 package top.trumeet.mipushframework.settings;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -23,6 +24,7 @@ import com.xiaomi.xmsf.R;
 import top.trumeet.mipushframework.event.EventFragment;
 import top.trumeet.mipushframework.push.PushController;
 import top.trumeet.mipushframework.register.RegisteredApplicationFragment;
+import top.trumeet.mipushframework.update.UpdateActivity;
 
 /**
  * Main settings activity
@@ -110,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
                     .setView(textView)
                     .show();
             return true;
+        } else if (item.getItemId() == R.id.action_update) {
+            startActivity(new Intent(this, UpdateActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }

@@ -7,4 +7,9 @@
         <attr name="itemTextColor"/>
         <attr name="itemBackground"/>
     </declare-styleable>
+
+    <declare-styleable name="ActionView">
+        <attr name="icon" format="reference" />
+        <attr name="text" format="reference|string" />
+    </declare-styleable>
 </resources>

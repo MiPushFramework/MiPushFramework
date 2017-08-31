@@ -84,4 +84,6 @@ dependencies {
         // workaround issue #73
         exclude group: 'com.google.android', module: 'android'
     }
+    // Markdown
+    compile 'com.zzhoujay.richtext:richtext:2.5.4'
 }
