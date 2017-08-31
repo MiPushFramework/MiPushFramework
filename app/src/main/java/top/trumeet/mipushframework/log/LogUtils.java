@@ -29,7 +29,8 @@ public class LogUtils {
                     , Toast.LENGTH_SHORT).show();
             return;
         }
-        Intent result = new Intent(Intent.ACTION_VIEW);
+        Intent result = new Intent(Intent.ACTION_SEND);
+        result.setType("text/*");
         try {
             Uri fileUri = FileProvider.getUriForFile(
                     context,
@@ -37,11 +38,12 @@ public class LogUtils {
                     file);
             result.addFlags(
                     Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            result.setDataAndType(fileUri,
-                    context.getContentResolver().getType(fileUri));
+            result.putExtra(Intent.EXTRA_STREAM, fileUri);
             context.startActivity(result);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(context, context.getString(R.string.log_share_error,
+                    e.getMessage()), Toast.LENGTH_SHORT).show();
         }
     }
 }
