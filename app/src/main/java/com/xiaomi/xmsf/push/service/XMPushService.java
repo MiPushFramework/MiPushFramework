@@ -4,6 +4,8 @@ import android.app.IntentService;
 import android.content.ComponentName;
 import android.content.Intent;
 
+import com.xiaomi.xmsf.XmsfApp;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +42,13 @@ public class XMPushService extends IntentService {
                 logger.warn("Denied register request: " + pkg);
                 result = Event.ResultType.DENY_USER;
             } else {
+                // Check multi request
+                if (!XmsfApp.getSession(this)
+                        .getRemoveTremblingInstance()
+                        .onCallRegister(pkg)) {
+                    logger.warn("Not allowed multi request");
+                    return;
+                }
                 if (application.getType() == RegisteredApplication.Type.ASK) {
                     logger.debug("Starting auth");
                     Intent authIntent = new Intent(this, AuthActivity.class);

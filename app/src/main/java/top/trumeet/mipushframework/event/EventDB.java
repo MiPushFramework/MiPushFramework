@@ -21,7 +21,7 @@ import top.trumeet.mipushframework.db.EventDao;
 
 public class EventDB {
     private static EventDao getDao (Context context) {
-        return XmsfApp.getDaoSession(context)
+        return XmsfApp.getSession(context).getDaoSession()
                 .getEventDao();
     }
 

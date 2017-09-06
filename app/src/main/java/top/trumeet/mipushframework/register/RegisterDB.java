@@ -17,7 +17,7 @@ import top.trumeet.mipushframework.db.RegisteredApplicationDao;
 
 public class RegisterDB {
     private static RegisteredApplicationDao getDao (Context context) {
-        return XmsfApp.getDaoSession(context)
+        return XmsfApp.getSession(context).getDaoSession()
                 .getRegisteredApplicationDao();
     }
 

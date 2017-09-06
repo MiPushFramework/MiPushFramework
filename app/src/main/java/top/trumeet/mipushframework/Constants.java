@@ -2,6 +2,8 @@ package top.trumeet.mipushframework;
 
 import android.content.Context;
 
+import top.trumeet.mipushframework.utils.RemoveTremblingUtils;
+
 /**
  * Created by Trumeet on 2017/8/24.
  * Constants
@@ -90,4 +92,6 @@ public final class Constants {
     public static final String LOG_FILE = "/log/file.log";
 
     public static final String AUTHORITY_FILE_PROVIDER = "top.trumeet.mipushframework.fileprovider";
+
+    public static final short MIN_REGISTER_REQUEST_INTERVAL = RemoveTremblingUtils.MIN_REQUEST_INTERVAL;
 }
