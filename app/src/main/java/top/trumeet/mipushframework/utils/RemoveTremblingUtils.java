@@ -3,7 +3,9 @@ package top.trumeet.mipushframework.utils;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Trumeet on 2017/9/6.
@@ -71,7 +73,8 @@ public class RemoveTremblingUtils {
     private void removeOldValues () {
         prepareMap();
         Date date = new Date();
-        for (String key : mLocalTimeMap.keySet()) {
+        Set<String> keys = new HashSet<>(mLocalTimeMap.keySet());
+        for (String key : keys) {
             if (shouldAllow(mLocalTimeMap.get(key),
                     date)) {
                 // Remove it to reduce memory
