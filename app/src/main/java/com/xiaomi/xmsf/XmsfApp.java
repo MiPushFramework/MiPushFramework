@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import com.github.yuweiguocn.library.greendao.MigrationHelper;
 import com.oasisfeng.condom.CondomOptions;
 import com.oasisfeng.condom.CondomProcess;
+import com.taobao.android.dexposed.XC_MethodHook;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.channel.commonutils.logger.MyLog;
 import com.xiaomi.channel.commonutils.misc.ScheduledJobManager;
@@ -59,11 +60,22 @@ public class XmsfApp extends Application {
         return getSharedPreferences("mipush_extra", 0).edit().putLong("xmsf_startup", j).commit();
     }
 
+    private XC_MethodHook.Unhook[] mUnHooks;
+
+    @Override
+    public void onTerminate () {
+        if (mUnHooks != null)
+            for (XC_MethodHook.Unhook unhook : mUnHooks)
+                unhook.unhook();
+        super.onTerminate();
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
 
         configureLogbackDirectly();
+        mUnHooks = PushController.hookSdk();
 
         CondomOptions options = buildOptions(this, TAG_CONDOM + "_PROCESS");
         CondomProcess.installExceptDefaultProcess(this,

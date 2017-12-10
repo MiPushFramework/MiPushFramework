@@ -87,4 +87,7 @@ dependencies {
     }
     // Markdown
     compile 'com.zzhoujay.richtext:richtext:2.5.4'
+
+    // Hook
+    compile 'me.weishu:epic:0.1.2@aar'
 }

@@ -18,6 +18,10 @@ import com.oasisfeng.condom.CondomOptions;
 import com.oasisfeng.condom.OutboundJudge;
 import com.oasisfeng.condom.OutboundType;
 import com.oasisfeng.condom.kit.NullDeviceIdKit;
+import com.taobao.android.dexposed.DexposedBridge;
+import com.taobao.android.dexposed.XC_MethodHook;
+import com.taobao.android.dexposed.XC_MethodReplacement;
+import com.xiaomi.channel.commonutils.android.MIUIUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.xiaomi.push.service.XMPushService;
 import com.xiaomi.xmsf.BuildConfig;
@@ -26,6 +30,7 @@ import com.xiaomi.xmsf.push.service.receivers.BootReceiver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import top.trumeet.mipushframework.Constants;
@@ -262,5 +267,30 @@ public class PushController {
                     }
                 });
         return sOptions;
+    }
+
+    /**
+     * Hook Push SDK
+     */
+    @NonNull
+    public static XC_MethodHook.Unhook[] hookSdk () {
+        List<XC_MethodHook.Unhook> unhooks = new ArrayList<>(0);
+        if (Build.VERSION.SDK_INT >= 26) {
+            // TODO: ArtHook does not support
+            return unhooks.toArray(new XC_MethodHook.Unhook[unhooks.size()]);
+        }
+        try {
+            unhooks.add(DexposedBridge.findAndHookMethod(Class.forName("com.xiaomi.channel.commonutils.android.MIUIUtils"),
+                    "getIsMIUI", new XC_MethodReplacement() {
+                        @Override
+                        protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+                            logger.debug("Hook", "get isMIUI -> hook");
+                            return MIUIUtils.IS_MIUI;
+                        }
+                    }));
+        } catch (Throwable e) {
+            logger.error("Hook", e);
+        }
+        return unhooks.toArray(new XC_MethodHook.Unhook[unhooks.size()]);
     }
 }
