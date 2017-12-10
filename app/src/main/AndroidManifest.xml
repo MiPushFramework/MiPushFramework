@@ -21,8 +21,6 @@
         tools:replace="android:allowBackup">
 
         <service android:name="com.xiaomi.xmsf.push.service.XMPushService"
-            android:exported="true"/>
-        <service android:name="top.trumeet.mipushframework.push.PushService"
             android:process=":pushservice"/>
         <service android:name="com.xiaomi.mipush.sdk.PushMessageHandler"
             android:enabled="true" android:exported="true" />

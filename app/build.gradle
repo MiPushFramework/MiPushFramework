@@ -53,6 +53,7 @@ android {
             v2SigningEnabled false
         }
     }
+    buildToolsVersion '26.0.2'
 }
 
 dependencies {
