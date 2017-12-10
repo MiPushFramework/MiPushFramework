@@ -57,7 +57,6 @@ public abstract class BaseAppsBinder<T> extends ItemViewBinder<T, BaseAppsBinder
             holder.title.setText(packageManager.getApplicationLabel(packageManager.getApplicationInfo(pkgName,
                     0)));
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
             holder.title.setText(pkgName);
         }
         Drawable icon = getIconFromMemoryCache(pkgName);
