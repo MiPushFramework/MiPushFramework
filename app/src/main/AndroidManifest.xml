@@ -24,6 +24,9 @@
         <service android:name="com.xiaomi.xmsf.push.service.XMPushService"
             android:exported="true"
             android:process=":pushservice"/>
+        <service android:name="com.xiaomi.push.service.XMPushService"
+            android:exported="false"
+            android:process=":pushservice"/>
         <service android:name="com.xiaomi.xmsf.push.service.notificationcollection.NotificationListener"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
@@ -41,8 +44,6 @@
             </intent-filter>
         </receiver>
 
-        <service android:name="com.xiaomi.xmsf.push.service.XMPushService"
-            android:process=":pushservice"/>
         <service android:name="com.xiaomi.mipush.sdk.PushMessageHandler"
             android:enabled="true" android:exported="true" />
         <service android:name="com.xiaomi.mipush.sdk.MessageHandleService"/>
