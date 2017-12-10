@@ -163,7 +163,9 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                 .getApplicationLabel(getActivity().getPackageManager()
                 .getApplicationInfo(mApplicationItem.getPackageName(), 0)));
             } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
+                appPreference.setIcon(android.R.drawable.sym_def_app_icon);
+                appPreference.setSummary(mApplicationItem.getPackageName());
+                appPreference.setTitle(mApplicationItem.getPackageName());
             }
             screen.addPreference(appPreference);
 
