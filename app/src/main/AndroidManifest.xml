@@ -20,6 +20,27 @@
         xmlns:tools="http://schemas.android.com/tools"
         tools:replace="android:allowBackup">
 
+        <service android:name="com.xiaomi.xmsf.push.service.HttpService" android:exported="true" />
+        <service android:name="com.xiaomi.xmsf.push.service.XMPushService"
+            android:exported="true"
+            android:process=":pushservice"/>
+        <service android:name="com.xiaomi.xmsf.push.service.notificationcollection.NotificationListener"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+        <receiver android:name="com.xiaomi.xmsf.push.service.receivers.BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.xiaomi.xmsf.push.service.receivers.NetworkStatusReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
         <service android:name="com.xiaomi.xmsf.push.service.XMPushService"
             android:process=":pushservice"/>
         <service android:name="com.xiaomi.mipush.sdk.PushMessageHandler"
@@ -86,12 +107,6 @@
 
         <activity android:name="top.trumeet.mipushframework.settings.MainActivity"
             android:label="@string/preference_title"/>
-
-        <receiver android:name=".push.service.receivers.BootReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
 
         <activity android:name="top.trumeet.mipushframework.permissions.ManagePermissionsActivity"
             android:label="@string/action_edit_permission"

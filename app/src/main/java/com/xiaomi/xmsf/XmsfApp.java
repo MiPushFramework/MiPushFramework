@@ -1,18 +1,34 @@
 package com.xiaomi.xmsf;
 
+import android.Manifest;
 import android.app.Application;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
 
 import com.github.yuweiguocn.library.greendao.MigrationHelper;
 import com.oasisfeng.condom.CondomOptions;
 import com.oasisfeng.condom.CondomProcess;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
+import com.xiaomi.channel.commonutils.logger.MyLog;
+import com.xiaomi.channel.commonutils.misc.ScheduledJobManager;
 import com.xiaomi.mipush.sdk.Logger;
+import com.xiaomi.push.service.OnlineConfig;
+import com.xiaomi.xmpush.thrift.ConfigKey;
 import com.xiaomi.xmsf.push.service.MiuiPushActivateService;
+import com.xiaomi.xmsf.push.service.notificationcollection.NotificationListener;
+import com.xiaomi.xmsf.push.service.notificationcollection.UploadNotificationJob;
 
 import org.greenrobot.greendao.database.Database;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Random;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.android.LogcatAppender;
@@ -71,6 +87,7 @@ public class XmsfApp extends Application {
                 , newLogger);
         if (PushController.isPrefsEnable(this))
             PushController.setAllEnable(true, this);
+        scheduleUploadNotificationInfo();
         long currentTimeMillis = System.currentTimeMillis();
         long lastStartupTime = getLastStartupTime();
         if (isAppMainProc(this) && (currentTimeMillis - lastStartupTime > 300000 || currentTimeMillis - lastStartupTime < 0)) {
@@ -156,5 +173,65 @@ public class XmsfApp extends Application {
         ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
         root.addAppender(fileAppender);
         root.addAppender(logcatAppender);
+    }
+
+    private HashSet<ComponentName> loadEnabledServices() {
+        HashSet<ComponentName> hashSet = new HashSet();
+        String string = Settings.Secure.getString(getContentResolver()
+                , "enabled_notification_listeners");
+        if (!(string == null || "".equals(string))) {
+            String[] split = string.split(":");
+            for (String unflattenFromString : split) {
+                ComponentName unflattenFromString2 = ComponentName.unflattenFromString(unflattenFromString);
+                if (unflattenFromString2 != null) {
+                    hashSet.add(unflattenFromString2);
+                }
+            }
+        }
+        return hashSet;
+    }
+
+    private void saveEnabledServices(HashSet<ComponentName> hashSet) {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_SECURE_SETTINGS)
+                != PackageManager.PERMISSION_GRANTED)
+            return;
+        StringBuilder stringBuilder = null;
+        Iterator it = hashSet.iterator();
+        while (it.hasNext()) {
+            ComponentName componentName = (ComponentName) it.next();
+            if (stringBuilder == null) {
+                stringBuilder = new StringBuilder();
+            } else {
+                stringBuilder.append(':');
+            }
+            stringBuilder.append(componentName.flattenToString());
+        }
+        Settings.Secure.putString(getContentResolver(), "enabled_notification_listeners", stringBuilder != null ? stringBuilder.toString() : "");
+    }
+
+    private void setListenerDefaultAdded() {
+        getSharedPreferences("mipush_extra", 0).edit().putBoolean("notification_listener_added", true).commit();
+    }
+
+    private boolean isListenerDefaultAdded() {
+        return getSharedPreferences("mipush_extra", 0).getBoolean("notification_listener_added", false);
+    }
+
+    private void scheduleUploadNotificationInfo() {
+        try {
+            if (!isListenerDefaultAdded() && Build.VERSION.SDK_INT >= 19) {
+                HashSet loadEnabledServices = loadEnabledServices();
+                loadEnabledServices.add(new ComponentName(this, NotificationListener.class));
+                saveEnabledServices(loadEnabledServices);
+                setListenerDefaultAdded();
+            }
+            int intValue = OnlineConfig.getInstance(this).getIntValue(ConfigKey.UploadNotificationInfoFrequency.getValue(), 120) * 60;
+            int nextInt = (new Random().nextInt(intValue) + intValue) / 2;
+            ScheduledJobManager.getInstance(this).addRepeatJob(new UploadNotificationJob(this)
+                    , intValue, nextInt);
+        } catch (Throwable th) {
+            MyLog.e(th);
+        }
     }
 }
