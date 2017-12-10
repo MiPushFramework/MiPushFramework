@@ -1,7 +1,5 @@
 package top.trumeet.mipushframework.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
@@ -9,6 +7,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+
+import me.pqpo.librarylog4a.Log4a;
 
 /**
  * <pre>
@@ -202,17 +202,18 @@ public final class ShellUtils {
         return s == null || s.trim().equals("");
     }
 
+    private static final String TAG = "Shell";
+
     /**
      * Exec shell using root
      * @param command command line
      * @return success
      */
     public static boolean exec (String command) {
-        Logger logger = LoggerFactory.getLogger("Shell");
-        logger.debug("Exec:" + command);
+        Log4a.d(TAG, "Exec:" + command);
         ShellUtils.CommandResult result = ShellUtils.execCmd(command, true, true);
-        logger.debug("SuccessMsg:" + result.successMsg);
-        logger.debug("ErrMsg:" + result.errorMsg);
+        Log4a.d(TAG, "SuccessMsg:" + result.successMsg);
+        Log4a.d(TAG, "ErrMsg:" + result.errorMsg);
         return result.isSuccess();
     }
 }

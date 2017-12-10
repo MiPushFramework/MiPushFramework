@@ -11,13 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.List;
 
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
+import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.mipushframework.utils.OnLoadMoreListener;
 
 /**
@@ -30,7 +28,7 @@ public class EventFragment extends Fragment {
             .getName() + ".EXTRA_TARGET_PACKAGE";
 
     private MultiTypeAdapter mAdapter;
-    private Logger logger = LoggerFactory.getLogger(EventFragment.class);
+    private static final String TAG = EventFragment.class.getSimpleName();
 
     /**
      * Already load page
@@ -83,7 +81,7 @@ public class EventFragment extends Fragment {
     }
 
     private void loadPage () {
-        logger.debug("loadPage");
+        Log4a.d(TAG, "loadPage");
         if (mLoadTask != null && !mLoadTask.isCancelled())
             return;
         mLoadTask = new LoadTask(mLoadPage + 1);

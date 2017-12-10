@@ -27,12 +27,10 @@ import com.xiaomi.push.service.XMPushService;
 import com.xiaomi.xmsf.BuildConfig;
 import com.xiaomi.xmsf.push.service.receivers.BootReceiver;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.mipushframework.Constants;
 import top.trumeet.mipushframework.event.Event;
 import top.trumeet.mipushframework.event.EventDB;
@@ -50,11 +48,7 @@ import static top.trumeet.mipushframework.Constants.TAG_CONDOM;
  */
 
 public class PushController {
-    private static Logger logger;
-    
-    static {
-        logger = LoggerFactory.getLogger(PushController.class);
-    }
+    private static final String TAG = PushController.class.getSimpleName();
     
     private static SharedPreferences getPrefs (Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
@@ -154,16 +148,16 @@ public class PushController {
                 list) {
             String pkg = info.service.getPackageName();
             String clz = info.service.getClassName();
-            //logger.debug("process -> " + info.process);
-            //logger.debug("package -> " + pkg);
-            //logger.debug("className -> " + clz);
-            //logger.debug("started -> "
+            //Log4a.d("process -> " + info.process);
+            //Log4a.d("package -> " + pkg);
+            //Log4a.d("className -> " + clz);
+            //Log4a.d("started -> "
             //        + info.started);
             if (context.getPackageName().equals(pkg)) {
                 if (!pkg.equals(context.getPackageName()) ||
                         !clz.equals(XMPushService.class.getName()) ||
                         !info.started) {
-                    logger.error( "SERVICE NOT RUNNING! PLZ CHECK YOUR ROM OR REPORT AN ISSUE!");
+                    Log4a.e(TAG,  "SERVICE NOT RUNNING! PLZ CHECK YOUR ROM OR REPORT AN ISSUE!");
                     return false;
                 } else {
                     return true;
@@ -198,41 +192,41 @@ public class PushController {
                 .setOutboundJudge(new OutboundJudge() {
                     @Override
                     public boolean shouldAllow(@NonNull OutboundType type, @Nullable Intent intent, @NonNull String target_package) {
-                        logger.debug("shouldAllow ->" + type.toString());
+                        Log4a.d(TAG, "shouldAllow ->" + type.toString());
                         if (type == OutboundType.START_SERVICE ||
                                 type == OutboundType.BIND_SERVICE) {
-                            logger.info("Allowed start or bind service: " + intent);
+                            Log4a.i(TAG, "Allowed start or bind service: " + intent);
                             return true;
                         }
                         if (type == OutboundType.BROADCAST) {
                             if (intent == null) {
-                                logger.error( "Not allowed broadcast with null intent: " + target_package);
+                                Log4a.e(TAG,  "Not allowed broadcast with null intent: " + target_package);
                                 return false;
                             }
 
                             if (intent.getAction().equals(Constants.ACTION_MESSAGE_ARRIVED) ||
                                     intent.getAction().equals(Constants.ACTION_ERROR) ||
                                     intent.getAction().equals(Constants.ACTION_RECEIVE_MESSAGE)) {
-                                logger.debug("Handle message broadcast: " + intent + ", " +
+                                Log4a.d(TAG, "Handle message broadcast: " + intent + ", " +
                                         target_package);
                                 RegisteredApplication application = RegisterDB.registerApplication(target_package,
                                         false, context);
                                 if (application == null) {
-                                    logger.warn("Not registered application: " + target_package);
+                                    Log4a.w(TAG, "Not registered application: " + target_package);
                                     return true;
                                 }
                                 if (BuildConfig.DEBUG) {
                                     // TODO: Always false?
-                                    logger.debug("hasExtra: " +
+                                    Log4a.d(TAG, "hasExtra: " +
                                             intent.hasExtra(Constants.EXTRA_MESSAGE_TYPE));
                                 }
                                 int messageType = intent.getIntExtra(Constants.EXTRA_MESSAGE_TYPE
                                         , Constants.MESSAGE_TYPE_PUSH);
-                                logger.debug("messageType: " + messageType);
+                                Log4a.d(TAG, "messageType: " + messageType);
                                 switch (messageType) {
                                     case Constants.MESSAGE_TYPE_PUSH:
                                         if (application.getAllowReceivePush()) {
-                                            logger.info("Allow message");
+                                            Log4a.i(TAG, "Allow message");
                                             // Try add flags?
                                             intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                                             intent.setPackage(target_package);
@@ -240,29 +234,29 @@ public class PushController {
                                                     Event.ResultType.OK, context);
                                             return true;
                                         } else {
-                                            logger.warn("Not allow message");
+                                            Log4a.w(TAG, "Not allow message");
                                             EventDB.insertEvent(target_package, Event.Type.RECEIVE_PUSH,
                                                     Event.ResultType.DENY_USER, context);
                                             return false;
                                         }
                                     case Constants.MESSAGE_TYPE_REGISTER_RESULT:
                                         if (application.getAllowReceiveRegisterResult()) {
-                                            logger.info("Allow callback register result");
+                                            Log4a.i(TAG, "Allow callback register result");
                                             // Try add flags?
                                             intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                                             return true;
                                         } else {
-                                            logger.warn("Not allow callback register result");
+                                            Log4a.w(TAG, "Not allow callback register result");
                                             return false;
                                         }
                                 }
-                                logger.error( "Not allowed broadcast: " + intent);
+                                Log4a.e(TAG,  "Not allowed broadcast: " + intent);
                                 return false;
                             }
                         }
 
                         // Deny something will crash...
-                        logger.warn("Allowed: " + intent + ", pkg=" + target_package);
+                        Log4a.w(TAG, "Allowed: " + intent + ", pkg=" + target_package);
                         return true;
                     }
                 });
@@ -284,12 +278,12 @@ public class PushController {
                     "getIsMIUI", new XC_MethodReplacement() {
                         @Override
                         protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
-                            logger.debug("Hook", "get isMIUI -> hook");
+                            Log4a.d("Hook", "get isMIUI -> hook");
                             return MIUIUtils.IS_MIUI;
                         }
                     }));
         } catch (Throwable e) {
-            logger.error("Hook", e);
+            Log4a.e(TAG, "Hook", e);
         }
         return unhooks.toArray(new XC_MethodHook.Unhook[unhooks.size()]);
     }

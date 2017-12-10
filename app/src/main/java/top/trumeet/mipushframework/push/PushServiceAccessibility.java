@@ -7,11 +7,10 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.PowerManager;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
+import me.pqpo.librarylog4a.Log4a;
 
 /**
  * Created by Trumeet on 2017/8/25.
@@ -20,7 +19,6 @@ import java.lang.reflect.Method;
 
 public class PushServiceAccessibility {
     private static final String TAG = "Accessibility";
-    private static Logger logger = LoggerFactory.getLogger(TAG);
 
     /**
      * Check this app is in system doze whitelist.
@@ -42,7 +40,7 @@ public class PushServiceAccessibility {
      */
     @TargetApi(Build.VERSION_CODES.O)
     public static boolean checkAllowRunInBackground (Context context) {
-        logger.debug("Check allow run in background");
+        Log4a.d(TAG, "Check allow run in background");
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
             return true;
         try {
@@ -57,10 +55,10 @@ public class PushServiceAccessibility {
                             .getPackageUid(context.getPackageName(),
                                     PackageManager.GET_DISABLED_COMPONENTS), context.getPackageName());
             if (mode == AppOpsManager.MODE_ERRORED) {
-                logger.error("ERRORED");
+                Log4a.e(TAG, "ERRORED");
                 return true;
             } else {
-                logger.debug("Mode: " + mode);
+                Log4a.d(TAG, "Mode: " + mode);
                 return mode != AppOpsManager.MODE_IGNORED;
             }
         } catch (Exception e) {

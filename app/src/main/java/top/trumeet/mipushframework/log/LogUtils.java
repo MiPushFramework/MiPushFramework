@@ -10,6 +10,10 @@ import com.xiaomi.xmsf.R;
 
 import java.io.File;
 
+import me.pqpo.librarylog4a.Log4a;
+import me.pqpo.librarylog4a.Logger;
+import me.pqpo.librarylog4a.appender.AndroidAppender;
+import me.pqpo.librarylog4a.appender.FileAppender;
 import top.trumeet.mipushframework.Constants;
 
 /**
@@ -18,6 +22,22 @@ import top.trumeet.mipushframework.Constants;
  */
 
 public class LogUtils {
+
+    public static void configureLog (Context context) {
+        AndroidAppender.Builder androidBuild = new AndroidAppender.Builder();
+
+        String log_path = getLogFile(context);
+        FileAppender.Builder fileBuild = new FileAppender.Builder(context)
+                .setLogFilePath(log_path);
+
+        Logger logger = new Logger.Builder()
+                .enableAndroidAppender(androidBuild)
+                .enableFileAppender(fileBuild)
+                .create();
+
+        Log4a.setLogger(logger);
+    }
+
     public static String getLogFile (Context context) {
         return context.getCacheDir().getAbsolutePath().concat(Constants.LOG_FILE);
     }

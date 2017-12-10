@@ -4,9 +4,7 @@ import android.os.Bundle;
 
 import com.xiaomi.xmsf.R;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import me.pqpo.librarylog4a.Log4a;
 import moe.shizuku.preference.Preference;
 import moe.shizuku.preference.PreferenceFragment;
 import top.trumeet.mipushframework.log.LogUtils;
@@ -21,7 +19,7 @@ import top.trumeet.mipushframework.push.PushServiceAccessibility;
  */
 
 public class SettingsFragment extends PreferenceFragment {
-    private Logger logger = LoggerFactory.getLogger(SettingsFragment.class);
+    private static final String TAG = SettingsFragment.class.getSimpleName();
 
     private Preference mDozePreference;
     private Preference mCheckServicePreference;
@@ -52,7 +50,7 @@ public class SettingsFragment extends PreferenceFragment {
         mDozePreference.setVisible(!PushServiceAccessibility.isInDozeWhiteList(getActivity()));
         mCheckServicePreference.setVisible(!(PushController.isPrefsEnable(getActivity()) &&
                 PushController.isServiceRunning(getActivity())));
-        logger.debug("rebuild UI took: " + String.valueOf(System.currentTimeMillis() -
+        Log4a.d(TAG, "rebuild UI took: " + String.valueOf(System.currentTimeMillis() -
                 time));
     }
 }

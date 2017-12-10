@@ -14,6 +14,9 @@ android {
         versionName rootProject.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resConfigs "zh"
+        ndk {
+            abiFilters 'armeabi', 'armeabi-v7a', 'mips', 'x86'
+        }
     }
     buildTypes {
         debug {
@@ -79,12 +82,9 @@ dependencies {
     implementation 'moe.shizuku.preference:preference-dialog-android:2.2.0'
     implementation 'moe.shizuku.preference:preference-simplemenu:2.2.0'
     // Log
-    compile 'org.slf4j:slf4j-api:1.7.21'
-    compile 'com.github.tony19:logback-android-core:1.1.1-6'
-    compile('com.github.tony19:logback-android-classic:1.1.1-6') {
-        // workaround issue #73
-        exclude group: 'com.google.android', module: 'android'
-    }
+    compile ('com.github.pqpo:Log4a:v1.1.0', {
+        exclude group: 'com.android.support'
+    })
     // Markdown
     compile 'com.zzhoujay.richtext:richtext:2.5.4'
 

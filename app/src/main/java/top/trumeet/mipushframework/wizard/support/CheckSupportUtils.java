@@ -13,9 +13,7 @@ import android.support.annotation.Nullable;
 import com.xiaomi.mipush.sdk.PushMessageReceiver;
 import com.xiaomi.push.service.XMPushService;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.mipushframework.Constants;
 
 /**
@@ -25,7 +23,7 @@ import top.trumeet.mipushframework.Constants;
  */
 
 final class CheckSupportUtils {
-    private Logger logger = LoggerFactory.getLogger("CheckSupportUtils");
+    private static final String TAG = CheckSupportUtils.class.getSimpleName();
 
     /**
      * Check package is support MiPush.
@@ -42,11 +40,11 @@ final class CheckSupportUtils {
     private SupportStatus checkNonStatic (PackageInfo info, PackageManager manager) {
         String pkg = info.packageName;
         if (!hasMiPushService(info)) {
-            logger.error("Pkg " + pkg + " not have push service!");
+            Log4a.e(TAG, "Pkg " + pkg + " not have push service!");
             return null;
         }
         boolean receiverSupport = customReceiverPass(info, manager);
-        logger.debug("Pkg " + pkg + " support receiver: " + receiverSupport);
+        Log4a.d(TAG, "Pkg " + pkg + " support receiver: " + receiverSupport);
         if (receiverSupport) {
             return new SupportStatus(pkg, SupportStatus.Status.OK);
         } else {
@@ -83,7 +81,7 @@ final class CheckSupportUtils {
         if (info.services == null)
             return false;
         for (ServiceInfo serviceInfo : info.services) {
-            logger.debug("Service name -> " + serviceInfo.name);
+            Log4a.d(TAG, "Service name -> " + serviceInfo.name);
             if (XMPushService.class.getName().equals(serviceInfo.name)) {
                 return true;
             }
@@ -117,12 +115,12 @@ final class CheckSupportUtils {
                 boolean enabled = packageManager.getComponentEnabledSetting(new ComponentName(
                         activityInfo.packageName, activityInfo.name
                 )) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
-                logger.info("Handle receiver: " + activityInfo.name +
+                Log4a.i(TAG, "Handle receiver: " + activityInfo.name +
                 "; enabled: " + enabled);
                 return enabled;
             }
         }
-        logger.debug("Not found custom message receiver in " + info.packageName);
+        Log4a.d(TAG, "Not found custom message receiver in " + info.packageName);
         // Not found
         return true;
     }
