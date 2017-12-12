@@ -32,6 +32,7 @@ import java.util.List;
 
 import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.mipushframework.Constants;
+import top.trumeet.mipushframework.alive.KeepAliveService;
 import top.trumeet.mipushframework.event.Event;
 import top.trumeet.mipushframework.event.EventDB;
 import top.trumeet.mipushframework.register.RegisterDB;
@@ -122,6 +123,7 @@ public class PushController {
         setPrefsEnable(enable, context);
         setServiceEnable(enable, context);
         setBootReceiverEnable(enable, context);
+        setAliveServiceEnable(enable, context);
     }
 
     /**
@@ -131,6 +133,25 @@ public class PushController {
      */
     public static boolean isAllEnable (Context context) {
         return isPrefsEnable(context) && isServiceRunning (context);
+    }
+
+    public static void setAliveServiceEnable (boolean enable, Context context) {
+        if (enable) {
+            context.getPackageManager()
+                    .setComponentEnabledSetting(new ComponentName(context,
+                            KeepAliveService.class),
+                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                            PackageManager.DONT_KILL_APP);
+            startAliveService(context);
+        }
+        else {
+            context.getPackageManager()
+                    .setComponentEnabledSetting(new ComponentName(context,
+                                    KeepAliveService.class),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP);
+            stopAliveService(context);
+        }
     }
 
     /**
@@ -286,5 +307,13 @@ public class PushController {
             Log4a.e(TAG, "Hook", e);
         }
         return unhooks.toArray(new XC_MethodHook.Unhook[unhooks.size()]);
+    }
+
+    private static void startAliveService (Context context) {
+        context.startService(new Intent(context, KeepAliveService.class));
+    }
+
+    private static void stopAliveService (Context context) {
+        context.stopService(new Intent(context, KeepAliveService.class));
     }
 }

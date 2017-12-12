@@ -159,4 +159,8 @@
 
     <!-- Manage applications, individual application info screen title. For example, if they click on "Browser" in "Manage applications", the title of the next screen will be this -->
     <string name="application_info_label">App info</string>
+
+    <!-- Notification -->
+    <string name="notification_category_alive">Push Status</string>
+    <string name="notification_alive">Mi Push running</string>
 </resources>
