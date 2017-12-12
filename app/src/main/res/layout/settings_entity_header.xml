@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (C) 2016 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+
+<!-- Entity header -->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/entity_header"
+    style="@style/EntityHeader"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+    android:paddingEnd="0dp"
+    android:paddingTop="24dp"
+    android:paddingBottom="24dp">
+
+    <ImageView
+        android:id="@+id/entity_header_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="fitXY"
+        android:layout_gravity="center_horizontal"
+        android:antialias="true" />
+
+    <LinearLayout
+        android:id="@+id/entity_header_links"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@android:id/button1"
+            style="?android:attr/actionOverflowButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:minWidth="@dimen/min_tap_target_size"
+            android:src="@drawable/ic_settings_24dp"
+            android:tint="?android:attr/colorAccent" />
+
+        <ImageButton
+            android:id="@android:id/button2"
+            style="?android:attr/actionOverflowButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:minWidth="@dimen/min_tap_target_size"
+            android:src="@null"
+            android:tint="?android:attr/colorAccent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/entity_header_icon"
+        android:layout_toStartOf="@id/entity_header_links"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/entity_header_title"
+            style="@style/TextAppearance.EntityHeaderTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="false"
+            android:ellipsize="marquee"
+            android:gravity="start"
+            android:textDirection="locale"
+            android:paddingTop="8dp" />
+
+        <TextView
+            android:id="@+id/install_type"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:textAppearance="@android:style/TextAppearance.Material.Body1"
+            android:textColor="?android:attr/textColorSecondary" />
+
+        <TextView
+            android:id="@+id/entity_header_summary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:textAlignment="viewStart"
+            android:textAppearance="@android:style/TextAppearance.Material.Body1"
+            android:textColor="?android:attr/textColorSecondary" />
+
+    </LinearLayout>
+
+</RelativeLayout>

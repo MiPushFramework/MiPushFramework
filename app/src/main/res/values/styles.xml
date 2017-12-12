@@ -1,8 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="@style/Theme.AppCompat.Light">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <item name="actionBarTheme">@style/ColorTheme.O.ActionBar</item>
         <item name="preferenceTheme">@style/AppTheme.PreferenceTheme</item>
+        <item name="colorSettings">#ffeeeeee</item><!-- material gray 200 -->
+    </style>
+
+    <style name="ColorTheme.O.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
+        <!--<item name="android:colorControlNormal">?android:textColorSecondary</item>-->
+        <item name="android:textColorPrimary">?colorAccent</item>
+        <item name="android:textColorSecondary">?colorAccent</item>
     </style>
 
     <style name="AppTheme.PreferenceTheme" parent="PreferenceThemeOverlay">
@@ -35,5 +41,20 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="EntityHeader">
+        <item name="android:background">?colorSettings</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <style name="TextAppearance.EntityHeaderTitle"
+        parent="@style/TextAppearance.AppCompat.Subhead">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textSize">16sp</item>
     </style>
 </resources>

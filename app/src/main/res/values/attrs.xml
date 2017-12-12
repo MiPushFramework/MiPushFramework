@@ -12,4 +12,6 @@
         <attr name="icon" format="reference" />
         <attr name="text" format="reference|string" />
     </declare-styleable>
+
+    <attr name="colorSettings" format="color|reference" />
 </resources>

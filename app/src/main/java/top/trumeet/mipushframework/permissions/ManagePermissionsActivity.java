@@ -1,19 +1,21 @@
 package top.trumeet.mipushframework.permissions;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.android.settings.widget.EntityHeaderController;
 import com.xiaomi.xmsf.R;
+import com.xiaomi.xmsf.push.service.Utils;
 
 import moe.shizuku.preference.Preference;
 import moe.shizuku.preference.PreferenceCategory;
@@ -123,6 +125,7 @@ public class ManagePermissionsActivity extends AppCompatActivity {
             MenuItem itemOk = menu.add(0, 0, 0, R.string.apply);
             Drawable iconOk = ContextCompat.getDrawable(getActivity(),
                     R.drawable.ic_check_black_24dp);
+            DrawableCompat.setTint(iconOk, Utils.getColorAttr(getContext(), R.attr.colorAccent));
             itemOk.setIcon(iconOk);
             itemOk.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         }
@@ -154,20 +157,18 @@ public class ManagePermissionsActivity extends AppCompatActivity {
             PreferenceScreen screen = getPreferenceManager()
                     .createPreferenceScreen(getActivity());
 
-            Preference appPreference = new Preference(getActivity());
-            try {
-                appPreference.setIcon(getActivity().getPackageManager()
-                .getApplicationIcon(mApplicationItem.getPackageName()));
-                appPreference.setSummary(mApplicationItem.getPackageName());
-                appPreference.setTitle(getActivity().getPackageManager()
-                .getApplicationLabel(getActivity().getPackageManager()
-                .getApplicationInfo(mApplicationItem.getPackageName(), 0)));
-            } catch (PackageManager.NameNotFoundException e) {
-                appPreference.setIcon(android.R.drawable.sym_def_app_icon);
-                appPreference.setSummary(mApplicationItem.getPackageName());
-                appPreference.setTitle(mApplicationItem.getPackageName());
-            }
-            screen.addPreference(appPreference);
+            Preference appPreferenceOreo = EntityHeaderController.newInstance((AppCompatActivity)getActivity(),
+                    this, null)
+                    .setRecyclerView(getListView())
+                    .setIcon(mApplicationItem.getIcon(getContext()))
+                    .setLabel(mApplicationItem.getLabel(getContext()))
+                    .setSummary(mApplicationItem.getPackageName())
+                    .setPackageName(mApplicationItem.getPackageName())
+                    .setUid(mApplicationItem.getUid(getContext()))
+                    .setButtonActions(EntityHeaderController.ActionType.ACTION_APP_INFO
+                            , EntityHeaderController.ActionType.ACTION_NONE)
+                    .done((AppCompatActivity)getActivity(), getContext());
+            screen.addPreference(appPreferenceOreo);
 
             final SimpleMenuPreference preferenceRegisterMode =
                     new SimpleMenuPreference(getActivity(),

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Preference fragment padding, bottom -->
+    <dimen name="preference_fragment_padding_bottom">16dp</dimen>
+    <dimen name="settings_side_margin">64dp</dimen>
+
+</resources>

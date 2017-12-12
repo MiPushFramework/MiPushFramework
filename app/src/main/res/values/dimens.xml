@@ -12,4 +12,11 @@
     <dimen name="design_bottom_navigation_active_item_max_width">168dp</dimen>
 
     <dimen name="new_version_card_height">150dp</dimen>
+
+    <!-- Preference fragment padding, bottom -->
+    <dimen name="preference_fragment_padding_bottom">0dp</dimen>
+
+    <dimen name="settings_side_margin">0dip</dimen>
+
+    <dimen name="min_tap_target_size">48dp</dimen>
 </resources>

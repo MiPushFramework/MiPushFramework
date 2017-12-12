@@ -1,8 +1,13 @@
 package top.trumeet.mipushframework.register;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
@@ -153,5 +158,34 @@ public class RegisteredApplication implements Parcelable {
 
     public void setAllowReceiveRegisterResult(boolean allowReceiveRegisterResult) {
         this.allowReceiveRegisterResult = allowReceiveRegisterResult;
+    }
+
+    @NonNull
+    public CharSequence getLabel (Context context) {
+        try {
+            return context.getPackageManager().getApplicationLabel(context.getPackageManager()
+                    .getApplicationInfo(packageName, PackageManager.GET_DISABLED_COMPONENTS));
+        } catch (PackageManager.NameNotFoundException e) {
+            return packageName;
+        }
+    }
+
+    @NonNull
+    public Drawable getIcon (Context context) {
+        try {
+            return context.getPackageManager().getApplicationIcon(packageName);
+        } catch (PackageManager.NameNotFoundException e) {
+            return ContextCompat.getDrawable(context, android.R.mipmap.sym_def_app_icon);
+        }
+    }
+
+    public int getUid (Context context) {
+        try {
+            return context.getPackageManager().getApplicationInfo(packageName,
+                    0)
+                    .uid;
+        } catch (PackageManager.NameNotFoundException e) {
+            return -1;
+        }
     }
 }
