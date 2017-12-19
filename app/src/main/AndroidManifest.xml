@@ -21,6 +21,7 @@
         tools:replace="android:allowBackup">
 
         <service android:name="com.xiaomi.xmsf.push.service.HttpService" android:exported="true" />
+        <service android:name=".push.service.StatService" android:exported="true" />
         <service android:name="com.xiaomi.xmsf.push.service.XMPushService"
             android:exported="true"
             android:process=":pushservice"/>
@@ -137,5 +138,13 @@
 
         <service android:name="top.trumeet.mipushframework.alive.KeepAliveService"
             android:enabled="false"/>
+
+        <receiver android:name="com.xiaomi.xmsf.push.service.receivers.NotificationEventReceiver" android:permission="com.xiaomi.xmsf.permission.NOTIFICATION_ACTIVE">
+            <intent-filter>
+                <action android:name="com.xiaomi.xmsf.push.NOTIFICATION_ACTIVE" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.xiaomi.miui.pushads.sdk.MiPushRelayTraceService" />
     </application>
 </manifest>
