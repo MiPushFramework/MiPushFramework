@@ -1,0 +1,76 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        applicationId "com.xiaomi.xmsf"
+        minSdkVersion rootProject.ext.minSdkVersion
+        // Keep alive
+        targetSdkVersion 23
+        // XMPush sdk requires XMPushService not exported, but sdk will start exported XMPushService after
+        // XMSF version code 106. SDK will also check version code must >= 105.
+        versionCode 105
+        versionName rootProject.ext.versionName + "_framework"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            abiFilters 'armeabi', 'armeabi-v7a', 'mips', 'x86'
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            signingConfig signingConfigs.debug
+            minifyEnabled false
+            //shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    signingConfigs {
+        debug {
+            try {
+                Properties properties = new Properties()
+                properties.load(project.rootProject.file('local.properties').newDataInputStream())
+                storeFile file(properties.getProperty('KEY_LOCATE'))
+                storePassword properties.getProperty('KEYSTORE_PASSWORD')
+                keyAlias properties.getProperty('KEYSTORE_ALIAS')
+                keyPassword properties.getProperty('KEY_PASSWORD')
+            }
+            catch (ignored) {
+                throw new InvalidUserDataException("You should define KEYSTORE_PASSWORD and KEY_PASSWORD in local.properties.")
+            }
+        }
+        release {
+            // 满足下面两个条件时需要此配置
+            // 1. Gradle版本 >= 2.14.1
+            // 2. Android Gradle Plugin 版本 >= 2.2.0
+            // 作用是只使用旧版签名，禁用V2版签名模式
+            v2SigningEnabled false
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    // Log
+    compile('com.github.pqpo:Log4a:v1.1.0', {
+        exclude group: 'com.android.support'
+    })
+    // Hook
+    implementation 'me.weishu:epic:0.1.2@aar'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation project(':common')
+    implementation project(':condom')
+    implementation "com.android.support:support-v4:$supportLibraryVersion"
+    implementation project(':provider')
+}

@@ -8,6 +8,8 @@ import com.xiaomi.xmsf.R;
 
 import java.util.Date;
 
+import top.trumeet.common.event.Event;
+import top.trumeet.common.utils.Utils;
 import top.trumeet.mipushframework.permissions.ManagePermissionsActivity;
 import top.trumeet.mipushframework.utils.BaseAppsBinder;
 import top.trumeet.mipushframework.utils.ParseUtils;
@@ -66,7 +68,7 @@ public class EventItemBinder extends BaseAppsBinder<Event> {
         }
         holder.text2.setText(
                 ParseUtils.getFriendlyDateString(new Date(item.getDate()),
-                        EventDB.getUTC(), holder.itemView.getContext()));
+                        Utils.getUTC(), holder.itemView.getContext()));
         holder.status.setText(status);
 
         if (clickEnabled) {

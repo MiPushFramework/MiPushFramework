@@ -13,7 +13,7 @@ import com.android.setupwizardlib.SetupWizardLayout;
 import com.android.setupwizardlib.view.NavigationBar;
 import com.xiaomi.xmsf.R;
 
-import top.trumeet.mipushframework.settings.MainActivity;
+import top.trumeet.mipushframework.MainActivity;
 
 /**
  * Created by Trumeet on 2017/8/24.

@@ -2,6 +2,7 @@ package top.trumeet.mipushframework.register;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CancellationSignal;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -16,8 +17,10 @@ import java.util.List;
 
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
+import top.trumeet.common.db.RegisteredApplicationDb;
+import top.trumeet.common.register.RegisteredApplication;
 
-import static top.trumeet.mipushframework.Constants.TAG;
+import static top.trumeet.common.Constants.TAG;
 
 /**
  * Created by Trumeet on 2017/8/26.
@@ -73,9 +76,13 @@ public class RegisteredApplicationFragment extends Fragment {
     }
 
     private class LoadTask extends AsyncTask<Integer, Void, List<RegisteredApplication>> {
+        private CancellationSignal mSignal;
+
         @Override
         protected List<RegisteredApplication> doInBackground(Integer... integers) {
-            return RegisterDB.getList(getActivity());
+            mSignal = new CancellationSignal();
+            return RegisteredApplicationDb.getList(getActivity(),
+                    null, mSignal);
         }
 
         @Override
@@ -85,6 +92,15 @@ public class RegisteredApplicationFragment extends Fragment {
             items.addAll(list);
             mAdapter.setItems(items);
             mAdapter.notifyItemRangeInserted(start, list.size());
+        }
+
+        @Override
+        protected void onCancelled () {
+            if (mSignal != null) {
+                if (!mSignal.isCanceled())
+                    mSignal.cancel();
+                mSignal = null;
+            }
         }
     }
 }

@@ -17,7 +17,7 @@ import com.android.setupwizardlib.SetupWizardLayout;
 import com.android.setupwizardlib.view.NavigationBar;
 import com.xiaomi.xmsf.R;
 
-import top.trumeet.mipushframework.Constants;
+import top.trumeet.common.Constants;
 import top.trumeet.mipushframework.wizard.FinishWizardActivity;
 
 /**

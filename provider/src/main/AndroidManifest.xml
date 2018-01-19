@@ -1,0 +1,50 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="top.trumeet.mipush.provider">
+
+    <!-- Allows an application to write application push settings.
+        <p>Protection level: signature|privileged
+    -->
+    <permission android:name="top.trumeet.mipush.permissions.WRITE_APPLICATION_SETTINGS"
+        android:protectionLevel="signature|privileged"
+        android:label="@string/permission_write_application_settings"/>
+
+    <!-- Allows an application to read application push settings.
+        <p>Protection level: signature|privileged
+    -->
+    <permission android:name="top.trumeet.mipush.permissions.READ_APPLICATION_SETTINGS"
+        android:protectionLevel="signature|privileged"
+        android:label="@string/permission_read_application_settings"/>
+
+    <!-- Allows an application to read events.
+        <p>Protection level: dangerous
+    -->
+    <permission android:name="top.trumeet.mipush.permissions.READ_EVENT"
+        android:protectionLevel="dangerous"
+        android:label="@string/permission_read_events"/>
+
+    <!-- Allows an application to insert an event.
+        <p>Protection level: signature|privileged
+    -->
+    <permission android:name="top.trumeet.mipush.permissions.WRITE_EVENT"
+        android:protectionLevel="signature|privileged"
+        android:label="@string/permission_write_events"/>
+
+    <uses-permission android:name="top.trumeet.mipush.permissions.WRITE_EVENT" />
+    <uses-permission android:name="top.trumeet.mipush.permissions.READ_EVENT" />
+    <uses-permission android:name="top.trumeet.mipush.permissions.READ_APPLICATION_SETTINGS" />
+    <uses-permission android:name="top.trumeet.mipush.permissions.WRITE_APPLICATION_SETTINGS" />
+
+    <application>
+        <provider
+            android:authorities="top.trumeet.mipush.providers.AppProvider"
+            android:name="top.trumeet.mipush.provider.register.AppProvider"
+            android:exported="true"
+            android:readPermission="top.trumeet.mipush.permissions.READ_APPLICATION_SETTINGS"/>
+
+        <provider
+            android:authorities="top.trumeet.mipush.providers.EventProvider"
+            android:name="top.trumeet.mipush.provider.event.EventProvider"
+            android:exported="true"
+            android:writePermission="top.trumeet.mipush.permissions.WRITE_EVENT"/>
+    </application>
+</manifest>

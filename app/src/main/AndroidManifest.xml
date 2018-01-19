@@ -1,88 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.xiaomi.xmsf"  >
-    <permission android:name="com.xiaomi.xmsf.permission.MIPUSH_RECEIVE" android:protectionLevel="signature" />
-
-    <uses-permission android:name="com.xiaomi.xmsf.permission.MIPUSH_RECEIVE" />
-    <uses-permission android:name="com.xiaomi.permission.SEND_PUSH" />
-
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="top.trumeet.mipush.permissions.WRITE_EVENT" />
+    <uses-permission android:name="top.trumeet.mipush.permissions.READ_EVENT" />
+    <uses-permission android:name="top.trumeet.mipush.permissions.READ_APPLICATION_SETTINGS" />
+    <uses-permission android:name="top.trumeet.mipush.permissions.WRITE_APPLICATION_SETTINGS" />
+    <uses-permission android:name="top.trumeet.mipush.permissions.CHANGE_PUSH_ENABLE_SETTING" />
+    <uses-permission android:name="top.trumeet.mipush.permissions.GET_PUSH_ENABLE_SETTING" />
+    <uses-permission android:name="top.trumeet.mipush.permissions.GET_VERSION" />
+    <uses-permission android:name="top.trumeet.mipush.permissions.CHECK_APP_OPS_STATUS" />
+
+
     <application android:theme="@style/AppTheme"
         android:label="@string/app_name"
         android:icon="@mipmap/ic_app"
-        android:name=".XmsfApp"
-        android:persistent="true"
-        android:allowBackup="false"
-        android:supportsRtl="true"
-        xmlns:tools="http://schemas.android.com/tools"
-        tools:replace="android:allowBackup">
-
-        <service android:name="com.xiaomi.xmsf.push.service.HttpService" android:exported="true" />
-        <service android:name=".push.service.StatService" android:exported="true" />
-        <service android:name="com.xiaomi.xmsf.push.service.XMPushService"
-            android:exported="true"
-            android:process=":pushservice"/>
-        <service android:name="com.xiaomi.push.service.XMPushService"
-            android:exported="false"
-            android:process=":pushservice"/>
-        <service android:name="com.xiaomi.xmsf.push.service.notificationcollection.NotificationListener"
-            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
-            <intent-filter>
-                <action android:name="android.service.notification.NotificationListenerService" />
-            </intent-filter>
-        </service>
-        <receiver android:name="com.xiaomi.xmsf.push.service.receivers.BootReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name="com.xiaomi.xmsf.push.service.receivers.NetworkStatusReceiver">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
-
-        <service android:name="com.xiaomi.mipush.sdk.PushMessageHandler"
-            android:enabled="true" android:exported="true" />
-        <service android:name="com.xiaomi.mipush.sdk.MessageHandleService"/>
-        <service
-            android:name="com.xiaomi.push.service.XMJobService"
-            android:enabled="true"
-            android:exported="false"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:process=":pushservice"/>
-        <receiver android:name="com.xiaomi.push.service.receivers.PingReceiver"
-            android:exported="false"
-            android:process=":pushservice">
-            <intent-filter>
-                <action android:name="com.xiaomi.push.PING_TIMER" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name="com.xiaomi.push.service.receivers.PkgUninstallReceiver" android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
-                <data android:scheme="package" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name=".push.service.receivers.MiuiPushMessageReceiver" android:exported="true">
-            <intent-filter>
-                <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.xiaomi.mipush.ERROR" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name=".push.service.receivers.AccountChangedReceiver">
-            <intent-filter>
-                <action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED" />
-            </intent-filter>
-        </receiver>
+        android:name="top.trumeet.mipushframework.MiPushFramework">
 
         <activity android:name="top.trumeet.mipushframework.wizard.WelcomeActivity"
             android:theme="@style/AppTheme.Wizard"
@@ -96,8 +30,6 @@
             android:theme="@style/AppTheme.Wizard" />
         <activity android:name="top.trumeet.mipushframework.wizard.StartFailFAQActivity"
             android:theme="@style/AppTheme.Wizard" />
-        <activity android:name="top.trumeet.mipushframework.wizard.support.CheckAppSupportActivity"
-            android:theme="@style/AppTheme.Wizard" />
         <activity android:name="top.trumeet.mipushframework.wizard.CheckRunInBackgroundActivity"
             android:theme="@style/AppTheme.Wizard" />
         <activity android:name="top.trumeet.mipushframework.wizard.CheckDozeActivity"
@@ -108,43 +40,19 @@
             android:theme="@style/AppTheme.Wizard" />
 
         <activity android:name="top.trumeet.mipushframework.settings.MainActivity"
-            android:label="@string/preference_title"/>
+            android:label="@string/preference_title"
+            android:configChanges="screenLayout|screenSize|orientation"/>
 
         <activity android:name="top.trumeet.mipushframework.permissions.ManagePermissionsActivity"
             android:label="@string/action_edit_permission"
             android:configChanges="screenLayout|screenSize|orientation"/>
 
-        <activity android:name="top.trumeet.mipushframework.auth.AuthActivity"
-            android:theme="@style/Theme.Transparent"
-            android:excludeFromRecents="true"
-            android:configChanges="screenLayout|screenSize|orientation"/>
 
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="top.trumeet.mipushframework.fileprovider"
-            android:grantUriPermissions="true"
-            android:exported="false">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths" />
-        </provider>
-        <service android:name="com.xiaomi.xmsf.push.service.MiuiPushActivateService" android:exported="true" />
         <activity android:name="top.trumeet.mipushframework.event.RecentActivityActivity"
             android:label="@string/recent_activity_title" />
 
         <activity android:name="top.trumeet.mipushframework.update.UpdateActivity"
             android:label="@string/action_update"
             android:theme="@style/SuwThemeGlif.Light"/>
-
-        <service android:name="top.trumeet.mipushframework.alive.KeepAliveService"
-            android:enabled="false"/>
-
-        <receiver android:name="com.xiaomi.xmsf.push.service.receivers.NotificationEventReceiver" android:permission="com.xiaomi.xmsf.permission.NOTIFICATION_ACTIVE">
-            <intent-filter>
-                <action android:name="com.xiaomi.xmsf.push.NOTIFICATION_ACTIVE" />
-            </intent-filter>
-        </receiver>
-
-        <service android:name="com.xiaomi.miui.pushads.sdk.MiPushRelayTraceService" />
     </application>
 </manifest>

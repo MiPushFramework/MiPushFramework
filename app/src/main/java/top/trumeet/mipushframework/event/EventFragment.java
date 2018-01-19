@@ -2,11 +2,13 @@ package top.trumeet.mipushframework.event;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CancellationSignal;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,8 @@ import java.util.List;
 
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
-import me.pqpo.librarylog4a.Log4a;
+import top.trumeet.common.db.EventDb;
+import top.trumeet.common.event.Event;
 import top.trumeet.mipushframework.utils.OnLoadMoreListener;
 
 /**
@@ -81,7 +84,7 @@ public class EventFragment extends Fragment {
     }
 
     private void loadPage () {
-        Log4a.d(TAG, "loadPage");
+        Log.d(TAG, "loadPage");
         if (mLoadTask != null && !mLoadTask.isCancelled())
             return;
         mLoadTask = new LoadTask(mLoadPage + 1);
@@ -99,6 +102,7 @@ public class EventFragment extends Fragment {
 
     private class LoadTask extends AsyncTask<Integer, Void, List<Event>> {
         private int mTargetPage;
+        private CancellationSignal mSignal;
 
         LoadTask (int page) {
             mTargetPage = page;
@@ -106,8 +110,9 @@ public class EventFragment extends Fragment {
 
         @Override
         protected List<Event> doInBackground(Integer... integers) {
-            return EventDB.query(mTargetPackage, mTargetPage,
-                    getActivity());
+            mSignal = new CancellationSignal();
+            return EventDb.query(mTargetPackage, mTargetPage,
+                    getActivity(), mSignal);
         }
 
         @Override
@@ -118,6 +123,15 @@ public class EventFragment extends Fragment {
             mAdapter.setItems(items);
             mAdapter.notifyItemRangeInserted(start, list.size());
             mLoadPage = mTargetPage;
+        }
+
+        @Override
+        protected void onCancelled () {
+            if (mSignal != null) {
+                if (!mSignal.isCanceled())
+                    mSignal.cancel();
+                mSignal = null;
+            }
         }
     }
 }

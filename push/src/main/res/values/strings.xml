@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Auth -->
+    <string name="auth_message"><![CDATA[要允许 <b>%1$s</b> 推送消息吗？如果您不确定，请使用 <b>允许一次</b>。]]></string>
+    <string name="allow">允许</string>
+    <string name="deny">拒绝</string>
+    <string name="allow_once">允许一次</string>
+
+    <!-- Log -->
+    <string name="log_none">无日志</string>
+    <string name="log_share_error">无法分享日志：%1$s</string>
+
+
+    <!-- Notification -->
+    <string name="notification_category_alive">Push Status</string>
+    <string name="notification_alive">Mi Push running</string>
+</resources>

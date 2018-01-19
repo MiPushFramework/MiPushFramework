@@ -6,6 +6,8 @@
     <string name="success">成功了</string>
     <string name="fail">失败</string>
     <string name="apply">应用</string>
+    <string name="retry">重试</string>
+    <string name="exit">退出</string>
 
     <!-- Preference -->
     <string name="preference_title">推送设定</string>
@@ -41,22 +43,22 @@
             <br />请提交 Issue：<a href="https://github.com/Trumeet/MiPushFramework">点击前往 GitHub 页面</a>
         ]]>
     </string>
-    <string name="wizard_title_check_app_support">检查应用支持</string>
-    <string name="wizard_descr_check_app_support">本步骤将检查设备上使用小米推送的应用是否可以收到推送</string>
-    <string name="app_support_ok">√ 如果应用请求，应该可以收到</string>
-    <string name="app_support_fail_can_fix">× 无法收到，点按修复</string>
-    <string name="app_support_fail">× 无法收到推送</string>
-    <string name="app_support_no_apps">本机没有使用小米推送的应用，您今后可能会使用这些应用，我们将会代替它进行后台推送。</string>
-    <string name="app_support_result">这些应用使用了小米推送：</string>
 
-    <string name="fix_push_title">尝试修复</string>
-    <string name="fix_push_descr">是否尝试修复 %1$s 的小米推送功能？</string>
+    <string name="wizard_connect">正在连接</string>
 
     <string name="wizard_title_doze_whitelist">移除电池优化</string>
-    <string name="wizard_descr_doze_whitelist">当对本应用启用电池优化后，将无法保持推送。请点按 下一页 请求去除优化</string>
+    <string name="wizard_descr_doze_whitelist">当您对推送服务启用电池优化后，将无法保持推送。请点按 下一页 请求去除优化</string>
 
     <string name="wizard_title_run_in_background">允许后台活动</string>
-    <string name="wizard_descr_run_in_background">在 Android O 及更高版本，您需要前往 应用详情 -> 电量 -> 允许后台活动 允许在后台运行。点按 下一页 前往设置</string>
+    <string name="wizard_descr_run_in_background">您禁用了推送服务的后台运行权限，它将无法后台推送，您%1$s，然后点按下一步。</string>
+    
+    <string name="run_in_background_appops_root">需要使用 Root 解除禁用（我们会自动处理它）</string>
+    <string name="run_in_background_rikka_appops"><![CDATA[
+需要打开 <b>App Ops</b> 工具，并选择 <b>Xiaomi Push Service Core</b> 应用，授予其 <b>在后台运行或被唤醒</b> 权限
+    ]]></string>
+    <string name="rikka_appops_help_toast"><![CDATA[
+请选择 <b>Xiaomi Push Service Core</b> 应用，授予其 <b>在后台运行或被唤醒</b> 权限
+    ]]></string>
 
     <string name="wizard_title_fake_build">修改 Build.prop 深度伪装MIUI</string>
     <string name="wizard_descr_fake_build"><![CDATA[某些应用（如京东、摩拜单车等）会使用自己的逻辑判断是否是 MIUI，如果是才启用小米推送，否则仍会使用其他推送方式驻留后台。这种判断逻辑通常是解析 build.prop。我们尝试通过向 build.prop 插入一些代表 MIUI 的键值对进行伪装，让这些应用使用小米推送。
@@ -122,18 +124,10 @@
         <item>3</item>
     </string-array>
 
-    <!-- Auth -->
-    <string name="auth_message"><![CDATA[要允许 <b>%1$s</b> 推送消息吗？]]></string>
-    <string name="allow">允许</string>
-    <string name="deny">拒绝</string>
-    <string name="allow_once">允许一次</string>
-    
     <!-- Settings -->
     <string name="settings_deploy">部署</string>
-    <string name="settings_app_support">应用支持</string>
-    <string name="settings_app_support_summary">检查本机支持小米推送的应用，并在其可能无法推送时尝试修复</string>
     <string name="settings_fake_build">伪装 Build.prop</string>
-    <string name="settings_fake_build_summary">某些应用（如京东、摩拜单车等）会使用自己的逻辑判断是否是 MIUI，如果是才启用小米推送，否则仍会使用其他推送方式驻留后台。这种判断逻辑通常是解析 build.prop。我们尝试通过向 build.prop 插入一些代表 MIUI 的键值对进行伪装，让这些应用使用小米推送。</string>
+    <string name="settings_fake_build_summary">某些应用（如某东、某拜单车等）会使用自己的逻辑判断是否是 MIUI，如果是才启用小米推送，否则仍会使用其他推送方式驻留后台。这种判断逻辑通常是解析 build.prop。我们尝试通过向 build.prop 插入一些代表 MIUI 的键值对进行伪装，让这些应用使用小米推送。</string>
     <string name="settings_check_service">检查服务运行状态</string>
     <string name="settings_check_service_summary">自动检查推送服务是否运行</string>
     <string name="settings_skip_doze">移除电池优化</string>
@@ -142,8 +136,6 @@
     <string name="settings_debug">诊断</string>
     <string name="settings_get_log">获取日志</string>
     <string name="settings_get_log_summary">点按分享日志，请在需要的时候随 Issues 一起提交。</string>
-    <string name="log_none">无日志</string>
-    <string name="log_share_error">无法分享日志：%1$s</string>
 
     <!-- Recent Activity -->
     <string name="recent_activity_view">查看近期活动</string>
@@ -160,7 +152,18 @@
     <!-- Manage applications, individual application info screen title. For example, if they click on "Browser" in "Manage applications", the title of the next screen will be this -->
     <string name="application_info_label">App info</string>
 
-    <!-- Notification -->
-    <string name="notification_category_alive">Push Status</string>
-    <string name="notification_alive">Mi Push running</string>
+    <!-- Fail reasons -->
+    <string name="connect_fail_title_unknown">无法连接至服务</string>
+    <string name="connect_fail_title_low_version">请升级推送服务</string>
+    <string name="connect_fail_title_not_installed">需要安装推送服务</string>
+
+    <string name="connect_fail_text_unknown"><![CDATA[
+    <b>我们无法连接至推送服务</b>，请检查您是否在使用<b>唤醒拦截工具</b>、<b>国产 ROM （唤醒限制功能）</b>，请将 <b>%1$s</b> 加入白名单，然后重试。
+    ]]></string>
+    <string name="connect_fail_text_low_version"><![CDATA[
+我们无法兼容您当前的推送服务版本：%1$s，请 <a href="%2$s">点按此处</a> 升级，然后重试。
+    ]]></string>
+    <string name="connect_fail_text_not_installed"><![CDATA[
+您需要安装单独的推送服务，它会在后台运行以进行推送。请 <a href="%1$s">点按此处</a> 安装，然后重试。
+    ]]></string>
 </resources>

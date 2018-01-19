@@ -16,8 +16,8 @@ import com.android.setupwizardlib.SetupWizardLayout;
 import com.android.setupwizardlib.view.NavigationBar;
 import com.xiaomi.xmsf.R;
 
-import top.trumeet.mipushframework.Constants;
-import top.trumeet.mipushframework.push.PushServiceAccessibility;
+import top.trumeet.common.Constants;
+import top.trumeet.common.push.PushServiceAccessibility;
 
 /**
  * Created by Trumeet on 2017/8/25.
@@ -57,7 +57,7 @@ public class CheckDozeActivity extends AppCompatActivity implements NavigationBa
         if (!PushServiceAccessibility.isInDozeWhiteList(this) &&
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent intent = new Intent();
-            String packageName = getPackageName();
+            String packageName = Constants.SERVICE_APP_NAME;
             intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
             intent.setData(Uri.parse("package:" + packageName));
             startActivity(intent);

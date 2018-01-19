@@ -23,6 +23,14 @@ allprojects {
         google()
         jcenter()
     }
+
+    gradle.taskGraph.whenReady {
+        tasks.each { task ->
+            if (task.name.equals('mockableAndroidJar')) {
+                task.enabled = false
+            }
+        }
+    }
 }
 
 task clean(type: Delete) {
@@ -33,9 +41,8 @@ ext {
     supportLibraryVersion = '26.1.0'
     minSdkVersion = 21
     compileSdkVersion = 26
-    // Keep alive
-    targetSdkVersion = 23
-    buildToolsVersion = "26.0.1"
-    versionCode = 105
-    versionName = "0.3.Alpha"
+    targetSdkVersion = 27
+    buildToolsVersion = "26.0.2"
+    versionCode = 1
+    versionName = "0.3.1.Alpha"
 }

@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CancellationSignal;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +16,6 @@ import android.view.MenuItem;
 
 import com.android.settings.widget.EntityHeaderController;
 import com.xiaomi.xmsf.R;
-import com.xiaomi.xmsf.push.service.Utils;
 
 import moe.shizuku.preference.Preference;
 import moe.shizuku.preference.PreferenceCategory;
@@ -23,9 +23,10 @@ import moe.shizuku.preference.PreferenceFragment;
 import moe.shizuku.preference.PreferenceScreen;
 import moe.shizuku.preference.SimpleMenuPreference;
 import moe.shizuku.preference.SwitchPreferenceCompat;
+import top.trumeet.common.db.RegisteredApplicationDb;
+import top.trumeet.common.register.RegisteredApplication;
+import top.trumeet.common.utils.Utils;
 import top.trumeet.mipushframework.event.RecentActivityActivity;
-import top.trumeet.mipushframework.register.RegisterDB;
-import top.trumeet.mipushframework.register.RegisteredApplication;
 
 /**
  * Created by Trumeet on 2017/8/27.
@@ -76,6 +77,7 @@ public class ManagePermissionsActivity extends AppCompatActivity {
 
     private class LoadTask extends AsyncTask<Void, Void, RegisteredApplication> {
         private String pkg;
+        private CancellationSignal mSignal;
 
         LoadTask (String pkg) {
             this.pkg = pkg;
@@ -83,9 +85,11 @@ public class ManagePermissionsActivity extends AppCompatActivity {
 
         @Override
         protected RegisteredApplication doInBackground(Void... voids) {
-            return RegisterDB.registerApplication(pkg /* Package */
+            mSignal = new CancellationSignal();
+            return RegisteredApplicationDb.registerApplication(pkg /* Package */
                     , false /* Auto Crate */,
-                    ManagePermissionsActivity.this /* Context */);
+                    ManagePermissionsActivity.this /* Context */,
+                    mSignal);
         }
 
         @Override
@@ -98,6 +102,15 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                         .replace(android.R.id.content,
                                 fragment)
                         .commitAllowingStateLoss();
+            }
+        }
+
+        @Override
+        protected void onCancelled () {
+            if (mSignal != null) {
+                if (!mSignal.isCanceled())
+                    mSignal.cancel();
+                mSignal = null;
             }
         }
     }
@@ -268,7 +281,7 @@ public class ManagePermissionsActivity extends AppCompatActivity {
 
             @Override
             protected Void doInBackground(Void... voids) {
-                RegisterDB.update(mApplicationItem,
+                RegisteredApplicationDb.update(mApplicationItem,
                         getActivity());
                 return null;
             }

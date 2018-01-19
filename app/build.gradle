@@ -1,15 +1,12 @@
 apply plugin: 'com.android.application'
-apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
-        applicationId "com.xiaomi.xmsf"
+        applicationId "top.trumeet.xmpush"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        // XMPush sdk requires XMPushService not exported, but sdk will start exported XMPushService after
-        // XMSF version code 106. SDK will also check version code must >= 105.
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -28,11 +25,6 @@ android {
             //shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-    greendao{
-        schemaVersion 4
-        daoPackage 'top.trumeet.mipushframework.db'
-        targetGenDir 'src/main/java'
     }
     signingConfigs {
         debug {
@@ -56,7 +48,6 @@ android {
             v2SigningEnabled false
         }
     }
-    buildToolsVersion '26.0.2'
 }
 
 dependencies {
@@ -64,9 +55,6 @@ dependencies {
     compile('com.github.AndroidSnippet:SetupWizardLibCompat:0.3', {
         exclude group: 'com.android.support'
     })
-    // GreenDao
-    implementation 'org.greenrobot:greendao:3.2.2'
-    compile 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.0.0'
     // Recycler
     implementation('me.drakeet.multitype:multitype:3.3.0', {
         exclude group: 'com.android.support'
@@ -74,20 +62,12 @@ dependencies {
     // Support
     implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
     implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
-    // 保♂险♂套
-    compile project(':condom')
     // Preference
     implementation 'moe.shizuku.preference:preference:2.2.0'
     implementation 'moe.shizuku.preference:preference-switchcompat:2.0.2'
     implementation 'moe.shizuku.preference:preference-dialog-android:2.2.0'
     implementation 'moe.shizuku.preference:preference-simplemenu:2.2.0'
-    // Log
-    compile ('com.github.pqpo:Log4a:v1.1.0', {
-        exclude group: 'com.android.support'
-    })
     // Markdown
     compile 'com.zzhoujay.richtext:richtext:2.5.4'
-
-    // Hook
-    compile 'me.weishu:epic:0.1.2@aar'
+    implementation project(':common')
 }

@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.ActivityCompat;
 
-import top.trumeet.mipushframework.Constants;
+import top.trumeet.common.Constants;
 import top.trumeet.mipushframework.settings.MainActivity;
 
 /**

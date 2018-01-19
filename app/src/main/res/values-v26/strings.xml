@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="wizard_descr_run_in_background">在 Android O 及更高版本，您需要前往 应用详情 -> 电量 -> 允许后台活动 允许在后台运行。点按 下一页 前往设置。%1$s</string>
+</resources>

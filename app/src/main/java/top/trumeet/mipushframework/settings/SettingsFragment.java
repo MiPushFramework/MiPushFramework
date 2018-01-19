@@ -1,15 +1,17 @@
 package top.trumeet.mipushframework.settings;
 
+import android.content.ComponentName;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.xiaomi.xmsf.R;
 
-import me.pqpo.librarylog4a.Log4a;
 import moe.shizuku.preference.Preference;
 import moe.shizuku.preference.PreferenceFragment;
-import top.trumeet.mipushframework.log.LogUtils;
-import top.trumeet.mipushframework.push.PushController;
-import top.trumeet.mipushframework.push.PushServiceAccessibility;
+import top.trumeet.common.Constants;
+import top.trumeet.common.push.PushServiceAccessibility;
+import top.trumeet.mipushframework.MainActivity;
 
 /**
  * Created by Trumeet on 2017/8/27.
@@ -37,7 +39,9 @@ public class SettingsFragment extends PreferenceFragment {
         getLogPrefernece.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                LogUtils.shareFile(getActivity());
+                startActivity(new Intent()
+                .setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
+                        Constants.SHARE_LOG_COMPONENT_NAME)));
                 return true;
             }
         });
@@ -48,9 +52,7 @@ public class SettingsFragment extends PreferenceFragment {
         super.onStart();
         long time = System.currentTimeMillis();
         mDozePreference.setVisible(!PushServiceAccessibility.isInDozeWhiteList(getActivity()));
-        mCheckServicePreference.setVisible(!(PushController.isPrefsEnable(getActivity()) &&
-                PushController.isServiceRunning(getActivity())));
-        Log4a.d(TAG, "rebuild UI took: " + String.valueOf(System.currentTimeMillis() -
+        Log.d(TAG, "rebuild UI took: " + String.valueOf(System.currentTimeMillis() -
                 time));
     }
 }

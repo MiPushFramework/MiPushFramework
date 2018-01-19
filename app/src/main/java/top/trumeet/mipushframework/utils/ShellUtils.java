@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import me.pqpo.librarylog4a.Log4a;
-
 /**
  * <pre>
  *     author: Blankj
@@ -210,10 +208,7 @@ public final class ShellUtils {
      * @return success
      */
     public static boolean exec (String command) {
-        Log4a.d(TAG, "Exec:" + command);
         ShellUtils.CommandResult result = ShellUtils.execCmd(command, true, true);
-        Log4a.d(TAG, "SuccessMsg:" + result.successMsg);
-        Log4a.d(TAG, "ErrMsg:" + result.errorMsg);
         return result.isSuccess();
     }
 }
