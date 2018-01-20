@@ -15,6 +15,7 @@ public class MiuiPushMessageReceiver extends PushMessageReceiver {
     private static final String TAG = MiuiPushMessageReceiver.class.getSimpleName();
     public void onCommandResult(Context context, MiPushCommandMessage miPushCommandMessage) {
         Log4a.d(TAG, "onCommandResult");
+        Log4a.d(TAG, miPushCommandMessage.toString());
         if (miPushCommandMessage.getResultCode() == 0) {
             String command = miPushCommandMessage.getCommand();
             if (miPushCommandMessage.getCommandArguments().size() > 0 && "register".equals(command)) {

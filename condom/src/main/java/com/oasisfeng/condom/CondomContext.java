@@ -17,6 +17,7 @@
 
 package com.oasisfeng.condom;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.ComponentCallbacks;
@@ -66,7 +67,7 @@ import static android.os.Build.VERSION_CODES.O;
  *
  * Created by Oasis on 2017/3/25.
  */
-@Keep
+@Keep @SuppressLint("MissingPermission")
 public class CondomContext extends ContextWrapper {
 
 	public static @CheckResult CondomContext wrap(final Context base, final @Nullable @Size(max=13) String tag) {
@@ -116,7 +117,8 @@ public class CondomContext extends ContextWrapper {
 
 	/* ****** Hooked Context APIs ****** */
 
-	@Override public boolean bindService(final Intent intent, final ServiceConnection conn, final int flags) {
+	@Override public boolean bindService(final Intent originalIntent, final ServiceConnection conn, final int flags) {
+		final Intent intent = applyRedirect(originalIntent);
 		final boolean result = mCondom.proceed(OutboundType.BIND_SERVICE, intent, Boolean.FALSE, new CondomCore.WrappedValueProcedure<Boolean>() { @Override public Boolean proceed() {
 			return CondomContext.super.bindService(intent, conn, flags);
 		}});
@@ -124,7 +126,8 @@ public class CondomContext extends ContextWrapper {
 		return result;
 	}
 
-	@Override public ComponentName startService(final Intent intent) {
+	@Override public ComponentName startService(final Intent originalIntent) {
+		final Intent intent = applyRedirect(originalIntent);
 		final ComponentName component = mCondom.proceed(OutboundType.START_SERVICE, intent, null, new CondomCore.WrappedValueProcedure<ComponentName>() { @Override public ComponentName proceed() {
 			return CondomContext.super.startService(intent);
 		}});
@@ -132,69 +135,81 @@ public class CondomContext extends ContextWrapper {
 		return component;
 	}
 
-	@Override public void sendBroadcast(final Intent intent) {
+	@Override public void sendBroadcast(final Intent originalIntent) {
+		final Intent intent = applyRedirect(originalIntent);
 		mCondom.proceedBroadcast(intent, new CondomCore.WrappedProcedure() { @Override public void run() {
 			CondomContext.super.sendBroadcast(intent);
 		}});
 	}
 
-	@Override public void sendBroadcast(final Intent intent, final String receiverPermission) {
+	@Override public void sendBroadcast(final Intent originalIntent, final String receiverPermission) {
+		final Intent intent = applyRedirect(originalIntent);
 		mCondom.proceedBroadcast(intent, new CondomCore.WrappedProcedure() { @Override public void run() {
 			CondomContext.super.sendBroadcast(intent, receiverPermission);
 		}});
 	}
 
-	@RequiresApi(JELLY_BEAN_MR1) @Override public void sendBroadcastAsUser(final Intent intent, final UserHandle user) {
-		mCondom.proceedBroadcast(intent, new CondomCore.WrappedProcedure() { @Override public void run() {
+	@RequiresApi(JELLY_BEAN_MR1) @Override public void sendBroadcastAsUser(final Intent originalIntent, final UserHandle user) {
+		final Intent intent = applyRedirect(originalIntent);
+		mCondom.proceedBroadcast(intent, new CondomCore.WrappedProcedure() {
+		@Override public void run() {
 			CondomContext.super.sendBroadcastAsUser(intent, user);
 		}});
 	}
 
-	@RequiresApi(JELLY_BEAN_MR1) @Override public void sendBroadcastAsUser(final Intent intent, final UserHandle user, final String receiverPermission) {
+	@RequiresApi(JELLY_BEAN_MR1) @Override public void sendBroadcastAsUser(final Intent originalIntent, final UserHandle user, final String receiverPermission) {
+		final Intent intent = applyRedirect(originalIntent);
 		mCondom.proceedBroadcast(intent, new CondomCore.WrappedProcedure() { @Override public void run() {
 			CondomContext.super.sendBroadcastAsUser(intent, user, receiverPermission);
 		}});
 	}
 
-	@Override public void sendOrderedBroadcast(final Intent intent, final String receiverPermission) {
+	@Override public void sendOrderedBroadcast(final Intent originalIntent, final String receiverPermission) {
+		final Intent intent = applyRedirect(originalIntent);
 		mCondom.proceedBroadcast(intent, new CondomCore.WrappedProcedure() { @Override public void run() {
 			CondomContext.super.sendOrderedBroadcast(intent, receiverPermission);
 		}});
 	}
 
-	@Override public void sendOrderedBroadcast(final Intent intent, final String receiverPermission, final BroadcastReceiver resultReceiver,
+	@Override public void sendOrderedBroadcast(final Intent originalIntent, final String receiverPermission, final BroadcastReceiver resultReceiver,
 											   final Handler scheduler, final int initialCode, final String initialData, final Bundle initialExtras) {
+		final Intent intent = applyRedirect(originalIntent);
 		mCondom.proceedBroadcast(intent, new CondomCore.WrappedProcedure() { @Override public void run() {
 			CondomContext.super.sendOrderedBroadcast(intent, receiverPermission, resultReceiver, scheduler, initialCode, initialData, initialExtras);
 		}});
 	}
 
-	@RequiresApi(JELLY_BEAN_MR1) @Override public void sendOrderedBroadcastAsUser(final Intent intent, final UserHandle user, final String receiverPermission, final BroadcastReceiver resultReceiver, final Handler scheduler, final int initialCode, final String initialData, final Bundle initialExtras) {
+	@RequiresApi(JELLY_BEAN_MR1) @Override public void sendOrderedBroadcastAsUser(final Intent originalIntent, final UserHandle user, final String receiverPermission, final BroadcastReceiver resultReceiver, final Handler scheduler, final int initialCode, final String initialData, final Bundle initialExtras) {
+		final Intent intent = applyRedirect(originalIntent);
 		mCondom.proceedBroadcast(intent, new CondomCore.WrappedProcedure() { @Override public void run() {
 			CondomContext.super.sendOrderedBroadcastAsUser(intent, user, receiverPermission, resultReceiver, scheduler, initialCode, initialData, initialExtras);
 		}});
 	}
 
-	@Override public void sendStickyBroadcast(final Intent intent) {
+	@Override public void sendStickyBroadcast(final Intent originalIntent) {
+		final Intent intent = applyRedirect(originalIntent);
 		mCondom.proceedBroadcast(intent, new CondomCore.WrappedProcedure() { @Override public void run() {
 			CondomContext.super.sendStickyBroadcast(intent);
 		}});
 	}
 
-	@RequiresApi(JELLY_BEAN_MR1) @Override public void sendStickyBroadcastAsUser(final Intent intent, final UserHandle user) {
+	@RequiresApi(JELLY_BEAN_MR1) @Override public void sendStickyBroadcastAsUser(final Intent originalIntent, final UserHandle user) {
+		final Intent intent = applyRedirect(originalIntent);
 		mCondom.proceedBroadcast(intent, new CondomCore.WrappedProcedure() { @Override public void run() {
 			CondomContext.super.sendStickyBroadcastAsUser(intent, user);
 		}});
 	}
 
-	@Override public void sendStickyOrderedBroadcast(final Intent intent, final BroadcastReceiver resultReceiver, final Handler scheduler,
+	@Override public void sendStickyOrderedBroadcast(final Intent originalIntent, final BroadcastReceiver resultReceiver, final Handler scheduler,
 													 final int initialCode, final String initialData, final Bundle initialExtras) {
+		final Intent intent = applyRedirect(originalIntent);
 		mCondom.proceedBroadcast(intent, new CondomCore.WrappedProcedure() { @Override public void run() {
 			CondomContext.super.sendStickyOrderedBroadcast(intent, resultReceiver, scheduler, initialCode, initialData, initialExtras);
 		}});
 	}
 
-	@RequiresApi(JELLY_BEAN_MR1) @Override public void sendStickyOrderedBroadcastAsUser(final Intent intent, final UserHandle user, final BroadcastReceiver resultReceiver, final Handler scheduler, final int initialCode, final String initialData, final Bundle initialExtras) {
+	@RequiresApi(JELLY_BEAN_MR1) @Override public void sendStickyOrderedBroadcastAsUser(final Intent originalIntent, final UserHandle user, final BroadcastReceiver resultReceiver, final Handler scheduler, final int initialCode, final String initialData, final Bundle initialExtras) {
+		final Intent intent = applyRedirect(originalIntent);
 		mCondom.proceedBroadcast(intent, new CondomCore.WrappedProcedure() { @Override public void run() {
 			CondomContext.super.sendStickyOrderedBroadcastAsUser(intent, user, resultReceiver, scheduler, initialCode, initialData, initialExtras);
 		}});
@@ -262,6 +277,15 @@ public class CondomContext extends ContextWrapper {
 
 	/* ****** Internal branch functionality ****** */
 
+	// Redirect component names. Very bad
+	private static final Map<String, String> COMPONENT_REDIRECT;
+	static {
+		COMPONENT_REDIRECT = new HashMap<>(1);
+		COMPONENT_REDIRECT.put("com.xiaomi.xmsf/com.xiaomi.push.service.XMPushService",
+				"com.xiaomi.xmsf/com.xiaomi.xmsf.push.service.PushServiceMain");
+	}
+
+
 	private static class KitManager implements CondomCore.CondomKitManager {
 
 		@Override public void addPermissionSpoof(final String permission) {
@@ -285,23 +309,57 @@ public class CondomContext extends ContextWrapper {
 		private final Set<String> mSpoofPermissions = new HashSet<>();
 	}
 
+	private static Intent applyRedirect (Intent original) {
+		if (COMPONENT_REDIRECT == null)
+			return original;
+		if (original.getComponent() != null) {
+			original.setComponent(applyRedirect(original.getComponent()));
+			return original;
+		}
+		return original;
+	}
+
+	private static String applyRedirect (String original) {
+		if (COMPONENT_REDIRECT == null || !COMPONENT_REDIRECT.containsKey(original))
+			return original;
+		return COMPONENT_REDIRECT.get(original);
+	}
+
+	private static ComponentName applyRedirect (ComponentName original) {
+		if (COMPONENT_REDIRECT == null || !COMPONENT_REDIRECT.containsKey(original.flattenToString()))
+			return original;
+		return ComponentName.unflattenFromString(COMPONENT_REDIRECT.get(original.flattenToString()));
+	}
 
 	class CondomPackageManager extends PackageManagerWrapper {
+		@Override public void setComponentEnabledSetting(ComponentName componentName, int newState, int flags) {
+			super.setComponentEnabledSetting(applyRedirect(componentName), newState, flags);
+		}
+
+		/*
+		@Override public int getComponentEnabledSetting(ComponentName componentName) {
+			return super.setComponentEnabledSetting(applyRedirect(componentName));
+		}
+		*/
+
 		@Override public PackageInfo getPackageInfo(String packageName, int flags) throws NameNotFoundException {
-			PackageInfo info = super.getPackageInfo(packageName, flags);
+			PackageInfo info = super.getPackageInfo(applyRedirect(packageName)
+					, flags);
 			if (getPackageName().equals(packageName)) {
 				return FakeManifestUtils.buildFakePackageInfo(info);
 			}
 			return info;
 		}
 
-		@Override public List<ResolveInfo> queryBroadcastReceivers(final Intent intent, final int flags) {
+		@Override public List<ResolveInfo> queryBroadcastReceivers(final Intent originalIntent, final int flags) {
+			final Intent intent = applyRedirect(originalIntent);
 			return mCondom.proceedQuery(OutboundType.QUERY_RECEIVERS, intent, new CondomCore.WrappedValueProcedure<List<ResolveInfo>>() { @Override public List<ResolveInfo> proceed() {
 				return CondomPackageManager.super.queryBroadcastReceivers(intent, flags);
 			}});
 		}
 
-		@Override public List<ResolveInfo> queryIntentServices(final Intent intent, final int flags) {
+		@Override public List<ResolveInfo> queryIntentServices(final Intent originalIntent, final int flags) {
+			final Intent intent = applyRedirect(originalIntent);
 			final int original_intent_flags = intent.getFlags();
 			return mCondom.proceedQuery(OutboundType.QUERY_SERVICES, intent, new CondomCore.WrappedValueProcedure<List<ResolveInfo>>() { @Override public List<ResolveInfo> proceed() {
 				final List<ResolveInfo> result = CondomPackageManager.super.queryIntentServices(intent, flags);
@@ -310,7 +368,8 @@ public class CondomContext extends ContextWrapper {
 			}});
 		}
 
-		@Override public ResolveInfo resolveService(final Intent intent, final int flags) {
+		@Override public ResolveInfo resolveService(final Intent originalIntent, final int flags) {
+			final Intent intent = applyRedirect(originalIntent);
 			final int original_intent_flags = intent.getFlags();
 			// Intent flags could only filter background receivers, we have to deal with services by ourselves.
 			return mCondom.proceed(OutboundType.QUERY_SERVICES, intent, null, new CondomCore.WrappedValueProcedure<ResolveInfo>() { @Override public ResolveInfo proceed() {
@@ -324,7 +383,7 @@ public class CondomContext extends ContextWrapper {
 		}
 
 		@Override public ProviderInfo resolveContentProvider(final String name, final int flags) {
-			final ProviderInfo provider = super.resolveContentProvider(name, flags);
+			final ProviderInfo provider = super.resolveContentProvider(applyRedirect(name), flags);
 			if (! mCondom.shouldAllowProvider(provider)) return null;
 			return provider;
 		}

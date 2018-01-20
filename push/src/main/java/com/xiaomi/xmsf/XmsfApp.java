@@ -19,6 +19,7 @@ import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.push.service.OnlineConfig;
 import com.xiaomi.xmpush.thrift.ConfigKey;
 import com.xiaomi.xmsf.push.control.PushControllerUtils;
+import com.xiaomi.xmsf.push.control.XMOutbound;
 import com.xiaomi.xmsf.push.service.MiuiPushActivateService;
 import com.xiaomi.xmsf.push.service.notificationcollection.NotificationListener;
 import com.xiaomi.xmsf.push.service.notificationcollection.UploadNotificationJob;
@@ -32,7 +33,6 @@ import java.util.Random;
 import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.mipush.provider.DatabaseUtils;
 
-import static com.xiaomi.xmsf.push.control.PushControllerUtils.buildOptions;
 import static com.xiaomi.xmsf.push.control.PushControllerUtils.isAppMainProc;
 import static top.trumeet.common.Constants.TAG_CONDOM;
 
@@ -73,7 +73,8 @@ public class XmsfApp extends Application {
 
         mUnHooks = PushControllerUtils.hookSdk();
 
-        CondomOptions options = buildOptions(this, TAG_CONDOM + "_PROCESS");
+        CondomOptions options = XMOutbound.create(this, TAG_CONDOM + "_PROCESS",
+                false);
         CondomProcess.installExceptDefaultProcess(this,
                 options);
         LoggerInterface newLogger = new LoggerInterface() {

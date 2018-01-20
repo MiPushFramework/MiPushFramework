@@ -30,6 +30,14 @@ public class XMPushService extends IntentService {
             return;
         }
         int result;
+        boolean register = true;
+        // Check multi request
+        if (!XmsfApp.getSession(this)
+                .getRemoveTremblingInstance()
+                .onCallRegister(pkg)) {
+            Log4a.w(TAG, "Don't register multi request");
+            register = false;
+        }
         if (!PushControllerUtils.isPrefsEnable(this)) {
             Log4a.e(TAG, "Not allowed in SP! Just return!");
             result = Event.ResultType.DENY_DISABLED;
@@ -41,14 +49,10 @@ public class XMPushService extends IntentService {
                 Log4a.w(TAG, "Denied register request: " + pkg);
                 result = Event.ResultType.DENY_USER;
             } else {
-                // Check multi request
-                if (!XmsfApp.getSession(this)
-                        .getRemoveTremblingInstance()
-                        .onCallRegister(pkg)) {
-                    Log4a.w(TAG, "Not allowed multi request");
-                    return;
-                }
                 if (application.getType() == RegisteredApplication.Type.ASK) {
+                    if (!register) {
+                        return;
+                    }
                     Log4a.d(TAG, "Starting auth");
                     Intent authIntent = new Intent(this, AuthActivity.class);
                     authIntent.putExtra(AuthActivity.EXTRA_REGISTERED_APPLICATION,
@@ -60,7 +64,7 @@ public class XMPushService extends IntentService {
                 } else {
                     Log4a.d(TAG, "Allowed register request: " + pkg);
                     Intent intent2 = new Intent();
-                    intent2.setComponent(new ComponentName(getPackageName(), "com.xiaomi.push.service.XMPushService"));
+                    intent2.setComponent(new ComponentName(this, PushServiceMain.class));
                     intent2.setAction(intent.getAction());
                     intent2.putExtras(intent);
                     startService(intent2);
@@ -73,6 +77,6 @@ public class XMPushService extends IntentService {
                 }
             }
         }
-        EventDb.insertEvent(pkg, Event.Type.REGISTER, result, this);
+        if (register) EventDb.insertEvent(pkg, Event.Type.REGISTER, result, this);
     }
 }

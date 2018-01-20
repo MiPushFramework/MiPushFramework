@@ -203,7 +203,7 @@ class CondomCore {
 
 	CondomCore(final Context base, final CondomOptions options) {
 		mBase = base;
-		DEBUG = (base.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+		DEBUG = BuildConfig.DEBUG_CONDOM && (base.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
 		mExcludeBackgroundReceivers = options.mExcludeBackgroundReceivers;
 		mExcludeBackgroundServices = SDK_INT < O && options.mExcludeBackgroundServices;
 		mOutboundJudge = options.mOutboundJudge;
