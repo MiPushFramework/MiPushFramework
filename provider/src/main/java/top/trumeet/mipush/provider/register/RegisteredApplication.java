@@ -45,6 +45,7 @@ public class RegisteredApplication implements Parcelable {
         type = in.readInt();
         allowReceivePush = in.readByte() != 0;
         allowReceiveRegisterResult = in.readByte() != 0;
+        allowReceiveCommand = in.readByte() != 0;
     }
 
     public static final Creator<RegisteredApplication> CREATOR = new Creator<RegisteredApplication>() {
@@ -76,6 +77,7 @@ public class RegisteredApplication implements Parcelable {
         parcel.writeInt(type);
         parcel.writeByte((byte) (allowReceivePush ? 1 : 0));
         parcel.writeByte((byte) (allowReceiveRegisterResult ? 1 : 0));
+        parcel.writeByte((byte) (allowReceiveCommand ? 1 : 0));
     }
 
     @IntDef({Type.ASK, Type.ALLOW, Type.DENY, Type.ALLOW_ONCE})
@@ -106,14 +108,18 @@ public class RegisteredApplication implements Parcelable {
     @Property(nameInDb = "allow_receive_register_result")
     private boolean allowReceiveRegisterResult;
 
-    @Generated(hash = 188204741)
-    public RegisteredApplication(Long id, String packageName, int type,
-            boolean allowReceivePush, boolean allowReceiveRegisterResult) {
+    @Property(nameInDb = "allow_receive_command_without_register_result")
+    private boolean allowReceiveCommand;
+
+    @Generated(hash = 45090013)
+    public RegisteredApplication(Long id, String packageName, int type, boolean allowReceivePush,
+            boolean allowReceiveRegisterResult, boolean allowReceiveCommand) {
         this.id = id;
         this.packageName = packageName;
         this.type = type;
         this.allowReceivePush = allowReceivePush;
         this.allowReceiveRegisterResult = allowReceiveRegisterResult;
+        this.allowReceiveCommand = allowReceiveCommand;
     }
 
     @Generated(hash = 1216470554)
@@ -206,12 +212,26 @@ public class RegisteredApplication implements Parcelable {
         return new top.trumeet.common.register.RegisteredApplication(original.id,
                 original.packageName,
                 original.type, original.allowReceivePush,
-                original.allowReceiveRegisterResult);
+                original.allowReceiveRegisterResult,
+                original.allowReceiveCommand);
     }
 
     @NonNull
     public static RegisteredApplication from (@NonNull top.trumeet.common.register.RegisteredApplication original) {
         return new RegisteredApplication(original.getId(), original.getPackageName(), original.getType(),
-                original.getAllowReceivePush(), original.getAllowReceiveRegisterResult());
+                original.getAllowReceivePush(), original.getAllowReceiveRegisterResult(),
+                original.isAllowReceiveCommand());
+    }
+
+    public boolean isAllowReceiveCommand() {
+        return allowReceiveCommand;
+    }
+
+    public void setAllowReceiveCommand(boolean allowReceiveCommand) {
+        this.allowReceiveCommand = allowReceiveCommand;
+    }
+
+    public boolean getAllowReceiveCommand() {
+        return this.allowReceiveCommand;
     }
 }

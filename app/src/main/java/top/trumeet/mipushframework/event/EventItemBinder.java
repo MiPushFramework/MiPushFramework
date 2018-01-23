@@ -42,6 +42,10 @@ public class EventItemBinder extends BaseAppsBinder<Event> {
                 text = holder.itemView.getContext()
                         .getString(R.string.event_push);
                 break;
+            case Event.Type.RECEIVE_COMMAND:
+                text = holder.itemView.getContext()
+                        .getString(R.string.event_command);
+                break;
             default:
                 text = null;
                 break;

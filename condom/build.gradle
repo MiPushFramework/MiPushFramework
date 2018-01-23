@@ -9,7 +9,7 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-        buildConfigField "boolean", "DEBUG_CONDOM", "false"
+        buildConfigField "boolean", "DEBUG_CONDOM", "true"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

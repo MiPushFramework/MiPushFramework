@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.ComponentName;
 import android.content.Intent;
 
+import com.xiaomi.push.service.PushServiceMain;
 import com.xiaomi.xmsf.XmsfApp;
 import com.xiaomi.xmsf.push.auth.AuthActivity;
 import com.xiaomi.xmsf.push.control.PushControllerUtils;

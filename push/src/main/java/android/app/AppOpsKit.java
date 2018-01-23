@@ -2,9 +2,7 @@ package android.app;
 
 import android.Manifest;
 import android.content.Context;
-import android.os.ServiceManager;
 
-import com.android.internal.app.IAppOpsService;
 import com.oasisfeng.condom.CondomKit;
 
 import me.pqpo.librarylog4a.Log4a;
@@ -29,9 +27,9 @@ public class AppOpsKit implements CondomKit, CondomKit.SystemServiceSupplier {
         return null;
     }
 
-    class CondomAppOpsManager extends AppOpsManager {
+    class CondomAppOpsManager extends AppOpsManagerExtender {
         CondomAppOpsManager (Context context) {
-            super(context, IAppOpsService.Stub.asInterface(ServiceManager.getService("appops")));
+            super(context);
         }
 
         @Override

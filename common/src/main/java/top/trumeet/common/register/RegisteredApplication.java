@@ -29,6 +29,7 @@ public class RegisteredApplication implements Parcelable {
     public static final String KEY_TYPE = "type";
     public static final String KEY_ALLOW_RECEIVE_PUSH = "allow_receive_push";
     public static final String KEY_ALLOW_RECEIVE_REGISTER_RESULT = "allow_receive_register_result";
+    public static final String KEY_ALLOW_RECEIVE_COMMAND = "allow_receive_command_without_register_result";
 
 
     private Long id;
@@ -42,6 +43,8 @@ public class RegisteredApplication implements Parcelable {
 
     private boolean allowReceiveRegisterResult;
 
+    // Init(register) result is a kind of command, if disabled, register result WILL STILL BE RECEIVED
+    private boolean allowReceiveCommand;
 
     protected RegisteredApplication(Parcel in) {
         if (in.readByte() == 0) {
@@ -53,6 +56,7 @@ public class RegisteredApplication implements Parcelable {
         type = in.readInt();
         allowReceivePush = in.readByte() != 0;
         allowReceiveRegisterResult = in.readByte() != 0;
+        allowReceiveCommand = in.readByte() != 0;
     }
 
     public static final Creator<RegisteredApplication> CREATOR = new Creator<RegisteredApplication>() {
@@ -84,6 +88,7 @@ public class RegisteredApplication implements Parcelable {
         parcel.writeInt(type);
         parcel.writeByte((byte) (allowReceivePush ? 1 : 0));
         parcel.writeByte((byte) (allowReceiveRegisterResult ? 1 : 0));
+        parcel.writeByte((byte) (allowReceiveCommand ? 1 : 0));
     }
 
     @android.support.annotation.IntDef({Type.ASK, Type.ALLOW, Type.DENY, Type.ALLOW_ONCE})
@@ -97,13 +102,24 @@ public class RegisteredApplication implements Parcelable {
         int ALLOW_ONCE = -1;
     }
 
+    public boolean isAllowReceiveCommand() {
+        return allowReceiveCommand;
+    }
+
+    public void setAllowReceiveCommand(boolean allowReceiveCommand) {
+        this.allowReceiveCommand = allowReceiveCommand;
+    }
+
     public RegisteredApplication(Long id, String packageName, int type,
-                                 boolean allowReceivePush, boolean allowReceiveRegisterResult) {
+                                 boolean allowReceivePush, boolean allowReceiveRegisterResult,
+                                 boolean allowReceiveCommand) {
         this.id = id;
         this.packageName = packageName;
         this.type = type;
         this.allowReceivePush = allowReceivePush;
         this.allowReceiveRegisterResult = allowReceiveRegisterResult;
+        this.allowReceiveCommand = allowReceiveCommand;
+
     }
 
     public RegisteredApplication() {
@@ -190,7 +206,8 @@ public class RegisteredApplication implements Parcelable {
                 cursor.getInt(cursor.getColumnIndex(KEY_TYPE)) /* type */,
                 cursor.getInt(cursor.getColumnIndex(KEY_ALLOW_RECEIVE_PUSH)) > 0 /* allow receive push */,
                 cursor.getInt(cursor.getColumnIndex(KEY_ALLOW_RECEIVE_REGISTER_RESULT)) > 0
-                /* allow receive register result */);
+                /* allow receive register result */,
+                cursor.getInt(cursor.getColumnIndex(KEY_ALLOW_RECEIVE_COMMAND)) > 0 /* allow receive command */);
     }
 
     /**
@@ -205,6 +222,7 @@ public class RegisteredApplication implements Parcelable {
         values.put(KEY_TYPE, getType());
         values.put(KEY_ALLOW_RECEIVE_PUSH, getAllowReceivePush());
         values.put(KEY_ALLOW_RECEIVE_REGISTER_RESULT, getAllowReceiveRegisterResult());
+        values.put(KEY_ALLOW_RECEIVE_COMMAND, isAllowReceiveCommand());
         return values;
     }
 
@@ -217,4 +235,6 @@ public class RegisteredApplication implements Parcelable {
                 ", allowReceiveRegisterResult=" + allowReceiveRegisterResult +
                 '}';
     }
+
+
 }

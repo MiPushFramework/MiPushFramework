@@ -282,7 +282,13 @@ public class CondomContext extends ContextWrapper {
 	static {
 		COMPONENT_REDIRECT = new HashMap<>(1);
 		COMPONENT_REDIRECT.put("com.xiaomi.xmsf/com.xiaomi.push.service.XMPushService",
-				"com.xiaomi.xmsf/com.xiaomi.xmsf.push.service.PushServiceMain");
+				"com.xiaomi.xmsf/com.xiaomi.push.service.PushServiceMain");
+		/*
+		COMPONENT_REDIRECT.put("com.xiaomi.xmsf/com.xiaomi.mipush.sdk.PushMessageHandler",
+				"com.xiaomi.xmsf/com.xiaomi.mipush.sdk.MessageHandler");
+		COMPONENT_REDIRECT.put("com.xiaomi.xmsf/com.xiaomi.mipush.sdk.MessageHandleService",
+				"com.xiaomi.xmsf/com.xiaomi.mipush.sdk.MyMessageHandleService");
+		*/
 	}
 
 

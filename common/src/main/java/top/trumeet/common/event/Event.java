@@ -25,13 +25,15 @@ public class Event {
     public static final String KEY_DATE = "date";
     public static final String KEY_RESULT = "result";
 
-    @android.support.annotation.IntDef({Type.RECEIVE_PUSH, Type.REGISTER})
+    @android.support.annotation.IntDef({Type.RECEIVE_PUSH, Type.REGISTER,
+    Type.RECEIVE_COMMAND})
     @Retention(SOURCE)
     @Target({ElementType.PARAMETER, ElementType.TYPE,
             ElementType.FIELD, ElementType.METHOD})
     public @interface Type {
         int RECEIVE_PUSH = 0;
         int REGISTER = 2;
+        int RECEIVE_COMMAND = 1;
     }
 
     @android.support.annotation.IntDef({ResultType.OK, ResultType.DENY_DISABLED, ResultType.DENY_USER})

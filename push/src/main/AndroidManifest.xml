@@ -50,7 +50,7 @@
             android:exported="true"
             android:process=":pushservice"/>
 
-        <service android:name=".push.service.PushServiceMain"
+        <service android:name="com.xiaomi.push.service.PushServiceMain"
             android:exported="true"
             android:process=":pushservice"
             tools:ignore="ExportedService" />
@@ -150,5 +150,13 @@
 
         <activity android:name=".ShareLogActivity"
             android:exported="true" />
+
+        <activity android:name="android.app.Activity"
+            android:label="Debug">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>

@@ -1,5 +1,6 @@
 package com.xiaomi.xmsf.push.control;
 
+import android.app.AppOpsKit;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
@@ -8,14 +9,8 @@ import com.oasisfeng.condom.CondomOptions;
 import com.oasisfeng.condom.OutboundJudge;
 import com.oasisfeng.condom.OutboundType;
 import com.oasisfeng.condom.kit.NullDeviceIdKit;
-import com.xiaomi.xmsf.BuildConfig;
 
 import me.pqpo.librarylog4a.Log4a;
-import top.trumeet.common.Constants;
-import top.trumeet.common.db.EventDb;
-import top.trumeet.common.db.RegisteredApplicationDb;
-import top.trumeet.common.event.Event;
-import top.trumeet.common.register.RegisteredApplication;
 
 /**
  * Created by Trumeet on 2018/1/19.
@@ -37,8 +32,7 @@ public class XMOutbound implements OutboundJudge {
                 .setOutboundJudge(new XMOutbound(context, tag));
         if (enableKit)
             options.addKit(new NullDeviceIdKit())
-                    //.addKit(new NotificationKit())
-                    //.addKit(new AppOpsKit())
+                    .addKit(new AppOpsKit())
                     ;
         return options;
     }
@@ -63,6 +57,7 @@ public class XMOutbound implements OutboundJudge {
                 return false;
             }
 
+            /*
             if (intent.getAction().equals(Constants.ACTION_MESSAGE_ARRIVED) ||
                     intent.getAction().equals(Constants.ACTION_ERROR) ||
                     intent.getAction().equals(Constants.ACTION_RECEIVE_MESSAGE)) {
@@ -113,6 +108,7 @@ public class XMOutbound implements OutboundJudge {
                 Log4a.e(TAG,  "Not allowed broadcast: " + intent);
                 return false;
             }
+            */
         }
 
         // Deny something will crash...

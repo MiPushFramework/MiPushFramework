@@ -45,7 +45,8 @@ public class RegisterDB {
                 new RegisteredApplication(null, pkg
                         , RegisteredApplication.Type.ASK,
                         true /* Allow push */,
-                        true /* Allow receive result */);
+                        true /* Allow receive result */,
+                        true /* Allow receive command */);
         getDao()
                 .insert(registeredApplication);
         return registeredApplication;

@@ -70,6 +70,7 @@
     <!-- Event -->
     <string name="event_register">注册推送</string>
     <string name="event_push">收到推送</string>
+    <string name="event_command">收到命令</string>
 
     <string name="status_ok">成功</string>
     <string name="status_deny_disable">禁用推送，已拒绝</string>
@@ -106,7 +107,8 @@
     <string name="action_edit_permission">修改权限</string>
     <string name="permissions">权限</string>
     <string name="permission_allow_register">注册推送</string>
-    <string name="permission_allow_receive">接收消息（及透传）</string>
+    <string name="permission_allow_receive">接收通知栏消息</string>
+    <string name="permission_allow_receive_command">接收命令（暂时无效，通知栏禁用则禁用）</string>
     <string name="permission_allow_receive_register_result">回掉注册结果（暂时无效）</string>
     
     <string name="permission_register_type">注册方式</string>

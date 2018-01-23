@@ -65,7 +65,8 @@ public class RegisteredApplicationDb {
                 new RegisteredApplication(null, pkg
                         , RegisteredApplication.Type.ASK,
                         true /* Allow push */,
-                        true /* Allow receive result */);
+                        true /* Allow receive result */,
+                        true /* Allow receive command */);
         insert(registeredApplication, context);
         return registeredApplication;
     }
