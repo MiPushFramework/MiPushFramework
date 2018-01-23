@@ -2,18 +2,17 @@ package android.app;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.media.AudioAttributes;
 import android.os.IBinder;
 
+import static android.os.Build.VERSION_CODES.KITKAT;
 import static android.os.Build.VERSION_CODES.M;
 
 /**
  * Created by Trumeet on 2018/1/22.
  */
 
+@TargetApi(KITKAT)
 public class AppOpsManagerExtender extends AppOpsManager {
-    private static final String TAG = "AppOpsManagerExtender";
-
     @Override
     public void setUidMode(int code, int uid, int mode) {
         delegate().setUidMode(code, uid, mode);
@@ -47,7 +46,7 @@ public class AppOpsManagerExtender extends AppOpsManager {
     }
 
     @Override
-    public void setRestriction(int code, @AudioAttributes.AttributeUsage int usage, int mode,
+    public void setRestriction(int code, int usage, int mode,
                                String[] exceptionPackages) {
         delegate().setRestriction(code, usage, mode, exceptionPackages);
     }
@@ -209,7 +208,7 @@ public class AppOpsManagerExtender extends AppOpsManager {
      * @hide
      */
     public int noteProxyOpNoThrow(int op, String proxiedPackageName) {
-        return noteProxyOpNoThrow(op, proxiedPackageName);
+        return delegate().noteProxyOpNoThrow(op, proxiedPackageName);
     }
 
     /**
@@ -218,7 +217,7 @@ public class AppOpsManagerExtender extends AppOpsManager {
      * @hide
      */
     public int noteOpNoThrow(int op, int uid, String packageName) {
-        return noteOpNoThrow(op, uid, packageName);
+        return delegate().noteOpNoThrow(op, uid, packageName);
     }
 
     /** @hide */
@@ -283,7 +282,7 @@ public class AppOpsManagerExtender extends AppOpsManager {
 
 
     public AppOpsManagerExtender(final Context context) {
-        super(null, null);
+        super();
         mDelegate = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
     }
 

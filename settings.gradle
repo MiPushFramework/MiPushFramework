@@ -1,1 +1,1 @@
-include ':app', ':condom', ':push', ':common', ':provider'
+include ':app', ':condom', ':push', ':common', ':provider', ':extenders'

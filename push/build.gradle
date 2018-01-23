@@ -61,7 +61,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     // Log
-    compile('com.github.pqpo:Log4a:v1.1.0', {
+    implementation('com.github.pqpo:Log4a:v1.1.0', {
         exclude group: 'com.android.support'
     })
     // Hook
@@ -73,4 +73,5 @@ dependencies {
     implementation project(':condom')
     implementation "com.android.support:support-v4:$supportLibraryVersion"
     implementation project(':provider')
+    implementation project(':extenders')
 }

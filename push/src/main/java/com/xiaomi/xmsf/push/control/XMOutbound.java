@@ -1,6 +1,5 @@
 package com.xiaomi.xmsf.push.control;
 
-import android.app.AppOpsKit;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
@@ -33,6 +32,7 @@ public class XMOutbound implements OutboundJudge {
         if (enableKit)
             options.addKit(new NullDeviceIdKit())
                     .addKit(new AppOpsKit())
+                .addKit(new NotificationManagerKit())
                     ;
         return options;
     }

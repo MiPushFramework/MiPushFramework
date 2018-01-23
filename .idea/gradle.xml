@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/condom" />
+            <option value="$PROJECT_DIR$/extenders" />
             <option value="$PROJECT_DIR$/provider" />
             <option value="$PROJECT_DIR$/push" />
           </set>
