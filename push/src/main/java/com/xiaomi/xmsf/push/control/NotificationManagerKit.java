@@ -32,9 +32,19 @@ public class NotificationManagerKit implements CondomKit {
             super(context);
         }
 
+        @Override public void notify(final int id, final Notification notification) {
+            Log4a.d(TAG, "notify -> " + id + ", " + notification);
+            super.notify(id, notification);
+        }
+
         @Override public void notify(final String tag, final int id, final Notification notification) {
             Log4a.d(TAG, "notify -> " + tag + ", " + id + ", " + notification);
             super.notify(tag, id, notification);
+        }
+
+        @Override public void cancel(final int id) {
+            Log4a.d(TAG, "cancel -> " + id);
+            super.cancel(id);
         }
 
         @Override public void cancel(final String tag, final int id) {

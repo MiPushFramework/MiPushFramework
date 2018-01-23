@@ -204,7 +204,6 @@ public class PushControllerUtils {
                     "getIsMIUI", new XC_MethodReplacement() {
                         @Override
                         protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
-                            Log4a.d("Hook", "get isMIUI -> hook");
                             return MIUIUtils.IS_MIUI;
                         }
                     }));
