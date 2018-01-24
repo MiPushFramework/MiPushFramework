@@ -98,6 +98,7 @@ public class PushServiceMain extends XMPushService {
                 .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                 .setPriority(NotificationCompat.PRIORITY_MIN)
                 .setOngoing(true)
+                .setShowWhen(false)
                 .build();
         manager.notify(NOTIFICATION_ALIVE_ID, notification);
         startForeground(NOTIFICATION_ALIVE_ID, notification);
