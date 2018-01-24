@@ -55,7 +55,7 @@ public class CheckRunningStatusActivity extends PushControllerWizardActivity imp
                         false)) {
                     finish();
                 } else {
-                    startActivity(new Intent(this, FinishWizardActivity.class));
+                    startActivity(new Intent(this, CheckRunInBackgroundActivity.class));
                 }
             } else {
                 startActivity(new Intent(this, StartFailFAQActivity.class));

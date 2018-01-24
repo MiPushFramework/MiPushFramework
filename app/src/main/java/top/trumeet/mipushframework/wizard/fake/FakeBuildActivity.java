@@ -18,7 +18,7 @@ import com.android.setupwizardlib.view.NavigationBar;
 import com.xiaomi.xmsf.R;
 
 import top.trumeet.common.Constants;
-import top.trumeet.mipushframework.wizard.FinishWizardActivity;
+import top.trumeet.mipushframework.wizard.CheckDozeActivity;
 
 /**
  * Created by Trumeet on 2017/8/25.
@@ -77,7 +77,7 @@ public class FakeBuildActivity extends AppCompatActivity implements NavigationBa
             finish();
         } else {
             startActivity(new Intent(this,
-                    FinishWizardActivity.class));
+                    CheckDozeActivity.class));
         }
     }
 

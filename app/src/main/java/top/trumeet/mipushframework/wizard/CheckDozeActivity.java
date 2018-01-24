@@ -93,7 +93,7 @@ public class CheckDozeActivity extends AppCompatActivity implements NavigationBa
             finish();
         } else {
             startActivity(new Intent(this,
-                    CheckRunInBackgroundActivity.class));
+                    FinishWizardActivity.class));
         }
     }
 
@@ -102,7 +102,7 @@ public class CheckDozeActivity extends AppCompatActivity implements NavigationBa
         switch (requestCode) {
             case RC_REQUEST:
                 if (PushServiceAccessibility.isInDozeWhiteList(this))
-                    finish();
+                    nextPage();
                 break;
         }
     }
