@@ -66,12 +66,14 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
-        <receiver android:name="com.xiaomi.xmsf.push.service.receivers.BootReceiver">
+        <receiver android:name="com.xiaomi.xmsf.push.service.receivers.BootReceiver"
+            android:process=":pushservice">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.xiaomi.xmsf.push.service.receivers.NetworkStatusReceiver">
+        <receiver android:name="com.xiaomi.xmsf.push.service.receivers.NetworkStatusReceiver"
+            android:process=":pushservice">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
@@ -119,7 +121,8 @@
         <service android:name=".push.alive.KeepAliveService"
             android:enabled="false"/>
 
-        <receiver android:name="com.xiaomi.xmsf.push.service.receivers.NotificationEventReceiver" android:permission="com.xiaomi.xmsf.permission.NOTIFICATION_ACTIVE">
+        <receiver android:name="com.xiaomi.xmsf.push.service.receivers.NotificationEventReceiver"
+            android:permission="com.xiaomi.xmsf.permission.NOTIFICATION_ACTIVE">
             <intent-filter>
                 <action android:name="com.xiaomi.xmsf.push.NOTIFICATION_ACTIVE" />
             </intent-filter>
