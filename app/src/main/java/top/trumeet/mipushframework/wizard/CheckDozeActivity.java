@@ -1,15 +1,17 @@
 package top.trumeet.mipushframework.wizard;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.setupwizardlib.SetupWizardLayout;
@@ -25,6 +27,8 @@ import top.trumeet.common.push.PushServiceAccessibility;
  */
 
 public class CheckDozeActivity extends AppCompatActivity implements NavigationBar.NavigationBarListener {
+    private static final int RC_REQUEST = 0;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +45,33 @@ public class CheckDozeActivity extends AppCompatActivity implements NavigationBa
         int padding = (int) getResources().getDimension(R.dimen.suw_glif_margin_sides);
         textView.setPadding(padding, padding, padding, padding);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
-        layout.addView(textView);
+
+        Button button = new Button(this);
+        button.setText(R.string.wizard_button_remove_doze);
+        //button.setPadding(padding, padding, padding, padding);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        params.topMargin = padding;
+        params.leftMargin = padding;
+        params.rightMargin = padding;
+        params.bottomMargin = padding;
+        button.setLayoutParams(params);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent()
+                .setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
+                        Constants.REMOVE_DOZE_COMPONENT_NAME)), RC_REQUEST);
+            }
+        });
+
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+        linearLayout.addView(textView);
+        linearLayout.addView(button);
+
+        layout.addView(linearLayout);
         layout.setHeaderText(R.string.wizard_title_doze_whitelist);
         setContentView(layout);
     }
@@ -54,16 +84,7 @@ public class CheckDozeActivity extends AppCompatActivity implements NavigationBa
     @SuppressLint("BatteryLife")
     @Override
     public void onNavigateNext() {
-        if (!PushServiceAccessibility.isInDozeWhiteList(this) &&
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Intent intent = new Intent();
-            String packageName = Constants.SERVICE_APP_NAME;
-            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-            intent.setData(Uri.parse("package:" + packageName));
-            startActivity(intent);
-        } else {
-            nextPage();
-        }
+        nextPage();
     }
 
     private void nextPage () {
@@ -73,6 +94,16 @@ public class CheckDozeActivity extends AppCompatActivity implements NavigationBa
         } else {
             startActivity(new Intent(this,
                     CheckRunInBackgroundActivity.class));
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case RC_REQUEST:
+                if (PushServiceAccessibility.isInDozeWhiteList(this))
+                    finish();
+                break;
         }
     }
 }
