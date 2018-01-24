@@ -87,7 +87,7 @@ public final class Constants {
      * Application log file, use {@link Context#getCacheDir()} as
      * prefix.
      */
-    public static final String LOG_FILE = "/log/file.log";
+    public static final String LOG_FILE = "/file.log";
 
     public static final String AUTHORITY_FILE_PROVIDER = "top.trumeet.mipushframework.fileprovider";
 

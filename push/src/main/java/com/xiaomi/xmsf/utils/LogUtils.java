@@ -3,13 +3,13 @@ package com.xiaomi.xmsf.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.widget.Toast;
 
 import com.xiaomi.xmsf.R;
 
 import java.io.File;
+import java.io.IOException;
 
 import me.pqpo.librarylog4a.Log4a;
 import me.pqpo.librarylog4a.Logger;
@@ -28,6 +28,14 @@ public class LogUtils {
         AndroidAppender.Builder androidBuild = new AndroidAppender.Builder();
 
         String log_path = getLogFile(context);
+        Log4a.d("Log", log_path);
+        if (!new File(log_path).exists()) {
+            try {
+                new File(log_path).createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         FileAppender.Builder fileBuild = new FileAppender.Builder(context)
                 .setLogFilePath(log_path);
 
@@ -40,8 +48,7 @@ public class LogUtils {
     }
 
     public static String getLogFile (Context context) {
-        return ContextCompat.getDataDir(context)
-                .getAbsolutePath().concat(Constants.LOG_FILE);
+        return context.getFilesDir().getAbsolutePath().concat(Constants.LOG_FILE);
     }
 
     public static void shareFile (Context context) {
