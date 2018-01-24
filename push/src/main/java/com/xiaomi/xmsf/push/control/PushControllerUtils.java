@@ -20,7 +20,6 @@ import com.taobao.android.dexposed.XC_MethodReplacement;
 import com.xiaomi.channel.commonutils.android.MIUIUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.xiaomi.push.service.PushServiceMain;
-import com.xiaomi.xmsf.push.alive.KeepAliveService;
 import com.xiaomi.xmsf.push.service.receivers.BootReceiver;
 
 import java.util.ArrayList;
@@ -117,7 +116,6 @@ public class PushControllerUtils {
         setPrefsEnable(enable, context);
         setServiceEnable(enable, context);
         setBootReceiverEnable(enable, context);
-        setAliveServiceEnable(enable, context);
     }
 
     /**
@@ -127,7 +125,6 @@ public class PushControllerUtils {
      */
     public static boolean isAllEnable (Context context) {
         return isPrefsEnable(context) && isServiceRunning (context)
-                && isAliveServiceEnable(context)
                 && isBootReceiverEnable(context);
     }
 
@@ -136,32 +133,6 @@ public class PushControllerUtils {
                 .getComponentEnabledSetting(new ComponentName(context,
                         BootReceiver.class)) ==
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
-    }
-
-    public static boolean isAliveServiceEnable (Context context) {
-        return context.getPackageManager()
-                .getComponentEnabledSetting(new ComponentName(context,
-                        KeepAliveService.class)) ==
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
-    }
-
-    public static void setAliveServiceEnable (boolean enable, Context context) {
-        if (enable) {
-            context.getPackageManager()
-                    .setComponentEnabledSetting(new ComponentName(context,
-                            KeepAliveService.class),
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                            PackageManager.DONT_KILL_APP);
-            startAliveService(context);
-        }
-        else {
-            context.getPackageManager()
-                    .setComponentEnabledSetting(new ComponentName(context,
-                                    KeepAliveService.class),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP);
-            stopAliveService(context);
-        }
     }
 
     /**
@@ -211,13 +182,5 @@ public class PushControllerUtils {
             Log4a.e(TAG, "Hook", e);
         }
         return unhooks.toArray(new XC_MethodHook.Unhook[unhooks.size()]);
-    }
-
-    private static void startAliveService (Context context) {
-        context.startService(new Intent(context, KeepAliveService.class));
-    }
-
-    private static void stopAliveService (Context context) {
-        context.stopService(new Intent(context, KeepAliveService.class));
     }
 }

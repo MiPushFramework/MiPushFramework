@@ -118,9 +118,6 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".push.alive.KeepAliveService"
-            android:enabled="false"/>
-
         <receiver android:name="com.xiaomi.xmsf.push.service.receivers.NotificationEventReceiver"
             android:permission="com.xiaomi.xmsf.permission.NOTIFICATION_ACTIVE">
             <intent-filter>

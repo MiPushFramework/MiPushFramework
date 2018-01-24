@@ -1,12 +1,19 @@
 package com.xiaomi.push.service;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.support.v4.app.NotificationCompat;
 
 import com.oasisfeng.condom.CondomContext;
 import com.xiaomi.smack.packet.Message;
 import com.xiaomi.xmpush.thrift.ActionType;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
+import com.xiaomi.xmsf.R;
 import com.xiaomi.xmsf.push.control.XMOutbound;
 
 import org.apache.thrift.TBase;
@@ -64,6 +71,9 @@ import static top.trumeet.common.Constants.TAG_CONDOM;
 public class PushServiceMain extends XMPushService {
     private static final String TAG = "PushService";
 
+    public static final String CHANNEL_STATUS = "status";
+    private static final int NOTIFICATION_ALIVE_ID = 0;
+
     @Override
     public void attachBaseContext (Context base) {
         Log4a.d(TAG, "attachBaseContext");
@@ -72,7 +82,37 @@ public class PushServiceMain extends XMPushService {
     }
 
     @Override
+    public @StartResult int onStartCommand(Intent intent, @StartArgFlags int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
+        NotificationManager manager = (NotificationManager)
+                getSystemService(NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CHANNEL_STATUS,
+                    getString(R.string.notification_category_alive),
+                    NotificationManager.IMPORTANCE_MIN);
+            manager.createNotificationChannel(channel);
+        }
+        Notification notification = new NotificationCompat.Builder(this,
+                CHANNEL_STATUS)
+                .setContentTitle(getString(R.string.notification_alive))
+                .setSmallIcon(R.drawable.ic_notifications_black_24dp)
+                .setPriority(NotificationCompat.PRIORITY_MIN)
+                .setOngoing(true)
+                .build();
+        manager.notify(NOTIFICATION_ALIVE_ID, notification);
+        startForeground(NOTIFICATION_ALIVE_ID, notification);
+        return Service.START_STICKY;
+    }
+
+    @Override
     public ClientEventDispatcher createClientEventDispatcher() {
         return new MyClientEventDispatcher();
+    }
+
+    @Override
+    public void onDestroy () {
+        ((NotificationManager)getSystemService(NOTIFICATION_SERVICE))
+                .cancel(NOTIFICATION_ALIVE_ID);
+        super.onDestroy();
     }
 }
