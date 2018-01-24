@@ -19,7 +19,7 @@ import com.taobao.android.dexposed.XC_MethodHook;
 import com.taobao.android.dexposed.XC_MethodReplacement;
 import com.xiaomi.channel.commonutils.android.MIUIUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
-import com.xiaomi.push.service.XMPushService;
+import com.xiaomi.push.service.PushServiceMain;
 import com.xiaomi.xmsf.push.alive.KeepAliveService;
 import com.xiaomi.xmsf.push.service.receivers.BootReceiver;
 
@@ -104,7 +104,7 @@ public class PushControllerUtils {
                 JobScheduler scheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
                 scheduler.cancelAll();
             }
-            context.stopService(new Intent(context, XMPushService.class));
+            context.stopService(new Intent(context, PushServiceMain.class));
         }
     }
 
@@ -171,7 +171,7 @@ public class PushControllerUtils {
      * @return is running
      */
     public static boolean isServiceRunning (Context context) {
-        return ServiceRunningChecker.isServiceRunning(context, XMPushService.class);
+        return ServiceRunningChecker.isServiceRunning(context, PushServiceMain.class);
     }
 
     @SuppressLint("WrongConstant")
