@@ -68,11 +68,14 @@ public class RegisteredApplicationDb {
                         true /* Allow receive result */,
                         true /* Allow receive command */);
         insert(registeredApplication, context);
-        return registeredApplication;
+
+        // Very bad
+        return registerApplication(pkg, false, context,
+                null);
     }
 
-    private static void insert (RegisteredApplication application,
+    private static Uri insert (RegisteredApplication application,
                                 Context context) {
-        getInstance(context).insert(application.toValues());
+        return getInstance(context).insert(application.toValues());
     }
 }
