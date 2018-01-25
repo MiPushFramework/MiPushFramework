@@ -55,10 +55,10 @@
     
     <string name="run_in_background_appops_root">需要使用 Root 解除禁用（我们会自动处理它）</string>
     <string name="run_in_background_rikka_appops"><![CDATA[
-需要打开 <b>App Ops</b> 工具，并选择 <b>Xiaomi Push Service Core</b> 应用，授予其 <b>在后台运行或被唤醒</b> 权限
+需要打开 <b>App Ops</b> 工具，并授予 <b>在后台运行或被唤醒</b> 权限
     ]]></string>
     <string name="rikka_appops_help_toast"><![CDATA[
-请选择 <b>Xiaomi Push Service Core</b> 应用，授予其 <b>在后台运行或被唤醒</b> 权限
+请授予 <b>在后台运行或被唤醒</b> 权限
     ]]></string>
 
     <string name="wizard_title_fake_build">修改 Build.prop 深度伪装MIUI</string>

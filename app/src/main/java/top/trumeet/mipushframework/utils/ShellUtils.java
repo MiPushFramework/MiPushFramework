@@ -211,4 +211,8 @@ public final class ShellUtils {
         ShellUtils.CommandResult result = ShellUtils.execCmd(command, true, true);
         return result.isSuccess();
     }
+
+    public static boolean isSuAvailable () {
+        return exec("su --help");
+    }
 }

@@ -84,21 +84,13 @@ public class CheckRunningStatusActivity extends PushControllerWizardActivity imp
 
         @Override
         protected Boolean doInBackground (Void... params) {
-            if (!getController().isEnable(true)) {
+            if (!getController().isEnable(false)) {
                 Log.w(TAG, "Service not enable, start it now!");
                 getController().setEnable(true);
                 SystemClock.sleep(2500);
             }
-            // Because some tools will kill service later after it starts.
-            // So we have to check it too much times.
-            for (int i = 0; i < Constants.CHECK_RUNNING_TIMES; i ++) {
-                //Log.d(TAG, "Loop -> " + i);
-                if (!getController().isEnable(false)) {
-                    return false;
-                }
-                SystemClock.sleep(5000);
-            }
-            return true;
+            SystemClock.sleep(1000 * 5);
+            return getController().isEnable(false);
         }
     }
 

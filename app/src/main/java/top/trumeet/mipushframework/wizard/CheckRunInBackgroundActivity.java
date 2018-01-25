@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,12 +32,35 @@ public class CheckRunInBackgroundActivity extends PushControllerWizardActivity i
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT < 19) {
+        if (Build.VERSION.SDK_INT < 19 || !canFix()) {
             nextPage();
             finish();
             return;
         }
         connect();
+    }
+
+    @Override
+    public void onResume () {
+        super.onResume();
+        if (!canFix()) {
+            nextPage();
+            finish();
+        }
+        PushController controller = getController();
+        if (controller != null && controller.isConnected() && !isConnecting()) {
+            mText.setText(Html.fromHtml(getString(R.string.wizard_descr_run_in_background, Build.VERSION.SDK_INT >= 26 ?
+                    "" : (Utils.isAppOpsInstalled() ? getString(R.string.run_in_background_rikka_appops) :
+                    getString(R.string.run_in_background_appops_root)))));
+
+            int result = controller.checkOp(AppOpsManager.OP_RUN_IN_BACKGROUND);
+            allow = (result == AppOpsManager.MODE_ALLOWED);
+
+            if (allow) {
+                nextPage();
+                finish();
+            }
+        }
     }
 
     @Override
@@ -67,27 +91,8 @@ public class CheckRunInBackgroundActivity extends PushControllerWizardActivity i
 
     @Override
     public void onNavigateNext() {
-        if (!allow) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Intent intent = new Intent();
-                String packageName = Constants.SERVICE_APP_NAME;
-                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                intent.setData(Uri.parse("package:" + packageName));
-                startActivity(intent);
-            } else if (Utils.isAppOpsInstalled()) {
-                startActivity(getPackageManager()
-                .getLaunchIntentForPackage("rikka.appops"));
-                Toast.makeText(this, Utils.getString(R.string.rikka_appops_help_toast,
-                        this), Toast.LENGTH_LONG).show();
-            } else {
-                if (ShellUtils.exec("appops set --user " + Utils.myUid() +
-                " " + getPackageName() + " " + AppOpsManager.OP_RUN_IN_BACKGROUND +
-                " " + AppOpsManager.MODE_ALLOWED))
-                    nextPage();
-                else
-                    Toast.makeText(this, R.string.fail
-                            , Toast.LENGTH_SHORT).show();
-            }
+        if (!allow && canFix()) {
+            lunchAppOps();
         } else {
             nextPage();
         }
@@ -96,5 +101,40 @@ public class CheckRunInBackgroundActivity extends PushControllerWizardActivity i
     private void nextPage () {
         startActivity(new Intent(this,
                 FakeBuildActivity.class));
+    }
+
+    private boolean canFix () {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ||
+                Utils.isAppOpsInstalled() ||
+                ShellUtils.isSuAvailable();
+    }
+
+    private void lunchAppOps () {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Intent intent = new Intent();
+            String packageName = Constants.SERVICE_APP_NAME;
+            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            intent.setData(Uri.parse("package:" + packageName));
+            startActivity(intent);
+        } else if (Utils.isAppOpsInstalled()) {
+            Intent intent = new Intent("rikka.appops.intent.action.PACKAGE_DETAIL")
+                    .addCategory(Intent.CATEGORY_DEFAULT)
+                    .setClassName("rikka.appops", "rikka.appops.DetailActivity")
+                    .putExtra("rikka.appops.intent.extra.USER_HANDLE", UserHandle.CURRENT.hashCode())
+                    .putExtra("rikka.appops.intent.extra.PACKAGE_NAME", Constants.SERVICE_APP_NAME)
+                    .setData(Uri.parse("package:" + Constants.SERVICE_APP_NAME))
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            Toast.makeText(this, Utils.getString(R.string.rikka_appops_help_toast,
+                    this), Toast.LENGTH_LONG).show();
+        } else {
+            if (ShellUtils.exec("appops set --user " + Utils.myUid() +
+                    " " + Constants.SERVICE_APP_NAME  + " " + AppOpsManager.OP_RUN_IN_BACKGROUND +
+                    " " + AppOpsManager.MODE_ALLOWED))
+                nextPage();
+            else
+                Toast.makeText(this, R.string.fail
+                        , Toast.LENGTH_SHORT).show();
+        }
     }
 }

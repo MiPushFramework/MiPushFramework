@@ -182,4 +182,9 @@ public abstract class PushControllerWizardActivity extends Activity {
 
     public void onConnected (@NonNull PushController controller,
                              @Nullable Bundle savedInstanceState) {}
+
+    public final boolean isConnecting () {
+        return mConnectTask != null && !mConnectTask.isCancelled() &&
+                mController != null && !mController.isConnected();
+    }
 }
