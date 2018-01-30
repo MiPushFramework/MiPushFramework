@@ -1,5 +1,6 @@
 package com.xiaomi.push.service;
 
+import android.annotation.Nullable;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -10,11 +11,13 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
 import com.oasisfeng.condom.CondomContext;
+import com.oasisfeng.condom.CondomKit;
 import com.xiaomi.smack.packet.Message;
 import com.xiaomi.xmpush.thrift.ActionType;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmsf.R;
 import com.xiaomi.xmsf.push.control.XMOutbound;
+import com.xiaomi.xmsf.push.notification.OreoNotificationManager;
 
 import org.apache.thrift.TBase;
 
@@ -74,11 +77,31 @@ public class PushServiceMain extends XMPushService {
     public static final String CHANNEL_STATUS = "status";
     private static final int NOTIFICATION_ALIVE_ID = 0;
 
+    private OreoNotificationManager mNotificationManager;
+
     @Override
     public void attachBaseContext (Context base) {
         Log4a.d(TAG, "attachBaseContext");
         super.attachBaseContext(CondomContext.wrap(base, TAG_CONDOM, XMOutbound.create(base,
-                TAG)));
+                TAG)
+        .addKit(new CondomKit() {
+            @Override
+            public void onRegister(CondomKitRegistry registry) {
+                registry.registerSystemService(Context.NOTIFICATION_SERVICE,
+                        new SystemServiceSupplier() {
+                            @Override
+                            public Object getSystemService(Context context, String name) {
+                                if (Context.NOTIFICATION_SERVICE.equals(name)) {
+                                    // 喂给服务一个这样的 Manager，可以区分包
+                                    if (mNotificationManager == null)
+                                        mNotificationManager = new OreoNotificationManager(context);
+                                    return mNotificationManager;
+                                }
+                                return null;
+                            }
+                        });
+            }
+        })));
     }
 
     @Override
@@ -115,5 +138,10 @@ public class PushServiceMain extends XMPushService {
         ((NotificationManager)getSystemService(NOTIFICATION_SERVICE))
                 .cancel(NOTIFICATION_ALIVE_ID);
         super.onDestroy();
+    }
+
+    @Nullable
+    public OreoNotificationManager getNotificationManager () {
+        return mNotificationManager;
     }
 }

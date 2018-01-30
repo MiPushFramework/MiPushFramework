@@ -2,6 +2,7 @@ package com.xiaomi.xmsf;
 
 import android.Manifest;
 import android.app.Application;
+import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -20,6 +21,7 @@ import com.xiaomi.push.service.OnlineConfig;
 import com.xiaomi.xmpush.thrift.ConfigKey;
 import com.xiaomi.xmsf.push.control.PushControllerUtils;
 import com.xiaomi.xmsf.push.control.XMOutbound;
+import com.xiaomi.xmsf.push.notification.NotificationController;
 import com.xiaomi.xmsf.push.service.MiuiPushActivateService;
 import com.xiaomi.xmsf.push.service.notificationcollection.NotificationListener;
 import com.xiaomi.xmsf.push.service.notificationcollection.UploadNotificationJob;
@@ -106,6 +108,11 @@ public class XmsfApp extends Application {
             setStartupTime(currentTimeMillis);
             MiuiPushActivateService.awakePushActivateService(PushControllerUtils.wrapContext(this)
                     , "com.xiaomi.xmsf.push.SCAN");
+        }
+
+        if (Build.VERSION.SDK_INT >= 26) {
+            NotificationManager manager = NotificationManager.from(this);
+            manager.createNotificationChannelGroup(NotificationController.createGroup(this));
         }
     }
 

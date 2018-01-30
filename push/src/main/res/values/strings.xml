@@ -12,6 +12,9 @@
 
 
     <!-- Notification -->
+    <string name="notification_group_config">Config</string>
     <string name="notification_category_alive">Push Status</string>
     <string name="notification_alive">Mi Push running</string>
+
+    <string name="notification_group_applications">Applications</string>
 </resources>

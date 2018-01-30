@@ -8,6 +8,7 @@ import com.xiaomi.push.service.PushServiceMain;
 import com.xiaomi.xmsf.XmsfApp;
 import com.xiaomi.xmsf.push.auth.AuthActivity;
 import com.xiaomi.xmsf.push.control.PushControllerUtils;
+import com.xiaomi.xmsf.push.notification.NotificationController;
 
 import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.common.Constants;
@@ -39,6 +40,7 @@ public class XMPushService extends IntentService {
             Log4a.w(TAG, "Don't register multi request");
             register = false;
         }
+        NotificationController.registerChannelIfNeeded(this, pkg);
         if (!PushControllerUtils.isPrefsEnable(this)) {
             Log4a.e(TAG, "Not allowed in SP! Just return!");
             result = Event.ResultType.DENY_DISABLED;
