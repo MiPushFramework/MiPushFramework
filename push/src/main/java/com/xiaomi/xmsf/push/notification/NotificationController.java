@@ -12,6 +12,8 @@ import android.text.Html;
 
 import com.xiaomi.xmsf.R;
 
+import static top.trumeet.common.utils.NotificationUtils.getChannelIdByPkg;
+
 /**
  * Created by Trumeet on 2018/1/25.
  */
@@ -24,14 +26,10 @@ public class NotificationController {
         return new NotificationChannelGroup(ID_GROUP_APPLICATIONS, Html.fromHtml(context.getString(R.string.notification_group_applications)));
     }
 
-    public static String channelId (@NonNull String packageName) {
-        return "app_" + packageName;
-    }
-
     @TargetApi(26)
     public static NotificationChannel createChannelWithPackage (@NonNull String packageName,
                                                                 @NonNull CharSequence name) {
-        NotificationChannel channel = new NotificationChannel(channelId(packageName),
+        NotificationChannel channel = new NotificationChannel(getChannelIdByPkg(packageName),
                 name, NotificationManager.IMPORTANCE_DEFAULT);
         channel.setGroup(ID_GROUP_APPLICATIONS);
         return channel;
@@ -49,7 +47,7 @@ public class NotificationController {
             return;
         }
 
-        if (manager.getNotificationChannel(channelId(packageName))
+        if (manager.getNotificationChannel(getChannelIdByPkg(packageName))
                 == null) {
             manager.createNotificationChannel(createChannelWithPackage(packageName, name));
         }

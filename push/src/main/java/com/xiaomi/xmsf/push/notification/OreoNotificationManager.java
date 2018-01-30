@@ -11,6 +11,8 @@ import android.util.Log;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
+import static top.trumeet.common.utils.NotificationUtils.getChannelIdByPkg;
+
 /**
  * Created by Trumeet on 2018/1/25.
  *
@@ -56,7 +58,7 @@ public class OreoNotificationManager extends NotificationManagerExtender {
         try {
             Field mChannelIdField = notification.getClass().getDeclaredField("mChannelId");
             mChannelIdField.setAccessible(true);
-            mChannelIdField.set(notification, NotificationController.channelId(apk));
+            mChannelIdField.set(notification, getChannelIdByPkg(apk));
         } catch (Exception e) {
             e.printStackTrace();
         }

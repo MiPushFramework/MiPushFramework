@@ -1,12 +1,15 @@
 package top.trumeet.mipushframework.permissions;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CancellationSignal;
+import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -23,10 +26,16 @@ import moe.shizuku.preference.PreferenceFragment;
 import moe.shizuku.preference.PreferenceScreen;
 import moe.shizuku.preference.SimpleMenuPreference;
 import moe.shizuku.preference.SwitchPreferenceCompat;
+import top.trumeet.common.Constants;
 import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.register.RegisteredApplication;
 import top.trumeet.common.utils.Utils;
 import top.trumeet.mipushframework.event.RecentActivityActivity;
+
+import static android.os.Build.VERSION_CODES.O;
+import static android.provider.Settings.EXTRA_APP_PACKAGE;
+import static android.provider.Settings.EXTRA_CHANNEL_ID;
+import static top.trumeet.common.utils.NotificationUtils.getChannelIdByPkg;
 
 /**
  * Created by Trumeet on 2017/8/27.
@@ -182,6 +191,23 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                             , EntityHeaderController.ActionType.ACTION_NONE)
                     .done((AppCompatActivity)getActivity(), getContext());
             screen.addPreference(appPreferenceOreo);
+
+            if (Build.VERSION.SDK_INT >= O) {
+                Preference manageNotificationPreference = new Preference(getActivity());
+                manageNotificationPreference.setTitle(R.string.settings_manage_app_notifications);
+                manageNotificationPreference.setSummary(R.string.settings_manage_app_notifications_summary);
+                manageNotificationPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    @TargetApi(O)
+                    public boolean onPreferenceClick(Preference preference) {
+                        startActivity(new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
+                                .putExtra(EXTRA_APP_PACKAGE, Constants.SERVICE_APP_NAME)
+                                .putExtra(EXTRA_CHANNEL_ID, getChannelIdByPkg(mApplicationItem.getPackageName())));
+                        return true;
+                    }
+                });
+                screen.addPreference(manageNotificationPreference);
+            }
 
             final SimpleMenuPreference preferenceRegisterMode =
                     new SimpleMenuPreference(getActivity(),
