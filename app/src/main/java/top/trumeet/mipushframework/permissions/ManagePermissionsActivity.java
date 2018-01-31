@@ -18,7 +18,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.android.settings.widget.EntityHeaderController;
-import com.xiaomi.xmsf.R;
 
 import moe.shizuku.preference.Preference;
 import moe.shizuku.preference.PreferenceCategory;
@@ -30,6 +29,7 @@ import top.trumeet.common.Constants;
 import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.register.RegisteredApplication;
 import top.trumeet.common.utils.Utils;
+import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.event.RecentActivityActivity;
 
 import static android.os.Build.VERSION_CODES.O;

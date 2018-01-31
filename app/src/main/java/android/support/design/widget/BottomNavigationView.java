@@ -38,7 +38,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.xiaomi.xmsf.R;
+import top.trumeet.mipush.R;
 
 /**
  * <p>

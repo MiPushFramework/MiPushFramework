@@ -9,9 +9,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.android.setupwizardlib.GlifLayout;
-import com.xiaomi.xmsf.BuildConfig;
-import com.xiaomi.xmsf.R;
 import com.zzhoujay.richtext.RichText;
+
+import top.trumeet.mipush.BuildConfig;
+import top.trumeet.mipush.R;
 
 /**
  * Created by Trumeet on 2017/8/30.

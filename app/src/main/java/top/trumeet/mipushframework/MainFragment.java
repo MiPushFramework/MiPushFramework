@@ -18,11 +18,10 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
-import com.xiaomi.xmsf.R;
-
 import top.trumeet.common.push.PushController;
 import top.trumeet.common.utils.Utils;
 import top.trumeet.common.widget.LinkAlertDialog;
+import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.control.FragmentBroadcast;
 import top.trumeet.mipushframework.control.OnConnectStatusChangedListener;
 import top.trumeet.mipushframework.event.EventFragment;

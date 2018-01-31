@@ -15,9 +15,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.xiaomi.xmsf.R;
-
 import me.drakeet.multitype.ItemViewBinder;
+import top.trumeet.mipush.R;
 
 /**
  * Created by Trumeet on 2017/8/26.

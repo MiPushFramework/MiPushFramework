@@ -11,12 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 
-import com.xiaomi.xmsf.R;
-
 import top.trumeet.common.Constants;
 import top.trumeet.common.push.PushController;
 import top.trumeet.common.utils.Utils;
 import top.trumeet.common.widget.LinkAlertDialog;
+import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.control.ConnectFailUtils;
 import top.trumeet.mipushframework.control.OnConnectStatusChangedListener;
 

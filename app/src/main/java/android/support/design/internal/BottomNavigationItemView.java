@@ -35,7 +35,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.xiaomi.xmsf.R;
+import top.trumeet.mipush.R;
 
 import static android.support.annotation.RestrictTo.Scope.GROUP_ID;
 
@@ -87,9 +87,9 @@ public class BottomNavigationItemView extends FrameLayout implements MenuView.It
 
         LayoutInflater.from(context).inflate(R.layout.design_bottom_navigation_item, this, true);
         setBackgroundResource(R.drawable.design_bottom_navigation_item_background);
-        mIcon = (ImageView) findViewById(R.id.icon);
-        mSmallLabel = (TextView) findViewById(R.id.smallLabel);
-        mLargeLabel = (TextView) findViewById(R.id.largeLabel);
+        mIcon = findViewById(R.id.icon);
+        mSmallLabel = findViewById(R.id.smallLabel);
+        mLargeLabel = findViewById(R.id.largeLabel);
 
     }
 

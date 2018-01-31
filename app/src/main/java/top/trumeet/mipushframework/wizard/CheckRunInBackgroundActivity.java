@@ -13,11 +13,11 @@ import android.text.Html;
 import android.widget.Toast;
 
 import com.android.setupwizardlib.view.NavigationBar;
-import com.xiaomi.xmsf.R;
 
 import top.trumeet.common.Constants;
 import top.trumeet.common.push.PushController;
 import top.trumeet.common.utils.Utils;
+import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.utils.ShellUtils;
 import top.trumeet.mipushframework.wizard.fake.FakeBuildActivity;
 

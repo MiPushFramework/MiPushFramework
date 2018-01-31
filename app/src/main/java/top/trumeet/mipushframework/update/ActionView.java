@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.xiaomi.xmsf.R;
+import top.trumeet.mipush.R;
 
 /**
  * Created by Trumeet on 2017/8/30.
@@ -58,8 +58,8 @@ public class ActionView extends LinearLayout {
     }
 
     private void initView() {
-        icon = (ImageView) findViewById(android.R.id.icon);
-        title = (TextView) findViewById(android.R.id.title);
+        icon = findViewById(android.R.id.icon);
+        title = findViewById(android.R.id.title);
     }
 
     public static class Action {

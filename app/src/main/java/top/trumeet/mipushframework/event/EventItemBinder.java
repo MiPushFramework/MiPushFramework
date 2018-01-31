@@ -4,12 +4,11 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.view.View;
 
-import com.xiaomi.xmsf.R;
-
 import java.util.Date;
 
 import top.trumeet.common.event.Event;
 import top.trumeet.common.utils.Utils;
+import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.permissions.ManagePermissionsActivity;
 import top.trumeet.mipushframework.utils.BaseAppsBinder;
 import top.trumeet.mipushframework.utils.ParseUtils;

@@ -2,13 +2,13 @@ package top.trumeet.mipushframework.utils;
 
 import android.content.Context;
 
-import com.xiaomi.xmsf.R;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import top.trumeet.mipush.R;
 
 /**
  * Created by Trumeet on 2017/7/18.

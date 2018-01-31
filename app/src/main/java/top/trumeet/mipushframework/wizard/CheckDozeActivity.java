@@ -16,10 +16,10 @@ import android.widget.TextView;
 
 import com.android.setupwizardlib.SetupWizardLayout;
 import com.android.setupwizardlib.view.NavigationBar;
-import com.xiaomi.xmsf.R;
 
 import top.trumeet.common.Constants;
 import top.trumeet.common.push.PushServiceAccessibility;
+import top.trumeet.mipush.R;
 
 /**
  * Created by Trumeet on 2017/8/25.

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.xiaomi.xmsf"  >
+    package="top.trumeet.mipush"  >
     <uses-permission android:name="top.trumeet.mipush.permissions.WRITE_EVENT" />
     <uses-permission android:name="top.trumeet.mipush.permissions.READ_EVENT" />
     <uses-permission android:name="top.trumeet.mipush.permissions.READ_APPLICATION_SETTINGS" />

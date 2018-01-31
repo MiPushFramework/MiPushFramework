@@ -26,10 +26,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.xiaomi.xmsf.R;
-
 import moe.shizuku.preference.Preference;
 import moe.shizuku.preference.PreferenceViewHolder;
+import top.trumeet.mipush.R;
 
 public class LayoutPreference extends Preference {
 

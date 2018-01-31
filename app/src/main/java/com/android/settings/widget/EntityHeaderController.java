@@ -42,13 +42,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.settings.applications.LayoutPreference;
-import com.xiaomi.xmsf.R;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import top.trumeet.common.register.RegisteredApplication;
 import top.trumeet.common.utils.Utils;
+import top.trumeet.mipush.R;
 
 public class EntityHeaderController {
 

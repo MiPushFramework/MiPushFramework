@@ -32,7 +32,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.xiaomi.xmsf.R;
+import top.trumeet.mipush.R;
 
 import static android.support.annotation.RestrictTo.Scope.GROUP_ID;
 

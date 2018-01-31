@@ -5,12 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.xiaomi.xmsf.R;
-
 import moe.shizuku.preference.Preference;
 import moe.shizuku.preference.PreferenceFragment;
 import top.trumeet.common.Constants;
 import top.trumeet.common.push.PushServiceAccessibility;
+import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.MainActivity;
 
 /**
