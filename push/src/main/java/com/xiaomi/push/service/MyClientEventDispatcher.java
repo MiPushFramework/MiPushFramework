@@ -44,14 +44,10 @@ import top.trumeet.common.register.RegisteredApplication;
  *
  * 客户端（接收方）：
  * 消息 intent 统一由 {@link com.xiaomi.mipush.sdk.PushMessageProcessor#processIntent} 处理。
- *
- * TODO: 现在还没有搞清楚消息加解密的原理，所以非常蠢地在发送的时候解码，很浪费资源
  */
 
 public class MyClientEventDispatcher extends ClientEventDispatcher {
     private static final String TAG = "MyClientEventDispatcher";
-    private EventProcessor mProcessor = new EventProcessor();
-
     public MyClientEventDispatcher () {
         try {
             // Patch mPushEventProcessor
@@ -119,13 +115,15 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
             if (BuildConfig.DEBUG) Log4a.d(TAG, "packageName: " + buildContainer.packageName
                     /*+ ", targetPackage: " +
             targetPackage*/);
+            // 是否是透传
+            boolean isPassThrough = buildContainer.getMetaInfo().passThrough == 1;
             if (PushConstants.PUSH_SERVICE_PACKAGE_NAME.equals(buildContainer.packageName) ||
-                    MessageProcessor.shouldAllow(buildContainer.packageName, Event.Type.RECEIVE_PUSH, // TODO: Detect command messages
+                    MessageProcessor.shouldAllow(buildContainer.packageName, isPassThrough ? Event.Type.RECEIVE_COMMAND : Event.Type.RECEIVE_PUSH,
                     buildContainer.getMetaInfo().getTitle()
                             , buildContainer.getMetaInfo().getDescription()
                             , var0)) {
 
-                if (Build.VERSION.SDK_INT >= 26) {
+                if (Build.VERSION.SDK_INT >= 26 && !isPassThrough) {
                     XmPushActionContainer container = MIPushEventProcessor.buildContainer(var1);
 
                     // 获得通知的 id 来区分通知。
