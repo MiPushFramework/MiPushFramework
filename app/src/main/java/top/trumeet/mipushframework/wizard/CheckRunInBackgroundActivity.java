@@ -32,7 +32,7 @@ public class CheckRunInBackgroundActivity extends PushControllerWizardActivity i
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT < 19 || !canFix()) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || !canFix()) {
             nextPage();
             finish();
             return;
