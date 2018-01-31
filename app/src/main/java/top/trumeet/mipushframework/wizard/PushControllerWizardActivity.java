@@ -55,7 +55,7 @@ public abstract class PushControllerWizardActivity extends Activity {
 
     @Override
     public void onDestroy () {
-        if (!mConnectTask.isCancelled()) {
+        if (mConnectTask != null && !mConnectTask.isCancelled()) {
             mConnectTask.cancel(true);
         }
         mConnectTask = null;
