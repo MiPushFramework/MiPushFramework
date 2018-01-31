@@ -213,6 +213,7 @@ public final class ShellUtils {
     }
 
     public static boolean isSuAvailable () {
-        return exec("su --help");
+        return execCmd("su --help", false, true)
+                .isSuccess();
     }
 }
