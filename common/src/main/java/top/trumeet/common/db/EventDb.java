@@ -34,10 +34,11 @@ public class EventDb {
     }
 
     public static Uri insertEvent (String pkg, @Event.Type int type,
-                                    @Event.ResultType int result,
+                                    @Event.ResultType int result, String notificationTitle,
+                                    String notificationSummary,
                                     Context context) {
         return insertEvent(new Event(null, pkg, type, Utils.getUTC().getTime()
-                        , result), context);
+                        , result, notificationTitle, notificationSummary), context);
     }
 
     public static List<Event> query (@Nullable Integer skip,

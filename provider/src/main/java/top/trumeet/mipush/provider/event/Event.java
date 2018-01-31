@@ -89,17 +89,42 @@ public class Event {
     @ResultType
     private int result;
 
-    @Generated(hash = 1595411819)
-    public Event(Long id, @NotNull String pkg, int type, long date, int result) {
+    @Property(nameInDb = "noti_title")
+    private String notificationTitle;
+
+    @Property(nameInDb = "noti_summary")
+    private String notificationSummary;
+
+    @Generated(hash = 344677835)
+    public Event() {
+    }
+
+    @Generated(hash = 1993179457)
+    public Event(Long id, @NotNull String pkg, int type, long date, int result, String notificationTitle,
+            String notificationSummary) {
         this.id = id;
         this.pkg = pkg;
         this.type = type;
         this.date = date;
         this.result = result;
+        this.notificationTitle = notificationTitle;
+        this.notificationSummary = notificationSummary;
     }
 
-    @Generated(hash = 344677835)
-    public Event() {
+    public String getNotificationTitle() {
+        return notificationTitle;
+    }
+
+    public void setNotificationTitle(String notificationTitle) {
+        this.notificationTitle = notificationTitle;
+    }
+
+    public String getNotificationSummary() {
+        return notificationSummary;
+    }
+
+    public void setNotificationSummary(String notificationSummary) {
+        this.notificationSummary = notificationSummary;
     }
 
     public Long getId() {
@@ -159,13 +184,15 @@ public class Event {
         return new top.trumeet.common.event.Event(original.id,
                 original.pkg,
                 original.type, original.date,
-                original.result);
+                original.result,
+                original.notificationTitle,
+                original.notificationSummary);
     }
 
     @NonNull
     public static Event from (@NonNull top.trumeet.common.event.Event original) {
         return new Event(original.getId(), original.getPkg(), original.getType(),
-                original.getDate(), original.getResult());
+                original.getDate(), original.getResult(), original.getNotificationTitle(), original.getNotificationSummary());
     }
 
 }

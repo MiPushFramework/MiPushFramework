@@ -24,6 +24,8 @@ public class Event {
     public static final String KEY_TYPE = "type";
     public static final String KEY_DATE = "date";
     public static final String KEY_RESULT = "result";
+    public static final String KEY_NOTIFICATION_TITLE = "noti_title";
+    public static final String KEY_NOTIFICATION_SUMMARY = "noti_summary";
 
     @android.support.annotation.IntDef({Type.RECEIVE_PUSH, Type.REGISTER,
     Type.RECEIVE_COMMAND})
@@ -86,12 +88,18 @@ public class Event {
     @ResultType
     private int result;
 
-    public Event(Long id, @NonNull String pkg, int type, long date, int result) {
+    private String notificationTitle;
+
+    private String notificationSummary;
+
+    public Event(Long id, @NonNull String pkg, int type, long date, int result, String notificationTitle, String notificationSummary) {
         this.id = id;
         this.pkg = pkg;
         this.type = type;
         this.date = date;
         this.result = result;
+        this.notificationTitle = notificationTitle;
+        this.notificationSummary = notificationSummary;
     }
 
     public Event() {
@@ -148,7 +156,9 @@ public class Event {
                 cursor.getString(cursor.getColumnIndex(KEY_PKG)) /* pkg */,
                 cursor.getInt(cursor.getColumnIndex(KEY_TYPE)) /* type */,
                 cursor.getLong(cursor.getColumnIndex(KEY_DATE)) /* date */,
-                cursor.getInt(cursor.getColumnIndex(KEY_RESULT)) /* result */);
+                cursor.getInt(cursor.getColumnIndex(KEY_RESULT)) /* result */,
+                cursor.getString(cursor.getColumnIndex(KEY_NOTIFICATION_TITLE)) /* notification title */,
+                cursor.getString(cursor.getColumnIndex(KEY_NOTIFICATION_SUMMARY)) /* notification summary */);
     }
 
     /**
@@ -163,6 +173,24 @@ public class Event {
         values.put(KEY_TYPE, getType());
         values.put(KEY_DATE, getDate());
         values.put(KEY_RESULT, getResult());
+        values.put(KEY_NOTIFICATION_TITLE, getNotificationTitle());
+        values.put(KEY_NOTIFICATION_SUMMARY, getNotificationSummary());
         return values;
+    }
+
+    public String getNotificationTitle() {
+        return notificationTitle;
+    }
+
+    public void setNotificationTitle(String notificationTitle) {
+        this.notificationTitle = notificationTitle;
+    }
+
+    public String getNotificationSummary() {
+        return notificationSummary;
+    }
+
+    public void setNotificationSummary(String notificationSummary) {
+        this.notificationSummary = notificationSummary;
     }
 }

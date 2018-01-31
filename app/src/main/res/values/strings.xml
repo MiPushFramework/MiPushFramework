@@ -70,7 +70,12 @@
 
     <!-- Event -->
     <string name="event_register">注册推送</string>
-    <string name="event_push">收到推送</string>
+
+    <!-- Notification but no title -->
+    <string name="event_push">收到通知</string>
+    <!-- Notification with title -->
+    <string name="event_push_notification">收到通知： %1$s</string>
+
     <string name="event_command">收到命令</string>
 
     <string name="status_ok">成功</string>

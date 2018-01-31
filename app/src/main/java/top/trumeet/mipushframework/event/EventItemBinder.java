@@ -39,8 +39,14 @@ public class EventItemBinder extends BaseAppsBinder<Event> {
                         .getString(R.string.event_register);
                 break;
             case Event.Type.RECEIVE_PUSH:
-                text = holder.itemView.getContext()
-                        .getString(R.string.event_push);
+                if (item.getNotificationTitle() != null
+                        && !item.getNotificationSummary().trim().equals("")) {
+                    text = holder.itemView.getContext()
+                            .getString(R.string.event_push_notification, item.getNotificationTitle());
+                } else {
+                    text = holder.itemView.getContext()
+                            .getString(R.string.event_push);
+                }
                 break;
             case Event.Type.RECEIVE_COMMAND:
                 text = holder.itemView.getContext()
