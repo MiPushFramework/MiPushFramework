@@ -1,4 +1,19 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -14,6 +29,10 @@ android {
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'mips', 'x86'
         }
+
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        manifestPlaceholders = [fabricKey:properties.getProperty('FABRIC_KEY')]
     }
     buildTypes {
         debug {
@@ -70,4 +89,7 @@ dependencies {
     // Markdown
     compile 'com.zzhoujay.richtext:richtext:2.5.4'
     implementation project(':common')
+    compile('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
+        transitive = true
+    }
 }

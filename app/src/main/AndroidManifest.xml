@@ -52,5 +52,8 @@
         <activity android:name="top.trumeet.mipushframework.update.UpdateActivity"
             android:label="@string/action_update"
             android:theme="@style/SuwThemeGlif.Light"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="${fabricKey}" />
     </application>
 </manifest>
