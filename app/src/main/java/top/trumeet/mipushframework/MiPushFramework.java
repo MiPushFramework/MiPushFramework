@@ -15,7 +15,7 @@ public class MiPushFramework extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (BuildConfig.DEBUG) {
+        if (!BuildConfig.DEBUG) {
             final Fabric fabric = new Fabric.Builder(this)
                     .kits(new Crashlytics())
                     .build();
