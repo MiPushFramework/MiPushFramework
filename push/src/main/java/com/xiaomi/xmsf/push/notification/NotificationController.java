@@ -31,6 +31,7 @@ public class NotificationController {
                                                                 @NonNull CharSequence name) {
         NotificationChannel channel = new NotificationChannel(getChannelIdByPkg(packageName),
                 name, NotificationManager.IMPORTANCE_DEFAULT);
+        channel.enableVibration(true);
         channel.setGroup(ID_GROUP_APPLICATIONS);
         return channel;
     }
