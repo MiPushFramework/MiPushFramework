@@ -3,7 +3,6 @@ package com.xiaomi.push.service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
 
 import com.xiaomi.slim.Blob;
 import com.xiaomi.smack.packet.CommonPacketExtension;
@@ -110,7 +109,7 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
     private static class EventProcessor extends MIPushEventProcessor {
         private static void runProcessMIPushMessage(XMPushService var0, byte[] var1, long var2) {
             XmPushActionContainer buildContainer = buildContainer(var1);
-            Log.d(TAG, "buildContainer: " + buildContainer.toString());
+            Log4a.d(TAG, "buildContainer: " + buildContainer.toString());
             //String targetPackage = MIPushNotificationHelper.getTargetPackage(buildContainer);
             if (BuildConfig.DEBUG) Log4a.d(TAG, "packageName: " + buildContainer.packageName
                     /*+ ", targetPackage: " +
