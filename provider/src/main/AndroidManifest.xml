@@ -16,10 +16,10 @@
         android:label="@string/permission_read_application_settings"/>
 
     <!-- Allows an application to read events.
-        <p>Protection level: dangerous
+        <p>Protection level: signature|privileged
     -->
     <permission android:name="top.trumeet.mipush.permissions.READ_EVENT"
-        android:protectionLevel="dangerous"
+        android:protectionLevel="signature|privileged"
         android:label="@string/permission_read_events"/>
 
     <!-- Allows an application to insert an event.
