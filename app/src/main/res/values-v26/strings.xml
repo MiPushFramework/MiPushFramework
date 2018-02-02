@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="wizard_descr_run_in_background">在 Android O 及更高版本，您需要前往 应用详情 -> 电量 -> 允许后台活动 允许在后台运行。点按 下一页 前往设置。%1$s</string>
-
     <string name="settings_manage_app_notifications">管理通知</string>
     <string name="settings_manage_app_notifications_summary">控制该应用通知的声音、重要级等详情</string>
 </resources>

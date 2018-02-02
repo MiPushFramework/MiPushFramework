@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.UserHandle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Html;
@@ -69,9 +68,8 @@ public class CheckRunInBackgroundActivity extends PushControllerWizardActivity i
         super.onConnected(controller, savedInstanceState);
         layout.getNavigationBar()
                 .setNavigationBarListener(this);
-        mText.setText(Html.fromHtml(getString(R.string.wizard_descr_run_in_background, Build.VERSION.SDK_INT >= 26 ?
-                        "" : (Utils.isAppOpsInstalled() ? getString(R.string.run_in_background_rikka_appops) :
-                        getString(R.string.run_in_background_appops_root)))));
+        mText.setText(Html.fromHtml(getString(R.string.wizard_descr_run_in_background, (Utils.isAppOpsInstalled() ? getString(R.string.run_in_background_rikka_appops) :
+                getString(R.string.run_in_background_appops_root)))));
         layout.setHeaderText(R.string.wizard_title_run_in_background);
         setContentView(layout);
 
@@ -104,19 +102,12 @@ public class CheckRunInBackgroundActivity extends PushControllerWizardActivity i
     }
 
     private boolean canFix () {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ||
-                Utils.isAppOpsInstalled() ||
+        return Utils.isAppOpsInstalled() ||
                 ShellUtils.isSuAvailable();
     }
 
     private void lunchAppOps () {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Intent intent = new Intent();
-            String packageName = Constants.SERVICE_APP_NAME;
-            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-            intent.setData(Uri.parse("package:" + packageName));
-            startActivity(intent);
-        } else if (Utils.isAppOpsInstalled()) {
+        if (Utils.isAppOpsInstalled()) {
             Intent intent = new Intent("rikka.appops.intent.action.PACKAGE_DETAIL")
                     .addCategory(Intent.CATEGORY_DEFAULT)
                     .setClassName("rikka.appops", "rikka.appops.DetailActivity")
