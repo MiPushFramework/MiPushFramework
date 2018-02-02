@@ -69,7 +69,6 @@ public class EntityHeaderController {
     private static final String TAG = "AppDetailFeature";
 
     private final Context mAppContext;
-    private final AppCompatActivity mActivity;
     private final Fragment mFragment;
     private final View mHeader;
     private RecyclerView mRecyclerView;
@@ -98,7 +97,6 @@ public class EntityHeaderController {
     }
 
     private EntityHeaderController(AppCompatActivity activity, Fragment fragment, View header) {
-        mActivity = activity;
         mAppContext = activity.getApplicationContext();
         mFragment = fragment;
         if (header != null) {
@@ -269,7 +267,8 @@ public class EntityHeaderController {
                     public void onClick(View v) {
                         Uri uri = Uri.fromParts("package", mPackageName, null);
                         mAppContext.startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                        .setData(uri));
+                        .setData(uri)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     }
                 });
                 button.setVisibility(View.VISIBLE);
