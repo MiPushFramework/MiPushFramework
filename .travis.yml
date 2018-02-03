@@ -13,6 +13,7 @@ script:
 before_install:
 - openssl aes-256-cbc -K $encrypted_66a7d5f7594e_key -iv $encrypted_66a7d5f7594e_iv
   -in .yuuta.jks.enc -out .yuuta.jks -d
+- chmod +x gradlew
 deploy:
   provider: releases
   skip_cleanup: true
