@@ -10,8 +10,6 @@ android:
   - extra-android-support
 script:
 - "./gradlew :app:assembleRelease"
-# 不知道怎么资瓷第二个 release
-#- "./gradlew :push:assembleRelease"
 before_install:
 - openssl aes-256-cbc -K $encrypted_60c45981e6b1_key -iv $encrypted_60c45981e6b1_iv
   -in .yuuta.jks.enc -out .yuuta.jks -d
