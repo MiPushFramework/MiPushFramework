@@ -32,7 +32,10 @@ android {
 
         Properties properties = new Properties()
         properties.load(project.rootProject.file('local.properties').newDataInputStream())
-        manifestPlaceholders = [fabricKey:properties.getProperty('FABRIC_KEY')]
+        def fabricKey = properties.getProperty('FABRIC_KEY')
+        manifestPlaceholders = [fabricKey:fabricKey != null ?
+                fabricKey : System.getenv("FABRIC_KEY")]
+        // buildConfigField "boolean", "SNAPSHOT", "\"" + rootProject.ext.snapshot + "\""
     }
     buildTypes {
         debug {
@@ -50,10 +53,17 @@ android {
             try {
                 Properties properties = new Properties()
                 properties.load(project.rootProject.file('local.properties').newDataInputStream())
-                storeFile file(properties.getProperty('KEY_LOCATE'))
-                storePassword properties.getProperty('KEYSTORE_PASSWORD')
-                keyAlias properties.getProperty('KEYSTORE_ALIAS')
-                keyPassword properties.getProperty('KEY_PASSWORD')
+                def locale = properties.getProperty("KEY_LOCATE")
+                storeFile file(locale != null ? locale : "./.yuuta.jks")
+                def keystorePwd = properties.getProperty("KEYSTORE_PASSWORD")
+                storePassword keystorePwd != null ?
+                        keystorePwd : System.getenv("KEYSTORE_PASS")
+                def alias = properties.getProperty("KEYSTORE_ALIAS")
+                keyAlias alias != null ?
+                        alias : System.getenv("ALIAS_NAME")
+                def pwd = properties.getProperty("KEY_PASSWORD")
+                keyPassword pwd != null ?
+                        pwd : System.getenv("ALIAS_PASS")
             }
             catch (ignored) {
                 throw new InvalidUserDataException("You should define KEYSTORE_PASSWORD and KEY_PASSWORD in local.properties.")

@@ -43,6 +43,8 @@ ext {
     compileSdkVersion = 26
     targetSdkVersion = 27
     buildToolsVersion = "26.0.2"
-    versionCode = 1
-    versionName = "0.3.1.Alpha"
+    versionCode = 2
+    snapshot = true
+    versionBase = "0.3.2.Alpha"
+    versionName = snapshot ? versionBase + "-SNAPSHOT" : versionBase
 }
