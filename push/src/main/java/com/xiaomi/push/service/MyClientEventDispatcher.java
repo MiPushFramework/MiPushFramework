@@ -59,7 +59,7 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
             }
             Log4a.d(TAG, "original: " + original);
             mPushEventProcessorField.set(this, new EventProcessor());
-            Log4a.i(TAG, "Patch success.");
+            Log4a.d(TAG, "Patch success.");
         } catch (Exception e) {
             Log4a.e(TAG, "*** Patch failed, core functions may not work.");
         }
@@ -109,7 +109,7 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
     private static class EventProcessor extends MIPushEventProcessor {
         private static void runProcessMIPushMessage(XMPushService var0, byte[] var1, long var2) {
             XmPushActionContainer buildContainer = buildContainer(var1);
-            Log4a.d(TAG, "buildContainer: " + buildContainer.toString());
+            Log4a.i(TAG, "buildContainer: " + buildContainer.toString());
             //String targetPackage = MIPushNotificationHelper.getTargetPackage(buildContainer);
             if (BuildConfig.DEBUG) Log4a.d(TAG, "packageName: " + buildContainer.packageName
                     /*+ ", targetPackage: " +

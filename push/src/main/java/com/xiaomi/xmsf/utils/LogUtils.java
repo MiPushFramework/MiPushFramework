@@ -11,6 +11,7 @@ import com.xiaomi.xmsf.R;
 import java.io.File;
 import java.io.IOException;
 
+import me.pqpo.librarylog4a.Level;
 import me.pqpo.librarylog4a.Log4a;
 import me.pqpo.librarylog4a.Logger;
 import me.pqpo.librarylog4a.appender.AndroidAppender;
@@ -37,6 +38,7 @@ public class LogUtils {
             }
         }
         FileAppender.Builder fileBuild = new FileAppender.Builder(context)
+                .setLevel(Level.INFO)
                 .setLogFilePath(log_path);
 
         Logger logger = new Logger.Builder()
