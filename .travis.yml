@@ -11,7 +11,7 @@ android:
 script:
 - "./gradlew :app:assembleRelease"
 before_install:
-- openssl aes-256-cbc -K $encrypted_60c45981e6b1_key -iv $encrypted_60c45981e6b1_iv
+- openssl aes-256-cbc -K $encrypted_66a7d5f7594e_key -iv $encrypted_66a7d5f7594e_iv
   -in .yuuta.jks.enc -out .yuuta.jks -d
 deploy:
   provider: releases
