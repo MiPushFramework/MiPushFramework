@@ -30,9 +30,12 @@ android {
             abiFilters 'armeabi', 'armeabi-v7a', 'mips', 'x86'
         }
 
-        Properties properties = new Properties()
-        properties.load(project.rootProject.file('local.properties').newDataInputStream())
-        def fabricKey = properties.getProperty('FABRIC_KEY')
+        def fabricKey = null
+        if (project.rootProject.file('local.properties').exists()) {
+            Properties properties = new Properties()
+            properties.load(project.rootProject.file('local.properties').newDataInputStream())
+            fabricKey = properties.getProperty('FABRIC_KEY')
+        }
         manifestPlaceholders = [fabricKey:fabricKey != null ?
                 fabricKey : System.getenv("FABRIC_KEY")]
         // buildConfigField "boolean", "SNAPSHOT", "\"" + rootProject.ext.snapshot + "\""
@@ -51,17 +54,24 @@ android {
     signingConfigs {
         debug {
             try {
-                Properties properties = new Properties()
-                properties.load(project.rootProject.file('local.properties').newDataInputStream())
-                def locale = properties.getProperty("KEY_LOCATE")
+                def locale = null
+                def keystorePwd = null
+                def alias = null
+                def pwd = null
+                if (project.rootProject.file('local.properties').exists()) {
+                    Properties properties = new Properties()
+                    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+                    locale = properties.getProperty("KEY_LOCATE")
+                    keystorePwd = properties.getProperty("KEYSTORE_PASSWORD")
+                    alias = properties.getProperty("KEYSTORE_ALIAS")
+                    pwd = properties.getProperty("KEY_PASSWORD")
+                }
+
                 storeFile file(locale != null ? locale : "./.yuuta.jks")
-                def keystorePwd = properties.getProperty("KEYSTORE_PASSWORD")
                 storePassword keystorePwd != null ?
                         keystorePwd : System.getenv("KEYSTORE_PASS")
-                def alias = properties.getProperty("KEYSTORE_ALIAS")
                 keyAlias alias != null ?
                         alias : System.getenv("ALIAS_NAME")
-                def pwd = properties.getProperty("KEY_PASSWORD")
                 keyPassword pwd != null ?
                         pwd : System.getenv("ALIAS_PASS")
             }
