@@ -1,6 +1,5 @@
 package com.xiaomi.xmsf.push.notification;
 
-import android.annotation.NonNull;
 import android.annotation.TargetApi;
 import android.app.NotificationChannel;
 import android.app.NotificationChannelGroup;
@@ -8,6 +7,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.text.Html;
 
 import com.xiaomi.xmsf.R;

@@ -186,7 +186,6 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                     .setLabel(mApplicationItem.getLabel(getContext()))
                     .setSummary(mApplicationItem.getPackageName())
                     .setPackageName(mApplicationItem.getPackageName())
-                    .setUid(mApplicationItem.getUid(getContext()))
                     .setButtonActions(EntityHeaderController.ActionType.ACTION_APP_INFO
                             , EntityHeaderController.ActionType.ACTION_NONE)
                     .done((AppCompatActivity)getActivity(), getContext());

@@ -5,10 +5,10 @@ import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.app.AppGlobals;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.Process;
-import android.os.RemoteException;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
@@ -23,11 +23,15 @@ import top.trumeet.common.R;
 
 public final class Utils {
     public static int myUid () {
-        return Process.myUserHandle().getIdentifier();
+        return Process.myUserHandle().hashCode();
     }
 
     public static boolean isServiceInstalled () {
         return isAppInstalled(Constants.SERVICE_APP_NAME);
+    }
+
+    public static PackageManager getPackageManager () {
+        return AppGlobals.getInitialApplication().getPackageManager();
     }
 
     public static boolean isAppOpsInstalled () {
@@ -36,10 +40,10 @@ public final class Utils {
 
     public static boolean isAppInstalled (String packageName) {
         try {
-            return AppGlobals.getPackageManager()
-                    .getPackageInfo(packageName, 0, myUid())
+            return getPackageManager()
+                    .getPackageInfo(packageName, 0)
                     != null;
-        } catch (RemoteException e) {
+        } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             return false;
         }

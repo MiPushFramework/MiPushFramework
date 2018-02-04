@@ -25,6 +25,14 @@ android {
 
 }
 
+android.libraryVariants.all { variant ->
+    String taskName = String.format("remove%sStubClasses", variant.name.capitalize())
+    task "${taskName}" {
+        doLast { delete "${buildDir}/intermediates/classes/${variant.name}" + "/android" }
+    }
+    variant.processJavaResources.dependsOn(taskName)
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 

@@ -89,6 +89,14 @@ android {
     }
 }
 
+android.applicationVariants.all { variant ->
+    String taskName = String.format("remove%sStubClasses", variant.name.capitalize())
+    task "${taskName}" {
+        doLast { delete "${buildDir}/intermediates/classes/${variant.name}" + "/android" }
+    }
+    variant.processJavaResources.dependsOn(taskName)
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile('com.github.AndroidSnippet:SetupWizardLibCompat:0.3', {

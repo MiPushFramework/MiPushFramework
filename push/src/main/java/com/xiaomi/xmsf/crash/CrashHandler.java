@@ -1,6 +1,6 @@
 package com.xiaomi.xmsf.crash;
 
-import android.annotation.NonNull;
+import android.support.annotation.NonNull;
 
 import me.pqpo.librarylog4a.Log4a;
 

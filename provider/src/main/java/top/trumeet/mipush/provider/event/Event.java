@@ -1,7 +1,7 @@
 package top.trumeet.mipush.provider.event;
 
-import android.annotation.NonNull;
 import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;

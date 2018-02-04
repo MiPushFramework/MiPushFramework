@@ -1,11 +1,11 @@
 package top.trumeet.common.db;
 
-import android.annotation.Nullable;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.CancellationSignal;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.List;
 

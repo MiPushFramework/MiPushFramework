@@ -16,8 +16,6 @@
 
 package com.android.settings.widget;
 
-import android.annotation.IdRes;
-import android.annotation.UserIdInt;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -25,8 +23,8 @@ import android.content.pm.ResolveInfo;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.UserHandle;
 import android.provider.Settings;
+import android.support.annotation.IdRes;
 import android.support.annotation.IntDef;
 import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.Fragment;
@@ -78,8 +76,6 @@ public class EntityHeaderController {
     private CharSequence mSummary;
     private String mPackageName;
     private Intent mAppNotifPrefIntent;
-    @UserIdInt
-    private int mUid = UserHandle.USER_NULL;
     @ActionType
     private int mAction1;
     @ActionType
@@ -169,11 +165,6 @@ public class EntityHeaderController {
 
     public EntityHeaderController setPackageName(String packageName) {
         mPackageName = packageName;
-        return this;
-    }
-
-    public EntityHeaderController setUid(int uid) {
-        mUid = uid;
         return this;
     }
 

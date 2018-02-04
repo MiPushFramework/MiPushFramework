@@ -1,11 +1,11 @@
 package top.trumeet.common.push;
 
 import android.annotation.TargetApi;
-import android.annotation.WorkerThread;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.PowerManager;
+import android.support.annotation.WorkerThread;
 
 import java.util.concurrent.CountDownLatch;
 

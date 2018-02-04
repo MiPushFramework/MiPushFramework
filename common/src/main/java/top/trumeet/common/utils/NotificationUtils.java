@@ -1,6 +1,6 @@
 package top.trumeet.common.utils;
 
-import android.annotation.NonNull;
+import android.support.annotation.NonNull;
 
 /**
  * Created by Trumeet on 2018/1/30.
