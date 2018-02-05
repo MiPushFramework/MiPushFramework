@@ -66,20 +66,20 @@ public class CheckRunInBackgroundActivity extends PushControllerWizardActivity i
     public void onConnected(@NonNull PushController controller,
                             Bundle savedInstanceState) {
         super.onConnected(controller, savedInstanceState);
+        int result = controller.checkOp(AppOpsManagerOverride.OP_RUN_IN_BACKGROUND);
+        allow = (result != AppOpsManager.MODE_IGNORED);
+
+        if (allow) {
+            nextPage();
+            finish();
+            return;
+        }
         layout.getNavigationBar()
                 .setNavigationBarListener(this);
         mText.setText(Html.fromHtml(getString(R.string.wizard_descr_run_in_background, (Utils.isAppOpsInstalled() ? getString(R.string.run_in_background_rikka_appops) :
                 getString(R.string.run_in_background_appops_root)))));
         layout.setHeaderText(R.string.wizard_title_run_in_background);
         setContentView(layout);
-
-        int result = controller.checkOp(AppOpsManagerOverride.OP_RUN_IN_BACKGROUND);
-        allow = (result == AppOpsManager.MODE_ALLOWED);
-
-        if (allow) {
-            nextPage();
-            finish();
-        }
     }
 
     @Override
