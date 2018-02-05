@@ -10,6 +10,7 @@ android:
   - extra-android-support
 script:
 - "./gradlew :app:assembleRelease"
+- "./gradlew :push:assembleRelease"
 before_install:
 - yes | sdkmanager "platforms;android-27"
 - openssl aes-256-cbc -K $encrypted_66a7d5f7594e_key -iv $encrypted_66a7d5f7594e_iv
@@ -20,6 +21,8 @@ deploy:
   skip_cleanup: true
   api_key:
     secure: G+LeoslAG/JLv5PsxNoH5jYr8gXhD8SzHAMhnXGkPy6CNPq3CHhyYTh5AKIbQyI9596KeNZSCBcUFRw2HvDC5BBnB7uKNmxGlPKLNRH+AEuF1ZkNlOc7Q2lYhuArbMeiZw2Tz3RL5/5HJYZ2LPwaDRxeB7HipqSfDXN+6W65qW6TTGO5ykZLLLUVsq+xBB1tzlxB4XLy5ac71lJ3z8uBJ9y3CnUQFicY9w5gV9BPxf217B4H8FcBloIF0z1I/qnZZX1WsLYqa3yrsNqeExmeP/ZT6gEqvAi46oJvaSPrOhcmoFzbobkxWXxrvEPsm2F4MwxugbcNUwCn1nm030/3ta2jIP68t8dmcV+uNtILCiv8BxBJyiZGr+ENsZ2nKluq4B50fBLrHv33dpnyYezMwE2+v9C5OBELe5R1ShfqXaxvnf3fZjSMT/lv/+m7g7JOGPtaHm6wlltgBK8vV4sYcH8mJvGeAaiXqFk3JVWMaRuVsIw5uWPWY2jPvgJ25ddlJ2Z1+2eJEtsw8RZZ785HgSfBKEwHDDNlG85/Yqr501Xjw4SzeN/3CalbVWGrVPa+s/wc5cjCFNe60NAcDaMdfc7P3HQe+E+5ij0rOTXwBd4HlPXNsFA8iDGGHqgLoWk/CyrtTnN8s7CzllaaSyWPG7bLLDaigMDJ8fzDL4Qmrp8=
-  file: app/build/outputs/apk/release/app-release.apk
+  file:
+    - "app/build/outputs/apk/release/app-release.apk"
+    - "push/build/outputs/apk/release/push-release.apk"
   on:
     repo: Trumeet/MiPushFramework
