@@ -1,7 +1,5 @@
 package com.xiaomi.xmsf.push.control;
 
-import android.Manifest;
-import android.app.AppGlobals;
 import android.app.AppOpsManager;
 import android.app.Service;
 import android.content.Intent;
@@ -13,6 +11,9 @@ import android.os.RemoteException;
 
 import top.trumeet.common.Constants;
 import top.trumeet.common.IPushController;
+import top.trumeet.common.override.AppOpsManagerOverride;
+import top.trumeet.common.override.ManifestOverride;
+import top.trumeet.common.utils.Utils;
 
 /**
  * Created by Trumeet on 2017/12/22.
@@ -26,15 +27,8 @@ public class ControlService extends Service {
     }
 
     private static boolean checkPermission (String permName) {
-        try {
-            if (AppGlobals.getPackageManager()
-                    .checkUidPermission(permName,
-                            Binder.getCallingUid()) != PackageManager.PERMISSION_GRANTED)
-                return false;
-            return true;
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
+        return Utils.getApplication().checkPermission(permName, Binder.getCallingPid(),
+                Binder.getCallingUid()) == PackageManager.PERMISSION_GRANTED;
     }
 
     private IPushController.Stub stub = new IPushController.Stub() {
@@ -65,10 +59,10 @@ public class ControlService extends Service {
         @Override
         public int checkOp(int op) throws RemoteException {
             if (!checkPermission(Constants.permissions.CHECK_APP_OPS_STATUS))
-            enforcePermission(Manifest.permission.GET_APP_OPS_STATS);
-            int mode = ((AppOpsManager)getSystemService(APP_OPS_SERVICE)).checkOpNoThrow(
+            enforcePermission(ManifestOverride.permission.GET_APP_OPS_STATS);
+            int mode = AppOpsManagerOverride.checkOpNoThrow(
                     op
-                    , Process.myUid(), getPackageName());
+                    , Process.myUid(), getPackageName(), ((AppOpsManager)getSystemService(APP_OPS_SERVICE)));
             return mode;
         }
     };

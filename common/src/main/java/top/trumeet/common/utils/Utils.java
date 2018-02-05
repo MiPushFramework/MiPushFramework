@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.app.AppGlobals;
+import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -28,6 +29,10 @@ public final class Utils {
 
     public static boolean isServiceInstalled () {
         return isAppInstalled(Constants.SERVICE_APP_NAME);
+    }
+
+    public static Application getApplication () {
+        return AppGlobals.getInitialApplication();
     }
 
     public static PackageManager getPackageManager () {

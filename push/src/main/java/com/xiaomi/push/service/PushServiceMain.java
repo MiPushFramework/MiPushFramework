@@ -105,7 +105,7 @@ public class PushServiceMain extends XMPushService {
     }
 
     @Override
-    public @StartResult int onStartCommand(Intent intent, @StartArgFlags int flags, int startId) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
         NotificationManager manager = (NotificationManager)
                 getSystemService(NOTIFICATION_SERVICE);

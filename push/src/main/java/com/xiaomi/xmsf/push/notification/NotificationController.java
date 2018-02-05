@@ -39,7 +39,7 @@ public class NotificationController {
     public static void registerChannelIfNeeded (Context context, String packageName) {
         if (Build.VERSION.SDK_INT < 26)
             return;
-        NotificationManager manager = NotificationManager.from(context);
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         CharSequence name;
         try {
             name = context.getPackageManager().getApplicationInfo(packageName, 0)

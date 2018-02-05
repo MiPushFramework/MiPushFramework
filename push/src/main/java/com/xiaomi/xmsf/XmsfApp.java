@@ -116,7 +116,7 @@ public class XmsfApp extends Application {
         }
 
         if (Build.VERSION.SDK_INT >= 26) {
-            NotificationManager manager = NotificationManager.from(this);
+            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             manager.createNotificationChannelGroup(NotificationController.createGroup(this));
         }
     }

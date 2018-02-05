@@ -19,6 +19,9 @@ public class AppOpsManager {
     @TargetApi(N)
     public static final int OP_RUN_IN_BACKGROUND = 63;
 
+    /** @hide */
+    public static final int OP_POST_NOTIFICATION = 11;
+
     public static final String OPSTR_ADD_VOICEMAIL = "android:add_voicemail";
     public static final String OPSTR_ANSWER_PHONE_CALLS = "android:answer_phone_calls";
     public static final String OPSTR_BODY_SENSORS = "android:body_sensors";
@@ -55,6 +58,10 @@ public class AppOpsManager {
     public static final String OPSTR_WRITE_SETTINGS = "android:write_settings";
 
     AppOpsManager() {
+        throw new RuntimeException("Stub!");
+    }
+
+    public int checkOpNoThrow(int op, int uid, String packageName) {
         throw new RuntimeException("Stub!");
     }
 

@@ -14,4 +14,12 @@ public class AppOpsManagerOverride {
     /** @hide Control whether an application is allowed to run in the background. */
     @TargetApi(N)
     public static final int OP_RUN_IN_BACKGROUND = AppOpsManager.OP_RUN_IN_BACKGROUND;
+
+    /** @hide */
+    public static final int OP_POST_NOTIFICATION = AppOpsManager.OP_POST_NOTIFICATION;
+
+    public static int checkOpNoThrow(int op, int uid, String packageName,
+                              AppOpsManager manager) {
+        return manager.checkOpNoThrow(op, uid, packageName);
+    }
 }

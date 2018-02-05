@@ -1,6 +1,5 @@
 package com.xiaomi.xmsf.push.control;
 
-import android.Manifest;
 import android.app.AppOpsManager;
 import android.app.AppOpsManagerExtender;
 import android.content.Context;
@@ -8,6 +7,8 @@ import android.content.Context;
 import com.oasisfeng.condom.CondomKit;
 
 import me.pqpo.librarylog4a.Log4a;
+import top.trumeet.common.override.AppOpsManagerOverride;
+import top.trumeet.common.override.ManifestOverride;
 
 /**
  * Created by Trumeet on 2018/1/19.
@@ -18,7 +19,7 @@ public class AppOpsKit implements CondomKit, CondomKit.SystemServiceSupplier {
 
     @Override
     public void onRegister(CondomKitRegistry registry) {
-        registry.addPermissionSpoof(Manifest.permission.GET_APP_OPS_STATS);
+        registry.addPermissionSpoof(ManifestOverride.permission.GET_APP_OPS_STATS);
         registry.registerSystemService(Context.APP_OPS_SERVICE, this);
     }
 
@@ -36,7 +37,7 @@ public class AppOpsKit implements CondomKit, CondomKit.SystemServiceSupplier {
 
         @Override
         public int checkOpNoThrow(int op, int uid, String packageName) {
-            if (op == AppOpsManager.OP_POST_NOTIFICATION) {
+            if (op == AppOpsManagerOverride.OP_POST_NOTIFICATION) {
                 Log4a.d(TAG, "check post notification op: " + uid + ", " + packageName);
                 // TODO: add a option is better.
                 return AppOpsManager.MODE_ALLOWED;
