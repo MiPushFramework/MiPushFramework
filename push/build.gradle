@@ -48,7 +48,7 @@ android {
                 pwd = properties.getProperty("KEY_PASSWORD")
             }
 
-            storeFile file(locale != null ? locale : "./.yuuta.jks")
+            storeFile file(locale != null ? locale : project.rootProjet.file(".yuuta.jks"))
             storePassword keystorePwd != null ?
                     keystorePwd : System.getenv("KEYSTORE_PASS")
             keyAlias alias != null ?
