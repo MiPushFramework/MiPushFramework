@@ -140,7 +140,10 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
                     manager.register(id, buildContainer.packageName);
                 }
                 if (BuildConfig.DEBUG) Log4a.d(TAG, "invoke original method");
-                doProcessMIPushMessage(var0, var1, var2);
+
+                MyMIPushMessageProcessor.process(var0, buildContainer, var1, var2);
+                //doProcessMIPushMessage(var0, var1, var2);
+
             } else {
                 if (BuildConfig.DEBUG) Log4a.d(TAG, "denied.");
             }
