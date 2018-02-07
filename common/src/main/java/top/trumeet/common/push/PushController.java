@@ -103,8 +103,13 @@ public class PushController {
     }
 
     public void disconnect () {
-        if (mConnection != null)
-            mConnection.disconnect();
+        try {
+            if (mConnection != null)
+                mConnection.disconnect();
+        } catch (IllegalStateException e) {
+            // Too bad, 不支持服务版本之后点重试就会 not registered
+            e.printStackTrace();
+        }
     }
 
     private void enforceConnected () {
