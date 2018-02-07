@@ -1,6 +1,7 @@
 package top.trumeet.mipushframework;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -27,7 +28,6 @@ import top.trumeet.mipushframework.control.OnConnectStatusChangedListener;
 import top.trumeet.mipushframework.event.EventFragment;
 import top.trumeet.mipushframework.register.RegisteredApplicationFragment;
 import top.trumeet.mipushframework.settings.SettingsFragment;
-import top.trumeet.mipushframework.update.UpdateActivity;
 
 /**
  * Created by Trumeet on 2017/12/30.
@@ -63,8 +63,10 @@ public class MainFragment extends Fragment implements OnConnectStatusChangedList
                     .show();
             return true;
         } else if (item.getItemId() == R.id.action_update) {
-            startActivity(new Intent(getContext()
-                    , UpdateActivity.class));
+            startActivity(new Intent(Intent.ACTION_VIEW)
+            .setData(Uri.parse("https://github.com/Trumeet/MiPushFramework/releases")));
+            Toast.makeText(getActivity(), R.string.update_toast, Toast.LENGTH_LONG)
+            .show();
         }
         return super.onOptionsItemSelected(item);
     }

@@ -93,7 +93,7 @@
 ## 感谢
 
 * @Rachel030219 提供文件
-* Android Open Source Project, MultiType, greenDao, SetupWizardLibCompat, Condom, MaterialPreference，GreenDaoUpgradeHelper, epic, Log4a , RichText
+* Android Open Source Project, MultiType, greenDao, SetupWizardLibCompat, Condom, MaterialPreference，GreenDaoUpgradeHelper, epic, Log4a
 * 酷安 @PzHown @lmnm011223 @`苏沐晨风丶`（未采纳） 提供图标
 
 # License

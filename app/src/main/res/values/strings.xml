@@ -141,11 +141,7 @@
 
     <!-- Update -->
     <string name="action_update">检查更新</string>
-    <string name="update_none">您正在使用最新版本</string>
-    <string name="update_progress">正在检查更新</string>
-    <string name="update_available">更新可用：%1$s</string>
-    <string name="action_download_update">前往下载页</string>
-    <string name="action_check_again">重新检查</string>
+    <string name="update_toast">请从 Release 页面下载最新的版本。（请下载 manager.apk）</string>
 
     <!-- Manage applications, individual application info screen title. For example, if they click on "Browser" in "Manage applications", the title of the next screen will be this -->
     <string name="application_info_label">App info</string>

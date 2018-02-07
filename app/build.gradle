@@ -79,8 +79,8 @@ android.applicationVariants.all { variant ->
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile('com.github.AndroidSnippet:SetupWizardLibCompat:0.3', {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation('com.github.AndroidSnippet:SetupWizardLibCompat:0.3', {
         exclude group: 'com.android.support'
     })
     // Recycler
@@ -95,10 +95,10 @@ dependencies {
     implementation 'moe.shizuku.preference:preference-switchcompat:2.0.2'
     implementation 'moe.shizuku.preference:preference-dialog-android:2.2.0'
     implementation 'moe.shizuku.preference:preference-simplemenu:2.2.0'
-    // Markdown
-    compile 'com.zzhoujay.richtext:richtext:2.5.4'
+    // Common
     implementation project(':common')
-    compile('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
+    // Fabric
+    implementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
         transitive = true
     }
 }
