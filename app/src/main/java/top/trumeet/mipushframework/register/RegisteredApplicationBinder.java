@@ -21,7 +21,7 @@ public class RegisteredApplicationBinder extends BaseAppsBinder<RegisteredApplic
     @Override
     protected void onBindViewHolder(@NonNull final ViewHolder holder
             , @NonNull final RegisteredApplication item) {
-        fillData(item.getPackageName(),
+        fillData(item.getPackageName(), true,
                 holder);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

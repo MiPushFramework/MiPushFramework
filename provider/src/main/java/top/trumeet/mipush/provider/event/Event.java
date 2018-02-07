@@ -1,6 +1,5 @@
 package top.trumeet.mipush.provider.event;
 
-import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -8,12 +7,6 @@ import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Property;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 /**
  * Created by Trumeet on 2017/8/26.
@@ -23,36 +16,6 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 @Entity
 public class Event {
-    @IntDef({Type.RECEIVE_PUSH, Type.REGISTER})
-    @Retention(SOURCE)
-    @Target({ElementType.PARAMETER, ElementType.TYPE,
-            ElementType.FIELD, ElementType.METHOD})
-    public @interface Type {
-        int RECEIVE_PUSH = 0;
-        int REGISTER = 2;
-    }
-
-    @IntDef({ResultType.OK, ResultType.DENY_DISABLED, ResultType.DENY_USER})
-    @Retention(SOURCE)
-    @Target({ElementType.PARAMETER, ElementType.TYPE,
-            ElementType.FIELD, ElementType.METHOD})
-    public @interface ResultType {
-        /**
-         * Allowed
-         */
-        int OK = 0;
-
-        /**
-         * Deny because push is disabled by user
-         */
-        int DENY_DISABLED = 1;
-
-        /**
-         * User denied
-         */
-        int DENY_USER = 2;
-    }
-
     /**
      * Id
      */
@@ -68,10 +31,10 @@ public class Event {
 
     /**
      * Event type
-     * @see Type
+     * @see top.trumeet.common.event.Event.Type
      */
     @Property(nameInDb = "type")
-    @Type
+    @top.trumeet.common.event.Event.Type
     @NotNull
     private int type;
 
@@ -86,8 +49,11 @@ public class Event {
      * Operation result
      */
     @Property(nameInDb = "result")
-    @ResultType
+    @top.trumeet.common.event.Event.ResultType
     private int result;
+
+    @Property(nameInDb = "dev_info")
+    private String info;
 
     @Property(nameInDb = "noti_title")
     private String notificationTitle;
@@ -99,14 +65,15 @@ public class Event {
     public Event() {
     }
 
-    @Generated(hash = 1993179457)
-    public Event(Long id, @NotNull String pkg, int type, long date, int result, String notificationTitle,
+    @Generated(hash = 722821452)
+    public Event(Long id, @NotNull String pkg, int type, long date, int result, String info, String notificationTitle,
             String notificationSummary) {
         this.id = id;
         this.pkg = pkg;
         this.type = type;
         this.date = date;
         this.result = result;
+        this.info = info;
         this.notificationTitle = notificationTitle;
         this.notificationSummary = notificationSummary;
     }
@@ -186,13 +153,22 @@ public class Event {
                 original.type, original.date,
                 original.result,
                 original.notificationTitle,
-                original.notificationSummary);
+                original.notificationSummary,
+                original.info);
     }
 
     @NonNull
     public static Event from (@NonNull top.trumeet.common.event.Event original) {
         return new Event(original.getId(), original.getPkg(), original.getType(),
-                original.getDate(), original.getResult(), original.getNotificationTitle(), original.getNotificationSummary());
+                original.getDate(), original.getResult(), original.getNotificationTitle(), original.getNotificationSummary(),
+                original.getInfo());
     }
 
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
 }

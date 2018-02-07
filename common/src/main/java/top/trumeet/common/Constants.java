@@ -86,7 +86,7 @@ public final class Constants {
 
     public static final String SERVICE_APP_NAME = "com.xiaomi.xmsf";
 
-    public static final int PUSH_SERVICE_VERSION_CODE = 1;
+    public static final int PUSH_SERVICE_VERSION_CODE = Integer.parseInt(BuildConfig.PUSH_VERSION_CODE);
 
     /**
      * 用于 Manager 控制 Service 的控制服务的名字

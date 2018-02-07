@@ -43,20 +43,16 @@ public abstract class BaseAppsBinder<T> extends ItemViewBinder<T, BaseAppsBinder
                 false));
     }
 
-    /**
-     * Should use in {@link ItemViewBinder#onBindViewHolder(RecyclerView.ViewHolder, Object)}.
-     * Load app title and icon
-     * @param pkgName Package name
-     * @param holder View holder
-     */
-    public final void fillData (String pkgName, ViewHolder holder) {
-        PackageManager packageManager = holder.itemView.getContext().
-                getPackageManager();
-        try {
-            holder.title.setText(packageManager.getApplicationLabel(packageManager.getApplicationInfo(pkgName,
-                    0)));
-        } catch (PackageManager.NameNotFoundException e) {
-            holder.title.setText(pkgName);
+    public final void fillData (String pkgName, boolean fillName, ViewHolder holder) {
+        if (fillName) {
+            PackageManager packageManager = holder.itemView.getContext().
+                    getPackageManager();
+            try {
+                holder.title.setText(packageManager.getApplicationLabel(packageManager.getApplicationInfo(pkgName,
+                        0)));
+            } catch (PackageManager.NameNotFoundException e) {
+                holder.title.setText(pkgName);
+            }
         }
         Drawable icon = getIconFromMemoryCache(pkgName);
         if (icon != null) {
@@ -65,6 +61,18 @@ public abstract class BaseAppsBinder<T> extends ItemViewBinder<T, BaseAppsBinder
             new IconWorkerTask(holder.icon)
                     .execute(pkgName);
         }
+    }
+
+    /**
+     * Should use in {@link ItemViewBinder#onBindViewHolder(RecyclerView.ViewHolder, Object)}.
+     * Load app title and icon
+     * @param pkgName Package name
+     * @param holder View holder
+     * @deprecated Use #fillData(String, boolean, ViewHolder) instead
+     */
+    @Deprecated
+    public final void fillData (String pkgName, ViewHolder holder) {
+        fillData(pkgName, true, holder);
     }
 
     private void addDrawableToMemoryCache (@Nullable String pkg, @NonNull Drawable icon) {

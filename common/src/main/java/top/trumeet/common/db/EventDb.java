@@ -11,6 +11,7 @@ import java.util.List;
 
 import top.trumeet.common.Constants;
 import top.trumeet.common.event.Event;
+import top.trumeet.common.event.type.EventType;
 import top.trumeet.common.utils.DatabaseUtils;
 import top.trumeet.common.utils.Utils;
 
@@ -33,12 +34,11 @@ public class EventDb {
                 .insert(event.toValues());
     }
 
-    public static Uri insertEvent (String pkg, @Event.Type int type,
-                                    @Event.ResultType int result, String notificationTitle,
-                                    String notificationSummary,
-                                    Context context) {
-        return insertEvent(new Event(null, pkg, type, Utils.getUTC().getTime()
-                        , result, notificationTitle, notificationSummary), context);
+    public static Uri insertEvent (@Event.ResultType int result,
+                                   EventType type,
+                                   Context context) {
+        return insertEvent(type.fillEvent(new Event(null, type.getPkg(), type.getType(), Utils.getUTC().getTime()
+                , result, null, null, type.getInfo())), context);
     }
 
     public static List<Event> query (@Nullable Integer skip,

@@ -80,6 +80,6 @@ public class XMPushService extends IntentService {
                 }
             }
         }
-        if (register) EventDb.insertEvent(pkg, Event.Type.REGISTER, result, null, null, this);
+        if (register) EventDb.insertEvent(result, new top.trumeet.common.event.type.RegistrationType(null, pkg), this);
     }
 }

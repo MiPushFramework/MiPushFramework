@@ -24,18 +24,46 @@ public class Event {
     public static final String KEY_TYPE = "type";
     public static final String KEY_DATE = "date";
     public static final String KEY_RESULT = "result";
+    public static final String KEY_INFO = "dev_info";
+
+    // Meta info
     public static final String KEY_NOTIFICATION_TITLE = "noti_title";
     public static final String KEY_NOTIFICATION_SUMMARY = "noti_summary";
 
-    @android.support.annotation.IntDef({Type.RECEIVE_PUSH, Type.REGISTER,
-    Type.RECEIVE_COMMAND})
+    @android.support.annotation.IntDef({Type.Notification,
+            Type.Command, Type.AckMessage, Type.Registration,
+    Type.MultiConnectionBroadcast, Type.MultiConnectionResult,
+    Type.UnRegistration, Type.ReportFeedback, Type.SetConfig, Type.Subscription,
+    Type.UnSubscription, Type.RegistrationResult})
     @Retention(SOURCE)
     @Target({ElementType.PARAMETER, ElementType.TYPE,
             ElementType.FIELD, ElementType.METHOD})
     public @interface Type {
+        @Deprecated
         int RECEIVE_PUSH = 0;
+        @Deprecated
         int REGISTER = 2;
+        @Deprecated
         int RECEIVE_COMMAND = 1;
+
+        // Same to com.xiaomi.xmpush.thrift.ActionType
+        int AckMessage = 6;
+        int MultiConnectionBroadcast = 11;
+        int MultiConnectionResult = 12;
+        int SendMessage = RECEIVE_PUSH;
+        int SetConfig = 7;
+        int Subscription = 3;
+        int UnSubscription = 4;
+        int Notification = RECEIVE_PUSH;
+        int Command = 10;
+        int ReportFeedback = 8;
+
+        // 和上面的重复（
+        int Registration = REGISTER;
+        int UnRegistration = 20;
+
+        // Custom
+        int RegistrationResult = 21;
     }
 
     @android.support.annotation.IntDef({ResultType.OK, ResultType.DENY_DISABLED, ResultType.DENY_USER})
@@ -92,7 +120,9 @@ public class Event {
 
     private String notificationSummary;
 
-    public Event(Long id, @NonNull String pkg, int type, long date, int result, String notificationTitle, String notificationSummary) {
+    private String info;
+
+    public Event(Long id, @NonNull String pkg, int type, long date, int result, String notificationTitle, String notificationSummary, String info) {
         this.id = id;
         this.pkg = pkg;
         this.type = type;
@@ -100,6 +130,7 @@ public class Event {
         this.result = result;
         this.notificationTitle = notificationTitle;
         this.notificationSummary = notificationSummary;
+        this.info = info;
     }
 
     public Event() {
@@ -158,7 +189,8 @@ public class Event {
                 cursor.getLong(cursor.getColumnIndex(KEY_DATE)) /* date */,
                 cursor.getInt(cursor.getColumnIndex(KEY_RESULT)) /* result */,
                 cursor.getString(cursor.getColumnIndex(KEY_NOTIFICATION_TITLE)) /* notification title */,
-                cursor.getString(cursor.getColumnIndex(KEY_NOTIFICATION_SUMMARY)) /* notification summary */);
+                cursor.getString(cursor.getColumnIndex(KEY_NOTIFICATION_SUMMARY)) /* notification summary */,
+                cursor.getString(cursor.getColumnIndex(KEY_INFO)) /* dev info */);
     }
 
     /**
@@ -175,7 +207,16 @@ public class Event {
         values.put(KEY_RESULT, getResult());
         values.put(KEY_NOTIFICATION_TITLE, getNotificationTitle());
         values.put(KEY_NOTIFICATION_SUMMARY, getNotificationSummary());
+        values.put(KEY_INFO, getInfo());
         return values;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 
     public String getNotificationTitle() {

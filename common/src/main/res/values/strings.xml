@@ -1,3 +1,13 @@
 <resources>
     <string name="push_service_name">Xiaomi Push Service Core</string>
+
+    <!-- Event -->
+    <string name="event_register">Register push</string>
+    <string name="event_register_result">发送注册结果</string>
+
+    <!-- Notification but no title -->
+    <string name="event_push">Receive notification</string>
+
+    <string name="event_command">Receive command</string>
+
 </resources>

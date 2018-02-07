@@ -9,8 +9,10 @@ import com.xiaomi.smack.packet.CommonPacketExtension;
 import com.xiaomi.smack.packet.Message;
 import com.xiaomi.smack.packet.Packet;
 import com.xiaomi.smack.util.TrafficUtils;
+import com.xiaomi.xmpush.thrift.ActionType;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
 import com.xiaomi.xmsf.push.notification.OreoNotificationManager;
+import com.xiaomi.xmsf.push.type.TypeFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -20,6 +22,8 @@ import top.trumeet.common.BuildConfig;
 import top.trumeet.common.db.EventDb;
 import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.event.Event;
+import top.trumeet.common.event.type.CommandType;
+import top.trumeet.common.event.type.EventType;
 import top.trumeet.common.register.RegisteredApplication;
 
 /**
@@ -43,10 +47,14 @@ import top.trumeet.common.register.RegisteredApplication;
  *
  * 客户端（接收方）：
  * 消息 intent 统一由 {@link com.xiaomi.mipush.sdk.PushMessageProcessor#processIntent} 处理。
+ *
+ * Warning:
+ * 理论上这里是服务器发送给 Framework，然后再由 Framework 发给对方 app 的中转。所以一些请求类的 request（如 {@link ActionType#Subscription}
+ * 这里拦截没有任何作用，所以没有在这里处理，仅记录。
  */
 
 public class MyClientEventDispatcher extends ClientEventDispatcher {
-    private static final String TAG = "MyClientEventDispatcher";
+        private static final String TAG = "MyClientEventDispatcher";
     public MyClientEventDispatcher () {
         try {
             // Patch mPushEventProcessor
@@ -81,27 +89,28 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
      * 处理收到的消息
      */
     private static class MessageProcessor {
-        private static boolean shouldAllow (String packageName, int type, String notificationTitle,
-                String notificationSummary, Context context) {
-            RegisteredApplication application = RegisteredApplicationDb.registerApplication(packageName,
+        private static boolean shouldAllow (EventType type, Context context) {
+            RegisteredApplication application = RegisteredApplicationDb.registerApplication(type.getPkg(),
                     false, context, null);
             if (application == null) {
                 return false;
             }
             boolean allow;
-            switch (type) {
-                case Event.Type.RECEIVE_COMMAND:
+            switch (type.getType()) {
+                case Event.Type.Command:
                     allow = application.isAllowReceiveCommand();
                     break;
-                case Event.Type.RECEIVE_PUSH:
+                case Event.Type.Notification:
                     allow = application.getAllowReceivePush();
                     break;
                 default:
-                    Log4a.e(TAG, "Unknown type: " + type);
-                    return true;
+                    Log4a.e(TAG, "Unknown type: " + type.getType());
+                    allow = true;
+                    break;
             }
-            EventDb.insertEvent(packageName, type, allow ? Event.ResultType.OK : Event.ResultType.DENY_USER
-                    , notificationTitle, notificationSummary, context);
+            Log4a.d(TAG, "insertEvent -> " + type);
+            EventDb.insertEvent(allow ? Event.ResultType.OK : Event.ResultType.DENY_USER
+                    , type, context);
             return allow;
         }
     }
@@ -115,12 +124,10 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
                     /*+ ", targetPackage: " +
             targetPackage*/);
             // 是否是透传
-            boolean isPassThrough = buildContainer.getMetaInfo().passThrough == 1;
+            EventType type = TypeFactory.create(buildContainer, buildContainer.packageName);
+            boolean isPassThrough = type instanceof CommandType;
             if (PushConstants.PUSH_SERVICE_PACKAGE_NAME.equals(buildContainer.packageName) ||
-                    MessageProcessor.shouldAllow(buildContainer.packageName, isPassThrough ? Event.Type.RECEIVE_COMMAND : Event.Type.RECEIVE_PUSH,
-                    buildContainer.getMetaInfo().getTitle()
-                            , buildContainer.getMetaInfo().getDescription()
-                            , var0)) {
+                    MessageProcessor.shouldAllow(type, var0)) {
 
                 if (Build.VERSION.SDK_INT >= 26 && !isPassThrough) {
                     XmPushActionContainer container = MIPushEventProcessor.buildContainer(var1);
