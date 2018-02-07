@@ -24,6 +24,7 @@ android {
         }
         manifestPlaceholders = [fabricKey:fabricKey != null ?
                 fabricKey : System.getenv("FABRIC_KEY")]
+        buildConfigField "String", "GIT_TAG", "\"" + rootProject.ext.gitTag + "\""
         // buildConfigField "boolean", "SNAPSHOT", "\"" + rootProject.ext.snapshot + "\""
     }
     buildTypes {

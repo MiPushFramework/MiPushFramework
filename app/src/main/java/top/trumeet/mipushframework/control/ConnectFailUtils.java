@@ -2,6 +2,7 @@ package top.trumeet.mipushframework.control;
 
 import android.content.Context;
 
+import top.trumeet.mipush.BuildConfig;
 import top.trumeet.mipush.R;
 
 import static top.trumeet.common.utils.Utils.getString;
@@ -15,7 +16,7 @@ import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener
 
 public class ConnectFailUtils {
     private static final String SERVICE_APK_URL =
-            "https://github.com/Trumeet/MiPushFramework/releases/download/" + top.trumeet.mipush.BuildConfig.VERSION_NAME +
+            "https://github.com/Trumeet/MiPushFramework/releases/download/" + BuildConfig.GIT_TAG +
                     "/xmsf_service.apk";
 
     public static CharSequence getTitle (Context context,
