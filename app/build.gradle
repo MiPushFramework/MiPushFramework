@@ -92,14 +92,19 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
     implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
     // Preference
-    implementation 'moe.shizuku.preference:preference:2.2.0'
-    implementation 'moe.shizuku.preference:preference-switchcompat:2.0.2'
-    implementation 'moe.shizuku.preference:preference-dialog-android:2.2.0'
-    implementation 'moe.shizuku.preference:preference-simplemenu:2.2.0'
+    implementation 'moe.shizuku.preference:preference:2.2.3'
+    implementation 'moe.shizuku.preference:preference-switchcompat:2.2.3'
+    implementation 'moe.shizuku.preference:preference-dialog-android:2.2.3'
+    implementation 'moe.shizuku.preference:preference-simplemenu:2.2.3'
     // Common
     implementation project(':common')
     // Fabric
     implementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
         transitive = true
     }
+    // Help
+    implementation ('moe.shizuku.support:helplib:1.1.0', {
+        exclude group: 'moe.shizuku.preference'
+        exclude group: 'com.android.support'
+    })
 }

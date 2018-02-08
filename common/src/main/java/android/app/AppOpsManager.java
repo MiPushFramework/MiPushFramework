@@ -69,13 +69,15 @@ public class AppOpsManager {
         throw new RuntimeException("Stub!");
     }
 
-    public void startWatchingMode(String op, String packageName, AppOpsManager.OnOpChangedListener callback) {
+    /*
+    public void startWatchingMode(String op, String packageName, android.app.AppOpsManager.OnOpChangedListener callback) {
         throw new RuntimeException("Stub!");
     }
 
-    public void stopWatchingMode(AppOpsManager.OnOpChangedListener callback) {
+    public void stopWatchingMode(android.app.AppOpsManager.OnOpChangedListener callback) {
         throw new RuntimeException("Stub!");
     }
+    */
 
     public int checkOp(String op, int uid, String packageName) {
         throw new RuntimeException("Stub!");
@@ -115,9 +117,5 @@ public class AppOpsManager {
 
     public void checkPackage(int uid, String packageName) {
         throw new RuntimeException("Stub!");
-    }
-
-    public interface OnOpChangedListener {
-        void onOpChanged(String var1, String var2);
     }
 }

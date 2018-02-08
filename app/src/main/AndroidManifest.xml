@@ -49,6 +49,10 @@
         <activity android:name="top.trumeet.mipushframework.event.RecentActivityActivity"
             android:label="@string/recent_activity_title" />
 
+        <activity android:name="top.trumeet.mipushframework.help.HelpActivity"
+            android:label="@string/helplib_title"
+            android:theme="@style/HelpTheme.DayNight" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="${fabricKey}" />
