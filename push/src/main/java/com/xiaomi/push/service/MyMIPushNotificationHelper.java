@@ -21,7 +21,6 @@ import java.util.ArrayList;
 
 import me.pqpo.librarylog4a.Log4a;
 
-import static com.xiaomi.push.service.MIPushNotificationHelper.getTargetPackage;
 import static com.xiaomi.push.service.MIPushNotificationHelper.isBusinessMessage;
 
 /**
@@ -37,8 +36,7 @@ public class MyMIPushNotificationHelper {
         String title = metaInfo.getTitle();
         String description = metaInfo.getDescription();
 
-        int id = metaInfo.getNotifyId()
-                + ((getTargetPackage(buildContainer).hashCode() / 10) * 10);
+        int id = MyClientEventDispatcher.getNotificationId(buildContainer);
 
         Notification.Builder localBuilder = new Notification.Builder(var0);
         Log4a.i(TAG, "title:" + title + "  description:" + description);
@@ -112,6 +110,8 @@ public class MyMIPushNotificationHelper {
         }
         PendingIntent localPendingIntent;
 
+        int id = MyClientEventDispatcher.getNotificationId(paramXmPushActionContainer);
+
         {
             //Jump web
             String urlJump = null;
@@ -125,7 +125,7 @@ public class MyMIPushNotificationHelper {
                 Intent localIntent3 = new Intent("android.intent.action.VIEW");
                 localIntent3.setData(Uri.parse(urlJump));
                 localIntent3.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-                localPendingIntent = PendingIntent.getActivity(paramContext, 0, localIntent3, PendingIntent.FLAG_UPDATE_CURRENT);
+                localPendingIntent = PendingIntent.getActivity(paramContext, id, localIntent3, PendingIntent.FLAG_UPDATE_CURRENT);
                 return localPendingIntent;
             }
         }
@@ -136,14 +136,17 @@ public class MyMIPushNotificationHelper {
             localIntent.putExtra("mipush_payload", paramArrayOfByte);
             localIntent.putExtra("mipush_notified", true);
             localIntent.addCategory(String.valueOf(paramPushMetaInfo.getNotifyId()));
-            localPendingIntent = PendingIntent.getService(paramContext, 0, localIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            localPendingIntent = PendingIntent.getService(paramContext, id, localIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         } else {
-            Intent localIntent = new Intent("com.xiaomi.mipush.RECEIVE_MESSAGE");
-            localIntent.setComponent(new ComponentName(paramXmPushActionContainer.packageName, "com.xiaomi.mipush.sdk.PushMessageHandler"));
+            Intent localIntent = new Intent();
+            localIntent.setComponent(new ComponentName("com.xiaomi.xmsf", "com.xiaomi.push.sdk.MyPushMessageHandler"));
+//            Intent localIntent = new Intent("com.xiaomi.mipush.RECEIVE_MESSAGE");
+//            localIntent.setComponent(new ComponentName(paramXmPushActionContainer.packageName, "com.xiaomi.mipush.sdk.PushMessageHandler"));
             localIntent.putExtra("mipush_payload", paramArrayOfByte);
             localIntent.putExtra("mipush_notified", true);
             localIntent.addCategory(String.valueOf(paramPushMetaInfo.getNotifyId()));
-            localPendingIntent = PendingIntent.getService(paramContext, 0, localIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            localPendingIntent = PendingIntent.getService(paramContext, id, localIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         }
         return localPendingIntent;
     }

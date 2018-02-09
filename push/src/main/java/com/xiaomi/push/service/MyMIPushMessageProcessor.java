@@ -94,13 +94,13 @@ public class MyMIPushMessageProcessor {
         //var5 buildContainer
         //var6 metaInfo
 
-        if ((!MIPushNotificationHelper.isBusinessMessage(buildContainer) || !AppInfoUtils.isPkgInstalled(var0, buildContainer.packageName))) {
-            if (!AppInfoUtils.isPkgInstalled(var0, buildContainer.packageName)) {
-                sendAppNotInstallNotification(var0, buildContainer);
-            } else {
-                Log4a.w(TAG, "receive a mipush message, we can see the app " + buildContainer.packageName+ ", but we can't see the receiver.");
-            }
-        }
+//        if ((!MIPushNotificationHelper.isBusinessMessage(buildContainer) || !AppInfoUtils.isPkgInstalled(var0, buildContainer.packageName))) {
+//            if (!AppInfoUtils.isPkgInstalled(var0, buildContainer.packageName)) {
+//                sendAppNotInstallNotification(var0, buildContainer);
+//            } else {
+//                Log4a.w(TAG, "receive a mipush message, we can see the app " + buildContainer.packageName+ ", but we can't see the receiver.");
+//            }
+//        }
         PushMetaInfo metaInfo = buildContainer.getMetaInfo();
 
         if ("com.xiaomi.xmsf".contains(buildContainer.packageName) && !buildContainer.isEncryptAction() &&
@@ -112,9 +112,16 @@ public class MyMIPushMessageProcessor {
 
         String title = metaInfo.getTitle();
         String description = metaInfo.getDescription();
-        if (TextUtils.isEmpty(title) || TextUtils.isEmpty(description)) {
+
+        if (TextUtils.isEmpty(title)) {
             return;
+//            metaInfo.setTitle(buildContainer.packageName);
         }
+
+        if (TextUtils.isEmpty(description)) {
+            metaInfo.setDescription("穿透消息，请打开APP查看");
+        }
+
 
 //        MIPushNotificationHelper.isNotifyForeground(metaInfo.getExtra());
 //        MIPushNotificationHelper.isApplicationForeground(var0, buildContainer.packageName);
