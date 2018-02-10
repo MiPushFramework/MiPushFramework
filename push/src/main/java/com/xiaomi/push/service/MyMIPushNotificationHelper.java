@@ -70,11 +70,11 @@ public class MyMIPushNotificationHelper {
             localBuilder.setWhen(System.currentTimeMillis());
             localBuilder.setShowWhen(true);
         }
-//            localBuilder.setContent(paramRemoteViews);
+
+        //localBuilder.setContent(paramRemoteViews); //not supported
         localBuilder.setContentTitle(title);
         localBuilder.setContentText(description);
-
-//            localBuilder.setAutoCancel(false);
+        localBuilder.setGroup(buildContainer.getPackageName());
         localBuilder.setSmallIcon(R.drawable.ic_notifications_black_24dp);
 
         try {
