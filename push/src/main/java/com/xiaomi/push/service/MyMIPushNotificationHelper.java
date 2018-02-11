@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
@@ -75,15 +76,18 @@ public class MyMIPushNotificationHelper {
         localBuilder.setContentTitle(title);
         localBuilder.setContentText(description);
         localBuilder.setGroup(buildContainer.getPackageName());
-        localBuilder.setSmallIcon(R.drawable.ic_notifications_black_24dp);
 
         try {
             Drawable icon = var0.getPackageManager().getApplicationIcon(buildContainer.getPackageName());
             Bitmap bitmap = MIPushNotificationHelper.drawableToBitmap(icon);
             localBuilder.setLargeIcon(bitmap);
-
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                localBuilder.setSmallIcon(Icon.createWithBitmap(bitmap)); //but non-pic in notification detail
+            } else {
+                localBuilder.setSmallIcon(R.drawable.ic_notifications_black_24dp);
+            }
         } catch (Exception e) {
-//                e.printStackTrace();
+            localBuilder.setSmallIcon(R.drawable.ic_notifications_black_24dp);
         }
 
         OreoNotificationManager manager = ((PushServiceMain) var0).getNotificationManager();

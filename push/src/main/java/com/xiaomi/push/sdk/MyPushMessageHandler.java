@@ -109,6 +109,8 @@ public class MyPushMessageHandler extends IntentService {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+            } else {
+                break;
             }
         }
 
