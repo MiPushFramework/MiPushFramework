@@ -1,17 +1,16 @@
 package com.xiaomi.push.service;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.text.TextUtils;
 
 import com.xiaomi.channel.commonutils.android.AppInfoUtils;
 import com.xiaomi.channel.commonutils.logger.MyLog;
+import com.xiaomi.channel.commonutils.reflect.JavaCalls;
 import com.xiaomi.smack.XMPPException;
 import com.xiaomi.xmpush.thrift.ActionType;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import me.pqpo.librarylog4a.Log4a;
@@ -163,7 +162,6 @@ public class MyMIPushMessageProcessor {
             public String getDesc() {
                 return "send ack message for message.";
             }
-
             public void process() {
                 try {
                     XmPushActionContainer var2 = MIPushEventProcessor.constructAckMessage(var0, var1);
@@ -178,62 +176,27 @@ public class MyMIPushMessageProcessor {
     }
 
     private static void sendAppAbsentAck(final XMPushService var0, final XmPushActionContainer var1, final String var2) {
-        var0.executeJob(new XMPushService.Job(4) {
-            public String getDesc() {
-                return "send app absent ack message for message.";
-            }
-
-            public void process() {
-                try {
-                    XmPushActionContainer var2x = MIPushEventProcessor.constructAckMessage(var0, var1);
-                    var2x.getMetaInfo().putToExtra("absent_target_package", var2);
-                    MIPushHelper.sendPacket(var0, var2x);
-                } catch (XMPPException var3) {
-                    Log4a.e(TAG, var3);
-                    var0.disconnect(10, var3);
-                }
-
-            }
-        });
+        try {
+            JavaCalls.callStaticMethodOrThrow(MIPushEventProcessor.class, "sendAppAbsentAck",var0, var1, var2);
+        } catch (Exception e) {
+            Log4a.e(TAG, e.getMessage(), e);
+        }
     }
 
     private static void sendAppNotInstallNotification(final XMPushService var0, final XmPushActionContainer var1) {
-        var0.executeJob(new XMPushService.Job(4) {
-            public String getDesc() {
-                return "send app absent message.";
-            }
-
-            public void process() {
-                try {
-                    MIPushHelper.sendPacket(var0, MIPushHelper.contructAppAbsentMessage(var1.getPackageName(), var1.getAppid()));
-                } catch (XMPPException var2) {
-                    Log4a.e(TAG, var2);
-                    var0.disconnect(10, var2);
-                }
-
-            }
-        });
+        try {
+            JavaCalls.callStaticMethodOrThrow(MIPushEventProcessor.class, "sendAppNotInstallNotification",var0, var1);
+        } catch (Exception e) {
+            Log4a.e(TAG, e.getMessage(), e);
+        }
     }
 
     private static void sendErrorAck(final XMPushService var0, final XmPushActionContainer var1, final String var2, final String var3) {
-        var0.executeJob(new XMPushService.Job(4) {
-            public String getDesc() {
-                return "send wrong message ack for message.";
-            }
-
-            public void process() {
-                try {
-                    XmPushActionContainer var2x = MIPushEventProcessor.constructAckMessage(var0, var1);
-                    var2x.metaInfo.putToExtra("error", var2);
-                    var2x.metaInfo.putToExtra("reason", var3);
-                    MIPushHelper.sendPacket(var0, var2x);
-                } catch (XMPPException var3x) {
-                    Log4a.e(TAG, var3x);
-                    var0.disconnect(10, var3x);
-                }
-
-            }
-        });
+        try {
+            JavaCalls.callStaticMethodOrThrow(MIPushEventProcessor.class, "sendErrorAck",var0, var1, var2, var3);
+        } catch (Exception e) {
+            Log4a.e(TAG, e.getMessage(), e);
+        }
     }
 
     private static boolean verifyGeoMessage(Map<String, String> var0) {
@@ -242,65 +205,24 @@ public class MyMIPushMessageProcessor {
 
 
     private static boolean geoMessageIsValidated(XMPushService var0, XmPushActionContainer var1) {
-        boolean var2;
-        if (!GeoFenceUtils.checkMetoknlpVersionAbove(var0)) {
-            var2 = false;
-        } else if (!GeoFenceUtils.verifyGeoChannel(var0)) {
-            var2 = false;
-        } else if (!AppInfoUtils.isPkgInstalled(var0, var1.packageName)) {
-            sendAppNotInstallNotification(var0, var1);
-            var2 = false;
-        } else {
-            Map var3 = var1.getMetaInfo().getExtra();
-            if (var3 == null) {
-                var2 = false;
-            } else if (!"12".contains((CharSequence) var3.get("__geo_action"))) {
-                var2 = false;
-            } else if (TextUtils.isEmpty((CharSequence) var3.get("__geo_ids"))) {
-                var2 = false;
-            } else {
-                var2 = true;
-            }
+        try {
+//            MIPushEventProcessor.geoMessageIsValidated(var0, var1);
+            return JavaCalls.callStaticMethodOrThrow(MIPushEventProcessor.class, "geoMessageIsValidated", var0, var1);
+        } catch (Exception e) {
+            Log4a.e(TAG, e.getMessage(), e);
         }
-        return var2;
+        return false;
     }
 
 
     private static boolean processGeoMessage(XMPushService var0, PushMetaInfo var1, byte[] var2) {
-        Map var3 = var1.getExtra();
-        String[] var4 = ((String) var3.get("__geo_ids")).split(",");
-        ArrayList<android.content.ContentValues> var5 = new ArrayList<android.content.ContentValues>();
-        int var6 = var4.length;
-        int var7 = 0;
-
-        boolean var8;
-        while (true) {
-            if (var7 >= var6) {
-                if (!GeoFenceMessageDao.getInstance(var0).insertGeoMessages(var5)) {
-                    MyLog.v("geofence added some new geofence message failed messagi_id:" + var1.getId());
-                }
-                var8 = false;
-                break;
-            }
-
-            String var9 = var4[var7];
-            ContentValues var10 = new ContentValues();
-            var10.put("geo_id", var9);
-            var10.put("message_id", var1.getId());
-            int var11 = Integer.parseInt((String) var3.get("__geo_action"));
-            var10.put("action", var11);
-            var10.put("content", var2);
-            var10.put("deadline", Long.parseLong((String) var3.get("__geo_deadline")));
-            if (TextUtils.equals(GeoFenceDao.getInstance(var0).findGeoStatueByGeoId(var9), "Enter") && var11 == 1) {
-                var8 = true;
-                break;
-            }
-
-            var5.add(var10);
-            ++var7;
+        try {
+//            MIPushEventProcessor.processGeoMessage(var0, var1, var2);
+            return JavaCalls.callStaticMethodOrThrow(MIPushEventProcessor.class, "processGeoMessage",var0, var1, var2);
+        } catch (Exception e) {
+            Log4a.e(TAG, e.getMessage(), e);
         }
-
-        return var8;
+        return false;
     }
 
 }
