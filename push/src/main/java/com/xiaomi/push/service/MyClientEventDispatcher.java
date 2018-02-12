@@ -145,7 +145,9 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
                 }
                 if (BuildConfig.DEBUG) Log4a.d(TAG, "invoke original method");
 
-                MyMIPushMessageProcessor.process(var0, buildContainer, var1, var2);
+                Intent localIntent = buildIntent(var1, System.currentTimeMillis());
+
+                MyMIPushMessageProcessor.process(var0, buildContainer, var1, var2, localIntent);
                 //doProcessMIPushMessage(var0, var1, var2);
 
             } else {

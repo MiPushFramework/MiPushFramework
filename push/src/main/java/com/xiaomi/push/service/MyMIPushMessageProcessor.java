@@ -1,6 +1,7 @@
 package com.xiaomi.push.service;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.text.TextUtils;
 
 import com.xiaomi.channel.commonutils.android.AppInfoUtils;
@@ -23,7 +24,7 @@ import me.pqpo.librarylog4a.Log4a;
 public class MyMIPushMessageProcessor {
     private static final String TAG = "MyMIPushMessageProcessor";
 
-    public static void process(XMPushService var0, XmPushActionContainer var4, byte[] var1, long var2) {
+    public static void process(XMPushService var0, XmPushActionContainer var4, byte[] var1, long var2, Intent localIntent) {
         try {
             String targetPackage = MIPushNotificationHelper.getTargetPackage(var4);
             Long current = System.currentTimeMillis();
@@ -80,7 +81,7 @@ public class MyMIPushMessageProcessor {
                     }
                 }
 
-                userProcessMIPushMessage(var0, var4, var1, var2, var9);
+                userProcessMIPushMessage(var0, var4, var1, var2, localIntent, var9);
             }
 
 
@@ -90,7 +91,7 @@ public class MyMIPushMessageProcessor {
     }
 
 
-    private static void userProcessMIPushMessage(XMPushService var0, XmPushActionContainer buildContainer, byte[] var1, long var2, boolean var4) {
+    private static void userProcessMIPushMessage(XMPushService var0, XmPushActionContainer buildContainer, byte[] var1, long var2, Intent localIntent, boolean var4) {
         //var5 buildContainer
         //var6 metaInfo
 
@@ -101,6 +102,14 @@ public class MyMIPushMessageProcessor {
 //                Log4a.w(TAG, "receive a mipush message, we can see the app " + buildContainer.packageName+ ", but we can't see the receiver.");
 //            }
 //        }
+
+        if (MIPushNotificationHelper.isBusinessMessage(buildContainer) && AppInfoUtils.isPkgInstalled(var0, buildContainer.packageName)) {
+            if (ActionType.Registration == buildContainer.getAction()) {
+                String str2 = buildContainer.getPackageName();
+                com.xiaomi.tinyData.TinyDataManager.getInstance(var0).processPendingData("Register Success, package name is " + str2);
+            }
+        }
+
         PushMetaInfo metaInfo = buildContainer.getMetaInfo();
 
         if ("com.xiaomi.xmsf".contains(buildContainer.packageName) && !buildContainer.isEncryptAction() &&

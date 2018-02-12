@@ -12,7 +12,9 @@ import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
+import android.widget.RemoteViews;
 
+import com.xiaomi.channel.commonutils.reflect.JavaCalls;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
 import com.xiaomi.xmsf.R;
@@ -47,7 +49,17 @@ public class MyMIPushNotificationHelper {
             localBuilder.setContentIntent(localPendingIntent);
         }
 
-        if (Build.VERSION.SDK_INT >= 24) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+            try {
+                RemoteViews localRemoteViews = JavaCalls.callStaticMethodOrThrow(MIPushNotificationHelper.class, "getNotificationForCustomLayout", var0.getApplicationContext(), buildContainer, var1);
+                if (localRemoteViews != null) {
+                        localBuilder.setCustomContentView(localRemoteViews);
+                }
+            } catch(Exception e){
+                Log4a.e(TAG, e.getLocalizedMessage(), e);
+            }
+
             int i = R.drawable.ic_notifications_black_24dp;
             ArrayList<Notification.Action> actions = new ArrayList<>();
             {
