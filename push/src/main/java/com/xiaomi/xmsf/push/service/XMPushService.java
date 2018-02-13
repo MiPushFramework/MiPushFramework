@@ -37,7 +37,7 @@ public class XMPushService extends IntentService {
         if (!XmsfApp.getSession(this)
                 .getRemoveTremblingInstance()
                 .onCallRegister(pkg)) {
-            Log4a.w(TAG, "Don't register multi request");
+            Log4a.w(TAG, "Don't register multi request " + pkg);
             register = false;
         }
         NotificationController.registerChannelIfNeeded(this, pkg);

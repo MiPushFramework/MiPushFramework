@@ -40,28 +40,7 @@ public class MyPushMessageHandler extends IntentService {
     protected void onHandleIntent(Intent intent) {
 
         if (!DetectionService.isAccessibilitySettingsOn(getApplicationContext())) {
-            NotificationManager manager = (NotificationManager)
-                    getSystemService(NOTIFICATION_SERVICE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                NotificationChannel channel = new NotificationChannel(CHANNEL_STATUS,
-                        getString(R.string.notification_category_alive),
-                        NotificationManager.IMPORTANCE_MIN);
-                manager.createNotificationChannel(channel);
-            }
-
-            Notification notification = new NotificationCompat.Builder(this,
-                    CHANNEL_STATUS)
-                    .setContentTitle("请开启无障碍辅助") //TODO move to xml
-                    .setContentTitle("点击后开启 Xiaomi Push Service Core的权限")
-                    .setContentIntent(
-                            PendingIntent.getActivity(getApplicationContext(), 0,
-                                    new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS), PendingIntent.FLAG_UPDATE_CURRENT))
-                    .setSmallIcon(R.drawable.ic_notifications_black_24dp)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-                    .setAutoCancel(true)
-                    .build();
-            manager.notify(PushServiceMain.NOTIFICATION_ALIVE_ID, notification);
-            startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+            guideToSetAccessibility();
             return;
         }
 
@@ -135,6 +114,31 @@ public class MyPushMessageHandler extends IntentService {
             Log4a.w(TAG, "pull up app timeout" + package_name);
         }
 
+    }
+
+    private void guideToSetAccessibility() {
+        NotificationManager manager = (NotificationManager)
+                getSystemService(NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CHANNEL_STATUS,
+                    getString(R.string.notification_category_alive),
+                    NotificationManager.IMPORTANCE_MIN);
+            manager.createNotificationChannel(channel);
+        }
+
+        Notification notification = new NotificationCompat.Builder(this,
+                CHANNEL_STATUS)
+                .setContentTitle("请开启无障碍辅助") //TODO move to xml
+                .setContentTitle("点击后开启 Xiaomi Push Service Core的权限")
+                .setContentIntent(
+                        PendingIntent.getActivity(getApplicationContext(), 0,
+                                new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS), PendingIntent.FLAG_UPDATE_CURRENT))
+                .setSmallIcon(R.drawable.ic_notifications_black_24dp)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true)
+                .build();
+        manager.notify(PushServiceMain.NOTIFICATION_ALIVE_ID, notification);
+        startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
     }
 
     public static boolean isAppForeground(String packageName) {
