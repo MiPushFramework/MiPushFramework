@@ -133,6 +133,7 @@
             android:exported="true"
             tools:ignore="ExportedService" />
         <service android:name="com.xiaomi.xmsf.push.service.MiuiPushActivateService" android:exported="true" />
+        <service android:name="com.xiaomi.push.sdk.MyPushMessageHandler" />
 
 
         <activity android:name=".push.auth.AuthActivity"
@@ -155,5 +156,21 @@
 
         <activity android:name=".RemoveDozeActivity"
             android:exported="true" />
+
+
+        <service
+            android:name="com.xiaomi.helper.DetectionService"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/detection_service_config"/>
+
+        </service>
+
     </application>
 </manifest>

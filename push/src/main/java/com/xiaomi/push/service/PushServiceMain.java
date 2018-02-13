@@ -75,7 +75,7 @@ public class PushServiceMain extends XMPushService {
     private static final String TAG = "PushService";
 
     public static final String CHANNEL_STATUS = "status";
-    private static final int NOTIFICATION_ALIVE_ID = 0;
+    public static final int NOTIFICATION_ALIVE_ID = 0;
 
     private OreoNotificationManager mNotificationManager;
 
