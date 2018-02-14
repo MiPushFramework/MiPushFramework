@@ -23,7 +23,7 @@ public abstract class OnLoadMoreListener extends RecyclerView.OnScrollListener {
             return;
         }
 
-        if (lastItemCount != itemCount && lastPosition == itemCount - 1) {
+        if (lastItemCount != itemCount && (lastPosition > itemCount - 3)) {
             lastItemCount = itemCount;
             this.onLoadMore();
         }

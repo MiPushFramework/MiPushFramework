@@ -85,8 +85,11 @@ public class EventFragment extends Fragment {
 
     private void loadPage () {
         Log.d(TAG, "loadPage");
-        if (mLoadTask != null && !mLoadTask.isCancelled())
-            return;
+        if (mLoadTask != null && !mLoadTask.isCancelled()) {
+            if (mLoadTask.getStatus() != AsyncTask.Status.FINISHED) {
+                return;
+            }
+        }
         mLoadTask = new LoadTask(mLoadPage + 1);
         mLoadTask.execute();
     }
