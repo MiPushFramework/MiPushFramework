@@ -191,10 +191,10 @@ public class MyMIPushMessageProcessor {
                 try {
                     List<ResolveInfo> localList = paramXMPushService.getPackageManager().queryBroadcastReceivers(localIntent, 0);
                     if ((localList != null) && (!localList.isEmpty())) {
-                        paramXMPushService.sendBroadcast(localIntent, ClientEventDispatcher.getReceiverPermission(paramXMPushService.getPackageName()));
+                        paramXMPushService.sendBroadcast(localIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.getPackageName()));
                     }
                 } catch (Exception localException) {
-                    paramXMPushService.sendBroadcast(localIntent, ClientEventDispatcher.getReceiverPermission(paramXMPushService.getPackageName()));
+                    paramXMPushService.sendBroadcast(localIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.getPackageName()));
                 }
             }
 
