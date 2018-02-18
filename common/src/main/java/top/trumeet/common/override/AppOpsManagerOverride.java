@@ -2,6 +2,7 @@ package top.trumeet.common.override;
 
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
+import android.app.usage.UsageStatsManager;
 
 import static android.os.Build.VERSION_CODES.N;
 
@@ -17,6 +18,9 @@ public class AppOpsManagerOverride {
 
     /** @hide */
     public static final int OP_POST_NOTIFICATION = AppOpsManager.OP_POST_NOTIFICATION;
+
+    /** @hide Retrieve current usage stats via {@link UsageStatsManager}. */
+    public static final int OP_GET_USAGE_STATS = AppOpsManager.OP_GET_USAGE_STATS;
 
     public static int checkOpNoThrow(int op, int uid, String packageName,
                               AppOpsManager manager) {

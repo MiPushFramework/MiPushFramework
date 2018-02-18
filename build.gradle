@@ -49,9 +49,9 @@ ext {
     minSdkVersion = 21
     compileSdkVersion = 27
     targetSdkVersion = 27
-    buildToolsVersion = "27.0.1"
+    buildToolsVersion = "27.0.3"
     versionCode = gitCommitCount
-    pushVersionCode = 2
+    pushVersionCode = 3
     snapshot = true
     versionBase = "${baseVersionName}.r${gitCommitCount}.${gitCommitId}"
     versionName = snapshot ? versionBase + "-SNAPSHOT" : versionBase

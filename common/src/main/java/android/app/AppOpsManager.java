@@ -6,6 +6,7 @@
 package android.app;
 
 import android.annotation.TargetApi;
+import android.app.usage.UsageStatsManager;
 
 import static android.os.Build.VERSION_CODES.N;
 
@@ -21,6 +22,9 @@ public class AppOpsManager {
 
     /** @hide */
     public static final int OP_POST_NOTIFICATION = 11;
+
+    /** @hide Retrieve current usage stats via {@link UsageStatsManager}. */
+    public static final int OP_GET_USAGE_STATS = 43;
 
     public static final String OPSTR_ADD_VOICEMAIL = "android:add_voicemail";
     public static final String OPSTR_ANSWER_PHONE_CALLS = "android:answer_phone_calls";

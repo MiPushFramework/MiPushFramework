@@ -61,6 +61,9 @@
 请授予 <b>在后台运行或被唤醒</b> 权限
     ]]></string>
 
+    <string name="wizard_title_stats_permission">Usage stats</string>
+    <string name="wizard_title_stats_permission_text">You need to grant "Usage" permission or you will not be able to receive notifications.</string>
+
     <string name="wizard_title_fake_build">修改 Build.prop 深度伪装MIUI</string>
     <string name="wizard_descr_fake_build"><![CDATA[某些应用（如京东、摩拜单车等）会使用自己的逻辑判断是否是 MIUI，如果是才启用小米推送，否则仍会使用其他推送方式驻留后台。这种判断逻辑通常是解析 build.prop。我们尝试通过向 build.prop 插入一些代表 MIUI 的键值对进行伪装，让这些应用使用小米推送。
     <br /><br />如果您需要伪装，请先 <a href="http://forum.xda-developers.com/apps/magisk/official-magisk-v7-universal-systemless-t3473445">下载安装 Magisk，点这儿前往XDA</a>。安装完成后，打开 <b>Magisk Manager</b>，下载 <b><a href="https://github.com/cubesky/MiPushFake/releases/latest">MiPushFake</a></b> 模块并激活重启，随后即可完成伪装。]]></string>

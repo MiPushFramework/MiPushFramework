@@ -14,7 +14,12 @@
     <!-- Notification -->
     <string name="notification_group_config">Config</string>
     <string name="notification_category_alive">Push Status</string>
+    <string name="notification_category_warning">Warning</string>
     <string name="notification_alive">Mi Push running</string>
 
     <string name="notification_group_applications">Applications</string>
+
+    <!-- Stats permission guide -->
+    <string name="notification_stats_permission_title">Please grant usage stats permission</string>
+    <string name="notification_stats_permission_text">We need to use the permissions to display the notification, click to solve</string>
 </resources>

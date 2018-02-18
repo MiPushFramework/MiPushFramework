@@ -18,7 +18,6 @@ import top.trumeet.common.push.PushController;
 import top.trumeet.common.utils.Utils;
 import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.utils.ShellUtils;
-import top.trumeet.mipushframework.wizard.fake.FakeBuildActivity;
 
 /**
  * Created by Trumeet on 2017/8/25.
@@ -98,7 +97,7 @@ public class CheckRunInBackgroundActivity extends PushControllerWizardActivity i
 
     private void nextPage () {
         startActivity(new Intent(this,
-                FakeBuildActivity.class));
+                UsageStatsPermissionActivity.class));
     }
 
     private boolean canFix () {
