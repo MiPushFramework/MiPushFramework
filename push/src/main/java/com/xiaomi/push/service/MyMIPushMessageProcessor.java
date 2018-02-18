@@ -178,30 +178,29 @@ public class MyMIPushMessageProcessor {
         if (var7) {
             Log4a.w(TAG, "drop a duplicate message, key=" + var8);
         } else {
+            if (isGeoMessage) {
+                MIPushEventProcessor.sendGeoAck(paramXMPushService, buildContainer, false, true, false);
+            }
+
             //NotifyPushMessageInfo var9 = MIPushNotificationHelper.notifyPushMessage(paramXMPushService, var5, var2);
             MyMIPushNotificationHelper.notifyPushMessage(paramXMPushService, buildContainer, paramArrayOfByte, var2);
-        }
-
-        if (isGeoMessage) {
-            MIPushEventProcessor.sendGeoAck(paramXMPushService, buildContainer, false, true, false);
-        } else {
-            sendAckMessage(paramXMPushService, buildContainer);
-
             if (!MIPushNotificationHelper.isBusinessMessage(buildContainer)) {
                 Intent localIntent = new Intent("com.xiaomi.mipush.MESSAGE_ARRIVED");
                 localIntent.putExtra("mipush_payload", paramArrayOfByte);
-                localIntent.setPackage(paramXMPushService.getPackageName());
+                localIntent.setPackage(buildContainer.packageName);
                 try {
                     List<ResolveInfo> localList = paramXMPushService.getPackageManager().queryBroadcastReceivers(localIntent, 0);
                     if ((localList != null) && (!localList.isEmpty())) {
-                        paramXMPushService.sendBroadcast(localIntent, ClientEventDispatcher.getReceiverPermission(paramXMPushService.getPackageName()));
+                        paramXMPushService.sendBroadcast(localIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.getPackageName()));
                     }
                 } catch (Exception localException) {
-                    paramXMPushService.sendBroadcast(localIntent, ClientEventDispatcher.getReceiverPermission(paramXMPushService.getPackageName()));
+                    paramXMPushService.sendBroadcast(localIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.getPackageName()));
                 }
             }
 
         }
+
+        sendAckMessage(paramXMPushService, buildContainer);
     }
 
 

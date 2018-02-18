@@ -21,8 +21,10 @@ import com.xiaomi.xmsf.R;
 import com.xiaomi.xmsf.push.notification.OreoNotificationManager;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import me.pqpo.librarylog4a.Log4a;
+import top.trumeet.common.BuildConfig;
 
 import static com.xiaomi.push.service.MIPushNotificationHelper.isBusinessMessage;
 
@@ -54,29 +56,32 @@ public class MyMIPushNotificationHelper {
             try {
                 RemoteViews localRemoteViews = JavaCalls.callStaticMethodOrThrow(MIPushNotificationHelper.class, "getNotificationForCustomLayout", var0.getApplicationContext(), buildContainer, var1);
                 if (localRemoteViews != null) {
-                        localBuilder.setCustomContentView(localRemoteViews);
+                    localBuilder.setCustomContentView(localRemoteViews);
                 }
-            } catch(Exception e){
+            } catch (Exception e) {
                 Log4a.e(TAG, e.getLocalizedMessage(), e);
             }
 
-            int i = R.drawable.ic_notifications_black_24dp;
-            ArrayList<Notification.Action> actions = new ArrayList<>();
-            {
-                PendingIntent pendingIntent = openActivityPendingIntent(var0, buildContainer, metaInfo, var1);
-                if (pendingIntent != null) {
-                    actions.add(new Notification.Action(i, "开启应用", pendingIntent));
+            if (BuildConfig.DEBUG) {
+                int i = R.drawable.ic_notifications_black_24dp;
+                ArrayList<Notification.Action> actions = new ArrayList<>();
+                {
+                    PendingIntent pendingIntent = openActivityPendingIntent(var0, buildContainer, metaInfo, var1);
+                    if (pendingIntent != null) {
+                        actions.add(new Notification.Action(i, "开启应用", pendingIntent));
+                    }
                 }
-            }
-            {
-                PendingIntent pendingIntent = startServicePendingIntent(var0, buildContainer, metaInfo, var1);
-                if (pendingIntent != null) {
-                    actions.add(new Notification.Action(i, "跳转", pendingIntent));
+                {
+                    PendingIntent pendingIntent = startServicePendingIntent(var0, buildContainer, metaInfo, var1);
+                    if (pendingIntent != null) {
+                        actions.add(new Notification.Action(i, "跳转", pendingIntent));
+                    }
                 }
+
+                Notification.Action[] actions1 = {};
+                localBuilder.setActions(actions.toArray(actions1));
             }
 
-            Notification.Action[] actions1 = {};
-            localBuilder.setActions(actions.toArray(actions1));
         }
 
         if (Build.VERSION.SDK_INT >= 24) {
@@ -85,8 +90,11 @@ public class MyMIPushNotificationHelper {
         }
 
         //localBuilder.setContent(paramRemoteViews); //not supported
-        localBuilder.setContentTitle(title);
-        localBuilder.setContentText(description);
+
+        String[] titleAndDesp = determineTitleAndDespByDIP(var0, metaInfo);
+        localBuilder.setContentTitle(titleAndDesp[0]);
+        localBuilder.setContentText(titleAndDesp[1]);
+
         localBuilder.setGroup(buildContainer.getPackageName());
 
         try {
@@ -189,6 +197,19 @@ public class MyMIPushNotificationHelper {
             localPendingIntent = PendingIntent.getService(paramContext, 0, localIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
         return localPendingIntent;
+    }
+
+    private static String[] determineTitleAndDespByDIP(Context paramContext, PushMetaInfo paramPushMetaInfo) {
+
+        try {
+//            MIPushNotificationHelper.determineTitleAndDespByDIP(paramContext, paramPushMetaInfo);
+            return JavaCalls.callStaticMethodOrThrow(MIPushNotificationHelper.class, "determineTitleAndDespByDIP", paramContext, paramPushMetaInfo);
+        } catch (Exception e) {
+            Log4a.e(TAG, e.getMessage(), e);
+            return new String[]{paramPushMetaInfo.getTitle(), paramPushMetaInfo.getDescription()};
+
+        }
+
     }
 
 
