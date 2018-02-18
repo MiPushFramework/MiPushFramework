@@ -21,5 +21,5 @@
 
     <!-- Stats permission guide -->
     <string name="notification_stats_permission_title">Please grant usage stats permission</string>
-    <string name="notification_stats_permission_text">We need to use the permissions to display the notification, click to solve</string>
+    <string name="notification_stats_permission_text">We need usage rights to process your request, click grant permissions</string>
 </resources>

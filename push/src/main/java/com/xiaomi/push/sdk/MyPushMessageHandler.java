@@ -135,7 +135,7 @@ public class MyPushMessageHandler extends IntentService {
         Notification notification = new NotificationCompat.Builder(this,
                 CHANNEL_WARNING)
                 .setContentTitle(getString(R.string.notification_stats_permission_title))
-                .setContentTitle(getString(R.string.notification_stats_permission_title))
+                .setContentText(getString(R.string.notification_stats_permission_text))
                 .setContentIntent(
                         PendingIntent.getActivity(getApplicationContext(), 0,
                                 new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS), PendingIntent.FLAG_UPDATE_CURRENT))
