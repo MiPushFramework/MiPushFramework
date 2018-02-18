@@ -1,46 +1,40 @@
 package com.xiaomi.push.sdk;
 
 import android.app.IntentService;
-import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
-import android.provider.Settings;
-import android.support.v4.app.NotificationCompat;
 
-import com.xiaomi.helper.DetectionService;
+import com.xiaomi.helper.ITopActivity;
+import com.xiaomi.helper.TopActivityFactory;
 import com.xiaomi.push.service.MyClientEventDispatcher;
-import com.xiaomi.push.service.PushServiceMain;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
 import com.xiaomi.xmpush.thrift.XmPushThriftSerializeUtils;
-import com.xiaomi.xmsf.R;
 
 import me.pqpo.librarylog4a.Log4a;
-
-import static com.xiaomi.push.service.PushServiceMain.CHANNEL_STATUS;
 
 /**
  * Created by zts1993 on 2018/2/9.
  */
-
 public class MyPushMessageHandler extends IntentService {
     private static final String TAG = "MyPushMessageHandler";
 
+    ITopActivity iTopActivity = null;
+
     public MyPushMessageHandler() {
         super("my mipush message handler");
+        iTopActivity = TopActivityFactory.newInstance(TopActivityFactory.AccessMode.USAGE_STATS);
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Context context = this;
 
-        if (!DetectionService.isAccessibilitySettingsOn(getApplicationContext())) {
-            guideToSetAccessibility();
+        if (!iTopActivity.isEnabled(context)) {
+            iTopActivity.guideToEnable(context);
             return;
         }
 
@@ -61,10 +55,9 @@ public class MyPushMessageHandler extends IntentService {
 
         PushMetaInfo metaInfo = container.getMetaInfo();
 
-        Context context = this;
         String package_name = container.getPackageName();
 
-        if (!isAppForeground(package_name)) {
+        if (!iTopActivity.isAppForeground(context, package_name)) {
             Log4a.i(TAG, "app is not at front , let's pull up");
             PackageManager packageManager = context.getPackageManager();
             Intent localIntent1 = packageManager.getLaunchIntentForPackage(package_name);
@@ -82,7 +75,7 @@ public class MyPushMessageHandler extends IntentService {
         }
 
         for (int i = 0; i < 5; i++) {
-            if (!isAppForeground(package_name)) {
+            if (!iTopActivity.isAppForeground(context, package_name)) {
                 try {
                     Thread.sleep(100); //TODO let's wait?
                 } catch (InterruptedException e) {
@@ -93,7 +86,7 @@ public class MyPushMessageHandler extends IntentService {
             }
         }
 
-        if (isAppForeground(package_name)) {
+        if (iTopActivity.isAppForeground(context, package_name)) {
 
             Intent localIntent = new Intent("com.xiaomi.mipush.RECEIVE_MESSAGE");
             localIntent.setComponent(new ComponentName(package_name, "com.xiaomi.mipush.sdk.PushMessageHandler"));
@@ -116,34 +109,6 @@ public class MyPushMessageHandler extends IntentService {
 
     }
 
-    private void guideToSetAccessibility() {
-        NotificationManager manager = (NotificationManager)
-                getSystemService(NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(CHANNEL_STATUS,
-                    getString(R.string.notification_category_alive),
-                    NotificationManager.IMPORTANCE_MIN);
-            manager.createNotificationChannel(channel);
-        }
-
-        Notification notification = new NotificationCompat.Builder(this,
-                CHANNEL_STATUS)
-                .setContentTitle("请开启无障碍辅助") //TODO move to xml
-                .setContentTitle("点击后开启 Xiaomi Push Service Core的权限")
-                .setContentIntent(
-                        PendingIntent.getActivity(getApplicationContext(), 0,
-                                new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS), PendingIntent.FLAG_UPDATE_CURRENT))
-                .setSmallIcon(R.drawable.ic_notifications_black_24dp)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setAutoCancel(true)
-                .build();
-        manager.notify(PushServiceMain.NOTIFICATION_ALIVE_ID, notification);
-        startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
-    }
-
-    public static boolean isAppForeground(String packageName) {
-        return packageName.equals(DetectionService.getForegroundPackageName());
-    }
 
 }
 
