@@ -85,6 +85,11 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
         super.notifyPacketArrival(xMPushService, str, blob);
     }
 
+    public static int getNotificationId(XmPushActionContainer paramXmPushActionContainer) {
+        return paramXmPushActionContainer.getMetaInfo().getNotifyId() +
+                ((MIPushNotificationHelper.getTargetPackage(paramXmPushActionContainer).hashCode() / 10) * 10);
+    }
+
     /**
      * 处理收到的消息
      */
@@ -125,11 +130,10 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
             targetPackage*/);
             // 是否是透传
             EventType type = TypeFactory.create(buildContainer, buildContainer.packageName);
-            boolean isPassThrough = type instanceof CommandType;
             if (PushConstants.PUSH_SERVICE_PACKAGE_NAME.equals(buildContainer.packageName) ||
                     MessageProcessor.shouldAllow(type, var0)) {
 
-                if (Build.VERSION.SDK_INT >= 26 && !isPassThrough) {
+                if (Build.VERSION.SDK_INT >= 26) {
                     XmPushActionContainer container = MIPushEventProcessor.buildContainer(var1);
 
                     // 获得通知的 id 来区分通知。
@@ -140,7 +144,12 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
                     manager.register(id, buildContainer.packageName);
                 }
                 if (BuildConfig.DEBUG) Log4a.d(TAG, "invoke original method");
-                doProcessMIPushMessage(var0, var1, var2);
+
+                Intent localIntent = buildIntent(var1, System.currentTimeMillis());
+
+                MyMIPushMessageProcessor.process(var0, buildContainer, var1, var2, localIntent);
+                //doProcessMIPushMessage(var0, var1, var2);
+
             } else {
                 if (BuildConfig.DEBUG) Log4a.d(TAG, "denied.");
             }
