@@ -1,10 +1,12 @@
 package com.xiaomi.push.service;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -24,20 +26,22 @@ import com.xiaomi.channel.commonutils.reflect.JavaCalls;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
 import com.xiaomi.xmsf.R;
-import com.xiaomi.xmsf.push.notification.OreoNotificationManager;
-
-import java.util.ArrayList;
 
 import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.common.BuildConfig;
 
+import static com.xiaomi.push.service.MIPushNotificationHelper.drawableToBitmap;
 import static com.xiaomi.push.service.MIPushNotificationHelper.isBusinessMessage;
+import static top.trumeet.common.utils.NotificationUtils.getChannelIdByPkg;
 
 /**
  * Created by zts1993 on 2018/2/8.
  */
 
 public class MyMIPushNotificationHelper {
+    private static final String NOTIFICATION_ICON = "mipush_notification";
+    private static final String NOTIFICATION_SMALL_ICON = "mipush_small_notification";
+
     private static final String TAG = "MyMIPushNotificationHelper";
 
     static void notifyPushMessage(XMPushService var0, XmPushActionContainer buildContainer, byte[] var1, long var2) {
@@ -49,7 +53,32 @@ public class MyMIPushNotificationHelper {
         int id = MyClientEventDispatcher.getNotificationId(buildContainer);
 
         Notification.Builder localBuilder = new Notification.Builder(var0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            localBuilder.setChannelId(getChannelIdByPkg(buildContainer.getPackageName()));
+        }
         Log4a.i(TAG, "title:" + title + "  description:" + description);
+
+        // Set small icon
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int iconId = getIconId(var0, buildContainer.getPackageName(), NOTIFICATION_ICON);
+            int iconId2 = getIconId(var0, buildContainer.getPackageName(), NOTIFICATION_SMALL_ICON);
+            int iconIdFinal;
+            Log4a.d(TAG, "id: " + iconId + ", id2: " + iconId2);
+            if (iconId <= 0 || iconId2 <= 0) {
+                iconIdFinal = getIdForSmallIcon(var0, buildContainer.getPackageName());
+                if (iconIdFinal == 0)
+                    iconIdFinal = R.drawable.ic_notifications_black_24dp;
+            } else {
+                localBuilder.setLargeIcon(getBitmapFromId(var0, iconId));
+                iconIdFinal = iconId2;
+            }
+            // TODO: 系统会把 Icon tint 成白块
+            localBuilder.setSmallIcon(Icon.createWithResource(buildContainer.getPackageName()
+                    , iconIdFinal));
+        } else {
+            // TODO: Icon 向下兼容
+            localBuilder.setSmallIcon(R.drawable.ic_notifications_black_24dp);
+        }
 
         PendingIntent localPendingIntent = getClickedPendingIntent(var0, buildContainer, metaInfo, var1);
         if (localPendingIntent != null) {
@@ -70,20 +99,16 @@ public class MyMIPushNotificationHelper {
             // Debug actions
             if (BuildConfig.DEBUG) {
                 int i = R.drawable.ic_notifications_black_24dp;
-                ArrayList<Notification.Action> actions = new ArrayList<>();
 
                 PendingIntent pendingIntentOpenActivity = openActivityPendingIntent(var0, buildContainer, metaInfo, var1);
                 if (pendingIntentOpenActivity != null) {
-                    actions.add(new Notification.Action(i, "Open App", pendingIntentOpenActivity));
+                    localBuilder.addAction(new Notification.Action(i, "Open App", pendingIntentOpenActivity));
                 }
 
                 PendingIntent pendingIntentJump = startServicePendingIntent(var0, buildContainer, metaInfo, var1);
                 if (pendingIntentJump != null) {
-                    actions.add(new Notification.Action(i, "Jump", pendingIntentJump));
+                    localBuilder.addAction(new Notification.Action(i, "Jump", pendingIntentJump));
                 }
-
-                Notification.Action[] actions1 = {};
-                localBuilder.setActions(actions.toArray(actions1));
             }
 
         }
@@ -104,13 +129,6 @@ public class MyMIPushNotificationHelper {
         Drawable icon = null;
         try {
             icon = var0.getPackageManager().getApplicationIcon(buildContainer.getPackageName());
-            Bitmap bitmap = MIPushNotificationHelper.drawableToBitmap(icon);
-            localBuilder.setLargeIcon(bitmap);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                localBuilder.setSmallIcon(Icon.createWithBitmap(bitmap)); //but non-pic in notification detail
-            } else {
-                localBuilder.setSmallIcon(R.drawable.ic_notifications_black_24dp);
-            }
         } catch (Exception e) {
             localBuilder.setSmallIcon(R.drawable.ic_notifications_black_24dp);
         }
@@ -130,7 +148,7 @@ public class MyMIPushNotificationHelper {
         } catch (PackageManager.NameNotFoundException ignored) {}
         localBuilder.setExtras(extras);
 
-        OreoNotificationManager manager = ((PushServiceMain) var0).getNotificationManager();
+        NotificationManager manager = (NotificationManager) var0.getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notification = localBuilder.build();
         manager.notify(id, notification);
 
@@ -248,10 +266,29 @@ public class MyMIPushNotificationHelper {
         } catch (Exception e) {
             Log4a.e(TAG, e.getMessage(), e);
             return new String[]{paramPushMetaInfo.getTitle(), paramPushMetaInfo.getDescription()};
-
         }
-
     }
 
+    private static Bitmap getBitmapFromId(Context context, int i) {
+        return drawableToBitmap(context.getResources().getDrawable(i));
+    }
 
+    private static int getIconId(Context context, String str, String str2) {
+        return context.getResources().getIdentifier(str2, "drawable", str);
+    }
+
+    private static int getIdForSmallIcon(Context context, String str) {
+        int iconId = getIconId(context, str, NOTIFICATION_ICON);
+        int iconId2 = getIconId(context, str, NOTIFICATION_SMALL_ICON);
+        ApplicationInfo info = null;
+        try {
+            info = context.getPackageManager().getApplicationInfo(str, 0);
+        } catch (PackageManager.NameNotFoundException ignored) {
+            return 0;
+        }
+        if (iconId <= 0) {
+            iconId = iconId2 > 0 ? iconId2 : info.icon;
+        }
+        return (iconId != 0 || Build.VERSION.SDK_INT < 9) ? iconId : info.logo;
+    }
 }

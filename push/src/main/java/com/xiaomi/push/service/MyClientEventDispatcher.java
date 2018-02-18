@@ -2,7 +2,6 @@ package com.xiaomi.push.service;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 
 import com.xiaomi.slim.Blob;
 import com.xiaomi.smack.packet.CommonPacketExtension;
@@ -11,7 +10,6 @@ import com.xiaomi.smack.packet.Packet;
 import com.xiaomi.smack.util.TrafficUtils;
 import com.xiaomi.xmpush.thrift.ActionType;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
-import com.xiaomi.xmsf.push.notification.OreoNotificationManager;
 import com.xiaomi.xmsf.push.type.TypeFactory;
 
 import java.lang.reflect.Field;
@@ -22,7 +20,6 @@ import top.trumeet.common.BuildConfig;
 import top.trumeet.common.db.EventDb;
 import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.event.Event;
-import top.trumeet.common.event.type.CommandType;
 import top.trumeet.common.event.type.EventType;
 import top.trumeet.common.register.RegisteredApplication;
 
@@ -133,16 +130,6 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
             if (PushConstants.PUSH_SERVICE_PACKAGE_NAME.equals(buildContainer.packageName) ||
                     MessageProcessor.shouldAllow(type, var0)) {
 
-                if (Build.VERSION.SDK_INT >= 26) {
-                    XmPushActionContainer container = MIPushEventProcessor.buildContainer(var1);
-
-                    // 获得通知的 id 来区分通知。
-                    int id = container.getMetaInfo().getNotifyId()
-                            + ((MIPushNotificationHelper.getTargetPackage(container).hashCode() / 10) * 10);
-                    OreoNotificationManager manager = ((PushServiceMain) var0)
-                            .getNotificationManager();
-                    manager.register(id, buildContainer.packageName);
-                }
                 if (BuildConfig.DEBUG) Log4a.d(TAG, "invoke original method");
 
                 Intent localIntent = buildIntent(var1, System.currentTimeMillis());
