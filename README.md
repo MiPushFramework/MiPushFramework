@@ -35,11 +35,11 @@
 ## 缺陷
 
 * 不支持 MIUI。
-* 在 Android O 上，可能由于 **后台限制** 导致推送服务中断，请尝试对 `Xiaomi Push Service Core` 取消后台限制
+* 在 Android O 上，可能由于 **后台限制** 导致推送服务中断，请尝试对 `Push` 取消后台限制
 * 如果使用了绿色守护小米推送处方会无法启动推送服务
-* 不建议使用 黑域、绿色守护、Xposed一些模块 对 `Xiaomi Push Service Core` 做操作，可能导致推送不稳定
+* 不建议使用 黑域、绿色守护、Xposed一些模块 对 `Push` 做操作，可能导致推送不稳定
 * 只有推送功能。其他完整功能（如查找手机）请体验 MIUI
-* 对 `Xiaomi Push Service Core` 启用电池优化会无法后台
+* 对 `Push` 启用电池优化会无法后台
 
 
 

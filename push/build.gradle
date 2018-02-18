@@ -83,4 +83,5 @@ dependencies {
     implementation "com.android.support:support-v4:$supportLibraryVersion"
     implementation project(':provider')
     implementation project(':extenders')
+    implementation "com.android.support:palette-v7:$supportLibraryVersion"
 }

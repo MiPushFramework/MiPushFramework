@@ -1,5 +1,5 @@
 <resources>
-    <string name="push_service_name">Xiaomi Push Service Core</string>
+    <string name="push_service_name">Push</string>
 
     <!-- Event -->
     <string name="event_register">Register push</string>

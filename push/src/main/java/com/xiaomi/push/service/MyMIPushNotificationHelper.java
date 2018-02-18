@@ -11,7 +11,13 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.graphics.ColorUtils;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.widget.RemoteViews;
 
 import com.xiaomi.channel.commonutils.reflect.JavaCalls;
@@ -21,7 +27,6 @@ import com.xiaomi.xmsf.R;
 import com.xiaomi.xmsf.push.notification.OreoNotificationManager;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.common.BuildConfig;
@@ -62,20 +67,19 @@ public class MyMIPushNotificationHelper {
                 Log4a.e(TAG, e.getLocalizedMessage(), e);
             }
 
+            // Debug actions
             if (BuildConfig.DEBUG) {
                 int i = R.drawable.ic_notifications_black_24dp;
                 ArrayList<Notification.Action> actions = new ArrayList<>();
-                {
-                    PendingIntent pendingIntent = openActivityPendingIntent(var0, buildContainer, metaInfo, var1);
-                    if (pendingIntent != null) {
-                        actions.add(new Notification.Action(i, "开启应用", pendingIntent));
-                    }
+
+                PendingIntent pendingIntentOpenActivity = openActivityPendingIntent(var0, buildContainer, metaInfo, var1);
+                if (pendingIntentOpenActivity != null) {
+                    actions.add(new Notification.Action(i, "Open App", pendingIntentOpenActivity));
                 }
-                {
-                    PendingIntent pendingIntent = startServicePendingIntent(var0, buildContainer, metaInfo, var1);
-                    if (pendingIntent != null) {
-                        actions.add(new Notification.Action(i, "跳转", pendingIntent));
-                    }
+
+                PendingIntent pendingIntentJump = startServicePendingIntent(var0, buildContainer, metaInfo, var1);
+                if (pendingIntentJump != null) {
+                    actions.add(new Notification.Action(i, "Jump", pendingIntentJump));
                 }
 
                 Notification.Action[] actions1 = {};
@@ -97,8 +101,9 @@ public class MyMIPushNotificationHelper {
 
         localBuilder.setGroup(buildContainer.getPackageName());
 
+        Drawable icon = null;
         try {
-            Drawable icon = var0.getPackageManager().getApplicationIcon(buildContainer.getPackageName());
+            icon = var0.getPackageManager().getApplicationIcon(buildContainer.getPackageName());
             Bitmap bitmap = MIPushNotificationHelper.drawableToBitmap(icon);
             localBuilder.setLargeIcon(bitmap);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -110,10 +115,46 @@ public class MyMIPushNotificationHelper {
             localBuilder.setSmallIcon(R.drawable.ic_notifications_black_24dp);
         }
 
+        // Fill app name
+        Bundle extras = new Bundle();
+        try {
+            if (icon != null) {
+                int color = getIconColor(icon);
+                CharSequence subText = createColorSubtext(var0.getPackageManager()
+                        .getApplicationLabel(var0.getPackageManager().getApplicationInfo(buildContainer.getPackageName(),
+                                0)), color);
+                if (subText != null) extras.putCharSequence(NotificationCompat.EXTRA_SUB_TEXT,
+                        subText);
+                localBuilder.setColor(color);
+            }
+        } catch (PackageManager.NameNotFoundException ignored) {}
+        localBuilder.setExtras(extras);
+
         OreoNotificationManager manager = ((PushServiceMain) var0).getNotificationManager();
         Notification notification = localBuilder.build();
         manager.notify(id, notification);
 
+    }
+
+    private static int getIconColor (Drawable icon) {
+        int color = com.xiaomi.xmsf.utils.ColorUtils.getIconColor(icon);
+        if (color != Notification.COLOR_DEFAULT) {
+            final float[] hsl = new float[3];
+            ColorUtils.colorToHSL(color, hsl);
+            hsl[1] = 0.94f;
+            hsl[2] = Math.min(hsl[2] * 0.6f, 0.31f);
+            return ColorUtils.HSLToColor(hsl);
+        }
+        return color;
+    }
+
+    private static Spannable createColorSubtext (CharSequence appName,
+                                                 int color) {
+        final Spannable amened = new SpannableStringBuilder(appName);
+        // 弄一个自己的颜色 TODO：不知道小米有没有这个 API，或者抄袭 AOSP 的实现
+        amened.setSpan(new ForegroundColorSpan(color),
+                0, amened.length(), 0);
+        return amened;
     }
 
 
