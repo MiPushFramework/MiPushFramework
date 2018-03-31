@@ -86,7 +86,6 @@ public class MyPushMessageHandler extends IntentService {
             Log4a.d(TAG, "app is at foreground");
         }
 
-        /*
         for (int i = 0; i < 5; i++) {
             if (!isAppForeground(package_name, this)) {
                 try {
@@ -98,7 +97,6 @@ public class MyPushMessageHandler extends IntentService {
                 break;
             }
         }
-        */
 
         if (isAppForeground(package_name, this)) {
             Intent localIntent = new Intent("com.xiaomi.mipush.RECEIVE_MESSAGE");
