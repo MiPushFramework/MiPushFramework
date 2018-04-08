@@ -36,6 +36,8 @@ import static com.xiaomi.push.service.PushServiceMain.CHANNEL_WARNING;
 public class MyPushMessageHandler extends IntentService {
     private static final String TAG = "MyPushMessageHandler";
 
+    private static final int APP_CHECK_FRONT_MAX_RETRY = 5;
+
     public MyPushMessageHandler() {
         super("my mipush message handler");
     }
@@ -86,47 +88,45 @@ public class MyPushMessageHandler extends IntentService {
             Log4a.d(TAG, "app is at foreground");
         }
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < APP_CHECK_FRONT_MAX_RETRY; i++) {
             if (!isAppForeground(package_name, this)) {
                 try {
                     Thread.sleep(100); //TODO let's wait?
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                if (i == (APP_CHECK_FRONT_MAX_RETRY-1)) {
+                    Log4a.w(TAG, "pull up app timeout" + package_name);
+                }
             } else {
                 break;
             }
         }
 
-        if (isAppForeground(package_name, this)) {
-            Intent localIntent = new Intent("com.xiaomi.mipush.RECEIVE_MESSAGE");
-            localIntent.setComponent(new ComponentName(package_name, "com.xiaomi.mipush.sdk.PushMessageHandler"));
-            localIntent.putExtra("mipush_payload", mipush_payloads);
-            localIntent.putExtra("mipush_notified", true);
-            localIntent.addCategory(String.valueOf(metaInfo.getNotifyId()));
-            try {
-                Log4a.d(TAG, "send to service " + package_name);
-                startService(localIntent);
+        Intent localIntent = new Intent("com.xiaomi.mipush.RECEIVE_MESSAGE");
+        localIntent.setComponent(new ComponentName(package_name, "com.xiaomi.mipush.sdk.PushMessageHandler"));
+        localIntent.putExtra("mipush_payload", mipush_payloads);
+        localIntent.putExtra("mipush_notified", true);
+        localIntent.addCategory(String.valueOf(metaInfo.getNotifyId()));
+        try {
+            Log4a.d(TAG, "send to service " + package_name);
+            startService(localIntent);
 
-                int id = MyClientEventDispatcher.getNotificationId(container);
-                ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(id);
-
-            } catch (Exception e) {
-                Log4a.e(TAG, e.getLocalizedMessage(), e);
-            }
-        } else {
-            Log4a.w(TAG, "pull up app timeout" + package_name);
+            int id = MyClientEventDispatcher.getNotificationId(container);
+            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(id);
+        } catch (Exception e) {
+            Log4a.e(TAG, e.getLocalizedMessage(), e);
         }
 
     }
 
-    private void guideToSetStatsPermission () {
+    private void guideToSetStatsPermission() {
         NotificationManager manager = (NotificationManager)
                 getSystemService(NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(CHANNEL_WARNING,
                     getString(R.string.notification_category_warning),
-                    NotificationManager.IMPORTANCE_MAX);
+                    NotificationManager.IMPORTANCE_HIGH);
             manager.createNotificationChannel(channel);
         }
 
@@ -145,10 +145,17 @@ public class MyPushMessageHandler extends IntentService {
     }
 
     public static boolean isAppForeground(String packageName, Context context) {
-        int level = ActivityManagerOverride.getPackageImportance(packageName,
-                ((ActivityManager) context.getSystemService(ACTIVITY_SERVICE)));
-        Log4a.d(TAG, "Importance flag: " + level);
-        return level == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
+        try {
+            int level = ActivityManagerOverride.getPackageImportance(packageName,
+                    ((ActivityManager) context.getSystemService(ACTIVITY_SERVICE)));
+            Log4a.d(TAG, "Importance flag: " + level);
+            return level == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
+        } catch (Exception e) {
+            //we just return false here now
+            //to prevent crash
+            //temp solution
+            return false;
+        }
     }
 
 }
