@@ -134,20 +134,19 @@ public class MyMIPushNotificationHelper {
                 }
             }
 
-        }
-
-        if (Build.VERSION.SDK_INT >= 24) {
             localBuilder.setWhen(System.currentTimeMillis());
             localBuilder.setShowWhen(true);
         }
-
-        //localBuilder.setContent(paramRemoteViews); //not supported
 
         String[] titleAndDesp = determineTitleAndDespByDIP(var0, metaInfo);
         localBuilder.setContentTitle(titleAndDesp[0]);
         localBuilder.setContentText(titleAndDesp[1]);
 
         localBuilder.setGroup(buildContainer.getPackageName());
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
+            localBuilder.setDefaults(Notification.DEFAULT_ALL); //for VERSION < N_MR1
+        }
 
         Drawable icon = null;
         try {
