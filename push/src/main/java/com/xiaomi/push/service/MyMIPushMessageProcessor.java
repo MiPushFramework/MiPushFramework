@@ -1,8 +1,11 @@
 package com.xiaomi.push.service;
 
 import android.accounts.Account;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.text.TextUtils;
 
@@ -126,6 +129,10 @@ public class MyMIPushMessageProcessor {
 //                Log4a.w(TAG, "receive a mipush message, we can see the app " + buildContainer.packageName+ ", but we can't see the receiver.");
 //            }
 //        }
+        if (!AppInfoUtils.isPkgInstalled(paramXMPushService, buildContainer.packageName)) {
+            sendAppNotInstallNotification(paramXMPushService, buildContainer);
+            return;
+        }
 
         String paramString = MIPushNotificationHelper.getTargetPackage(buildContainer);
 
@@ -154,9 +161,13 @@ public class MyMIPushMessageProcessor {
         String title = metaInfo.getTitle();
         String description = metaInfo.getDescription();
 
-        if (TextUtils.isEmpty(title)) {
+        if (TextUtils.isEmpty(title) && TextUtils.isEmpty(description)) {
             return;
-//            metaInfo.setTitle(buildContainer.packageName);
+        }
+
+        if (TextUtils.isEmpty(title)) {
+            String appName = getAppNameFromPkgName(paramXMPushService, buildContainer.packageName,buildContainer.packageName);
+            metaInfo.setTitle(appName);
         }
 
         if (TextUtils.isEmpty(description)) {
@@ -203,6 +214,16 @@ public class MyMIPushMessageProcessor {
         sendAckMessage(paramXMPushService, buildContainer);
     }
 
+    public static String getAppNameFromPkgName(Context context, String Packagename, String defaultName) {
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            ApplicationInfo info = packageManager.getApplicationInfo(Packagename, PackageManager.GET_META_DATA);
+            return (String) packageManager.getApplicationLabel(info);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return defaultName;
+        }
+    }
 
     private static void sendAckMessage(final XMPushService var0, final XmPushActionContainer var1) {
         var0.executeJob(new XMPushService.Job(4) {

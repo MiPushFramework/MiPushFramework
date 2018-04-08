@@ -92,7 +92,7 @@
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE"
             android:process=":pushservice"/>
-        <receiver android:name="com.xiaomi.push.service.receivers.PingReceiver"
+        <receiver android:name="com.xiaomi.xmsf.push.service.receivers.MiPushPingReceiver"
             android:exported="false"
             android:process=":pushservice">
             <intent-filter>
