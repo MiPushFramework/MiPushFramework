@@ -20,7 +20,6 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.widget.RemoteViews;
 
 import com.xiaomi.channel.commonutils.reflect.JavaCalls;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
@@ -110,14 +109,14 @@ public class MyMIPushNotificationHelper {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
-            try {
-                RemoteViews localRemoteViews = JavaCalls.callStaticMethodOrThrow(MIPushNotificationHelper.class, "getNotificationForCustomLayout", var0.getApplicationContext(), buildContainer, var1);
-                if (localRemoteViews != null) {
-                    localBuilder.setCustomContentView(localRemoteViews);
-                }
-            } catch (Exception e) {
-                Log4a.e(TAG, e.getLocalizedMessage(), e);
-            }
+//            try {
+//                RemoteViews localRemoteViews = JavaCalls.callStaticMethodOrThrow(MIPushNotificationHelper.class, "getNotificationForCustomLayout", var0.getApplicationContext(), buildContainer, var1);
+//                if (localRemoteViews != null) {
+//                    localBuilder.setCustomContentView(localRemoteViews);
+//                }
+//            } catch (Exception e) {
+//                Log4a.e(TAG, e.getLocalizedMessage(), e);
+//            }
 
             // Debug actions
             if (BuildConfig.DEBUG) {
@@ -167,7 +166,8 @@ public class MyMIPushNotificationHelper {
                         subText);
                 localBuilder.setColor(color);
             }
-        } catch (PackageManager.NameNotFoundException ignored) {}
+        } catch (PackageManager.NameNotFoundException ignored) {
+        }
         localBuilder.setExtras(extras);
 
         NotificationManager manager = (NotificationManager) var0.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -176,7 +176,7 @@ public class MyMIPushNotificationHelper {
 
     }
 
-    private static int getIconColor (Drawable icon) {
+    private static int getIconColor(Drawable icon) {
         int color = com.xiaomi.xmsf.utils.ColorUtils.getIconColor(icon);
         if (color != Notification.COLOR_DEFAULT) {
             final float[] hsl = new float[3];
@@ -188,8 +188,8 @@ public class MyMIPushNotificationHelper {
         return color;
     }
 
-    private static Spannable createColorSubtext (CharSequence appName,
-                                                 int color) {
+    private static Spannable createColorSubtext(CharSequence appName,
+                                                int color) {
         final Spannable amened = new SpannableStringBuilder(appName);
         // 弄一个自己的颜色 TODO：不知道小米有没有这个 API，或者抄袭 AOSP 的实现
         amened.setSpan(new ForegroundColorSpan(color),
