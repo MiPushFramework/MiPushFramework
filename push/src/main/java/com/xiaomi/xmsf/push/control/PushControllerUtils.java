@@ -166,10 +166,9 @@ public class PushControllerUtils {
     @NonNull
     public static XC_MethodHook.Unhook[] hookSdk () {
         List<XC_MethodHook.Unhook> unhooks = new ArrayList<>(0);
-        if (Build.VERSION.SDK_INT >= 26) {
-            // TODO: ArtHook does not support
-            return unhooks.toArray(new XC_MethodHook.Unhook[unhooks.size()]);
-        }
+//        if (Build.VERSION.SDK_INT >= 26) {
+//            return unhooks.toArray(new XC_MethodHook.Unhook[unhooks.size()]);
+//        }
         try {
             unhooks.add(DexposedBridge.findAndHookMethod(Class.forName("com.xiaomi.channel.commonutils.android.MIUIUtils"),
                     "getIsMIUI", new XC_MethodReplacement() {
