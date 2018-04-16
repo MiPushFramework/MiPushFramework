@@ -22,6 +22,7 @@ import com.xiaomi.xmpush.thrift.ConfigKey;
 import com.xiaomi.xmsf.crash.CrashHandler;
 import com.xiaomi.xmsf.push.control.PushControllerUtils;
 import com.xiaomi.xmsf.push.control.XMOutbound;
+import com.xiaomi.xmsf.push.hooks.PushSdkHooks;
 import com.xiaomi.xmsf.push.notification.NotificationController;
 import com.xiaomi.xmsf.push.service.MiuiPushActivateService;
 import com.xiaomi.xmsf.push.service.notificationcollection.NotificationListener;
@@ -78,7 +79,7 @@ public class XmsfApp extends Application {
                 new CrashHandler(Thread.currentThread().getUncaughtExceptionHandler())
         );
 
-        mUnHooks = PushControllerUtils.hookSdk();
+        mUnHooks = new PushSdkHooks().getHooks();
 
         CondomOptions options = XMOutbound.create(this, TAG_CONDOM + "_PROCESS",
                 false);
