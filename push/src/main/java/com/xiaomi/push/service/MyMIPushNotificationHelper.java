@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
@@ -89,7 +90,11 @@ public class MyMIPushNotificationHelper {
 
             if (iconSmallId <= 0) {
                 if (iconBitmap != null) {
-                    localBuilder.setSmallIcon(Icon.createWithBitmap(iconBitmap)); //but non-pic in notification detail
+
+                    Bitmap bitmap = convertToTransparentAndWhite(iconBitmap);
+                    localBuilder.setSmallIcon(Icon.createWithBitmap(bitmap));
+//                    localBuilder.setSmallIcon(Icon.createWithBitmap(iconBitmap)); //but non-pic in notification detail
+
                 } else {
                     localBuilder.setSmallIcon(R.drawable.ic_notifications_black_24dp);
                 }
@@ -313,4 +318,51 @@ public class MyMIPushNotificationHelper {
         }
         return (iconId != 0 || Build.VERSION.SDK_INT < 9) ? iconId : info.logo;
     }
+
+
+    // mark white as alpha
+    // mark color as white
+    // TODO process with color background
+    private static Bitmap convertToTransparentAndWhite(Bitmap bmp) {
+        int width = bmp.getWidth();
+        int height = bmp.getHeight();
+        int[] pixels = new int[width * height];
+        bmp.getPixels(pixels, 0, width, 0, 0, width, height);
+
+        int whiteCnt = 0;
+        int tsCnt = 0;
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                int dot = pixels[width * i + j];
+                if (dot == Color.WHITE) {
+                    pixels[width * i + j] = Color.TRANSPARENT;
+                    tsCnt ++;
+                } else {
+                    pixels[width * i + j] = Color.WHITE;
+                    whiteCnt ++;
+                }
+            }
+        }
+
+        if (whiteCnt > tsCnt) {
+            //revert WHITE and TRANSPARENT
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    int dot = pixels[width * i + j];
+                    if (dot == Color.WHITE) {
+                        pixels[width * i + j] = Color.TRANSPARENT;
+                    } else {
+                        pixels[width * i + j] = Color.WHITE;
+                    }
+                }
+            }
+
+        }
+
+        Bitmap newBmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        newBmp.setPixels(pixels, 0, width, 0, 0, width, height);
+        return newBmp;
+    }
+
+
 }
