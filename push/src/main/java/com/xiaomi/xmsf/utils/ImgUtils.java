@@ -14,12 +14,12 @@ import java.util.Collections;
  */
 public class ImgUtils {
 
-    public static Bitmap convertToTransparentAndWhite(Bitmap bmp) {
-        int calculateThreshold = calculateThreshold(bmp);
-        int width = bmp.getWidth();
-        int height = bmp.getHeight();
+    public static Bitmap convertToTransparentAndWhite(Bitmap bitmap) {
+        int calculateThreshold = calculateThreshold(bitmap);
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
         int[] pixels = new int[width * height];
-        bmp.getPixels(pixels, 0, width, 0, 0, width, height);
+        bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
 
         int whiteCnt = 0;
         int tsCnt = 0;
@@ -56,8 +56,105 @@ public class ImgUtils {
             }
         }
 
-        Bitmap newBmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        newBmp.setPixels(pixels, 0, width, 0, 0, width, height);
+        //corner
+        int B = width / 8;
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                //shift
+                if ((i > B) && (i < (height - B))) {
+                    continue;
+                }
+                if ((j > B) && (j < (width - B))) {
+                    continue;
+                }
+
+                int x = (i > (height / 2) && ((height - i) < B)) ? (i - (height - 2 * B)) : i;
+                int y = (j > (width / 2) && ((width - j) < B)) ? (j - (width - 2 * B)) : j;
+
+                if (((x - B) * (x - B) + (y - B) * (y - B)) > B * B) {
+                    pixels[width * i + j] = Color.TRANSPARENT;
+                }
+            }
+        }
+
+
+        int top = 0;
+        int left = 0;
+        int right = 0;
+        int bottom = 0;
+
+        for (int h = 0; h < bitmap.getHeight(); h++) {
+            boolean holdBlackPix = false;
+            for (int w = 0; w < bitmap.getWidth(); w++) {
+                if (pixels[width * h + w] != Color.TRANSPARENT) {
+                    holdBlackPix = true;
+                    break;
+                }
+            }
+
+            if (holdBlackPix) {
+                break;
+            }
+            top++;
+        }
+
+        for (int w = 0; w < bitmap.getWidth(); w++) {
+            boolean holdBlackPix = false;
+            for (int h = 0; h < bitmap.getHeight(); h++) {
+                if (pixels[width * h + w] != Color.TRANSPARENT) {
+                    holdBlackPix = true;
+                    break;
+                }
+            }
+            if (holdBlackPix) {
+                break;
+            }
+            left++;
+        }
+
+        for (int w = bitmap.getWidth() - 1; w >= 0; w--) {
+            boolean holdBlackPix = false;
+            for (int h = 0; h < bitmap.getHeight(); h++) {
+                if (pixels[width * h + w] != Color.TRANSPARENT) {
+                    holdBlackPix = true;
+                    break;
+                }
+            }
+            if (holdBlackPix) {
+                break;
+            }
+            right++;
+        }
+
+        for (int h = bitmap.getHeight() - 1; h >= 0; h--) {
+            boolean holdBlackPix = false;
+            for (int w = 0; w < bitmap.getWidth(); w++) {
+                if (pixels[width * h + w] != Color.TRANSPARENT) {
+                    holdBlackPix = true;
+                    break;
+                }
+            }
+            if (holdBlackPix) {
+                break;
+            }
+            bottom++;
+        }
+
+        int cropHeight = bitmap.getHeight() - bottom - top;
+        int cropWidth = bitmap.getWidth() - left - right;
+
+        int[] newPix = new int[cropWidth * cropHeight];
+
+        int i = 0;
+        for (int h = top; h < top + cropHeight; h++) {
+            for (int w = left; w < left + cropWidth; w++) {
+                newPix[i++] = pixels[width * h + w];
+            }
+        }
+
+        Bitmap newBmp = Bitmap.createBitmap(cropWidth, cropHeight, Bitmap.Config.ARGB_8888);
+        newBmp.setPixels(newPix, 0, cropWidth, 0, 0, cropWidth, cropHeight);
         return newBmp;
     }
 
@@ -76,8 +173,7 @@ public class ImgUtils {
         }
     }
 
-    private static boolean IsDimodal(double[] histogram)       // 检测直方图是否为双峰的
-    {
+    private static boolean IsDimodal(double[] histogram) {
         // 对直方图的峰进行计数，只有峰数位2才为双峰
         int Count = 0;
         for (int Y = 1; Y < 255; Y++) {
@@ -86,10 +182,7 @@ public class ImgUtils {
                 if (Count > 2) return false;
             }
         }
-        if (Count == 2)
-            return true;
-        else
-            return false;
+        return Count == 2;
     }
 
 
