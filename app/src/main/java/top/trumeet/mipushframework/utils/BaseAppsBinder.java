@@ -2,6 +2,9 @@ package top.trumeet.mipushframework.utils;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -16,22 +19,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import me.drakeet.multitype.ItemViewBinder;
+import top.trumeet.common.cache.IconCache;
+import top.trumeet.mipush.BuildConfig;
 import top.trumeet.mipush.R;
 
 /**
  * Created by Trumeet on 2017/8/26.
  * Base application list recycler binder with async load icon
- * @author Trumeet 
+ *
+ * @author Trumeet
  */
 
 public abstract class BaseAppsBinder<T> extends ItemViewBinder<T, BaseAppsBinder.ViewHolder> {
 
     private LruCache<String, Drawable> mIconMemoryCaches;
 
-    public BaseAppsBinder () {
+    public BaseAppsBinder() {
         super();
         int maxMemory = (int) Runtime.getRuntime().maxMemory();
-        int cacheSizes = maxMemory/5;
+        int cacheSizes = maxMemory / 5;
 
         mIconMemoryCaches = new LruCache<>(cacheSizes);
     }
@@ -43,7 +49,7 @@ public abstract class BaseAppsBinder<T> extends ItemViewBinder<T, BaseAppsBinder
                 false));
     }
 
-    public final void fillData (String pkgName, boolean fillName, ViewHolder holder) {
+    public final void fillData(String pkgName, boolean fillName, ViewHolder holder) {
         if (fillName) {
             PackageManager packageManager = holder.itemView.getContext().
                     getPackageManager();
@@ -66,23 +72,24 @@ public abstract class BaseAppsBinder<T> extends ItemViewBinder<T, BaseAppsBinder
     /**
      * Should use in {@link ItemViewBinder#onBindViewHolder(RecyclerView.ViewHolder, Object)}.
      * Load app title and icon
+     *
      * @param pkgName Package name
-     * @param holder View holder
+     * @param holder  View holder
      * @deprecated Use #fillData(String, boolean, ViewHolder) instead
      */
     @Deprecated
-    public final void fillData (String pkgName, ViewHolder holder) {
+    public final void fillData(String pkgName, ViewHolder holder) {
         fillData(pkgName, true, holder);
     }
 
-    private void addDrawableToMemoryCache (@Nullable String pkg, @NonNull Drawable icon) {
+    private void addDrawableToMemoryCache(@Nullable String pkg, @NonNull Drawable icon) {
         if (getIconFromMemoryCache(pkg) == null) {
             if (pkg == null) pkg = "";
             mIconMemoryCaches.put(pkg, icon);
         }
     }
 
-    private Drawable getIconFromMemoryCache (@Nullable String pkg) {
+    private Drawable getIconFromMemoryCache(@Nullable String pkg) {
         if (pkg == null) pkg = "";
         return mIconMemoryCaches.get(pkg);
     }
@@ -91,7 +98,8 @@ public abstract class BaseAppsBinder<T> extends ItemViewBinder<T, BaseAppsBinder
         private Context context;
 
         private ImageView imageView;
-        IconWorkerTask (ImageView imageView) {
+
+        IconWorkerTask(ImageView imageView) {
             this.imageView = imageView;
             this.context = imageView.getContext();
         }
@@ -105,13 +113,23 @@ public abstract class BaseAppsBinder<T> extends ItemViewBinder<T, BaseAppsBinder
                 icon = ContextCompat.getDrawable(context,
                         android.R.mipmap.sym_def_app_icon);
             } else {
-                try {
-                    icon = context.getPackageManager()
-                            .getApplicationIcon(pkg);
-                } catch (PackageManager.NameNotFoundException ignore) {
-                    icon = ContextCompat.getDrawable(context,
-                            android.R.mipmap.sym_def_app_icon);
+                if (BuildConfig.DEBUG) {
+                    Bitmap whiteIconBitmap = IconCache.getInstance().getWhiteIconBitmap(context, pkg);
+                    if (whiteIconBitmap != null) {
+                        icon = new BitmapDrawable(context.getResources(), whiteIconBitmap);
+                    } else {
+                        icon = ContextCompat.getDrawable(context, android.R.mipmap.sym_def_app_icon);
+                    }
+                } else {
+                    try {
+                        icon = context.getPackageManager()
+                                .getApplicationIcon(pkg);
+                    } catch (PackageManager.NameNotFoundException ignore) {
+                        icon = ContextCompat.getDrawable(context,
+                                android.R.mipmap.sym_def_app_icon);
+                    }
                 }
+
             }
             if (icon == null) {
                 return null;
@@ -121,9 +139,12 @@ public abstract class BaseAppsBinder<T> extends ItemViewBinder<T, BaseAppsBinder
         }
 
         @Override
-        protected void onPostExecute (Drawable drawable) {
+        protected void onPostExecute(Drawable drawable) {
             if (imageView != null) {
                 imageView.setImageDrawable(drawable);
+                if (BuildConfig.DEBUG) {
+                    imageView.setBackgroundColor(Color.BLACK);
+                }
             }
         }
     }
@@ -134,7 +155,8 @@ public abstract class BaseAppsBinder<T> extends ItemViewBinder<T, BaseAppsBinder
         public TextView summary;
         public TextView text2;
         public TextView status;
-        ViewHolder (View itemView) {
+
+        ViewHolder(View itemView) {
             super(itemView);
             icon = itemView.findViewById(android.R.id.icon);
             title = itemView.findViewById(android.R.id.title);
