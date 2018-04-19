@@ -1,5 +1,7 @@
 package com.xiaomi.xmsf.push.hooks;
 
+import android.os.Build;
+
 import com.taobao.android.dexposed.XC_MethodHook;
 import com.xiaomi.xmsf.push.hooks.impl.HookGetIsMIUI;
 import com.xiaomi.xmsf.push.hooks.impl.HookPingReceiver;
@@ -27,16 +29,22 @@ public class PushSdkHooks {
 
 
     public XC_MethodHook.Unhook[] getHooks() {
-        List<XC_MethodHook.Unhook> res = new ArrayList<>();
+        List<XC_MethodHook.Unhook> unhooks = new ArrayList<>();
+
+        if (Build.VERSION.SDK_INT >= 27) {
+            // TODO support Android P
+            return unhooks.toArray(new XC_MethodHook.Unhook[unhooks.size()]);
+        }
+
         for (IHook unhook : registeredHooks) {
             try {
                 Log4a.i(TAG, "init hook : " + unhook.getClass().getSimpleName());
-                res.add(unhook.fetchHook());
+                unhooks.add(unhook.fetchHook());
             } catch (Exception e) {
                 Log4a.e(TAG, "Hook failed", e);
             }
         }
-        return res.toArray(new XC_MethodHook.Unhook[]{});
+        return unhooks.toArray(new XC_MethodHook.Unhook[]{});
     }
 
 }
