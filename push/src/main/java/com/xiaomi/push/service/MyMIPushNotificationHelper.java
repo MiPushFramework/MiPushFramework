@@ -26,6 +26,7 @@ import com.xiaomi.channel.commonutils.reflect.JavaCalls;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
 import com.xiaomi.xmsf.R;
+import com.xiaomi.xmsf.utils.ImgUtils;
 
 import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.common.BuildConfig;
@@ -91,7 +92,7 @@ public class MyMIPushNotificationHelper {
             if (iconSmallId <= 0) {
                 if (iconBitmap != null) {
 
-                    Bitmap bitmap = convertToTransparentAndWhite(iconBitmap);
+                    Bitmap bitmap = ImgUtils.convertToTransparentAndWhite(iconBitmap);
                     localBuilder.setSmallIcon(Icon.createWithBitmap(bitmap));
 //                    localBuilder.setSmallIcon(Icon.createWithBitmap(iconBitmap)); //but non-pic in notification detail
 
@@ -320,55 +321,6 @@ public class MyMIPushNotificationHelper {
     }
 
 
-    // step1 mark likely white as alpha
-    //       mark color as white
-    // step2 revert if white pixel more than white
-    // TODO enhance binaryzation with Otsu
-    private static Bitmap convertToTransparentAndWhite(Bitmap bmp) {
-        int width = bmp.getWidth();
-        int height = bmp.getHeight();
-        int[] pixels = new int[width * height];
-        bmp.getPixels(pixels, 0, width, 0, 0, width, height);
-
-        int whiteCnt = 0;
-        int tsCnt = 0;
-
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                int dot = pixels[width * i + j];
-                int red = ((dot & 0x00FF0000) >> 16);
-                int green = ((dot & 0x0000FF00) >> 8);
-                int blue = (dot & 0x000000FF);
-                int grey = (int) ((float) red * 0.3 + (float) green * 0.59 + (float) blue * 0.11);
-
-                if (dot == Color.WHITE || grey >  220) {
-                    pixels[width * i + j] = Color.TRANSPARENT;
-                    tsCnt ++;
-                } else {
-                    pixels[width * i + j] = Color.WHITE;
-                    whiteCnt ++;
-                }
-            }
-        }
-
-        if (whiteCnt > tsCnt) {
-            //revert WHITE and TRANSPARENT
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    int dot = pixels[width * i + j];
-                    if (dot == Color.WHITE) {
-                        pixels[width * i + j] = Color.TRANSPARENT;
-                    } else {
-                        pixels[width * i + j] = Color.WHITE;
-                    }
-                }
-            }
-        }
-
-        Bitmap newBmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        newBmp.setPixels(pixels, 0, width, 0, 0, width, height);
-        return newBmp;
-    }
 
 
 }
