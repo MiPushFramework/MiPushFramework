@@ -320,9 +320,10 @@ public class MyMIPushNotificationHelper {
     }
 
 
-    // mark white as alpha
-    // mark color as white
-    // TODO process with color background
+    // step1 mark likely white as alpha
+    //       mark color as white
+    // step2 revert if white pixel more than white
+    // TODO enhance binaryzation with Otsu
     private static Bitmap convertToTransparentAndWhite(Bitmap bmp) {
         int width = bmp.getWidth();
         int height = bmp.getHeight();
@@ -331,10 +332,16 @@ public class MyMIPushNotificationHelper {
 
         int whiteCnt = 0;
         int tsCnt = 0;
+
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 int dot = pixels[width * i + j];
-                if (dot == Color.WHITE) {
+                int red = ((dot & 0x00FF0000) >> 16);
+                int green = ((dot & 0x0000FF00) >> 8);
+                int blue = (dot & 0x000000FF);
+                int grey = (int) ((float) red * 0.3 + (float) green * 0.59 + (float) blue * 0.11);
+
+                if (dot == Color.WHITE || grey >  220) {
                     pixels[width * i + j] = Color.TRANSPARENT;
                     tsCnt ++;
                 } else {
@@ -356,7 +363,6 @@ public class MyMIPushNotificationHelper {
                     }
                 }
             }
-
         }
 
         Bitmap newBmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
