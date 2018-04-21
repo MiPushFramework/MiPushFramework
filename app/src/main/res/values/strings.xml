@@ -134,6 +134,19 @@
     <string name="settings_skip_doze">移除电池优化</string>
     <string name="settings_skip_doze_summary">在 Android 6.0 及更高版本，电池优化会影响推送</string>
 
+    <string name="settings_options">配置</string>
+    <string name="pref_title_access_mode">前台APP检测模式</string>
+    <string-array name="pref_title_access_mode_list_titles">
+        <item>使用情况访问 API (性能好-推荐)</item>
+        <item>辅助模式 (兼容性好)</item>
+    </string-array>
+
+    <string-array name="pref_title_access_mode_list_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+
     <string name="settings_debug">诊断</string>
     <string name="settings_get_log">获取日志</string>
     <string name="settings_get_log_summary">点按分享日志，请在需要的时候随 Issues 一起提交。</string>
