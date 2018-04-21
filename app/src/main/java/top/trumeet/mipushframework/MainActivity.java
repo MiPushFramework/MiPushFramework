@@ -48,7 +48,10 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkAndConnect();
+    }
 
+    private void checkAndConnect () {
         PermissionUtils.requestPermissions(this, new String[]{Constants.permissions.WRITE_SETTINGS});
     }
 
@@ -109,7 +112,7 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
                             public void onDisconnected() {
                                 mFragment.onChange(OnConnectStatusChangedListener.DISCONNECTED);
 
-                                connect();
+                                checkAndConnect();
                             }
                         });
             }
@@ -169,7 +172,7 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
         .setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                connect();
+                checkAndConnect();
             }
         })
         .setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
