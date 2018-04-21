@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.android.settings.widget.EntityHeaderController;
 
@@ -28,6 +29,7 @@ import moe.shizuku.preference.SwitchPreferenceCompat;
 import top.trumeet.common.Constants;
 import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.register.RegisteredApplication;
+import top.trumeet.common.utils.PermissionUtils;
 import top.trumeet.common.utils.Utils;
 import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.event.RecentActivityActivity;
@@ -42,20 +44,22 @@ import static top.trumeet.common.utils.NotificationUtils.getChannelIdByPkg;
  * @author Trumeet
  */
 
-public class ManagePermissionsActivity extends AppCompatActivity {
+public class ManagePermissionsActivity extends AppCompatActivity implements PermissionUtils.PermissionGrantListener {
     public static final String EXTRA_PACKAGE_NAME =
             ManagePermissionsActivity.class.getName()
             + ".EXTRA_PACKAGE_NAME";
 
     private LoadTask mTask;
+    private String mPkg;
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null &&
                 getIntent().hasExtra(EXTRA_PACKAGE_NAME)) {
-            mTask = new LoadTask(getIntent().getStringExtra(EXTRA_PACKAGE_NAME));
-            mTask.execute();
+            mPkg = getIntent().getStringExtra(EXTRA_PACKAGE_NAME);
+            PermissionUtils.requestPermissionsIfNeeded(this,
+                    new String[]{Constants.permissions.WRITE_SETTINGS});
         }
         getSupportActionBar()
                 .setDisplayHomeAsUpEnabled(true);
@@ -327,5 +331,37 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                 getActivity().finish();
             }
         }
+    }
+
+    @Override
+    public void onResult (boolean granted, boolean blocked, String permName) {
+        if (Constants.permissions.WRITE_SETTINGS.equalsIgnoreCase(permName)) {
+            if (granted) {
+                mTask = new LoadTask(mPkg);
+                mTask.execute();
+            } else {
+                Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission,
+                        PermissionUtils.getName(permName)), Toast.LENGTH_LONG)
+                        .show();
+                if (blocked) {
+                    Uri uri = Uri.fromParts("package", getPackageName(), null);
+                    startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                            .setData(uri)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                } else {
+                    PermissionUtils.requestPermissionsIfNeeded(this,
+                            new String[]{permName});
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (PermissionUtils.handle(this, requestCode, permissions,
+                grantResults)) {
+            return;
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

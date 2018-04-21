@@ -14,29 +14,19 @@
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
 
-    <!-- Allows an application to change push enable status.
-        <p>Protection level: signature
-    -->
-    <permission android:name="top.trumeet.mipush.permissions.CHANGE_PUSH_ENABLE_SETTING"
-        android:protectionLevel="signature" />
+    <permission android:name="top.trumeet.mipush.permissions.READ_SETTINGS"
+        android:logo="@drawable/ic_notifications_black_24dp"
+        android:label="@string/perm_read_settings"
+        android:protectionLevel="normal" />
+    <permission android:name="top.trumeet.mipush.permissions.WRITE_SETTINGS"
+        android:logo="@drawable/ic_notifications_black_24dp"
+        android:label="@string/perm_change_settings"
+        android:protectionLevel="dangerous" />
+    <permission android:name="top.trumeet.mipush.permissions.BIND"
+        android:protectionLevel="normal" />
+    <uses-permission android:name="top.trumeet.mipush.permissions.READ_SETTINGS" />
+    <uses-permission android:name="top.trumeet.mipush.permission.WRITE_SETTINGS" />
 
-    <!-- Allows an application to get push enable status.
-        <p>Protection level: signature
-    -->
-    <permission android:name="top.trumeet.mipush.permissions.GET_PUSH_ENABLE_SETTING"
-        android:protectionLevel="signature" />
-
-    <!-- Allows an application to get push service version code.
-        <p>Protection level: signature
-    -->
-    <permission android:name="top.trumeet.mipush.permissions.GET_VERSION"
-        android:protectionLevel="signature" />
-
-    <!-- Allows an application to check push service app op status
-        <p>Protection level: signature|privileged|development
-    -->
-    <permission android:name="top.trumeet.mipush.permissions.CHECK_APP_OPS_STATUS"
-        android:protectionLevel="signature|privileged|development" />
     <application
         android:name=".XmsfApp"
         android:label="@string/push_service_name"
@@ -133,7 +123,7 @@
 
         <service android:name=".push.control.ControlService"
             android:exported="true"
-            tools:ignore="ExportedService" />
+            android:permission="top.trumeet.mipush.permissions.BIND"/>
         <service android:name="com.xiaomi.xmsf.push.service.MiuiPushActivateService" android:exported="true" />
         <service android:name="com.xiaomi.push.sdk.MyPushMessageHandler" />
 

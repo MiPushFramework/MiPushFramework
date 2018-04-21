@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="top.trumeet.mipush"  >
-    <uses-permission android:name="top.trumeet.mipush.permissions.WRITE_EVENT" />
-    <uses-permission android:name="top.trumeet.mipush.permissions.READ_EVENT" />
-    <uses-permission android:name="top.trumeet.mipush.permissions.READ_APPLICATION_SETTINGS" />
-    <uses-permission android:name="top.trumeet.mipush.permissions.WRITE_APPLICATION_SETTINGS" />
-    <uses-permission android:name="top.trumeet.mipush.permissions.CHANGE_PUSH_ENABLE_SETTING" />
-    <uses-permission android:name="top.trumeet.mipush.permissions.GET_PUSH_ENABLE_SETTING" />
-    <uses-permission android:name="top.trumeet.mipush.permissions.GET_VERSION" />
-    <uses-permission android:name="top.trumeet.mipush.permissions.CHECK_APP_OPS_STATUS" />
 
+    <uses-permission android:name="top.trumeet.mipush.permissions.READ_SETTINGS" />
+    <uses-permission android:name="top.trumeet.mipush.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="top.trumeet.mipush.permissions.BIND" />
 
     <application android:theme="@style/AppTheme"
         android:label="@string/app_name"

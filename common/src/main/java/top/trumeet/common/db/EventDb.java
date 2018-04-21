@@ -1,11 +1,13 @@
 package top.trumeet.common.db;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.CancellationSignal;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresPermission;
 
 import java.util.List;
 
@@ -28,12 +30,14 @@ public class EventDb {
         return new DatabaseUtils(CONTENT_URI, context.getContentResolver());
     }
 
+    @RequiresPermission(value = Constants.permissions.WRITE_SETTINGS)
     public static Uri insertEvent (Event event,
                                     Context context) {
         return getInstance(context)
                 .insert(event.toValues());
     }
 
+    @RequiresPermission(value = Constants.permissions.WRITE_SETTINGS)
     public static Uri insertEvent (@Event.ResultType int result,
                                    EventType type,
                                    Context context) {
@@ -41,6 +45,7 @@ public class EventDb {
                 , result, null, null, type.getInfo())), context);
     }
 
+    @RequiresPermission(value = Constants.permissions.READ_SETTINGS)
     public static List<Event> query (@Nullable Integer skip,
                                      @Nullable Integer limit,
                                      @Nullable String pkg,
@@ -52,6 +57,7 @@ public class EventDb {
                         DatabaseUtils.order(Event.KEY_DATE, "desc") +
                                 DatabaseUtils.limitAndOffset(limit, skip),
                         new DatabaseUtils.Converter<Event>() {
+                            @SuppressLint("MissingPermission")
                             @Override
                             @NonNull
                             public Event convert(@NonNull Cursor cursor) {
@@ -60,10 +66,12 @@ public class EventDb {
                         });
     }
 
+    @RequiresPermission(value = Constants.permissions.READ_SETTINGS)
     public static List<Event> query (int page, Context context, CancellationSignal signal) {
         return query(null, page, context, signal);
     }
 
+    @RequiresPermission(value = Constants.permissions.READ_SETTINGS)
     public static List<Event> query (String pkg, int page, Context context,
                                      CancellationSignal cancellationSignal) {
         int skip;

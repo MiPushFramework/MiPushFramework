@@ -22,4 +22,7 @@
     <!-- Stats permission guide -->
     <string name="notification_stats_permission_title">Please grant usage stats permission</string>
     <string name="notification_stats_permission_text">We need usage rights to process your request, click grant permissions</string>
+
+    <string name="perm_change_settings">Manage push service</string>
+    <string name="perm_read_settings">Get push settings</string>
 </resources>

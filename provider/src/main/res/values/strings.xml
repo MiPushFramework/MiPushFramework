@@ -1,6 +1,2 @@
 <resources>
-    <string name="permission_read_events">Read push events</string>
-    <string name="permission_write_events">Change push events</string>
-    <string name="permission_read_application_settings">Read application push permissions</string>
-    <string name="permission_write_application_settings">Change application push permissions</string>
 </resources>
