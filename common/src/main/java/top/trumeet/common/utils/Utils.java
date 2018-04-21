@@ -11,7 +11,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.PixelFormat;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Process;
 import android.support.annotation.ColorInt;
@@ -27,27 +27,27 @@ import top.trumeet.common.Constants;
 import top.trumeet.common.R;
 
 public final class Utils {
-    public static int myUid () {
+    public static int myUid() {
         return Process.myUserHandle().hashCode();
     }
 
-    public static boolean isServiceInstalled () {
+    public static boolean isServiceInstalled() {
         return isAppInstalled(Constants.SERVICE_APP_NAME);
     }
 
-    public static Application getApplication () {
+    public static Application getApplication() {
         return AppGlobals.getInitialApplication();
     }
 
-    public static PackageManager getPackageManager () {
+    public static PackageManager getPackageManager() {
         return AppGlobals.getInitialApplication().getPackageManager();
     }
 
-    public static boolean isAppOpsInstalled () {
+    public static boolean isAppOpsInstalled() {
         return isAppInstalled("rikka.appops");
     }
 
-    public static boolean isAppInstalled (String packageName) {
+    public static boolean isAppInstalled(String packageName) {
         try {
             return getPackageManager()
                     .getPackageInfo(packageName, 0)
@@ -92,8 +92,8 @@ public final class Utils {
     }
 
 
-    public static Date getUTC (Date date) {
-        Calendar cal = Calendar.getInstance() ;
+    public static Date getUTC(Date date) {
+        Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         int zoneOffset = cal.get(java.util.Calendar.ZONE_OFFSET);
         int dstOffset = cal.get(java.util.Calendar.DST_OFFSET);
@@ -101,31 +101,15 @@ public final class Utils {
         return cal.getTime();
     }
 
-    public static Date getUTC () {
+    public static Date getUTC() {
         return getUTC(new Date());
     }
 
-    public static CharSequence getString (@StringRes int id,
-                                          @NonNull Context context,
-                                          Object... formatArgs) {
+    public static CharSequence getString(@StringRes int id,
+                                         @NonNull Context context,
+                                         Object... formatArgs) {
         return Html.fromHtml(context.getString(id, formatArgs));
     }
 
-    public static Bitmap drawableToBitmap(Drawable drawable) {
-        // 取 drawable 的长宽
-        int w = drawable.getIntrinsicWidth();
-        int h = drawable.getIntrinsicHeight();
 
-        // 取 drawable 的颜色格式
-        Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
-                : Bitmap.Config.RGB_565;
-        // 建立对应 bitmap
-        Bitmap bitmap = Bitmap.createBitmap(w, h, config);
-        // 建立对应 bitmap 的画布
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, w, h);
-        // 把 drawable 内容画到画布中
-        drawable.draw(canvas);
-        return bitmap;
-    }
 }

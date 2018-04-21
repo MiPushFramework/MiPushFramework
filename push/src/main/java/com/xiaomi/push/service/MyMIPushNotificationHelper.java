@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
@@ -28,6 +27,8 @@ import com.xiaomi.xmsf.R;
 
 import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.common.BuildConfig;
+import top.trumeet.common.cache.IconCache;
+import top.trumeet.common.utils.ImgUtils;
 
 import static com.xiaomi.push.service.MIPushNotificationHelper.drawableToBitmap;
 import static com.xiaomi.push.service.MIPushNotificationHelper.isBusinessMessage;
@@ -65,19 +66,13 @@ public class MyMIPushNotificationHelper {
             localBuilder.setStyle(style);
         }
 
+        Bitmap iconBitmap = IconCache.getInstance().getRawIconBitmap(var0, buildContainer.getPackageName());
 
         // Set small icon
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int iconLargeId = getIconId(var0, buildContainer.getPackageName(), NOTIFICATION_ICON);
             int iconSmallId = getIconId(var0, buildContainer.getPackageName(), NOTIFICATION_SMALL_ICON);
-
             Log4a.d(TAG, "id: " + iconLargeId + ", id2: " + iconSmallId);
-            Bitmap iconBitmap = null;
-            try {
-                Drawable icon = var0.getPackageManager().getApplicationIcon(buildContainer.getPackageName());
-                iconBitmap = MIPushNotificationHelper.drawableToBitmap(icon);
-            } catch (Exception ignored) {
-            }
 
             if (iconLargeId <= 0) {
                 if (iconBitmap != null) {
@@ -88,17 +83,18 @@ public class MyMIPushNotificationHelper {
             }
 
             if (iconSmallId <= 0) {
-                if (iconBitmap != null) {
-                    localBuilder.setSmallIcon(Icon.createWithBitmap(iconBitmap)); //but non-pic in notification detail
+
+                Bitmap whiteIconBitmap = IconCache.getInstance().getWhiteIconBitmap(var0, buildContainer.getPackageName());
+                if (whiteIconBitmap != null) {
+                    localBuilder.setSmallIcon(Icon.createWithBitmap(whiteIconBitmap));
                 } else {
                     localBuilder.setSmallIcon(R.drawable.ic_notifications_black_24dp);
                 }
+
             } else {
                 localBuilder.setSmallIcon(Icon.createWithResource(buildContainer.getPackageName(), iconSmallId));
             }
-            // TODO: 系统会把 Icon tint 成白块
         } else {
-            // TODO: Icon 向下兼容
             localBuilder.setSmallIcon(R.drawable.ic_notifications_black_24dp);
         }
 
@@ -147,18 +143,11 @@ public class MyMIPushNotificationHelper {
             localBuilder.setDefaults(Notification.DEFAULT_ALL); //for VERSION < N_MR1
         }
 
-        Drawable icon = null;
-        try {
-            icon = var0.getPackageManager().getApplicationIcon(buildContainer.getPackageName());
-        } catch (Exception e) {
-            localBuilder.setSmallIcon(R.drawable.ic_notifications_black_24dp);
-        }
-
         // Fill app name
         Bundle extras = new Bundle();
         try {
-            if (icon != null) {
-                int color = getIconColor(icon);
+            if (iconBitmap != null) {
+                int color = getIconColor(iconBitmap);
                 CharSequence subText = createColorSubtext(var0.getPackageManager()
                         .getApplicationLabel(var0.getPackageManager().getApplicationInfo(buildContainer.getPackageName(),
                                 0)), color);
@@ -176,8 +165,8 @@ public class MyMIPushNotificationHelper {
 
     }
 
-    private static int getIconColor(Drawable icon) {
-        int color = com.xiaomi.xmsf.utils.ColorUtils.getIconColor(icon);
+    private static int getIconColor(Bitmap bitmap) {
+        int color = com.xiaomi.xmsf.utils.ColorUtils.getIconColor(bitmap);
         if (color != Notification.COLOR_DEFAULT) {
             final float[] hsl = new float[3];
             ColorUtils.colorToHSL(color, hsl);
@@ -313,4 +302,6 @@ public class MyMIPushNotificationHelper {
         }
         return (iconId != 0 || Build.VERSION.SDK_INT < 9) ? iconId : info.logo;
     }
+
+
 }
