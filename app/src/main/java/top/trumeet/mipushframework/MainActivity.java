@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.UiThread;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Pair;
@@ -17,6 +18,7 @@ import android.view.ViewPropertyAnimator;
 import android.widget.Toast;
 
 import top.trumeet.common.Constants;
+import top.trumeet.common.plugin.PlatformUtils;
 import top.trumeet.common.push.PushController;
 import top.trumeet.common.utils.PermissionUtils;
 import top.trumeet.common.utils.Utils;
@@ -49,9 +51,16 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkAndConnect();
+        checkAndShowPlatformNotice();
     }
 
+    @UiThread
     private void checkAndConnect () {
+        Log.d("MainActivity", "checkAndConnect");
+        if (!Utils.isServiceInstalled()) {
+            showConnectFail(FAIL_REASON_NOT_INSTALLED);
+            return;
+        }
         PermissionUtils.requestPermissions(this, new String[]{Constants.permissions.WRITE_SETTINGS});
     }
 
@@ -215,6 +224,14 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
                             new String[]{permName});
                 }
             }
+        }
+    }
+
+    private void checkAndShowPlatformNotice () {
+        if (PlatformUtils.isPlatformModeSupported() &&
+                !PlatformUtils.isServicePlatformSign()) {
+            Toast.makeText(this, Utils.getString(R.string.platform_suggestion_toast,
+                    this), Toast.LENGTH_LONG).show();
         }
     }
 }

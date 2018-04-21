@@ -164,6 +164,14 @@
 您需要安装单独的推送服务，它会在后台运行以进行推送。请 <a href="%1$s">点按此处</a> 安装，然后重试。
     ]]></string>
 
+    <!-- Platform -->
+    <string name="platform_not_installed"><![CDATA[
+<br /><br />您的设备支持 <b>系统模式</b>，使用该模式将可以更好地运行。您可以点按 <a href="%1$s">Platform APK</a> 获取。（如果您的设备不支持该模式，将无法安装。）
+    ]]></string>
+    <string name="platform_suggestion_toast"><![CDATA[
+您的设备支持 <b>系统模式</b>，您可以前往检查更新 中下载 xmsf_service_platform.apk 以便更好地运行。
+    ]]></string>
+
     <!-- Help -->
     <string-array name="help_articles" translatable="false">
         <item>help_article_can_not_receive_push|can_not_receive_push</item>
