@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.pqpo.librarylog4a.Log4a;
+import me.weishu.epic.art.EpicNative;
 
 /**
  * Created by zts1993 on 2018/4/16.
@@ -33,6 +34,13 @@ public class PushSdkHooks {
 
         if (Build.VERSION.SDK_INT >= 27) {
             // TODO support Android P
+            return unhooks.toArray(new XC_MethodHook.Unhook[unhooks.size()]);
+        }
+        // 判断 Epic 资瓷 abi 与否，very bad
+        try {
+            EpicNative.getMethodAddress(PushSdkHooks.class.getDeclaredMethod("getHooks"));
+        } catch (UnsatisfiedLinkError | NoSuchMethodException ignored) {
+            Log4a.e(TAG, "dexposed not supported");
             return unhooks.toArray(new XC_MethodHook.Unhook[unhooks.size()]);
         }
 
