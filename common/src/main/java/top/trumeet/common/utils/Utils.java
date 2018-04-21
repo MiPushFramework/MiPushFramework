@@ -9,10 +9,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Process;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
@@ -108,8 +104,10 @@ public final class Utils {
     public static CharSequence getString(@StringRes int id,
                                          @NonNull Context context,
                                          Object... formatArgs) {
-        return Html.fromHtml(context.getString(id, formatArgs));
+        return toHtml(context.getString(id, formatArgs));
     }
 
-
+    public static CharSequence toHtml (String str) {
+        return Html.fromHtml(str);
+    }
 }

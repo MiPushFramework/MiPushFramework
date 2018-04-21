@@ -1,14 +1,17 @@
 package top.trumeet.common.db;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.CancellationSignal;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresPermission;
 
 import java.util.List;
 
+import top.trumeet.common.Constants;
 import top.trumeet.common.register.RegisteredApplication;
 import top.trumeet.common.utils.DatabaseUtils;
 
@@ -27,6 +30,8 @@ public class RegisteredApplicationDb {
         return new DatabaseUtils(CONTENT_URI, context.getContentResolver());
     }
 
+    @RequiresPermission(allOf = {Constants.permissions.WRITE_SETTINGS,
+        Constants.permissions.READ_SETTINGS})
     public static RegisteredApplication
     registerApplication (String pkg, boolean autoCreate, Context context,
                          CancellationSignal signal) {
@@ -35,6 +40,7 @@ public class RegisteredApplicationDb {
                 (autoCreate ? create(pkg, context) : null) : list.get(0);
     }
 
+    @RequiresPermission(value = Constants.permissions.READ_SETTINGS)
     public static List<RegisteredApplication>
     getList (Context context,
              @Nullable String pkg,
@@ -43,6 +49,7 @@ public class RegisteredApplicationDb {
                 .queryAndConvert(signal, pkg != null ? KEY_PACKAGE_NAME + "=?" :
                         null,
                         pkg != null ? new String[]{pkg} : null, null, new DatabaseUtils.Converter<RegisteredApplication>() {
+                            @SuppressLint("MissingPermission")
                             @android.support.annotation.NonNull
                             @Override
                             public RegisteredApplication convert
@@ -52,6 +59,7 @@ public class RegisteredApplicationDb {
                         });
     }
 
+    @RequiresPermission(value = Constants.permissions.WRITE_SETTINGS)
     public static int update (RegisteredApplication application,
                                Context context) {
         return getInstance(context)
@@ -59,6 +67,8 @@ public class RegisteredApplicationDb {
                         new String[]{application.getId().toString()});
     }
 
+    @RequiresPermission(allOf = {Constants.permissions.WRITE_SETTINGS,
+            Constants.permissions.READ_SETTINGS})
     private static RegisteredApplication create (String pkg,
                                                  Context context) {
         RegisteredApplication registeredApplication =
@@ -74,6 +84,7 @@ public class RegisteredApplicationDb {
                 null);
     }
 
+    @RequiresPermission(value = Constants.permissions.WRITE_SETTINGS)
     private static Uri insert (RegisteredApplication application,
                                 Context context) {
         return getInstance(context).insert(application.toValues());

@@ -101,20 +101,8 @@ public final class Constants {
             SERVICE_APP_NAME + ".RemoveDozeActivity";
 
     public static class permissions {
-        private static String permission (String name) {
-            return "top.trumeet.mipush.permissions." + name;
-        }
-
-        public static final String CHANGE_PUSH_ENABLE_SETTING =
-                permission("CHANGE_PUSH_ENABLE_SETTING");
-
-        public static final String GET_PUSH_ENABLE_SETTING =
-                permission("GET_PUSH_ENABLE_SETTING");
-
-        public static final String GET_VERSION =
-                permission("GET_VERSION");
-
-        public static final String CHECK_APP_OPS_STATUS =
-                permission("CHECK_APP_OPS_STATUS");
+        public static final String BIND = "top.trumeet.mipush.permissions.BIND";
+        public static final String READ_SETTINGS = "top.trumeet.mipush.permissions.READ_SETTINGS";
+        public static final String WRITE_SETTINGS = "top.trumeet.mipush.permissions.WRITE_SETTINGS";
     }
 }

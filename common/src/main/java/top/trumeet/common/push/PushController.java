@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresPermission;
 import android.util.Log;
 
 import java.util.concurrent.CountDownLatch;
@@ -36,6 +37,7 @@ public class PushController {
     public PushController () {
     }
 
+    @RequiresPermission(Constants.permissions.BIND)
     public void connect (Context context,
                          @Nullable final OnReadyListener listener) {
         if (!Utils.isServiceInstalled()) {
@@ -73,6 +75,7 @@ public class PushController {
      * @return Instance
      */
     @NonNull
+    @RequiresPermission(Constants.permissions.BIND)
     public static PushController getConnected (@NonNull Context context, @Nullable final OnReadyListener disconnectListener) {
         PushController controller = new PushController();
         if (!Utils.isServiceInstalled()) {
@@ -121,6 +124,7 @@ public class PushController {
    /** Get enable status of service
    * @param strict check all status
    **/
+   @RequiresPermission(value = Constants.permissions.READ_SETTINGS)
     public boolean isEnable (boolean strict) {
         enforceConnected();
         try {
@@ -130,6 +134,7 @@ public class PushController {
         }
     }
 
+    @RequiresPermission(value = Constants.permissions.READ_SETTINGS)
     public int getVersionCode () {
         enforceConnected();
         try {
@@ -139,6 +144,7 @@ public class PushController {
         }
     }
 
+    @RequiresPermission(value = Constants.permissions.WRITE_SETTINGS)
     public void setEnable (boolean enable) {
         enforceConnected();
         try {
@@ -148,6 +154,7 @@ public class PushController {
         }
     }
 
+    @RequiresPermission(value = Constants.permissions.READ_SETTINGS)
     public int checkOp (int op) {
         enforceConnected();
         try {

@@ -1,3 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    android:sharedUserId="android.uid.system">
+    android:sharedUserId="android.uid.system"
+    coreApp="true">
+    <!-- TODO: coreApp: multi-user support in Manager -->
+    <application
+        android:persistent="true" />
 </manifest>

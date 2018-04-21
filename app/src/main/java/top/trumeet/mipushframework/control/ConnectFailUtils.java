@@ -2,6 +2,8 @@ package top.trumeet.mipushframework.control;
 
 import android.content.Context;
 
+import top.trumeet.common.plugin.PlatformUtils;
+import top.trumeet.common.utils.Utils;
 import top.trumeet.mipush.BuildConfig;
 import top.trumeet.mipush.R;
 
@@ -18,6 +20,10 @@ public class ConnectFailUtils {
     private static final String SERVICE_APK_URL =
             "https://github.com/Trumeet/MiPushFramework/releases/download/" + BuildConfig.GIT_TAG +
                     "/xmsf_service.apk";
+
+    private static final String SERVICE_PLATFORM_APK_URL =
+            "https://github.com/Trumeet/MiPushFramework/releases/download/" + BuildConfig.GIT_TAG +
+                    "/xmsf_service_platform.apk";
 
     public static CharSequence getTitle (Context context,
                                          @OnConnectStatusChangedListener.FailReason int reason) {
@@ -41,8 +47,14 @@ public class ConnectFailUtils {
                 return getString(R.string.connect_fail_text_unknown, context,
                         getString(top.trumeet.common.R.string.push_service_name, context));
             case FAIL_REASON_NOT_INSTALLED:
-                return getString(R.string.connect_fail_text_not_installed, context,
+                String original = context.getString(R.string.connect_fail_text_not_installed,
                         SERVICE_APK_URL);
+                if (PlatformUtils.isPlatformModeSupported()) {
+                    String platformModeNotice = context.getString(R.string.platform_not_installed,
+                            SERVICE_PLATFORM_APK_URL);
+                    original += platformModeNotice;
+                }
+                return Utils.toHtml(original);
             case FAIL_REASON_LOW_VERSION:
                 return getString(R.string.connect_fail_text_low_version, context,
                         String.valueOf(serviceVersionCode),

@@ -10,4 +10,6 @@
 
     <string name="event_command">Receive command</string>
 
+    <!-- Permissions -->
+    <string name="request_permission">We need %1$s to work</string>
 </resources>

@@ -35,7 +35,7 @@ public class ControlService extends Service {
 
         @Override
         public boolean isEnable(boolean strict) throws RemoteException {
-            enforcePermission(Constants.permissions.GET_PUSH_ENABLE_SETTING);
+            enforcePermission(Constants.permissions.READ_SETTINGS);
             return strict ?
                     PushControllerUtils.isAllEnable(ControlService.this)
                     :
@@ -46,19 +46,19 @@ public class ControlService extends Service {
 
         @Override
         public void setEnable(boolean enable) throws RemoteException {
-            enforcePermission(Constants.permissions.CHANGE_PUSH_ENABLE_SETTING);
+            enforcePermission(Constants.permissions.WRITE_SETTINGS);
             PushControllerUtils.setAllEnable(enable, ControlService.this);
         }
 
         @Override
         public int getVersionCode() throws RemoteException {
-            enforcePermission(Constants.permissions.GET_VERSION);
+            enforcePermission(Constants.permissions.READ_SETTINGS);
             return Constants.PUSH_SERVICE_VERSION_CODE;
         }
 
         @Override
         public int checkOp(int op) throws RemoteException {
-            if (!checkPermission(Constants.permissions.CHECK_APP_OPS_STATUS))
+            if (!checkPermission(Constants.permissions.READ_SETTINGS))
             enforcePermission(ManifestOverride.permission.GET_APP_OPS_STATS);
             int mode = AppOpsManagerOverride.checkOpNoThrow(
                     op
