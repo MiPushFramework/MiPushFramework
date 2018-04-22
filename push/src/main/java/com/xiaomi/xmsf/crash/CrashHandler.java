@@ -20,6 +20,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(Thread t, Throwable e) {
         Log4a.e("Crash", t.toString() + ": Application crashed", e);
+        Log4a.flush();
         if (mBase != null) mBase.uncaughtException(t, e);
     }
 }
