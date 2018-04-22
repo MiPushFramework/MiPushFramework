@@ -9,6 +9,7 @@ import top.trumeet.mipush.R;
 
 import static top.trumeet.common.utils.Utils.getString;
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_LOW_VERSION;
+import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_MIUI;
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_NOT_INSTALLED;
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_UNKNOWN;
 
@@ -34,6 +35,8 @@ public class ConnectFailUtils {
                 return getString(R.string.connect_fail_title_low_version, context);
             case FAIL_REASON_NOT_INSTALLED:
                 return getString(R.string.connect_fail_title_not_installed, context);
+            case FAIL_REASON_MIUI:
+                return getString(R.string.connect_fail_title_rom, context);
             default:
                 return "";
         }
@@ -59,6 +62,8 @@ public class ConnectFailUtils {
                 return getString(R.string.connect_fail_text_low_version, context,
                         String.valueOf(serviceVersionCode),
                         SERVICE_APK_URL);
+            case FAIL_REASON_MIUI:
+                return getString(R.string.connect_fail_text_is_miui, context);
             default:
                 return "";
         }

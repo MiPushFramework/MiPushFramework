@@ -18,11 +18,13 @@ import com.android.setupwizardlib.SetupWizardLayout;
 import top.trumeet.common.Constants;
 import top.trumeet.common.push.PushController;
 import top.trumeet.common.utils.Utils;
+import top.trumeet.common.utils.rom.RomUtils;
 import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.control.ConnectFailUtils;
 import top.trumeet.mipushframework.control.OnConnectStatusChangedListener;
 
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_LOW_VERSION;
+import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_MIUI;
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_NOT_INSTALLED;
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_UNKNOWN;
 
@@ -103,6 +105,9 @@ public abstract class PushControllerWizardActivity extends Activity {
         @Override
         protected Pair<Boolean, Integer> doInBackground(Void... voids) {
             SystemClock.sleep(1000);
+            if (RomUtils.isMiui()) {
+                return new Pair<>(false, FAIL_REASON_MIUI);
+            }
             if (mController == null || !mController.isConnected()) {
                 mController = PushController.getConnected(PushControllerWizardActivity.this,
                         new PushController.OnReadyListener() {

@@ -22,6 +22,7 @@ import top.trumeet.common.plugin.PlatformUtils;
 import top.trumeet.common.push.PushController;
 import top.trumeet.common.utils.PermissionUtils;
 import top.trumeet.common.utils.Utils;
+import top.trumeet.common.utils.rom.RomUtils;
 import top.trumeet.common.widget.LinkAlertDialog;
 import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.control.ConnectFailUtils;
@@ -29,6 +30,7 @@ import top.trumeet.mipushframework.control.OnConnectStatusChangedListener;
 
 import static top.trumeet.mipush.BuildConfig.DEBUG;
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_LOW_VERSION;
+import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_MIUI;
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_NOT_INSTALLED;
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_UNKNOWN;
 
@@ -114,6 +116,9 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
 
         @Override
         protected Pair<Boolean, Integer> doInBackground(Void... voids) {
+            if (RomUtils.isMiui()) {
+                return new Pair<>(false, FAIL_REASON_MIUI);
+            }
             if (mController == null || !mController.isConnected()) {
                 mController = PushController.getConnected(MainActivity.this,
                         new PushController.OnReadyListener() {
