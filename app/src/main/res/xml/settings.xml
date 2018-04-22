@@ -48,6 +48,12 @@
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:title="@string/pref_title_access_mode" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="DebugIcon"
+            android:title="@string/settings_debug_icon" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

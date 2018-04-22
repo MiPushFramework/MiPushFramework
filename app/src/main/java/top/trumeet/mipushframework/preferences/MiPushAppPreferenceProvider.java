@@ -2,6 +2,9 @@ package top.trumeet.mipushframework.preferences;
 
 import com.crossbowffs.remotepreferences.RemotePreferenceProvider;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import top.trumeet.common.utils.PreferencesUtils;
 
 public class MiPushAppPreferenceProvider extends RemotePreferenceProvider {
@@ -14,11 +17,7 @@ public class MiPushAppPreferenceProvider extends RemotePreferenceProvider {
         if (write) {
             return false;
         }
-
-        if (!"com.xiaomi.xmsf".equals(getCallingPackage())) {
-            return false;
-        }
-
+        
         return true;
     }
 }

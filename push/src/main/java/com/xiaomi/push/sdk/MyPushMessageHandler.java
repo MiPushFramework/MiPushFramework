@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
 import com.crossbowffs.remotepreferences.RemotePreferenceAccessException;
-import com.crossbowffs.remotepreferences.RemotePreferences;
 import com.xiaomi.helper.ITopActivity;
 import com.xiaomi.helper.TopActivityFactory;
 import com.xiaomi.push.service.MyClientEventDispatcher;
@@ -40,8 +39,7 @@ public class MyPushMessageHandler extends IntentService {
         ITopActivity iTopActivity = null; //now we just check every time
 
         if (iTopActivity == null) {
-            SharedPreferences prefs = new RemotePreferences(this,
-                    PreferencesUtils.Authority, PreferencesUtils.MainPrefs, true);
+            SharedPreferences prefs = PreferencesUtils.getPreferences(this);
 
             int accessMode = 0;
             try {
