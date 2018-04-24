@@ -3,7 +3,7 @@
     package="top.trumeet.mipush"  >
 
     <uses-permission android:name="top.trumeet.mipush.permissions.READ_SETTINGS" />
-    <uses-permission android:name="top.trumeet.mipush.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="top.trumeet.mipush.permissions.WRITE_SETTINGS" />
     <uses-permission android:name="top.trumeet.mipush.permissions.BIND" />
 
     <application android:theme="@style/AppTheme"

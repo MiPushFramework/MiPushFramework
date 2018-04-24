@@ -25,7 +25,7 @@
     <permission android:name="top.trumeet.mipush.permissions.BIND"
         android:protectionLevel="normal" />
     <uses-permission android:name="top.trumeet.mipush.permissions.READ_SETTINGS" />
-    <uses-permission android:name="top.trumeet.mipush.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="top.trumeet.mipush.permissions.WRITE_SETTINGS" />
 
     <application
         android:name=".XmsfApp"
