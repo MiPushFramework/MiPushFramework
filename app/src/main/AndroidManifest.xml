@@ -53,5 +53,11 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="${fabricKey}" />
+
+
+        <provider
+            android:name="top.trumeet.mipushframework.preferences.MiPushAppPreferenceProvider"
+            android:authorities="top.trumeet.mipushframework.preferences"
+            android:exported="true"/>
     </application>
 </manifest>

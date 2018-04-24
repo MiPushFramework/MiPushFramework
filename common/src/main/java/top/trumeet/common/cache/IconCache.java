@@ -9,6 +9,10 @@ import top.trumeet.common.utils.ImgUtils;
 
 import static top.trumeet.common.utils.ImgUtils.drawableToBitmap;
 
+/**
+ * Author: TimothyZhang023
+ * Icon Cache
+ */
 public class IconCache {
 
     private volatile static IconCache cache = null;
@@ -31,36 +35,48 @@ public class IconCache {
         return cache;
     }
 
-    public Bitmap getRawIconBitmap(Context ctx, String pkg) {
-        String cacheKey = "raw_" + pkg;
-        Bitmap iconBitmap = mIconMemoryCaches.get(cacheKey);
-        if (iconBitmap == null) {
-            try {
-                Drawable icon = ctx.getPackageManager().getApplicationIcon(pkg);
-                iconBitmap = drawableToBitmap(icon);
-            } catch (Exception ignored) {
+    public Bitmap getRawIconBitmap(final Context ctx, final String pkg) {
+        return new CacheAspect<Bitmap>(mIconMemoryCaches) {
+            @Override
+            Bitmap gen() {
+                try {
+                    Drawable icon = ctx.getPackageManager().getApplicationIcon(pkg);
+                    return drawableToBitmap(icon);
+                } catch (Exception ignored) {
+                    return null;
+                }
             }
-
-            if (iconBitmap != null) {
-                mIconMemoryCaches.put(cacheKey, iconBitmap);
-            }
-        }
-        return iconBitmap;
+        }.get("raw_" + pkg);
     }
 
-
-    public Bitmap getWhiteIconBitmap(Context ctx, String pkg) {
-        String cacheKey = "white_" + pkg;
-        Bitmap whiteBitmap = mIconMemoryCaches.get(cacheKey);
-        if (whiteBitmap == null) {
-            Bitmap rawIconBitmap = getRawIconBitmap(ctx, pkg);
-            if (rawIconBitmap != null) {
-                whiteBitmap = ImgUtils.convertToTransparentAndWhite(rawIconBitmap);
-                mIconMemoryCaches.put(cacheKey, whiteBitmap);
+    public Bitmap getWhiteIconBitmap(final Context ctx, final String pkg) {
+        return new CacheAspect<Bitmap>(mIconMemoryCaches) {
+            @Override
+            Bitmap gen() {
+                Bitmap rawIconBitmap = getRawIconBitmap(ctx, pkg);
+                return rawIconBitmap == null ? null : ImgUtils.convertToTransparentAndWhite(rawIconBitmap);
             }
-        }
-        return whiteBitmap;
+        }.get("white_" + pkg);
     }
 
+    abstract class CacheAspect<T> {
+        private LruCache<String, T> cache;
+        CacheAspect(LruCache<String, T> cache) {
+            this.cache = cache;
+        }
+
+        public T get(String cacheKey) {
+            T cached = cache.get(cacheKey);
+            if (cached == null) {
+                cached = gen();
+                if (cached != null) {
+                    cache.put(cacheKey, cached);
+                }
+            }
+            return cached;
+        }
+
+        abstract T gen();
+    }
 
 }

@@ -34,6 +34,8 @@ public abstract class BaseAppsBinder<T> extends ItemViewBinder<T, BaseAppsBinder
 
     private LruCache<String, Drawable> mIconMemoryCaches;
 
+    public static boolean debugIcon = false;
+
     public BaseAppsBinder() {
         super();
         int maxMemory = (int) Runtime.getRuntime().maxMemory();
@@ -113,7 +115,7 @@ public abstract class BaseAppsBinder<T> extends ItemViewBinder<T, BaseAppsBinder
                 icon = ContextCompat.getDrawable(context,
                         android.R.mipmap.sym_def_app_icon);
             } else {
-                if (BuildConfig.DEBUG) {
+                if (debugIcon) {
                     Bitmap whiteIconBitmap = IconCache.getInstance().getWhiteIconBitmap(context, pkg);
                     if (whiteIconBitmap != null) {
                         icon = new BitmapDrawable(context.getResources(), whiteIconBitmap);
@@ -142,7 +144,7 @@ public abstract class BaseAppsBinder<T> extends ItemViewBinder<T, BaseAppsBinder
         protected void onPostExecute(Drawable drawable) {
             if (imageView != null) {
                 imageView.setImageDrawable(drawable);
-                if (BuildConfig.DEBUG) {
+                if (debugIcon) {
                     imageView.setBackgroundColor(Color.BLACK);
                 }
             }

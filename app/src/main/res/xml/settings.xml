@@ -39,6 +39,24 @@
         </Preference>
     </PreferenceCategory>
     <PreferenceCategory
+        android:title="@string/settings_options">
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/pref_title_access_mode_list_titles"
+            android:entryValues="@array/pref_title_access_mode_list_values"
+            android:key="AccessMode"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/pref_title_access_mode" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="DebugIcon"
+            android:title="@string/settings_debug_icon" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/settings_debug">
         <Preference
             android:key="key_get_log"
