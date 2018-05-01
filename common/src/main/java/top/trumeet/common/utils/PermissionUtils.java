@@ -66,7 +66,8 @@ public class PermissionUtils {
                 }
             }
         }
-        requestPermissions(activity, needRequest.toArray(new String[needRequest.size()]));
+        if (needRequest.size() > 0)
+            requestPermissions(activity, needRequest.toArray(new String[needRequest.size()]));
     }
 
     private static void runCallback (final PermissionGrantListener listener, final boolean granted
