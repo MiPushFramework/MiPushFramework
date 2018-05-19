@@ -1,5 +1,7 @@
 package top.trumeet.mipushframework.register;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CancellationSignal;
@@ -13,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.drakeet.multitype.Items;
@@ -24,6 +27,7 @@ import static top.trumeet.common.Constants.TAG;
 
 /**
  * Created by Trumeet on 2017/8/26.
+ *
  * @author Trumeet
  */
 
@@ -32,7 +36,7 @@ public class RegisteredApplicationFragment extends Fragment {
     private LoadTask mLoadTask;
 
     @Override
-    public void onCreate (Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAdapter = new MultiTypeAdapter();
         mAdapter.register(RegisteredApplication.class, new RegisteredApplicationBinder());
@@ -53,21 +57,21 @@ public class RegisteredApplicationFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated (View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         loadPage();
     }
 
-    private void loadPage () {
+    private void loadPage() {
         Log.d(TAG, "loadPage");
         if (mLoadTask != null && !mLoadTask.isCancelled())
             return;
-        mLoadTask = new LoadTask();
+        mLoadTask = new LoadTask(getActivity().getApplicationContext());
         mLoadTask.execute();
     }
 
     @Override
-    public void onDetach () {
+    public void onDetach() {
         if (mLoadTask != null && !mLoadTask.isCancelled()) {
             mLoadTask.cancel(true);
             mLoadTask = null;
@@ -78,15 +82,30 @@ public class RegisteredApplicationFragment extends Fragment {
     private class LoadTask extends AsyncTask<Integer, Void, List<RegisteredApplication>> {
         private CancellationSignal mSignal;
 
+        public LoadTask(Context context) {
+            this.context = context;
+        }
+
+        private Context context;
+
         @Override
         protected List<RegisteredApplication> doInBackground(Integer... integers) {
             mSignal = new CancellationSignal();
-            return RegisteredApplicationDb.getList(getActivity(),
-                    null, mSignal);
+
+            List<RegisteredApplication> res = new ArrayList<>();
+            for (RegisteredApplication application : RegisteredApplicationDb.getList(getActivity(), null, mSignal)) {
+                try {
+                    context.getPackageManager().getApplicationInfo(application.getPackageName(), 0);
+                    res.add(application);
+                } catch (PackageManager.NameNotFoundException ignore) {
+                }
+            }
+
+            return res;
         }
 
         @Override
-        protected void onPostExecute (List<RegisteredApplication> list) {
+        protected void onPostExecute(List<RegisteredApplication> list) {
             int start = mAdapter.getItemCount();
             Items items = new Items(mAdapter.getItems());
             items.addAll(list);
@@ -95,7 +114,7 @@ public class RegisteredApplicationFragment extends Fragment {
         }
 
         @Override
-        protected void onCancelled () {
+        protected void onCancelled() {
             if (mSignal != null) {
                 if (!mSignal.isCanceled())
                     mSignal.cancel();
