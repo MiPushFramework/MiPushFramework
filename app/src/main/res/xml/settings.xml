@@ -54,6 +54,11 @@
             android:key="DebugIcon"
             android:title="@string/settings_debug_icon" />
 
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="AutoRegister"
+            android:title="@string/settings_auto_register" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

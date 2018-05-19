@@ -3,7 +3,9 @@ package com.xiaomi.xmsf.push.service;
 import android.app.IntentService;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.SharedPreferences;
 
+import com.crossbowffs.remotepreferences.RemotePreferenceAccessException;
 import com.xiaomi.push.service.PushServiceMain;
 import com.xiaomi.xmsf.XmsfApp;
 import com.xiaomi.xmsf.push.auth.AuthActivity;
@@ -16,15 +18,26 @@ import top.trumeet.common.db.EventDb;
 import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.event.Event;
 import top.trumeet.common.register.RegisteredApplication;
+import top.trumeet.common.utils.PreferencesUtils;
 
 public class XMPushService extends IntentService {
     private static final String TAG = "XMPushService Bridge";
-    
+
+    class Conf {
+        boolean autoRegister = false;
+    }
+
+    private Conf conf;
+
     public XMPushService() {
         super("XMPushService Bridge");
     }
 
     protected void onHandleIntent(Intent intent) {
+        if (conf == null) {
+            conf = buildConf();
+        }
+
         Log4a.d(TAG, "onHandleIntent -> A application want to register push");
         String pkg = intent.getStringExtra(Constants.EXTRA_MI_PUSH_PACKAGE);
         if (pkg == null) {
@@ -47,11 +60,15 @@ public class XMPushService extends IntentService {
         } else {
             RegisteredApplication application = RegisteredApplicationDb
                     .registerApplication(pkg,
-                    true, this, null);
+                            true, this, null);
             if (application.getType() == RegisteredApplication.Type.DENY) {
                 Log4a.w(TAG, "Denied register request: " + pkg);
                 result = Event.ResultType.DENY_USER;
             } else {
+                if (conf.autoRegister && application.getType() == RegisteredApplication.Type.ASK) {
+                    application.setType(RegisteredApplication.Type.ALLOW);
+                }
+
                 if (application.getType() == RegisteredApplication.Type.ASK) {
                     if (!register) {
                         return;
@@ -80,6 +97,17 @@ public class XMPushService extends IntentService {
                 }
             }
         }
-        if (register) EventDb.insertEvent(result, new top.trumeet.common.event.type.RegistrationType(null, pkg), this);
+        if (register)
+            EventDb.insertEvent(result, new top.trumeet.common.event.type.RegistrationType(null, pkg), this);
+    }
+
+    private Conf buildConf() {
+        Conf tmp = new Conf();
+        try {
+            SharedPreferences prefs = PreferencesUtils.getPreferences(this);
+            tmp.autoRegister = prefs.getBoolean(PreferencesUtils.KeyAutoRegister, true);
+        } catch (RemotePreferenceAccessException ignored) {
+        }
+        return tmp;
     }
 }
