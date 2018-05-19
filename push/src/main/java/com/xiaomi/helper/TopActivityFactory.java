@@ -2,6 +2,7 @@ package com.xiaomi.helper;
 
 import com.xiaomi.helper.impl.ActivityAccessibilityImpl;
 import com.xiaomi.helper.impl.ActivityUsageStatsImpl;
+import com.xiaomi.helper.impl.FakeImpl;
 
 /**
  * Created by zts1993 on 2018/2/18.
@@ -15,8 +16,7 @@ public class TopActivityFactory {
         } else if (accessMode == AccessMode.ACCESSIBILITY) {
             return new ActivityAccessibilityImpl();
         } else {
-            return null; //should never be here
-
+            return new FakeImpl(); //should never be here
         }
 
     }
