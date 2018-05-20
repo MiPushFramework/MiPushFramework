@@ -152,6 +152,7 @@
     <string name="settings_debug">诊断</string>
     <string name="settings_get_log">获取日志</string>
     <string name="settings_get_log_summary">点按分享日志，请在需要的时候随 Issues 一起提交。</string>
+    <string name="settings_clear_log">清空日志</string>
 
     <!-- Recent Activity -->
     <string name="recent_activity_view">查看近期活动</string>

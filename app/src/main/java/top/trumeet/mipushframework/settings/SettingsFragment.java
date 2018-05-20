@@ -33,9 +33,7 @@ public class SettingsFragment extends PreferenceFragment {
         mCheckServicePreference = getPreferenceScreen()
                 .findPreference("key_check_service");
 
-        Preference getLogPrefernece = getPreferenceScreen()
-                .findPreference("key_get_log");
-        getLogPrefernece.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+       setPreferenceOnclick("key_get_log", new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 startActivity(new Intent()
@@ -44,6 +42,25 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             }
         });
+
+       setPreferenceOnclick("key_clear_log", new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                startActivity(new Intent()
+                .setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
+                        Constants.CLEAR_LOG_COMPONENT_NAME)));
+                return true;
+            }
+        });
+
+
+
+
+    }
+
+    private void setPreferenceOnclick(String key, Preference.OnPreferenceClickListener onPreferenceClickListener) {
+          getPreferenceScreen().findPreference(key).setOnPreferenceClickListener(onPreferenceClickListener);
+
     }
 
     @Override

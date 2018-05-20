@@ -20,12 +20,13 @@ import top.trumeet.common.Constants;
 
 /**
  * Created by Trumeet on 2017/8/28.
+ *
  * @author Trumeet
  */
 
 public class LogUtils {
 
-    public static void configureLog (Context context) {
+    public static void configureLog(Context context) {
         AndroidAppender.Builder androidBuild = new AndroidAppender.Builder();
 
         String log_path = getLogFile(context);
@@ -49,11 +50,32 @@ public class LogUtils {
         Log4a.setLogger(logger);
     }
 
-    public static String getLogFile (Context context) {
+    public static String getLogFile(Context context) {
         return context.getFilesDir().getAbsolutePath().concat(Constants.LOG_FILE);
     }
 
-    public static void shareFile (Context context) {
+    public static void clearLog(Context context) {
+        File file = new File(getLogFile(context));
+        if (!file.exists() || file.length() <= 0) {
+            Toast.makeText(context, R.string.log_none
+                    , Toast.LENGTH_SHORT).show();
+            return;
+        }
+        try {
+
+            java.io.FileWriter fileWriter = new java.io.FileWriter(file);
+            fileWriter.write("");
+            fileWriter.flush();
+            fileWriter.close();
+        } catch (IOException e) {
+            Toast.makeText(context, context.getString(R.string.common_err,
+                    e.getMessage()), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+        Toast.makeText(context, context.getString(R.string.log_clear_done), Toast.LENGTH_SHORT).show();
+    }
+
+    public static void shareFile(Context context) {
         File file = new File(getLogFile(context));
         if (!file.exists() || file.length() <= 0) {
             Toast.makeText(context, R.string.log_none

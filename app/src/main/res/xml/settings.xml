@@ -68,6 +68,11 @@
             android:title="@string/settings_get_log"
             android:summary="@string/settings_get_log_summary" />
         <Preference
+            android:key="key_clear_log"
+            android:title="@string/settings_clear_log" />
+
+
+        <Preference
             android:title="@string/helplib_title">
             <intent
                 android:targetPackage="top.trumeet.mipush"

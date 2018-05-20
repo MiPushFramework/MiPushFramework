@@ -97,6 +97,9 @@ public final class Constants {
     public static final String SHARE_LOG_COMPONENT_NAME =
             SERVICE_APP_NAME + ".ShareLogActivity";
 
+    public static final String CLEAR_LOG_COMPONENT_NAME =
+            SERVICE_APP_NAME + ".ClearLogActivity";
+
     public static final String REMOVE_DOZE_COMPONENT_NAME =
             SERVICE_APP_NAME + ".RemoveDozeActivity";
 
