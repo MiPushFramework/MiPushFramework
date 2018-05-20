@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.oasisfeng.condom.CondomOptions;
 import com.oasisfeng.condom.CondomProcess;
@@ -74,6 +75,23 @@ public class XmsfApp extends Application {
         super.onCreate();
 
         LogUtils.configureLog(this);
+
+        MyLog.setLogger(new LoggerInterface() {
+            private String mTag = "xiaomi-patched";
+
+            public void setTag(String tag) {
+                this.mTag = tag;
+            }
+
+            public void log(String content) {
+                Log.v(this.mTag, content);
+            }
+
+            public void log(String content, Throwable t) {
+                if (content.contains("isMIUI")) { return;}
+                Log.v(this.mTag, content, t);
+            }
+        });
 
         Thread.currentThread().setUncaughtExceptionHandler(
                 new CrashHandler(Thread.currentThread().getUncaughtExceptionHandler())

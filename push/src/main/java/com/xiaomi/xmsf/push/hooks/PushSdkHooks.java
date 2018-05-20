@@ -3,7 +3,7 @@ package com.xiaomi.xmsf.push.hooks;
 import android.os.Build;
 
 import com.taobao.android.dexposed.XC_MethodHook;
-import com.xiaomi.xmsf.push.hooks.impl.HookGetIsMIUI;
+import com.xiaomi.xmsf.push.hooks.impl.HookMIUIPushSdk;
 import com.xiaomi.xmsf.push.hooks.impl.HookPingReceiver;
 import com.xiaomi.xmsf.push.hooks.impl.HookPkgUninstallReceiver;
 
@@ -23,7 +23,7 @@ public class PushSdkHooks {
 
     static {
         //register
-        registeredHooks.add(new HookGetIsMIUI());
+        registeredHooks.add(new HookMIUIPushSdk());
         registeredHooks.add(new HookPkgUninstallReceiver());
         registeredHooks.add(new HookPingReceiver());
     }
@@ -47,7 +47,7 @@ public class PushSdkHooks {
         for (IHook unhook : registeredHooks) {
             try {
                 Log4a.i(TAG, "init hook : " + unhook.getClass().getSimpleName());
-                unhooks.add(unhook.fetchHook());
+                unhooks.addAll(unhook.fetchHook());
             } catch (Exception e) {
                 Log4a.e(TAG, "Hook failed", e);
             }

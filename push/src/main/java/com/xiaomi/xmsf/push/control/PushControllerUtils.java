@@ -8,25 +8,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Process;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 
 import com.oasisfeng.condom.CondomContext;
-import com.taobao.android.dexposed.DexposedBridge;
-import com.taobao.android.dexposed.XC_MethodHook;
-import com.taobao.android.dexposed.XC_MethodReplacement;
 import com.xiaomi.mipush.sdk.MiPushClient;
-import com.xiaomi.push.service.GeoFenceUtils;
 import com.xiaomi.push.service.PushServiceConstants;
 import com.xiaomi.push.service.PushServiceMain;
-import com.xiaomi.xmsf.push.hooks.PushSdkHooks;
 import com.xiaomi.xmsf.push.service.receivers.BootReceiver;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.common.Constants;
@@ -102,6 +92,16 @@ public class PushControllerUtils {
     public static void setServiceEnable(boolean enable, Context context) {
         if (enable && isAppMainProc(context)) {
             Log4a.d(TAG, "Starting...");
+
+            try {
+                Intent serviceIntent = new Intent(context, PushServiceMain.class);
+                serviceIntent.putExtra(PushServiceConstants.EXTRA_TIME_STAMP, System.currentTimeMillis());
+                serviceIntent.setAction(PushServiceConstants.ACTION_TIMER);
+                context.startService(serviceIntent);
+            } catch (Throwable e) {
+                Log4a.e(TAG, e);
+            }
+
             MiPushClient.registerPush(wrapContext(context), APP_ID, APP_KEY);
         } else {
             Log4a.d(TAG, "Stopping...");

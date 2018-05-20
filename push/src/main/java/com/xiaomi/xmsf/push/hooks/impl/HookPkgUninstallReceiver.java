@@ -12,6 +12,9 @@ import com.xiaomi.push.service.PushServiceConstants;
 import com.xiaomi.push.service.PushServiceMain;
 import com.xiaomi.xmsf.push.hooks.IHook;
 
+import java.util.Collections;
+import java.util.List;
+
 import me.pqpo.librarylog4a.Log4a;
 
 /**
@@ -22,8 +25,8 @@ public class HookPkgUninstallReceiver implements IHook {
     private static final String TAG = HookPkgUninstallReceiver.class.getSimpleName();
 
     @Override
-    public XC_MethodHook.Unhook fetchHook() throws Exception {
-        return DexposedBridge.findAndHookMethod(Class.forName("com.xiaomi.push.service.receivers.PkgUninstallReceiver"),
+    public List<XC_MethodHook.Unhook> fetchHook() throws Exception {
+        return Collections.singletonList(DexposedBridge.findAndHookMethod(Class.forName("com.xiaomi.push.service.receivers.PkgUninstallReceiver"),
                 "onReceive", Context.class, Intent.class, new XC_MethodReplacement() {
                     @Override
                     protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
@@ -48,6 +51,6 @@ public class HookPkgUninstallReceiver implements IHook {
                         }
                         return null;
                     }
-                });
+                }));
     }
 }
