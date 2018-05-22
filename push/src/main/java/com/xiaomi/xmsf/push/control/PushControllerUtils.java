@@ -90,8 +90,12 @@ public class PushControllerUtils {
      * @param context context param
      */
     public static void setServiceEnable(boolean enable, Context context) {
-        if (enable && isAppMainProc(context)) {
+        if (enable) {
             Log4a.d(TAG, "Starting...");
+
+            if (isAppMainProc(context)) {
+                MiPushClient.registerPush(wrapContext(context), APP_ID, APP_KEY);
+            }
 
             try {
                 Intent serviceIntent = new Intent(context, PushServiceMain.class);
@@ -102,7 +106,6 @@ public class PushControllerUtils {
                 Log4a.e(TAG, e);
             }
 
-            MiPushClient.registerPush(wrapContext(context), APP_ID, APP_KEY);
         } else {
             Log4a.d(TAG, "Stopping...");
             MiPushClient.unregisterPush(wrapContext(context));

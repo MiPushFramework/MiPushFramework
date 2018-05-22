@@ -3,6 +3,7 @@ package top.trumeet.common.push;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.DeadObjectException;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
@@ -129,6 +130,8 @@ public class PushController {
         enforceConnected();
         try {
             return getService().isEnable(strict);
+        } catch (DeadObjectException e) {
+            return false;
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
