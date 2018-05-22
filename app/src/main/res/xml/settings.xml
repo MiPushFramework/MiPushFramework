@@ -71,6 +71,10 @@
             android:key="key_clear_log"
             android:title="@string/settings_clear_log" />
 
+        <Preference
+            android:key="activity_keep_alive"
+            android:title="@string/settings_activity_keep_alive" />
+
 
         <Preference
             android:title="@string/helplib_title">

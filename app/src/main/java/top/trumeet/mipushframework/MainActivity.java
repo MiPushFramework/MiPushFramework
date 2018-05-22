@@ -76,15 +76,18 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
         super.onConfigurationChanged(newConfiguration);
     }
 
-    private void initRealView () {
-        mConnectProgress.setVisibility(View.GONE);
-        mConnectProgress = null;
+    private void initRealView() {
+        if (mConnectProgress != null) {
+            mConnectProgress.setVisibility(View.GONE);
+            mConnectProgress = null;
+        }
 
         mFragment = new MainFragment();
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(android.R.id.content, mFragment)
                 .commitAllowingStateLoss();
+
     }
 
     @Override

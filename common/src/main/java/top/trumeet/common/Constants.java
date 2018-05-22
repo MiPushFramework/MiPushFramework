@@ -100,6 +100,9 @@ public final class Constants {
     public static final String CLEAR_LOG_COMPONENT_NAME =
             SERVICE_APP_NAME + ".ClearLogActivity";
 
+    public static final String KEEPLIVE_COMPONENT_NAME =
+            SERVICE_APP_NAME + ".EmptyActivity";
+
     public static final String REMOVE_DOZE_COMPONENT_NAME =
             SERVICE_APP_NAME + ".RemoveDozeActivity";
 

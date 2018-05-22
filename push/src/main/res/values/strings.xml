@@ -30,4 +30,5 @@
 
     <string name="perm_change_settings">Manage push service</string>
     <string name="perm_read_settings">Get push settings</string>
+    <string name="title_activity_empty">EmptyActivity</string>
 </resources>

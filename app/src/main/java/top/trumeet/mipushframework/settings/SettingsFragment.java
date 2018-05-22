@@ -54,6 +54,18 @@ public class SettingsFragment extends PreferenceFragment {
         });
 
 
+       setPreferenceOnclick("activity_keep_alive", new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent().setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
+                        Constants.KEEPLIVE_COMPONENT_NAME));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                return true;
+            }
+        });
+
+
 
 
     }
