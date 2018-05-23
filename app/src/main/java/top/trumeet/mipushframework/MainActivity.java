@@ -32,6 +32,7 @@ import static top.trumeet.mipush.BuildConfig.DEBUG;
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_LOW_VERSION;
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_MIUI;
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_NOT_INSTALLED;
+import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_SECURITY_EXCEPTION;
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_UNKNOWN;
 
 /**
@@ -122,26 +123,33 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
             if (RomUtils.isMiui()) {
                 return new Pair<>(false, FAIL_REASON_MIUI);
             }
-            if (mController == null || !mController.isConnected()) {
-                mController = PushController.getConnected(MainActivity.this,
-                        new PushController.OnReadyListener() {
-                            @Override
-                            public void onDisconnected() {
-                                mFragment.onChange(OnConnectStatusChangedListener.DISCONNECTED);
-
-                                checkAndConnect();
-                            }
-                        });
+            if (!Utils.isServiceInstalled()) {
+                return new Pair<>(false, FAIL_REASON_NOT_INSTALLED);
             }
-            boolean success = mController.isConnected();
+
+            if (mController == null || !mController.isConnected()) {
+                try {
+                    mController = PushController.getConnected(MainActivity.this,
+                            new PushController.OnReadyListener() {
+                                @Override
+                                public void onDisconnected() {
+                                    mFragment.onChange(OnConnectStatusChangedListener.DISCONNECTED);
+
+                                    checkAndConnect();
+                                }
+                            });
+                } catch (java.lang.SecurityException e) {
+                    return new Pair<>(false, FAIL_REASON_SECURITY_EXCEPTION);
+                }
+            }
+            boolean success = (mController != null) && mController.isConnected();
             if (success) {
                 int version = mController.getVersionCode();
                 if (version != Constants.PUSH_SERVICE_VERSION_CODE)
                     return new Pair<>(false, FAIL_REASON_LOW_VERSION);
                 return new Pair<>(true, null);
             }
-            if (!Utils.isServiceInstalled())
-                return new Pair<>(false, FAIL_REASON_NOT_INSTALLED);
+
             return new Pair<>(false, FAIL_REASON_UNKNOWN);
         }
 
@@ -216,11 +224,12 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
     public void onResult (boolean granted, boolean blocked, String permName) {
         if (DEBUG) Log.d("MainActivity", "onResult -> " + granted + ", " + blocked + ", " + permName);
         if (Constants.permissions.WRITE_SETTINGS.equalsIgnoreCase(permName)) {
-            if (granted) {
+            String permDisplayName = PermissionUtils.getName(permName);
+
+            if (granted || (permDisplayName==null)) {
                 connect();
             } else {
-                Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission,
-                        PermissionUtils.getName(permName)), Toast.LENGTH_LONG)
+                Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission, permDisplayName), Toast.LENGTH_LONG)
                         .show();
                 if (blocked) {
                     Uri uri = Uri.fromParts("package", getPackageName(), null);

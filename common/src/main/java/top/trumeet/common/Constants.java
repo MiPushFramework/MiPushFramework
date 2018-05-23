@@ -111,4 +111,7 @@ public final class Constants {
         public static final String READ_SETTINGS = "top.trumeet.mipush.permissions.READ_SETTINGS";
         public static final String WRITE_SETTINGS = "top.trumeet.mipush.permissions.WRITE_SETTINGS";
     }
+    public static class permissions_old {
+        public static final String GET_VERSION = "top.trumeet.mipush.permissions.GET_VERSION";
+    }
 }

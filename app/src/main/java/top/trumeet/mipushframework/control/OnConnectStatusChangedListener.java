@@ -24,7 +24,7 @@ public interface OnConnectStatusChangedListener {
     @Retention(RetentionPolicy.CLASS)
     @Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE, ElementType.METHOD,
             ElementType.FIELD, ElementType.PARAMETER})
-    @IntDef({FAIL_REASON_NOT_INSTALLED, FAIL_REASON_UNKNOWN,
+    @IntDef({FAIL_REASON_NOT_INSTALLED, FAIL_REASON_UNKNOWN, FAIL_REASON_SECURITY_EXCEPTION,
     FAIL_REASON_LOW_VERSION, FAIL_REASON_MIUI})
     @interface FailReason {
     }
@@ -49,6 +49,8 @@ public interface OnConnectStatusChangedListener {
      * MIUI 用户
      */
     int FAIL_REASON_MIUI = 2;
+
+    int FAIL_REASON_SECURITY_EXCEPTION = 3;
 
     int CONNECTED = 0;
     int DISCONNECTED = 1;

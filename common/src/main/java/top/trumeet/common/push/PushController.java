@@ -137,7 +137,7 @@ public class PushController {
         }
     }
 
-    @RequiresPermission(value = Constants.permissions.READ_SETTINGS)
+    @RequiresPermission(anyOf = { Constants.permissions.READ_SETTINGS, Constants.permissions_old.GET_VERSION} )
     public int getVersionCode () {
         enforceConnected();
         try {

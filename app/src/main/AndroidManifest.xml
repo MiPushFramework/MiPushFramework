@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="top.trumeet.mipush"  >
 
+    <uses-permission android:name="top.trumeet.mipush.permissions.GET_VERSION" />
+
     <uses-permission android:name="top.trumeet.mipush.permissions.READ_SETTINGS" />
     <uses-permission android:name="top.trumeet.mipush.permissions.WRITE_SETTINGS" />
     <uses-permission android:name="top.trumeet.mipush.permissions.BIND" />

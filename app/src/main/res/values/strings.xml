@@ -199,4 +199,8 @@
     </string-array>
 
     <string name="help_article_can_not_receive_push">无法收到推送</string>
+    <string name="connect_fail_test_se"><![CDATA[
+    <b>权限不足通常是由于升级所致，请重再一次安装manager APP，注意不要清空数据。
+    寻找当前版本安装包 <a href="%1$s">点击这里</a> </b>
+    ]]></string>
 </resources>
