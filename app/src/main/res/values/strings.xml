@@ -149,11 +149,15 @@
     <string name="settings_auto_register">自动注册应用</string>
 
 
+    <string name="settings_enhance">增强</string>
     <string name="settings_debug">诊断</string>
     <string name="settings_get_log">获取日志</string>
     <string name="settings_get_log_summary">点按分享日志，请在需要的时候随 Issues 一起提交。</string>
     <string name="settings_clear_log">清空日志</string>
-    <string name="settings_activity_keep_alive">空白应用保活(打开然后锁定)</string>
+    <string name="settings_activity_keep_alive">后台服务保活</string>
+    <string name="settings_summary_keep_alive">很多ROM(比如一加)有自己的后台清理逻辑，但是可以通过应用切换界面锁定功能设置白名单。
+    点击之后，请在应用切换界面找到刚刚打开的后台服务保活界面并锁定。[注意]手机每次重启之后需要点击这里开启保活界面。
+    </string>
 
     <!-- Recent Activity -->
     <string name="recent_activity_view">查看近期活动</string>

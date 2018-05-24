@@ -30,5 +30,10 @@
 
     <string name="perm_change_settings">Manage push service</string>
     <string name="perm_read_settings">Get push settings</string>
-    <string name="title_activity_empty">EmptyActivity</string>
+    <string name="title_activity_keepalive">后台服务保活界面</string>
+    <string name="activity_rom_keepalive">
+        这是一个空白activity。
+        如果需要，请锁定它。
+        防止ROM停止MiPush后台服务。
+    </string>
 </resources>

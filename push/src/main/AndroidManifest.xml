@@ -191,7 +191,7 @@
 
         <activity
             android:name=".EmptyActivity"
-            android:label="@string/title_activity_empty"
+            android:label="@string/title_activity_keepalive"
             android:exported="true" />
 
     </application>

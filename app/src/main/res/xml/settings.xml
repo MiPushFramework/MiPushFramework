@@ -62,7 +62,18 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/settings_enhance">
+
+
+        <Preference
+            android:key="activity_keep_alive"
+            android:title="@string/settings_activity_keep_alive"
+            android:summary="@string/settings_summary_keep_alive"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/settings_debug">
+
         <Preference
             android:key="key_get_log"
             android:title="@string/settings_get_log"
@@ -70,11 +81,6 @@
         <Preference
             android:key="key_clear_log"
             android:title="@string/settings_clear_log" />
-
-        <Preference
-            android:key="activity_keep_alive"
-            android:title="@string/settings_activity_keep_alive" />
-
 
         <Preference
             android:title="@string/helplib_title">
