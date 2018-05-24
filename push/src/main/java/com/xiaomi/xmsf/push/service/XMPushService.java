@@ -67,6 +67,7 @@ public class XMPushService extends IntentService {
             } else {
                 if (conf.autoRegister && application.getType() == RegisteredApplication.Type.ASK) {
                     application.setType(RegisteredApplication.Type.ALLOW);
+                    RegisteredApplicationDb.update(application, this);
                 }
 
                 if (application.getType() == RegisteredApplication.Type.ASK) {
