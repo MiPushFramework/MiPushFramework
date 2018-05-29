@@ -13,6 +13,17 @@
         android:icon="@mipmap/ic_app"
         android:name="top.trumeet.mipushframework.MiPushFramework">
 
+        <meta-data
+            android:name="xposedmodule"
+            android:value="true" />
+        <meta-data
+            android:name="xposeddescription"
+            android:value="小米推送框架增强模块" />
+        <meta-data
+            android:name="xposedminversion"
+            android:value="53" />
+
+
         <activity android:name="top.trumeet.mipushframework.wizard.WelcomeActivity"
             android:theme="@style/AppTheme.Wizard"
             android:icon="@mipmap/ic_launcher">
