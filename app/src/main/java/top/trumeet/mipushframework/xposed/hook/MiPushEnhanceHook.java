@@ -1,6 +1,7 @@
 package top.trumeet.mipushframework.xposed.hook;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -31,10 +32,12 @@ public class MiPushEnhanceHook implements IXposedHookLoadPackage {
         blackList.add("android");
         blackList.add("de.robv.android.xposed.installer");
         blackList.add("com.xiaomi.xmsf");
+        blackList.add("com.tencent.mm");
 
         fakeMap.put("ro.miui.ui.version.name", "V9");
         fakeMap.put("ro.miui.ui.version.code", "7");
         fakeMap.put("ro.miui.version.code_time", "1527550858");
+        fakeMap.put("ro.miui.internal.storage", Environment.getExternalStorageState());
         fakeMap.put("ro.product.manufacturer", BRAND);
         fakeMap.put("ro.product.brand", BRAND);
         fakeMap.put("ro.product.name", BRAND);
