@@ -22,7 +22,7 @@ android {
             properties.load(project.rootProject.file('local.properties').newDataInputStream())
             fabricKey = properties.getProperty('FABRIC_KEY')
         }
-        manifestPlaceholders = [fabricKey:fabricKey != null ?
+        manifestPlaceholders = [fabricKey: fabricKey != null ?
                 fabricKey : System.getenv("FABRIC_KEY")]
         buildConfigField "String", "GIT_TAG", "\"" + rootProject.ext.gitTag + "\""
         // buildConfigField "boolean", "SNAPSHOT", "\"" + rootProject.ext.snapshot + "\""
@@ -103,8 +103,14 @@ dependencies {
         transitive = true
     }
     // Help
-    implementation ('moe.shizuku.support:helplib:1.1.0', {
+    implementation('moe.shizuku.support:helplib:1.1.0', {
         exclude group: 'moe.shizuku.preference'
         exclude group: 'com.android.support'
     })
+
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.alibaba:fastjson:1.1.54.android'
+
+    provided 'de.robv.android.xposed:api:82'
+
 }
