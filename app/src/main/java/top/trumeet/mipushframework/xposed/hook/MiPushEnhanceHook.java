@@ -37,7 +37,7 @@ public class MiPushEnhanceHook implements IXposedHookLoadPackage {
         fakeMap.put("ro.miui.ui.version.name", "V9");
         fakeMap.put("ro.miui.ui.version.code", "7");
         fakeMap.put("ro.miui.version.code_time", "1527550858");
-        fakeMap.put("ro.miui.internal.storage", Environment.getExternalStorageState());
+        fakeMap.put("ro.miui.internal.storage", "/sdcard/");
         fakeMap.put("ro.product.manufacturer", BRAND);
         fakeMap.put("ro.product.brand", BRAND);
         fakeMap.put("ro.product.name", BRAND);
