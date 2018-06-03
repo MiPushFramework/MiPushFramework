@@ -60,11 +60,11 @@ public class ConnectFailUtils {
             case FAIL_REASON_NOT_INSTALLED:
                 String original = context.getString(R.string.connect_fail_text_not_installed,
                         SERVICE_APK_URL);
-                if (PlatformUtils.isPlatformModeSupported()) {
-                    String platformModeNotice = context.getString(R.string.platform_not_installed,
-                            SERVICE_PLATFORM_APK_URL);
-                    original += platformModeNotice;
-                }
+//                if (PlatformUtils.isPlatformModeSupported()) {
+//                    String platformModeNotice = context.getString(R.string.platform_not_installed,
+//                            SERVICE_PLATFORM_APK_URL);
+//                    original += platformModeNotice;
+//                }
                 return Utils.toHtml(original);
             case FAIL_REASON_LOW_VERSION:
                 return getString(R.string.connect_fail_text_low_version, context,
