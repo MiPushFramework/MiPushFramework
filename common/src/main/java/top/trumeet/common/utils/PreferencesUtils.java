@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 
 import com.crossbowffs.remotepreferences.RemotePreferences;
 
+/**
+ * @author zts
+ */
 public class PreferencesUtils {
 
     public static String Authority = "top.trumeet.mipushframework.preferences";

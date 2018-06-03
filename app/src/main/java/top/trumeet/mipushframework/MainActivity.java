@@ -130,7 +130,7 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
             if (mController == null || !mController.isConnected()) {
                 try {
                     mController = PushController.getConnected(MainActivity.this,
-                            new PushController.OnReadyListener() {
+                            new PushController.AbstractOnReadyListener() {
                                 @Override
                                 public void onDisconnected() {
                                     mFragment.onChange(OnConnectStatusChangedListener.DISCONNECTED);

@@ -14,6 +14,7 @@ import java.util.Collections;
  * https://www.cnblogs.com/Imageshop/p/3307308.html
  * AND
  * http://imagej.net/Auto_Threshold
+ * @author zts
  */
 public class ImgUtils {
 

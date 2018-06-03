@@ -1,6 +1,7 @@
 # MiPushFramework
 
 在任何非 MIUI 设备上体验小米系统级推送。
+[![Build Status](https://travis-ci.org/Trumeet/MiPushFramework.svg?branch=master)](https://travis-ci.org/Trumeet/MiPushFramework)
 
 ![](https://raw.githubusercontent.com/Trumeet/MiPushFramework/master/art/screenshot.png)
 ![](https://raw.githubusercontent.com/Trumeet/MiPushFramework/master/art/tab_events.jpg)
@@ -81,7 +82,8 @@
 
 ## 参与项目
 
-欢迎提交 PR、Issues 帮助这个项目更好。
+* 欢迎提交 PR、Issues 帮助这个项目更好。
+* 代码规范: Alibaba Java Coding Guidelines
 
 ## 已知问题
 
