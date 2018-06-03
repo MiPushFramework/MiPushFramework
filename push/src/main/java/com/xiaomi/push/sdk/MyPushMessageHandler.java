@@ -27,7 +27,7 @@ import top.trumeet.common.utils.PreferencesUtils;
 public class MyPushMessageHandler extends IntentService {
     private static final String TAG = "MyPushMessageHandler";
 
-    private static final int START_SERVICE_DELAY = 8000;
+    private static final int START_SERVICE_DELAY = 5000;
     private static final int APP_CHECK_FRONT_MAX_RETRY = 6;
     private static final int APP_CHECK_SLEEP_DURATION_MS = 500;
     private static final int APP_CHECK_SLEEP_MAX_TIMEOUT_MS = APP_CHECK_FRONT_MAX_RETRY * APP_CHECK_SLEEP_DURATION_MS;
@@ -78,11 +78,11 @@ public class MyPushMessageHandler extends IntentService {
 
             startService(localIntent);
 
-            Thread.sleep(START_SERVICE_DELAY);
-            startService(localIntent);
-
             int id = MyClientEventDispatcher.getNotificationId(container);
             ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(id);
+
+            Thread.sleep(START_SERVICE_DELAY);
+            startService(localIntent);
 
         } catch (Exception e) {
             Log4a.e(TAG, e.getLocalizedMessage(), e);
