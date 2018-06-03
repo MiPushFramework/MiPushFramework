@@ -11,7 +11,9 @@ import top.trumeet.common.Constants;
 import top.trumeet.common.utils.Utils;
 
 /**
- * Created by Trumeet on 2018/4/21.
+ *
+ * @author Trumeet
+ * @date 2018/4/21
  */
 
 public class PlatformUtils {
