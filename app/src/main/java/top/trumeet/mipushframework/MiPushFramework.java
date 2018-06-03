@@ -26,18 +26,22 @@ public class MiPushFramework extends Application {
             Fabric.with(fabric);
         }
 
-        {
-            //debugIcon init
-            try {
-                SharedPreferences prefs = PreferencesUtils.getPreferences(this);
-                BaseAppsBinder.debugIcon  = prefs.getBoolean(PreferencesUtils.KeyDebugIcon, false);
-            } catch (RemotePreferenceAccessException e) {
-            }
-        }
+        init();
+
     }
 
     @Override
     public void onTerminate() {
         super.onTerminate();
     }
+
+    private void init() {
+        //debugIcon init
+        try {
+            SharedPreferences prefs = PreferencesUtils.getPreferences(this);
+            BaseAppsBinder.debugIcon = prefs.getBoolean(PreferencesUtils.KeyDebugIcon, false);
+        } catch (RemotePreferenceAccessException e) {
+        }
+    }
+
 }

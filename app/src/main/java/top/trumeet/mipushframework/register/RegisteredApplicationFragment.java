@@ -1,12 +1,14 @@
 package top.trumeet.mipushframework.register;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,13 +18,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
 import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.register.RegisteredApplication;
 
+import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 import static top.trumeet.common.Constants.TAG;
 
 /**
@@ -31,7 +37,8 @@ import static top.trumeet.common.Constants.TAG;
  * @author Trumeet
  */
 
-public class RegisteredApplicationFragment extends Fragment {
+public class RegisteredApplicationFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+
     private MultiTypeAdapter mAdapter;
     private LoadTask mLoadTask;
 
@@ -41,6 +48,8 @@ public class RegisteredApplicationFragment extends Fragment {
         mAdapter = new MultiTypeAdapter();
         mAdapter.register(RegisteredApplication.class, new RegisteredApplicationBinder());
     }
+
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Nullable
     @Override
@@ -52,8 +61,14 @@ public class RegisteredApplicationFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(view.getContext(),
                 LinearLayoutManager.VERTICAL);
         view.addItemDecoration(dividerItemDecoration);
+
+
+        swipeRefreshLayout = new SwipeRefreshLayout(getActivity());
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.addView(view);
+
         loadPage();
-        return view;
+        return swipeRefreshLayout;
     }
 
     @Override
@@ -79,6 +94,12 @@ public class RegisteredApplicationFragment extends Fragment {
         super.onDetach();
     }
 
+    @Override
+    public void onRefresh() {
+        loadPage();
+
+    }
+
     private class LoadTask extends AsyncTask<Integer, Void, List<RegisteredApplication>> {
         private CancellationSignal mSignal;
 
@@ -92,12 +113,17 @@ public class RegisteredApplicationFragment extends Fragment {
         protected List<RegisteredApplication> doInBackground(Integer... integers) {
             mSignal = new CancellationSignal();
 
+            List<ApplicationInfo> installedApplications = context.getPackageManager().getInstalledApplications(GET_UNINSTALLED_PACKAGES);
+
+            Map<String, ApplicationInfo> applicationInfoMap = new HashMap<>();
+            for (ApplicationInfo installedApplication : installedApplications) {
+                applicationInfoMap.put(installedApplication.packageName, installedApplication);
+            }
+
             List<RegisteredApplication> res = new ArrayList<>();
             for (RegisteredApplication application : RegisteredApplicationDb.getList(getActivity(), null, mSignal)) {
-                try {
-                    context.getPackageManager().getApplicationInfo(application.getPackageName(), 0);
+                if (applicationInfoMap.containsKey(application.getPackageName())) {
                     res.add(application);
-                } catch (PackageManager.NameNotFoundException ignore) {
                 }
             }
 
@@ -106,11 +132,17 @@ public class RegisteredApplicationFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<RegisteredApplication> list) {
+            mAdapter.notifyItemRangeRemoved(0, mAdapter.getItemCount());
+            mAdapter.getItems().clear();
+
             int start = mAdapter.getItemCount();
             Items items = new Items(mAdapter.getItems());
             items.addAll(list);
             mAdapter.setItems(items);
             mAdapter.notifyItemRangeInserted(start, list.size());
+
+            swipeRefreshLayout.setRefreshing(false);
+            mLoadTask = null;
         }
 
         @Override
@@ -120,6 +152,9 @@ public class RegisteredApplicationFragment extends Fragment {
                     mSignal.cancel();
                 mSignal = null;
             }
+
+            swipeRefreshLayout.setRefreshing(false);
+            mLoadTask = null;
         }
     }
 }
