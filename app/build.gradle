@@ -11,7 +11,7 @@ android {
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        resConfigs "zh"
+        resConfigs "zh","en","de"
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'mips', 'x86'
         }

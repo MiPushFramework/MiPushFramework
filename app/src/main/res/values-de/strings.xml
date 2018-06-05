@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mi Push Service</string>
+    <string name="loading">Lade</string>
+    <string name="enable">Aktivieren</string>
+    <string name="success">Erfolgreich</string>
+    <string name="fail">Fehler</string>
+    <string name="apply">Anwenden</string>
+    <string name="retry">Wiederholen</string>
+    <string name="exit">Schließen</string>
+    <string name="preference_title">Mi Push</string>
+    <string name="main_event">Log</string>
+    <string name="main_apps">Apps</string>
+    <string name="main_settings">Einstellungen</string>
+    <string name="msg_enable">Aktiviert, Apps erhalten Push-Nachrichten und können sich registrieren</string>
+    <string name="msg_disable">Deaktiviert, Apps erhalten keine Push-Nachrichten</string>
+    <string name="about_descr"><![CDATA[Dies ist ein Open-Source-Projekt um den Mi Push Service in jedem ROM zu aktivieren. Für mehr Details, besuchen Sie die Homepage des Projekts：<a href="https://github.com/Trumeet/MiPushFramework">MiPushFramework</a>.\nJeder ist eingeladen, sich am Projekt zu beteiligen. Bitte halten Sie sich an die Open Source Regeln.\nPowered by @Trumeet]]></string>
+    <string name="action_about">Über</string>
+    <string name="wizard_descr"><![CDATA[Dies ist ein Open-Source-Projekt um den Mi Push Service in jedem ROM zu aktivieren. Für mehr Details, besuchen Sie die Homepage des Projekts：<a href="https://github.com/Trumeet/MiPushFramework">MiPushFramework</a>]]></string>
+    <string name="wizard_title_check_running">Prüfe Status</string>
+    <string name="wizard_descr_check_running">Wir prüfen automatisch, ob der Push Service läuft und funktioniert. Dies kann ein paar Sekunden dauern.</string>
+    <string name="wizard_descr_check_running_ok">Prüfung erfolgreich! Der Dienst läuft, keine weiteren Maßnahmen erforderlich</string>
+    <string name="wizard_descr_check_running_fail">Bei der Prüfung sind Probleme aufgetaucht, der Dienst läuft nicht. Möglicherweise verhindern Einstellungen oder Tools auf dem System eine Ausführung. Probleme werden im nächsten Schritt behoben.</string>
+    <string name="wizard_title_start_fail">Dienst konnte nicht gestartet werden.</string>
+    <string name="service_not_running_faq">
+        <![CDATA[
+            <b>Sollten Sie einen Greenify-Dienst oder Domain-Blocker nutzen,</b>
+            <br />fügen Sie diese App bitte der Whitelist hinzu.
+            <br /><b>Sollten Sie zudem Dienste blockieren, erstellen Sie eine Ausnahme für</b>
+            <br /><b>XMPushService</b> da sonst der Mi Push Service nicht gestartet werden kann.
+            <br /><b>Einige Chinesische ROMs (z. B. Flyme, EMUI, Magic),</b>
+            <br />besitzen zudem Einstellungen um Hintergrunddienste einzuschränken. Setzen Sie auch hier die App auf die Whitelist.
+            <br /><br /><b>Noch Fragen?</b>
+            <br />Bitte erstellen Sie ein Issue：<a href="https://github.com/Trumeet/MiPushFramework">GitHub Repository öffnen</a>
+        ]]>
+    </string>
+    <string name="wizard_title_doze_whitelist">Akku-Optimierung entfernen</string>
+    <string name="wizard_descr_doze_whitelist">Wenn die Akku-Optimierung für den Push Service aktiviert ist, funktioniert dieser möglicherweise nicht korrekt. Bitte klicken Sie auf den Button, um die Optimierung für diese App zu deaktivieren.</string>
+    <string name="wizard_button_remove_doze">Optimierung entfernen</string>
+    <string name="wizard_connect">Verbinde</string>
+    <string name="wizard_title_run_in_background">Hintergrundaktivitäten erlauben</string>
+    <string name="run_in_background_appops_root">Es wird Root benötigt zum Aktivieren (wird automatisch geregelt)</string>
+    <string name="wizard_descr_run_in_background">Der Push Service hat keine Erlaubnis, um im Hintergrund ausgeführt zu werden. %1$s, klicken Sie danach auf Weiter.</string>
+    <string name="run_in_background_rikka_appops"><![CDATA[ Bitte öffnen Sie das <b>App Ops</b> Tool und geben Sie die Berechtigung <b>Im Hintergrund laufen oder Wach bleiben</b> ]]></string>
+    <string name="rikka_appops_help_toast"><![CDATA[ Bitte geben Sie die Berechtigung <b>Im Hintergrund laufen oder Wach bleiben</b>  ]]></string>
+    <string name="wizard_title_stats_permission">Nutzungsdaten</string>
+    <string name="wizard_title_stats_permission_text">Sie müssen die Berechtigung erteilen, auf Nutzungsstatistiken zugreifen zu dürfen.</string>
+    <string name="wizard_title_fake_build">Als MIUI tarnen</string>
+    <string name="wizard_descr_fake_build"><![CDATA[Einige Apps nutzen ihre eigene Logik um zu ermitteln, ob es sich beim aktuellen OS um MIUI handelt. Im Erfolgsfall wird Mi Push aktiviert, andernfalls werden andere Pushdienste im Hintergrund ausgeführt. Diese Entscheidungslogik schaut meistens auf Einträge in der build.prop. Wir erstellen daher einige Einträge dort, um das OS als MIUI zu tarnen.<br /><br />Hierfür müssen Sie <a href="http://forum.xda-developers.com/apps/magisk/official-magisk-v7-universal-systemless-t3473445">Magisk von XDA installieren</a>. Nach der Installation, öffnen Sie <b>Magisk Manager</b> und laden <b><a href="https://github.com/cubesky/MiPushFake/releases/latest">MiPushFake</a></b>. Nach Aktivierung des Moduls und einem Neustart wird Ihr System als MIUI erkannt.]]></string>
+    <string name="settings_manage_app_notifications">Banchrichtigungseinstellungen</string>
+    <string name="settings_manage_app_notifications_summary">Benachrichtungseinstellungen wie Töne, Wichtigkeit, etc. anpassen</string>
+
+    <!-- Permission -->
+    <string name="action_edit_permission">Berechtigungen anpassen</string>
+    <string name="permissions">Berechtigungen</string>
+    <string name="permission_allow_register">Registrierung</string>
+    <string name="permission_allow_receive">Benachrichtigungen erhalten</string>
+    <string name="permission_allow_receive_command">Befehle erhalten</string>
+    <string name="permission_allow_receive_register_result">Ergebnis der Registrierung zurückgeben (aktuell inaktiv)</string>
+
+    <string name="permission_register_type">Registrierungsart</string>
+    <string name="register_type_allow">Erlauben (automatische Registrierung)</string>
+    <string name="register_type_deny">Nicht erlauben</string>
+    <string name="register_type_ask">Fragen (Standard)</string>
+    <string-array name="register_types">
+        <item>@string/register_type_ask</item>
+        <item>@string/register_type_allow</item>
+        <item>@string/register_type_deny</item>
+    </string-array>
+
+    <!-- Settings -->
+    <string name="settings_deploy">Ausliefern</string>
+    <string name="settings_fake_build">Als MIUI tarnen</string>
+    <string name="settings_fake_build_summary">Einige Apps nutzen ihre eigene Logik um zu ermitteln, ob es sich beim aktuellen OS um MIUI handelt. Im Erfolgsfall wird Mi Push aktiviert, andernfalls werden andere Pushdienste im Hintergrund ausgeführt. Diese Entscheidungslogik schaut meistens auf Einträge in der build.prop. Wir erstellen daher einige Einträge dort, um das OS als MIUI zu tarnen.</string>
+    <string name="settings_check_service">Status prüfen</string>
+    <string name="settings_check_service_summary">Automatisch prüfen, ob der Push Service läuft</string>
+    <string name="settings_skip_doze">Akku-Optmierung entfernen</string>
+    <string name="settings_skip_doze_summary">In Android 6.0 und später kann Akku-Optimierung die Funktion beeinträchtigen</string>
+
+    <string name="settings_options">Einstellungen (Neustarten nach Änderungen)</string>
+    <string name="pref_title_access_mode">Erfassungsmodus Vordergrund-App</string>
+    <string-array name="pref_title_access_mode_list_titles">
+        <item>Usage Access API (Performance - Empfohlen)</item>
+        <item>Assistenzmodus (gute Kompatibilät)</item>
+    </string-array>
+
+    <string-array name="pref_title_access_mode_list_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <string name="settings_debug_icon">Transparentes Debug Icon</string>
+    <string name="settings_auto_register">Automatische Registrierung von Apps</string>
+
+
+    <string name="settings_enhance">Erweitert</string>
+    <string name="settings_debug">Debug</string>
+    <string name="settings_get_log">Logs holen</string>
+    <string name="settings_get_log_summary">Tippen, um Logeinträge zu kopieren. Erstellen Sie ein Issue falls nötig (GitHub)</string>
+    <string name="settings_clear_log">Log leeren</string>
+    <string name="settings_activity_keep_alive">Hintergrundaktivität</string>
+    <string name="settings_summary_keep_alive">Viele ROMs haben eigene Implementierung, um HIntergrundaktivitäten zu beschränken, besitzen aber auch Whitelists.
+    Suchen Sie nach dem Klicken die App in den geöffneten Einstellungen und fügen Sie eine Ausnahme hinzu. [Hinweis] Sie müssen hier nach jedem Neustart des Telefons erneut klicken.
+    </string>
+
+    <!-- Recent Activity -->
+    <string name="recent_activity_view">Zeige letzte Aktivitäten</string>
+    <string name="recent_activity_title">Letzte Aktivitäten</string>
+
+    <!-- Update -->
+    <string name="action_update">Auf Updates prüfen</string>
+    <string name="update_toast">Bitte installieren Sie die aktuellste Version. (-> manager.apk)</string>
+
+    <!-- Manage applications, individual application info screen title. For example, if they click on "Browser" in "Manage applications", the title of the next screen will be this -->
+    <string name="application_info_label">App Info</string>
+
+    <!-- Fail reasons -->
+    <string name="connect_fail_title_unknown">Unbekannter Fehler beim Verbinden mit dem Dienst.</string>
+    <string name="connect_fail_title_low_version">Bitt aktualisieren Sie den Push Service</string>
+    <string name="connect_fail_title_not_installed">Push Service nicht installiert</string>
+    <string name="connect_fail_title_rom">Ihr ROM wird nicht unterstützt.</string>
+
+    <string name="connect_fail_text_unknown"><![CDATA[
+    <b>Verbindung zum Dienst nicht erfolgreich</b>. Sollten Sie <b>Wakelocks unterdrücken</b>, fügen Sie <b>%1$s</b> zur Whitelist hinzu und versuchen Sie es erneut.
+    ]]></string>
+    <string name="connect_fail_text_low_version"><![CDATA[
+Der Push Service ist mit Ihrer aktuellen Version nicht kompatibel: %1$s. <a href="%2$s">Klicken Sie hier</a> für ein Update und versuchen Sie es erneut.
+    ]]></string>
+    <string name="connect_fail_text_not_installed"><![CDATA[
+Ein separater Push Service wird benötigt, der im Hintergrund läuft. <a href="%1$s">Klicken Sie hier</a> für die Installation und versuchen Sie es erneut.
+    ]]></string>
+    <string name="connect_fail_text_is_miui"><![CDATA[
+Entschuldigung, MIUI selber wird leider nicht unterstützt.
+    ]]></string>
+
+    <!-- Platform -->
+    <string name="platform_not_installed"><![CDATA[
+<br /><br />Ihr Gerät unterstützt den <b>system mode</b>, welcher besser funktioniert. Sie können die Installationsdatei hier erhalten: <a href="%1$s">Platform APK</a>. (Sollte Ihr Gerät den Modus doch nicht unterstützen, wird auch nichts installiert.)
+    ]]></string>
+    <string name="platform_suggestion_toast"><![CDATA[
+Ihr Gerät unterstützt den <b>system mode</b>. Sie sollten für eine bessere Performance xmsf_service_platform.apk installieren bzw. aktualisieren.
+    ]]></string>
+
+    <string name="help_article_can_not_receive_push">Push-Nachrichten werden nicht empfangen</string>
+    <string name="connect_fail_test_se"><![CDATA[
+    <b>Manchmal werden durch ein Update des OS Berechtigungen entfernt. Bitte installieren Sie die "Manager App" erneut ohne die Nutzerdaten zu löschen.
+    Die aktuellste Version erhalten Sie hier: <a href="%1$s">Manager App</a> </b>
+    ]]></string>
+    <string name="status_ok">Erfolg</string>
+    <string name="status_deny_disable">Abgelehnt, Push deaktiviert</string>
+    <string name="status_deny_user">Abgelehnt durch Benutzer</string>
+    <string name="wizard_descr_finish">Alles erledigt! Sie können den Push Service jetzt nutzen.</string>
+    <string name="toast_fake_build_already_enable">Sie haben diese Einstellung bereits aktiviert. Öffnen Sie zum Entfernen der Magisk Manager und deaktivieren oder löschen Sie MiPushFake.</string>
+
+    <string name="helplib_action_about">Über</string>
+    <string name="helplib_action_issue">Fehler melden</string>
+    <string name="helplib_action_mail">E-Mail senden</string>
+    <string name="helplib_action_telegram_group">Telegram Gruppe beitreten</string>
+    <string name="helplib_title"><![CDATA[Hilfe & Support]]></string>
+    <string name="helplib_title_contact">Kontaktiere uns</string>
+    <string name="helplib_title_faq">FAQ</string>
+	
+	    <!-- Date parse -->
+    <eat-comment />
+    <!-- Date format -->
+    <!-- Just, < 1 min -->
+    <string name="date_just">Gerade eben</string>
+    <!-- 1 Minute ago, >= 1 Minute, < 60 Minutes -->
+    <plurals name="date_minutes">
+        <item quantity="one">Minute</item>
+        <item quantity="other">Minuten</item>
+    </plurals>
+    <!-- 1 Hours ago, >= 1 hour, < 24 hours -->
+    <plurals name="date_hours">
+        <item quantity="one">Stunde</item>
+        <item quantity="other">Stunden</item>
+    </plurals>
+    <!-- 1 Day ago, >= 1 day, < days -->
+    <plurals name="date_days">
+        <item quantity="one">Tag</item>
+        <item quantity="other">Tage</item>
+    </plurals>
+    <!-- For non-just and non-long format -->
+    <string name="date_format_normal">vor %1$s %2$s</string>
+    <!-- For Just format -->
+    <string name="date_format_just">%1$s</string>
+    <!-- For Long ago format -->
+    <string name="date_format_long">%1$s</string>
+
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="common_err">%1$s</string>
+    <string name="auth_message"><![CDATA[Do you want to allow <b>%1$s</b> push messages? If you are unsure, use <b>Allow once</b>. ]]></string>
+    <string name="allow">Allow</string>
+    <string name="deny">Deny</string>
+    <string name="allow_once">Allow once</string>
+    <string name="log_none">No log</string>
+    <string name="log_share_error">Unable to share log: %1$s</string>
+    <string name="log_clear_done">Log cleared</string>
+    <string name="notification_group_config">Config</string>
+    <string name="notification_category_alive">Push Status</string>
+    <string name="notification_category_warning">Warning</string>
+    <string name="notification_alive">Mi Push running</string>
+    <string name="notification_group_applications">Applications</string>
+    <string name="notification_stats_permission_title">Please grant usage stats permission</string>
+    <string name="notification_stats_permission_text">We need usage rights to process your request, click grant permissions</string>
+    <string name="perm_change_settings">Manage push service</string>
+    <string name="perm_read_settings">Get push settings</string>
+    <string name="title_activity_keepalive">Background service keepalive interface</string>
+    <string name="activity_rom_keepalive">This is a blank activity. If necessary, lock it. Prevent ROM from stopping the MiPush background service.</string>
+</resources>

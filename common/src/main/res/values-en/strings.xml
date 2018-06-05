@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="push_service_name">Push</string>
+    <string name="event_register">Register push</string>
+    <string name="event_register_result">Send registration results</string>
+    <string name="event_push">Receive notification</string>
+    <string name="event_command">Receive command</string>
+    <string name="request_permission">We need %1$s to work</string>
+</resources>

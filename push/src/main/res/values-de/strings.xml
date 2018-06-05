@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="common_err">%1$s</string>
+    <string name="auth_message"><![CDATA[Möchten Sie für <b>%1$s</b> Pushnachrichten erlauben? Falls Sie unsicher sind, wählen Sie <b>Einmal erlauben</b>. ]]></string>
+    <string name="allow">Erlauben</string>
+    <string name="deny">Verweigern</string>
+    <string name="allow_once">Einmal erlauben</string>
+    <string name="log_none">Kein Log</string>
+    <string name="log_share_error">Log kann nicht geteilt werden: %1$s</string>
+    <string name="log_clear_done">Log geleert</string>
+    <string name="notification_group_config">Konfiguration</string>
+    <string name="notification_category_alive">Push Status</string>
+    <string name="notification_category_warning">Warnung</string>
+    <string name="notification_alive">Mi Push läuft</string>
+    <string name="notification_group_applications">Anwendungen</string>
+    <string name="notification_stats_permission_title">Lesen der Nutzungsstatistiken</string>
+    <string name="notification_stats_permission_text">Wir benötigen das Recht zum Lesen von Nutzungsstatistiken, bitte erteilen Sie die Berechtigung.</string>
+    <string name="perm_change_settings">Push Service verwalten</string>
+    <string name="perm_read_settings">Einstellungen lesen</string>
+    <string name="title_activity_keepalive">Hintergrunddienst \"Keep alive\" Aktivität</string>
+    <string name="activity_rom_keepalive">Dies ist eine leere Aktivität. Falls nötig, sperren Sie diese. Verhindert, dass das ROM den Hintergrunddienst beendet.</string>
+</resources>
