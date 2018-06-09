@@ -82,7 +82,7 @@ public class ParseUtils {
             return context.getString(R.string.date_format_normal,
                     String.valueOf(day),
                     context.getResources()
-                            .getQuantityString(R.plurals.date_hours,
+                            .getQuantityString(R.plurals.date_days,
                                     (int) day));
         } else {
             return context.getString(R.string.date_format_long,
