@@ -33,6 +33,7 @@ public class XMPushService extends IntentService {
         super("XMPushService Bridge");
     }
 
+    @Override
     protected void onHandleIntent(Intent intent) {
         if (conf == null) {
             conf = buildConf();
@@ -98,8 +99,9 @@ public class XMPushService extends IntentService {
                 }
             }
         }
-        if (register)
+        if (register) {
             EventDb.insertEvent(result, new top.trumeet.common.event.type.RegistrationType(null, pkg), this);
+        }
     }
 
     private Conf buildConf() {

@@ -22,6 +22,7 @@ public class IconCache {
         int maxMemory = (int) Runtime.getRuntime().maxMemory();
         int cacheSizes = maxMemory / 5;
         mIconMemoryCaches = new LruCache<>(cacheSizes);
+        //TODO check cacheSizes is correct ?
     }
 
     public static IconCache getInstance() {
@@ -36,7 +37,7 @@ public class IconCache {
     }
 
     public Bitmap getRawIconBitmap(final Context ctx, final String pkg) {
-        return new CacheAspect<Bitmap>(mIconMemoryCaches) {
+        return new AbstractCacheAspect<Bitmap>(mIconMemoryCaches) {
             @Override
             Bitmap gen() {
                 try {
@@ -50,7 +51,7 @@ public class IconCache {
     }
 
     public Bitmap getWhiteIconBitmap(final Context ctx, final String pkg) {
-        return new CacheAspect<Bitmap>(mIconMemoryCaches) {
+        return new AbstractCacheAspect<Bitmap>(mIconMemoryCaches) {
             @Override
             Bitmap gen() {
                 Bitmap rawIconBitmap = getRawIconBitmap(ctx, pkg);
@@ -59,24 +60,6 @@ public class IconCache {
         }.get("white_" + pkg);
     }
 
-    abstract class CacheAspect<T> {
-        private LruCache<String, T> cache;
-        CacheAspect(LruCache<String, T> cache) {
-            this.cache = cache;
-        }
 
-        public T get(String cacheKey) {
-            T cached = cache.get(cacheKey);
-            if (cached == null) {
-                cached = gen();
-                if (cached != null) {
-                    cache.put(cacheKey, cached);
-                }
-            }
-            return cached;
-        }
-
-        abstract T gen();
-    }
 
 }

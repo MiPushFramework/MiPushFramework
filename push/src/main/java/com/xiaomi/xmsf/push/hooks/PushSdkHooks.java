@@ -46,7 +46,7 @@ public class PushSdkHooks {
 
         for (IHook unhook : registeredHooks) {
             try {
-                Log4a.i(TAG, "init hook : " + unhook.getClass().getSimpleName());
+                Log4a.d(TAG, "init hook : " + unhook.getClass().getSimpleName());
                 unhooks.addAll(unhook.fetchHook());
             } catch (Exception e) {
                 Log4a.e(TAG, "Hook failed", e);
