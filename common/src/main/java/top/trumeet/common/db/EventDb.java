@@ -77,7 +77,7 @@ public class EventDb {
         int skip;
         int limit;
         skip = Constants.PAGE_SIZE * (page - 1);
-        limit = skip + Constants.PAGE_SIZE;
+        limit = Constants.PAGE_SIZE;
         return query(skip, limit, pkg, context, cancellationSignal);
     }
 }
