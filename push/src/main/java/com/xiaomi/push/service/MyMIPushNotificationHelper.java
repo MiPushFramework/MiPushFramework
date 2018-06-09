@@ -1,7 +1,6 @@
 package com.xiaomi.push.service;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
@@ -24,15 +23,15 @@ import com.xiaomi.channel.commonutils.reflect.JavaCalls;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
 import com.xiaomi.xmsf.R;
+import com.xiaomi.xmsf.push.notification.NotificationController;
 
 import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.common.BuildConfig;
+import top.trumeet.common.cache.ApplicationNameCache;
 import top.trumeet.common.cache.IconCache;
-import top.trumeet.common.utils.ImgUtils;
 
 import static com.xiaomi.push.service.MIPushNotificationHelper.drawableToBitmap;
 import static com.xiaomi.push.service.MIPushNotificationHelper.isBusinessMessage;
-import static top.trumeet.common.utils.NotificationUtils.getChannelIdByPkg;
 
 /**
  * Created by zts1993 on 2018/2/8.
@@ -53,9 +52,7 @@ public class MyMIPushNotificationHelper {
         int id = MyClientEventDispatcher.getNotificationId(buildContainer);
 
         Notification.Builder localBuilder = new Notification.Builder(var0);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            localBuilder.setChannelId(getChannelIdByPkg(buildContainer.getPackageName()));
-        }
+
         Log4a.i(TAG, "title:" + title + "  description:" + description);
 
         if (description.length() > 30) { //TODO length 30 is constant
@@ -137,31 +134,28 @@ public class MyMIPushNotificationHelper {
         localBuilder.setContentTitle(titleAndDesp[0]);
         localBuilder.setContentText(titleAndDesp[1]);
 
-        localBuilder.setGroup(buildContainer.getPackageName());
 
+        //for VERSION < N_MR1
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
-            localBuilder.setDefaults(Notification.DEFAULT_ALL); //for VERSION < N_MR1
+            localBuilder.setDefaults(Notification.DEFAULT_ALL);
         }
 
         // Fill app name
         Bundle extras = new Bundle();
-        try {
-            if (iconBitmap != null) {
-                int color = getIconColor(iconBitmap);
-                CharSequence subText = createColorSubtext(var0.getPackageManager()
-                        .getApplicationLabel(var0.getPackageManager().getApplicationInfo(buildContainer.getPackageName(),
-                                0)), color);
-                if (subText != null) extras.putCharSequence(NotificationCompat.EXTRA_SUB_TEXT,
-                        subText);
-                localBuilder.setColor(color);
+        CharSequence appName = ApplicationNameCache.getInstance().getAppName(var0, buildContainer.getPackageName());
+
+        if (iconBitmap != null && !TextUtils.isEmpty(appName)) {
+            int color = getIconColor(iconBitmap);
+            CharSequence subText = createColorSubtext(appName, color);
+            if (subText != null) {
+                extras.putCharSequence(NotificationCompat.EXTRA_SUB_TEXT, subText);
             }
-        } catch (PackageManager.NameNotFoundException ignored) {
+            localBuilder.setColor(color);
         }
+
         localBuilder.setExtras(extras);
 
-        NotificationManager manager = (NotificationManager) var0.getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = localBuilder.build();
-        manager.notify(id, notification);
+        NotificationController.publish(var0, id, buildContainer.getPackageName(), localBuilder);
 
     }
 
@@ -177,7 +171,7 @@ public class MyMIPushNotificationHelper {
         return color;
     }
 
-    private static Spannable createColorSubtext(CharSequence appName,
+    public static Spannable createColorSubtext(CharSequence appName,
                                                 int color) {
         final Spannable amened = new SpannableStringBuilder(appName);
         // 弄一个自己的颜色 TODO：不知道小米有没有这个 API，或者抄袭 AOSP 的实现

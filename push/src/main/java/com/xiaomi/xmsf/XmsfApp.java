@@ -2,7 +2,6 @@ package com.xiaomi.xmsf;
 
 import android.Manifest;
 import android.app.Application;
-import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -56,16 +55,18 @@ public class XmsfApp extends Application {
     private XC_MethodHook.Unhook[] mUnHooks;
 
     @Override
-    public void onTerminate () {
-        if (mUnHooks != null)
-            for (XC_MethodHook.Unhook unhook : mUnHooks)
+    public void onTerminate() {
+        if (mUnHooks != null) {
+            for (XC_MethodHook.Unhook unhook : mUnHooks) {
                 unhook.unhook();
+            }
+        }
         Log4a.flush();
         super.onTerminate();
     }
 
     @Override
-    public void attachBaseContext (Context context) {
+    public void attachBaseContext(Context context) {
         super.attachBaseContext(context);
         DatabaseUtils.init(this);
     }
@@ -79,16 +80,21 @@ public class XmsfApp extends Application {
         MyLog.setLogger(new LoggerInterface() {
             private String mTag = "xiaomi-patched";
 
+            @Override
             public void setTag(String tag) {
                 this.mTag = tag;
             }
 
+            @Override
             public void log(String content) {
                 Log.v(this.mTag, content);
             }
 
+            @Override
             public void log(String content, Throwable t) {
-                if (content.contains("isMIUI")) { return;}
+                if (content.contains("isMIUI")) {
+                    return;
+                }
                 Log.v(this.mTag, content, t);
             }
         });
@@ -105,17 +111,21 @@ public class XmsfApp extends Application {
                 options);
         LoggerInterface newLogger = new LoggerInterface() {
             private static final String TAG = "PushCore";
+
             @Override
             public void setTag(String tag) {
                 // ignore
             }
+
             @Override
             public void log(String content, Throwable t) {
-                if (t == null)
+                if (t == null) {
                     Log4a.i(TAG, content);
-                else
+                } else {
                     Log4a.e(TAG, content, t);
+                }
             }
+
             @Override
             public void log(String content) {
                 Log4a.d(TAG, content);
@@ -123,36 +133,38 @@ public class XmsfApp extends Application {
         };
         Logger.setLogger(PushControllerUtils.wrapContext(this)
                 , newLogger);
-        if (PushControllerUtils.isPrefsEnable(this))
+        if (PushControllerUtils.isPrefsEnable(this)) {
             PushControllerUtils.setAllEnable(true, this);
+        }
         scheduleUploadNotificationInfo();
         long currentTimeMillis = System.currentTimeMillis();
         long lastStartupTime = getLastStartupTime();
-        if (isAppMainProc(this) && (currentTimeMillis - lastStartupTime > 300000 || currentTimeMillis - lastStartupTime < 0)) {
-            setStartupTime(currentTimeMillis);
-            MiuiPushActivateService.awakePushActivateService(PushControllerUtils.wrapContext(this)
-                    , "com.xiaomi.xmsf.push.SCAN");
+        if (isAppMainProc(this)) {
+            if ((currentTimeMillis - lastStartupTime > 300000 || currentTimeMillis - lastStartupTime < 0)) {
+                setStartupTime(currentTimeMillis);
+                MiuiPushActivateService.awakePushActivateService(PushControllerUtils.wrapContext(this)
+                        , "com.xiaomi.xmsf.push.SCAN");
+            }
         }
 
-        if (Build.VERSION.SDK_INT >= 26) {
-            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            manager.createNotificationChannelGroup(NotificationController.createGroup(this));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationController.deleteOldNotificationChannelGroup(this);
         }
     }
 
-    public RemoveTremblingUtils getRemoveTremblingInstance () {
+    public RemoveTremblingUtils getRemoveTremblingInstance() {
         if (mRemoveTrembling != null)
             return mRemoveTrembling;
         mRemoveTrembling = new RemoveTremblingUtils();
         return mRemoveTrembling;
     }
 
-    public static XmsfApp getSession (Context context) {
+    public static XmsfApp getSession(Context context) {
         return ((XmsfApp) context.getApplicationContext());
     }
 
     private HashSet<ComponentName> loadEnabledServices() {
-        HashSet<ComponentName> hashSet = new HashSet();
+        HashSet<ComponentName> hashSet = new HashSet<>();
         String string = Settings.Secure.getString(getContentResolver()
                 , "enabled_notification_listeners");
         if (!(string == null || "".equals(string))) {
@@ -170,8 +182,9 @@ public class XmsfApp extends Application {
     private void saveEnabledServices(HashSet<ComponentName> hashSet) {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_SECURE_SETTINGS)
-                != PackageManager.PERMISSION_GRANTED)
+                != PackageManager.PERMISSION_GRANTED) {
             return;
+        }
         StringBuilder stringBuilder = null;
         Iterator it = hashSet.iterator();
         while (it.hasNext()) {
@@ -187,7 +200,7 @@ public class XmsfApp extends Application {
     }
 
     private void setListenerDefaultAdded() {
-        getSharedPreferences("mipush_extra", 0).edit().putBoolean("notification_listener_added", true).commit();
+        getSharedPreferences("mipush_extra", 0).edit().putBoolean("notification_listener_added", true).apply();
     }
 
     private boolean isListenerDefaultAdded() {
@@ -197,7 +210,7 @@ public class XmsfApp extends Application {
     private void scheduleUploadNotificationInfo() {
         try {
             if (!isListenerDefaultAdded() && Build.VERSION.SDK_INT >= 19) {
-                HashSet loadEnabledServices = loadEnabledServices();
+                HashSet<ComponentName>  loadEnabledServices = loadEnabledServices();
                 loadEnabledServices.add(new ComponentName(this, NotificationListener.class));
                 saveEnabledServices(loadEnabledServices);
                 setListenerDefaultAdded();

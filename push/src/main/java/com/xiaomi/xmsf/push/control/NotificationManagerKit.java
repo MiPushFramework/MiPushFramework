@@ -9,7 +9,9 @@ import com.oasisfeng.condom.CondomKit;
 import me.pqpo.librarylog4a.Log4a;
 
 /**
- * Created by Trumeet on 2018/1/23.
+ *
+ * @author Trumeet
+ * @date 2018/1/23
  */
 
 public class NotificationManagerKit implements CondomKit {
@@ -19,8 +21,9 @@ public class NotificationManagerKit implements CondomKit {
 
             @Override
             public Object getSystemService(Context context, String name) {
-                if (Context.NOTIFICATION_SERVICE.equals(name))
+                if (Context.NOTIFICATION_SERVICE.equals(name)) {
                     return new CondomNotificationManager(context);
+                }
                 return null;
             }
         });

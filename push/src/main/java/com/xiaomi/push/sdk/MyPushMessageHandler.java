@@ -1,9 +1,7 @@
 package com.xiaomi.push.sdk;
 
 import android.app.IntentService;
-import android.app.NotificationManager;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
@@ -14,12 +12,12 @@ import com.xiaomi.push.service.MyClientEventDispatcher;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
 import com.xiaomi.xmpush.thrift.XmPushThriftSerializeUtils;
+import com.xiaomi.xmsf.push.notification.NotificationController;
 
 import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.common.utils.PreferencesUtils;
 
 /**
- *
  * @author zts1993
  * @date 2018/2/9
  */
@@ -79,7 +77,7 @@ public class MyPushMessageHandler extends IntentService {
             startService(localIntent);
 
             int id = MyClientEventDispatcher.getNotificationId(container);
-            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(id);
+            NotificationController.cancel(this, id);
 
             Thread.sleep(START_SERVICE_DELAY);
             startService(localIntent);
