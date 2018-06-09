@@ -29,7 +29,7 @@ public class UsageStatsPermissionActivity extends PushControllerWizardActivity i
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || !canFix()) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             nextPage();
             finish();
             return;
@@ -40,10 +40,6 @@ public class UsageStatsPermissionActivity extends PushControllerWizardActivity i
     @Override
     public void onResume () {
         super.onResume();
-        if (!canFix()) {
-            nextPage();
-            finish();
-        }
         PushController controller = getController();
         if (controller != null && controller.isConnected() && !isConnecting()) {
             check(controller);
@@ -84,7 +80,7 @@ public class UsageStatsPermissionActivity extends PushControllerWizardActivity i
 
     @Override
     public void onNavigateNext() {
-        if (!allow && canFix()) {
+        if (!allow) {
             startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
         } else {
             nextPage();
@@ -96,8 +92,4 @@ public class UsageStatsPermissionActivity extends PushControllerWizardActivity i
                 FakeBuildActivity.class));
     }
 
-    private boolean canFix () {
-        return Utils.isAppOpsInstalled() ||
-                ShellUtils.isSuAvailable();
-    }
 }

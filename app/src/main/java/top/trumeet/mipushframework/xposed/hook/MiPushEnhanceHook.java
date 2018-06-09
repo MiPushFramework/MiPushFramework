@@ -1,7 +1,6 @@
 package top.trumeet.mipushframework.xposed.hook;
 
 import android.content.Context;
-import android.os.Environment;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -26,7 +25,6 @@ public class MiPushEnhanceHook implements IXposedHookLoadPackage {
     private Map<String, String> fakeMap = new HashMap<>();
 
     private static String BRAND = "Xiaomi";
-    private static String PRODUCT = "MIX2s";
 
     {
         blackList.add("android");
@@ -42,10 +40,6 @@ public class MiPushEnhanceHook implements IXposedHookLoadPackage {
         fakeMap.put("ro.product.brand", BRAND);
         fakeMap.put("ro.product.name", BRAND);
 
-
-        fakeMap.put("ro.product.model", PRODUCT);
-        fakeMap.put("ro.product.device", PRODUCT);
-        fakeMap.put("ro.hardware", PRODUCT);
     }
 
     private boolean inBlackList(String pkgName) {
@@ -68,7 +62,6 @@ public class MiPushEnhanceHook implements IXposedHookLoadPackage {
                 return;
             }
 
-
             if (!CommonUtil.isUserApplication(lpparam.appInfo)) {
                 return;
             }
@@ -90,12 +83,6 @@ public class MiPushEnhanceHook implements IXposedHookLoadPackage {
             XposedHelpers.setStaticObjectField(android.os.Build.class, "MANUFACTURER", BRAND);
             XposedHelpers.setStaticObjectField(android.os.Build.class, "BRAND", BRAND);
             XposedHelpers.setStaticObjectField(android.os.Build.class, "PRODUCT", BRAND);
-
-
-            XposedHelpers.setStaticObjectField(android.os.Build.class, "MODEL", PRODUCT);
-            XposedHelpers.setStaticObjectField(android.os.Build.class, "DEVICE", PRODUCT);
-            XposedHelpers.setStaticObjectField(android.os.Build.class, "HARDWARE", PRODUCT);
-
 
         } catch (Throwable throwable) {
             Log.e(TAG, "hook meet exception : " + throwable.getLocalizedMessage(), throwable);
