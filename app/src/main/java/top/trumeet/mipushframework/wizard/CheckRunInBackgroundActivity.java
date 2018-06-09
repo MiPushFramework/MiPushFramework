@@ -21,6 +21,7 @@ import top.trumeet.mipushframework.utils.ShellUtils;
 
 /**
  * Created by Trumeet on 2017/8/25.
+ *
  * @author Trumeet
  */
 
@@ -39,11 +40,12 @@ public class CheckRunInBackgroundActivity extends PushControllerWizardActivity i
     }
 
     @Override
-    public void onResume () {
+    public void onResume() {
         super.onResume();
         if (!canFix()) {
             nextPage();
             finish();
+            return;
         }
         PushController controller = getController();
         if (controller != null && controller.isConnected() && !isConnecting()) {
@@ -57,6 +59,7 @@ public class CheckRunInBackgroundActivity extends PushControllerWizardActivity i
             if (allow) {
                 nextPage();
                 finish();
+                return;
             }
         }
     }
@@ -95,17 +98,29 @@ public class CheckRunInBackgroundActivity extends PushControllerWizardActivity i
         }
     }
 
-    private void nextPage () {
+    private void nextPage() {
         startActivity(new Intent(this,
                 UsageStatsPermissionActivity.class));
     }
 
-    private boolean canFix () {
+    private boolean canFix() {
         return Utils.isAppOpsInstalled() ||
                 ShellUtils.isSuAvailable();
     }
 
-    private void lunchAppOps () {
+    private void lunchAppOps() {
+        // root first
+        if (ShellUtils.isSuAvailable()) {
+            if (ShellUtils.exec("appops set --user " + Utils.myUid() +
+                    " " + Constants.SERVICE_APP_NAME + " " + AppOpsManagerOverride.OP_RUN_IN_BACKGROUND +
+                    " " + AppOpsManager.MODE_ALLOWED)) {
+                nextPage();
+                return;
+            } else {
+                Toast.makeText(this, R.string.fail, Toast.LENGTH_SHORT).show();
+            }
+        }
+
         if (Utils.isAppOpsInstalled()) {
             Intent intent = new Intent("rikka.appops.intent.action.PACKAGE_DETAIL")
                     .addCategory(Intent.CATEGORY_DEFAULT)
@@ -115,16 +130,7 @@ public class CheckRunInBackgroundActivity extends PushControllerWizardActivity i
                     .setData(Uri.parse("package:" + Constants.SERVICE_APP_NAME))
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-            Toast.makeText(this, Utils.getString(R.string.rikka_appops_help_toast,
-                    this), Toast.LENGTH_LONG).show();
-        } else {
-            if (ShellUtils.exec("appops set --user " + Utils.myUid() +
-                    " " + Constants.SERVICE_APP_NAME  + " " + AppOpsManagerOverride.OP_RUN_IN_BACKGROUND +
-                    " " + AppOpsManager.MODE_ALLOWED))
-                nextPage();
-            else
-                Toast.makeText(this, R.string.fail
-                        , Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, Utils.getString(R.string.rikka_appops_help_toast, this), Toast.LENGTH_LONG).show();
         }
     }
 }

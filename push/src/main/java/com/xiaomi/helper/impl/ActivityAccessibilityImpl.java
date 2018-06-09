@@ -40,7 +40,9 @@ public class ActivityAccessibilityImpl implements ITopActivity {
 
     @Override
     public void guideToEnable(Context context) {
-        context.startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+        Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 
     public boolean isAppForeground(Context context, String packageName) {
