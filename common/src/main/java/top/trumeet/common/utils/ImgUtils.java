@@ -31,7 +31,7 @@ public class ImgUtils {
 
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                int dot = getPixel(width, pixels, i, j);
+                int dot = pixels[width * i + j];
                 int red = ((dot & 0x00FF0000) >> 16);
                 int green = ((dot & 0x0000FF00) >> 8);
                 int blue = (dot & 0x000000FF);
@@ -51,7 +51,7 @@ public class ImgUtils {
             //revert WHITE and TRANSPARENT
             for (int i = 0; i < height; i++) {
                 for (int j = 0; j < width; j++) {
-                    int dot = getPixel(width, pixels, i, j);
+                    int dot = pixels[width * i + j];
                     if (dot == Color.WHITE) {
                         pixels[width * i + j] = Color.TRANSPARENT;
                     } else {
@@ -95,7 +95,7 @@ public class ImgUtils {
         for (int h = 0; h < bitmap.getHeight(); h++) {
             boolean holdBlackPix = false;
             for (int w = 0; w < bitmap.getWidth(); w++) {
-                if (getPixel(width, pixels, h, w) != Color.TRANSPARENT) {
+                if (pixels[width * h + w] != Color.TRANSPARENT) {
                     holdBlackPix = true;
                     break;
                 }
@@ -110,7 +110,7 @@ public class ImgUtils {
         for (int w = 0; w < bitmap.getWidth(); w++) {
             boolean holdBlackPix = false;
             for (int h = 0; h < bitmap.getHeight(); h++) {
-                if (getPixel(width, pixels, h, w) != Color.TRANSPARENT) {
+                if (pixels[width * h + w] != Color.TRANSPARENT) {
                     holdBlackPix = true;
                     break;
                 }
@@ -124,7 +124,7 @@ public class ImgUtils {
         for (int w = bitmap.getWidth() - 1; w >= 0; w--) {
             boolean holdBlackPix = false;
             for (int h = 0; h < bitmap.getHeight(); h++) {
-                if (getPixel(width, pixels, h, w) != Color.TRANSPARENT) {
+                if (pixels[width * h + w] != Color.TRANSPARENT) {
                     holdBlackPix = true;
                     break;
                 }
@@ -138,7 +138,7 @@ public class ImgUtils {
         for (int h = bitmap.getHeight() - 1; h >= 0; h--) {
             boolean holdBlackPix = false;
             for (int w = 0; w < bitmap.getWidth(); w++) {
-                if (getPixel(width, pixels, h, w) != Color.TRANSPARENT) {
+                if (pixels[width * h + w] != Color.TRANSPARENT) {
                     holdBlackPix = true;
                     break;
                 }
@@ -175,7 +175,7 @@ public class ImgUtils {
         int i = 0;
         for (int h = top; h < top + cropHeight; h++) {
             for (int w = left; w < left + cropWidth; w++) {
-                newPix[i++] = getPixel(width, pixels, h, w);
+                newPix[i++] = pixels[width * h + w];
             }
         }
 
@@ -187,11 +187,12 @@ public class ImgUtils {
     private static void filterWhitePoint(int width, int height, int[] pixels, int exThre) {
         for (int i = 1; i < height - 1; i++) {
             for (int j = 1; j < width - 1; j++) {
-                int[] dots = new int[]{getPixel(width, pixels, i - 1, j - 1),
+                int[] dots = new int[]{
+                        getPixel(width, pixels, i - 1, j - 1),
                         getPixel(width, pixels, i - 1, j),
                         getPixel(width, pixels, i - 1, j + 1),
                         getPixel(width, pixels, i, j - 1),
-//                        getPixel(width, pixels, i, j),
+//                        pixels[width * i + j],
                         getPixel(width, pixels, i, j + 1),
                         getPixel(width, pixels, i + 1, j - 1),
                         getPixel(width, pixels, i + 1, j),
