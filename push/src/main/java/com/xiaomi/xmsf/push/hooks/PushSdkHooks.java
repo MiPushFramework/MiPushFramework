@@ -14,7 +14,9 @@ import me.pqpo.librarylog4a.Log4a;
 import me.weishu.epic.art.EpicNative;
 
 /**
- * Created by zts1993 on 2018/4/16.
+ *
+ * @author zts1993
+ * @date 2018/4/16
  */
 public class PushSdkHooks {
     private static final String TAG = PushSdkHooks.class.getSimpleName();
@@ -32,7 +34,7 @@ public class PushSdkHooks {
     public XC_MethodHook.Unhook[] getHooks() {
         List<XC_MethodHook.Unhook> unhooks = new ArrayList<>();
 
-        if (Build.VERSION.SDK_INT >= 27) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {
             // TODO support Android P
             return unhooks.toArray(new XC_MethodHook.Unhook[unhooks.size()]);
         }
