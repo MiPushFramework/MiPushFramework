@@ -138,9 +138,7 @@ public class NotificationController {
             builder.setColor(color);
             builder.setExtras(extras);
 
-            builder.setStyle(inboxStyle)
-                    .setNumber(statusBarNotifications.size())
-                    .setSmallIcon(notifyDefault.getSmallIcon())
+            builder.setSmallIcon(notifyDefault.getSmallIcon())
                     .setLargeIcon(notifyDefault.getLargeIcon())
                     .setCategory(Notification.CATEGORY_EVENT)
                     .setGroupSummary(true)
