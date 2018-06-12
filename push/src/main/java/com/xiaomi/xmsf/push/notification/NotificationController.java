@@ -16,8 +16,8 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 
 import top.trumeet.common.cache.ApplicationNameCache;
+import top.trumeet.common.utils.NotificationUtils;
 
-import static android.app.Notification.EXTRA_TITLE;
 import static com.xiaomi.push.service.MyMIPushNotificationHelper.createColorSubtext;
 import static top.trumeet.common.utils.NotificationUtils.getChannelIdByPkg;
 import static top.trumeet.common.utils.NotificationUtils.getGroupIdByPkg;
@@ -95,13 +95,13 @@ public class NotificationController {
 
 
     @TargetApi(Build.VERSION_CODES.O)
-    private static void sendSummaryNotification(Context context, String packageName) {
+    private static void updateSummaryNotification(Context context, String packageName, String groupId) {
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         StatusBarNotification[] activeNotifications = manager.getActiveNotifications();
-        if (activeNotifications == null || activeNotifications.length == 0) {
+        if (activeNotifications.length == 0) {
             return;
         }
-        String groupId = getGroupIdByPkg(packageName);
+
         ArrayList<StatusBarNotification> statusBarNotifications = new ArrayList<>();
 
         for (StatusBarNotification statusBarNotification : activeNotifications) {
@@ -110,27 +110,15 @@ public class NotificationController {
             }
         }
 
-        CharSequence appName = ApplicationNameCache.getInstance().getAppName(context, packageName);
-
         if (statusBarNotifications.size() > 1) {
+
+            CharSequence appName = ApplicationNameCache.getInstance().getAppName(context, packageName);
             Notification notifyDefault = statusBarNotifications.get(0).getNotification();
 
-            Notification.Builder builder = new Notification.Builder(context);
-            Notification.InboxStyle inboxStyle = new Notification.InboxStyle().setBigContentTitle(appName);
-
-            for (StatusBarNotification statusBarNotification : statusBarNotifications) {
-                Bundle extras = statusBarNotification.getNotification().extras;
-                if (extras != null && extras.size() > 0) {
-                    CharSequence title = (CharSequence) extras.get(EXTRA_TITLE);
-                    if (title != null) {
-                        inboxStyle.addLine(title);
-                    }
-
-                }
-            }
-
             Bundle extras = new Bundle();
+            Notification.Builder builder = new Notification.Builder(context, notifyDefault.getChannelId());
             int color = notifyDefault.color;
+
             CharSequence subText = createColorSubtext(appName, color);
             if (subText != null) {
                 extras.putCharSequence(NotificationCompat.EXTRA_SUB_TEXT, subText);
@@ -146,6 +134,8 @@ public class NotificationController {
                     .setGroup(groupId);
             Notification notification = builder.build();
             manager.notify(packageName.hashCode(), notification);
+        } else {
+            manager.cancel(packageName.hashCode());
         }
 
     }
@@ -157,7 +147,6 @@ public class NotificationController {
             //Forward Compatibility
             registerChannelIfNeeded(context, packageName);
 
-
             localBuilder.setChannelId(getChannelIdByPkg(packageName));
             localBuilder.setGroup(getGroupIdByPkg(packageName));
             localBuilder.setGroupAlertBehavior(Notification.GROUP_ALERT_ALL);
@@ -168,13 +157,33 @@ public class NotificationController {
         manager.notify(id, notification);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            sendSummaryNotification(context, packageName);
+            updateSummaryNotification(context, packageName, getGroupIdByPkg(packageName));
         }
     }
 
 
     public static void cancel(Context context, int id) {
-        ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(id);
 
+
+        String groupId = null;
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            StatusBarNotification[] activeNotifications = manager.getActiveNotifications();
+            for (StatusBarNotification activeNotification : activeNotifications) {
+                if (activeNotification.getId() == id) {
+                    groupId = activeNotification.getNotification().getGroup();
+                    break;
+                }
+
+            }
+        }
+
+        manager.cancel(id);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (groupId != null) {
+                updateSummaryNotification(context, NotificationUtils.getPackageName(groupId), groupId);
+            }
+        }
     }
 }

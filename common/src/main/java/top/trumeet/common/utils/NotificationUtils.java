@@ -16,4 +16,10 @@ public class NotificationUtils {
     public static String getGroupIdByPkg(@NonNull String packageName) {
         return "gp_" + packageName;
     }
+
+    public static String getPackageName(@NonNull String groupOrChannel) {
+        return groupOrChannel.substring(3);
+    }
+
+
 }
