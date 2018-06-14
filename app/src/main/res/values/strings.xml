@@ -52,7 +52,7 @@
 
     <string name="wizard_title_run_in_background">允许后台活动</string>
     <string name="wizard_descr_run_in_background">您禁用了推送服务的后台运行权限，它将无法后台推送，您%1$s，然后点按下一步。</string>
-    
+
     <string name="run_in_background_appops_root">需要使用 Root 解除禁用（我们会自动处理它）</string>
     <string name="run_in_background_rikka_appops"><![CDATA[
 需要打开 <b>App Ops</b> 工具，并授予 <b>在后台运行或被唤醒</b> 权限
@@ -109,7 +109,7 @@
     <string name="permission_allow_receive">接收通知栏消息</string>
     <string name="permission_allow_receive_command">接收命令</string>
     <string name="permission_allow_receive_register_result">回掉注册结果（暂时无效）</string>
-    
+
     <string name="permission_register_type">注册方式</string>
     <string name="register_type_allow">允许，自动注册</string>
     <string name="register_type_deny">阻止注册</string>
@@ -134,7 +134,7 @@
     <string name="settings_skip_doze">移除电池优化</string>
     <string name="settings_skip_doze_summary">在 Android 6.0 及更高版本，电池优化会影响推送</string>
 
-    <string name="settings_options">配置(重启应用生效)</string>
+    <string name="settings_options">配置(重启应用和服务生效)</string>
     <string name="pref_title_access_mode">前台APP检测模式</string>
     <string-array name="pref_title_access_mode_list_titles">
         <item>使用情况访问 API (性能好-推荐)</item>
@@ -145,6 +145,8 @@
         <item>0</item>
         <item>1</item>
     </string-array>
+    <string name="settings_debug_foreground_notification">开启保活通知(适用于Oreo之前版本)</string>
+    <string name="settings_debug_intent">调试跳转</string>
     <string name="settings_debug_icon">调试透明图标</string>
     <string name="settings_auto_register">自动注册应用</string>
 

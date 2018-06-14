@@ -20,14 +20,10 @@ import top.trumeet.common.event.Event;
 import top.trumeet.common.register.RegisteredApplication;
 import top.trumeet.common.utils.PreferencesUtils;
 
+import static com.xiaomi.xmsf.XmsfApp.conf;
+
 public class XMPushService extends IntentService {
     private static final String TAG = "XMPushService Bridge";
-
-    class Conf {
-        boolean autoRegister = false;
-    }
-
-    private Conf conf;
 
     public XMPushService() {
         super("XMPushService Bridge");
@@ -35,9 +31,6 @@ public class XMPushService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (conf == null) {
-            conf = buildConf();
-        }
 
         Log4a.d(TAG, "onHandleIntent -> A application want to register push");
         String pkg = intent.getStringExtra(Constants.EXTRA_MI_PUSH_PACKAGE);
@@ -66,7 +59,7 @@ public class XMPushService extends IntentService {
                 Log4a.w(TAG, "Denied register request: " + pkg);
                 result = Event.ResultType.DENY_USER;
             } else {
-                if (conf.autoRegister && application.getType() == RegisteredApplication.Type.ASK) {
+                if (XmsfApp.conf.autoRegister && application.getType() == RegisteredApplication.Type.ASK) {
                     application.setType(RegisteredApplication.Type.ALLOW);
                     RegisteredApplicationDb.update(application, this);
                 }
@@ -104,13 +97,4 @@ public class XMPushService extends IntentService {
         }
     }
 
-    private Conf buildConf() {
-        Conf tmp = new Conf();
-        try {
-            SharedPreferences prefs = PreferencesUtils.getPreferences(this);
-            tmp.autoRegister = prefs.getBoolean(PreferencesUtils.KeyAutoRegister, true);
-        } catch (RemotePreferenceAccessException ignored) {
-        }
-        return tmp;
-    }
 }

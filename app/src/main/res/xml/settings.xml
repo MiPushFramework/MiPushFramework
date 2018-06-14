@@ -49,10 +49,21 @@
             android:positiveButtonText="@null"
             android:title="@string/pref_title_access_mode" />
 
+
         <SwitchPreference
             android:defaultValue="false"
             android:key="DebugIcon"
             android:title="@string/settings_debug_icon" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="DebugIntent"
+            android:title="@string/settings_debug_intent" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="ForegroundNotification"
+            android:title="@string/settings_debug_foreground_notification" />
 
         <SwitchPreference
             android:defaultValue="true"

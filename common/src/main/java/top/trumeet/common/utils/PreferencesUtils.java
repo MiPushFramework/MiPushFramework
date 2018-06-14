@@ -16,6 +16,8 @@ public class PreferencesUtils {
     public static String KeyAccessMode = "AccessMode";
     public static String KeyDebugIcon = "DebugIcon";
     public static String KeyAutoRegister = "AutoRegister";
+    public static String KeyDebugIntent = "DebugIntent";
+    public static String KeyForegroundNotification = "ForegroundNotification";
 
     public static SharedPreferences getPreferences(Context ctx) {
         return new RemotePreferences(ctx, PreferencesUtils.Authority, PreferencesUtils.MainPrefs, true);
