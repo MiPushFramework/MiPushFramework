@@ -209,4 +209,5 @@
     <b>权限不足通常是由于升级所致，请重再一次安装manager APP，注意不要清空数据。
     寻找当前版本安装包 <a href="%1$s">点击这里</a> </b>
     ]]></string>
+    <string name="disable_fg_notification_warning">关闭可能会导致通知不及时</string>
 </resources>
