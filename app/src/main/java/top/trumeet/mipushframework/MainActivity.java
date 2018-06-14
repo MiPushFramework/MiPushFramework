@@ -54,7 +54,7 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkAndConnect();
-        checkAndShowPlatformNotice();
+        //checkAndShowPlatformNotice();
     }
 
     @UiThread
@@ -145,8 +145,9 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
             boolean success = (mController != null) && mController.isConnected();
             if (success) {
                 int version = mController.getVersionCode();
-                if (version != Constants.PUSH_SERVICE_VERSION_CODE)
+                if (version != Constants.PUSH_SERVICE_VERSION_CODE) {
                     return new Pair<>(false, FAIL_REASON_LOW_VERSION);
+                }
                 return new Pair<>(true, null);
             }
 
@@ -155,8 +156,10 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
 
         @Override
         protected void onPostExecute (Pair<Boolean, Integer> success) {
-            if (mFragment != null) mFragment.onChange(success.first ? OnConnectStatusChangedListener.CONNECTED :
-            OnConnectStatusChangedListener.DISCONNECTED);
+            if (mFragment != null) {
+                mFragment.onChange(success.first ? OnConnectStatusChangedListener.CONNECTED :
+                OnConnectStatusChangedListener.DISCONNECTED);
+            }
             if (success.first) {
                 mProgressFadeOutAnimate = mConnectProgress.animate()
                         .alpha(1f)
@@ -207,8 +210,9 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
             }
         })
         .show();
-        if (mController != null && mController.isConnected())
+        if (mController != null && mController.isConnected()) {
             mController.disconnectIfNeeded();
+        }
     }
 
     @Override
@@ -222,7 +226,9 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
 
     @Override
     public void onResult (boolean granted, boolean blocked, String permName) {
-        if (DEBUG) Log.d("MainActivity", "onResult -> " + granted + ", " + blocked + ", " + permName);
+        if (DEBUG) {
+            Log.d("MainActivity", "onResult -> " + granted + ", " + blocked + ", " + permName);
+        }
         if (Constants.permissions.WRITE_SETTINGS.equalsIgnoreCase(permName)) {
             String permDisplayName = PermissionUtils.getName(permName);
 

@@ -24,7 +24,9 @@ import me.pqpo.librarylog4a.Log4a;
 import static top.trumeet.common.Constants.TAG_CONDOM;
 
 /**
- * Created by Trumeet on 2018/1/19.
+ *
+ * @author Trumeet
+ * @date 2018/1/19
  * <p>
  * PayLoad 主要在 {@link com.xiaomi.mipush.sdk.PushServiceClient#sendMessage(TBase, ActionType, PushMetaInfo)} 等重载方法中处理。
  * 具体转换： {@link com.xiaomi.xmpush.thrift.XmPushThriftSerializeUtils#convertByteArrayToThriftObject(TBase, byte[])} 中。
@@ -55,7 +57,7 @@ import static top.trumeet.common.Constants.TAG_CONDOM;
  * <p>
  * 2. 本地发送
  * 根据发送消息中出错的 Stacktrace，我们可以轻松找出发送消息的下游处理。
- * 首先，在 {@link XMPushService#connectBySlim} 连接时，注册了包监听器 {@link XMPushService#C00621}。
+ * 首先，在 {@link XMPushService#connectBySlim} 连接时，注册了包监听器 {@link XMPushService#mPacketListener}。
  * 它在监听到 Blob 和 Packet 后启动 {@link BlobReceiveJob} 和 {@link PacketReceiveJob}。
  * 这两个 Job 都将数据交给 {@link PacketSync} 处理。但两者最后都经过检测 / 处理，将数据交给 {@link ClientEventDispatcher#notifyPacketArrival} 处理。
  * <p>
@@ -97,7 +99,7 @@ public class PushServiceMain extends XMPushService {
             manager.createNotificationChannel(channel);
         }
 
-        if (XmsfApp.conf.foregroundNotification) {
+        if (XmsfApp.conf.foregroundNotification || Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Notification notification = new NotificationCompat.Builder(this,
                     CHANNEL_STATUS)
                     .setContentTitle(getString(R.string.notification_alive))
