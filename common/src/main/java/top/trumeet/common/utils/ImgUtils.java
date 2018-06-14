@@ -19,6 +19,10 @@ import java.util.Collections;
  */
 public class ImgUtils {
 
+
+    private static int NUM_256 = 256;
+    private static int NUM_255 = 255;
+
     public static Bitmap convertToTransparentAndWhite(Bitmap bitmap) {
         int calculateThreshold = calculateThreshold(bitmap);
         int width = bitmap.getWidth();
@@ -65,22 +69,22 @@ public class ImgUtils {
         filterWhitePoint(width, height, pixels, 3);
 
         //corner
-        int B = width / 8;
+        int cornerWidth = width / 8;
 
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 //shift
-                if ((i > B) && (i < (height - B))) {
+                if ((i > cornerWidth) && (i < (height - cornerWidth))) {
                     continue;
                 }
-                if ((j > B) && (j < (width - B))) {
+                if ((j > cornerWidth) && (j < (width - cornerWidth))) {
                     continue;
                 }
 
-                int x = (i > (height / 2) && ((height - i) < B)) ? (i - (height - 2 * B)) : i;
-                int y = (j > (width / 2) && ((width - j) < B)) ? (j - (width - 2 * B)) : j;
+                int x = (i > (height / 2) && ((height - i) < cornerWidth)) ? (i - (height - 2 * cornerWidth)) : i;
+                int y = (j > (width / 2) && ((width - j) < cornerWidth)) ? (j - (width - 2 * cornerWidth)) : j;
 
-                if (((x - B) * (x - B) + (y - B) * (y - B)) > B * B) {
+                if (((x - cornerWidth) * (x - cornerWidth) + (y - cornerWidth) * (y - cornerWidth)) > cornerWidth * cornerWidth) {
                     pixels[width * i + j] = Color.TRANSPARENT;
                 }
             }
@@ -220,7 +224,7 @@ public class ImgUtils {
         return pixels[width * i + j];
     }
 
-    public static void getGreyHistogram(Bitmap bitmap, int[] histogram) {
+    private static void getGreyHistogram(Bitmap bitmap, int[] histogram) {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
         for (int x = 0; x < height; x++) {
@@ -235,59 +239,39 @@ public class ImgUtils {
         }
     }
 
-    private static boolean IsDimodal(double[] histogram) {
+    private static boolean isDimodal(double[] histogram) {
         // 对直方图的峰进行计数，只有峰数位2才为双峰
-        int Count = 0;
-        for (int Y = 1; Y < 255; Y++) {
-            if (histogram[Y - 1] < histogram[Y] && histogram[Y + 1] < histogram[Y]) {
-                Count++;
-                if (Count > 2) {
+        int count = 0;
+        for (int i = 1; i < (NUM_256 - 1); i++) {
+            if (histogram[i - 1] < histogram[i] && histogram[i + 1] < histogram[i]) {
+                count++;
+                if (count > 2) {
                     return false;
                 }
             }
         }
-        return Count == 2;
+        return count == 2;
     }
 
 
-    public static int calculateThreshold(Bitmap bitmap) {
-        //TODO choose the best algorithm
-//        return calculateThresholdByOSTU(bitmap);
+    private static int calculateThreshold(Bitmap bitmap) {
+        int[] histogram = new int[NUM_256];
+        getGreyHistogram(bitmap, histogram);
+
         ArrayList<Integer> thresholds = new ArrayList<>();
-        thresholds.add(calculateThresholdByOSTU(bitmap));
-        thresholds.add(calculateThresholdByMinimum(bitmap));
-//        thresholds.add(calculateThresholdByPTile(bitmap));
-        thresholds.add(calculateThresholdByMean(bitmap));
+        thresholds.add(calculateThresholdByOSTU(bitmap, histogram));
+        thresholds.add(calculateThresholdByMinimum(histogram));
+        thresholds.add(calculateThresholdByMean(histogram));
         Collections.sort(thresholds);
         return thresholds.get(thresholds.size() - 1);
     }
 
 
-    public static int calculateThresholdByPTile(Bitmap bitmap) {
-        int[] histogram = new int[256];
-        getGreyHistogram(bitmap, histogram);
-
-        int Tile = 50;
-        int Y, Amount = 0, Sum = 0;
-        for (Y = 0; Y < 256; Y++) {
-            Amount += histogram[Y];
-        }
-        for (Y = 0; Y < 256; Y++) {
-            Sum = Sum + histogram[Y];
-            if (Sum >= Amount * Tile / 100) {
-                return Y;
-            }
-        }
-        return -1;
-    }
-
-    public static int calculateThresholdByOSTU(Bitmap bitmap) {
-        int[] histogram = new int[256];
-        getGreyHistogram(bitmap, histogram);
+    public static int calculateThresholdByOSTU(Bitmap bitmap, int[] histogram) {
 
         int total = bitmap.getWidth() * bitmap.getHeight();
         double sum = 0;
-        for (int i = 0; i < 256; i++) {
+        for (int i = 0; i < NUM_256; i++) {
             sum += i * histogram[i];
         }
 
@@ -298,7 +282,7 @@ public class ImgUtils {
         double varMax = 0;
         int threshold = 0;
 
-        for (int i = 0; i < 256; i++) {
+        for (int i = 0; i < NUM_256; i++) {
             wB += histogram[i];
             if (wB == 0) {
                 continue;
@@ -324,53 +308,50 @@ public class ImgUtils {
         return threshold;
     }
 
-    public static int calculateThresholdByMinimum(Bitmap bitmap) {
-        int[] histogram = new int[256];
-        getGreyHistogram(bitmap, histogram);
-        int Y, Iter = 0;
-        double[] HistGramC = new double[256];           // 基于精度问题，一定要用浮点数来处理，否则得不到正确的结果
-        double[] HistGramCC = new double[256];          // 求均值的过程会破坏前面的数据，因此需要两份数据
-        for (Y = 0; Y < 256; Y++) {
-            HistGramC[Y] = histogram[Y];
-            HistGramCC[Y] = histogram[Y];
+    public static int calculateThresholdByMinimum(int[] histogram) {
+
+        int y, iter = 0;
+        double[] histgramc = new double[NUM_256];
+        double[] histgramcc = new double[NUM_256];
+        for (y = 0; y < NUM_256; y++) {
+            histgramc[y] = histogram[y];
+            histgramcc[y] = histogram[y];
         }
 
-        // 通过三点求均值来平滑直方图
-        while (!IsDimodal(HistGramCC)) {                        // 判断是否已经是双峰的图像了
-            HistGramCC[0] = (HistGramC[0] + HistGramC[0] + HistGramC[1]) / 3;                 // 第一点
-            for (Y = 1; Y < 255; Y++) {
-                HistGramCC[Y] = (HistGramC[Y - 1] + HistGramC[Y] + HistGramC[Y + 1]) / 3;     // 中间的点
+        while (!isDimodal(histgramcc)) {
+            histgramcc[0] = (histgramc[0] + histgramc[0] + histgramc[1]) / 3;
+            for (y = 1; y < (NUM_256 - 1); y++) {
+                histgramcc[y] = (histgramc[y - 1] + histgramc[y] + histgramc[y + 1]) / 3;
             }
-            HistGramCC[255] = (HistGramC[254] + HistGramC[255] + HistGramC[255]) / 3;         // 最后一点
-            System.arraycopy(HistGramCC, 0, HistGramC, 0, 256);
-            Iter++;
-            if (Iter >= 1000) {
-                return -1;                                                   // 直方图无法平滑为双峰的，返回错误代码
+            histgramcc[255] = (histgramc[254] + histgramc[255] + histgramc[255]) / 3;
+            System.arraycopy(histgramcc, 0, histgramc, 0, NUM_256);
+            iter++;
+            if (iter >= 1000) {
+                return -1;
             }
         }
         // 阈值极为两峰之间的最小值
-        boolean Peakfound = false;
-        for (Y = 1; Y < 255; Y++) {
-            if (HistGramCC[Y - 1] < HistGramCC[Y] && HistGramCC[Y + 1] < HistGramCC[Y]) {
-                Peakfound = true;
+        boolean peakFound = false;
+        for (y = 1; y < (NUM_256 - 1); y++) {
+            if (histgramcc[y - 1] < histgramcc[y] && histgramcc[y + 1] < histgramcc[y]) {
+                peakFound = true;
             }
-            if (Peakfound && HistGramCC[Y - 1] >= HistGramCC[Y] && HistGramCC[Y + 1] >= HistGramCC[Y]) {
-                return Y - 1;
+            if (peakFound && histgramcc[y - 1] >= histgramcc[y] && histgramcc[y + 1] >= histgramcc[y]) {
+                return y - 1;
             }
         }
         return -1;
     }
 
 
-    public static int calculateThresholdByMean(Bitmap bitmap) {
-        int[] histogram = new int[256];
-        getGreyHistogram(bitmap, histogram);
-        int Sum = 0, Amount = 0;
-        for (int Y = 0; Y < 256; Y++) {
-            Amount += histogram[Y];
-            Sum += Y * histogram[Y];
+    public static int calculateThresholdByMean(int[] histogram) {
+
+        int sum = 0, amount = 0;
+        for (int i = 0; i < NUM_256; i++) {
+            amount += histogram[i];
+            sum += i * histogram[i];
         }
-        return Sum / Amount;
+        return sum / amount;
     }
 
 
