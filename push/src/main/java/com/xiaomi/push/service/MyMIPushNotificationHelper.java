@@ -19,14 +19,20 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 
+import com.xiaomi.channel.commonutils.logger.MyLog;
 import com.xiaomi.channel.commonutils.reflect.JavaCalls;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
 import com.xiaomi.xmsf.R;
+import com.xiaomi.xmsf.XmsfApp;
 import com.xiaomi.xmsf.push.notification.NotificationController;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Map;
+
 import me.pqpo.librarylog4a.Log4a;
-import top.trumeet.common.BuildConfig;
 import top.trumeet.common.cache.ApplicationNameCache;
 import top.trumeet.common.cache.IconCache;
 
@@ -112,7 +118,7 @@ public class MyMIPushNotificationHelper {
 //            }
 
             // Debug actions
-            if (BuildConfig.DEBUG) {
+            if (XmsfApp.conf.debugIntent) {
                 int i = R.drawable.ic_notifications_black_24dp;
 
                 PendingIntent pendingIntentOpenActivity = openActivityPendingIntent(var0, buildContainer, metaInfo, var1);
@@ -124,6 +130,13 @@ public class MyMIPushNotificationHelper {
                 if (pendingIntentJump != null) {
                     localBuilder.addAction(new Notification.Action(i, "Jump", pendingIntentJump));
                 }
+
+                Intent sdkIntentJump = getSdkIntent(var0, buildContainer.getPackageName(), metaInfo);
+                if (sdkIntentJump != null) {
+                    PendingIntent pendingIntent = PendingIntent.getActivity(var0, 0, sdkIntentJump, PendingIntent.FLAG_UPDATE_CURRENT);
+                    localBuilder.addAction(new Notification.Action(i, "SDK Intent", pendingIntent));
+                }
+
             }
 
             localBuilder.setWhen(System.currentTimeMillis());
@@ -172,7 +185,7 @@ public class MyMIPushNotificationHelper {
     }
 
     public static Spannable createColorSubtext(CharSequence appName,
-                                                int color) {
+                                               int color) {
         final Spannable amened = new SpannableStringBuilder(appName);
         // 弄一个自己的颜色 TODO：不知道小米有没有这个 API，或者抄袭 AOSP 的实现
         amened.setSpan(new ForegroundColorSpan(color),
@@ -182,9 +195,9 @@ public class MyMIPushNotificationHelper {
 
 
     private static PendingIntent openActivityPendingIntent(Context paramContext, XmPushActionContainer paramXmPushActionContainer, PushMetaInfo paramPushMetaInfo, byte[] paramArrayOfByte) {
-        String package_name = paramXmPushActionContainer.getPackageName();
+        String packageName = paramXmPushActionContainer.getPackageName();
         PackageManager packageManager = paramContext.getPackageManager();
-        Intent localIntent1 = packageManager.getLaunchIntentForPackage(package_name);
+        Intent localIntent1 = packageManager.getLaunchIntentForPackage(packageName);
         if (localIntent1 != null) {
             localIntent1.addCategory(String.valueOf(paramPushMetaInfo.getNotifyId()));
             return PendingIntent.getActivity(paramContext, 0, localIntent1, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -237,6 +250,101 @@ public class MyMIPushNotificationHelper {
 
         }
         return localPendingIntent;
+    }
+
+    /**
+     * @see com.xiaomi.mipush.sdk.PushMessageProcessor#getNotificationMessageIntent
+     */
+    public static Intent getSdkIntent(Context context, String pkgName, PushMetaInfo paramPushMetaInfo) {
+
+        Map<String, String> extra = paramPushMetaInfo.getExtra();
+        if (extra == null) {
+            return null;
+        }
+
+        if (!extra.containsKey(PushConstants.EXTRA_PARAM_NOTIFY_EFFECT)) {
+            return null;
+        }
+
+        Intent intent = null;
+
+        String typeId = (String) extra.get(PushConstants.EXTRA_PARAM_NOTIFY_EFFECT);
+        if (PushConstants.NOTIFICATION_CLICK_DEFAULT.equals(typeId)) {
+            try {
+                intent = context.getPackageManager().getLaunchIntentForPackage(pkgName);
+            } catch (Exception e2) {
+                MyLog.e("Cause: " + e2.getMessage());
+            }
+        } else if (PushConstants.NOTIFICATION_CLICK_INTENT.equals(typeId)) {
+
+            if (extra.containsKey(PushConstants.EXTRA_PARAM_INTENT_URI)) {
+                String intentStr = extra.get(PushConstants.EXTRA_PARAM_INTENT_URI);
+                if (intentStr != null) {
+                    try {
+                        intent = Intent.parseUri(intentStr, Intent.URI_INTENT_SCHEME);
+                        intent.setPackage(pkgName);
+                    } catch (URISyntaxException e3) {
+                        MyLog.e("Cause: " + e3.getMessage());
+                    }
+                }
+            } else {
+                if (extra.containsKey(PushConstants.EXTRA_PARAM_CLASS_NAME)) {
+                    String className = (String) extra.get(PushConstants.EXTRA_PARAM_CLASS_NAME);
+                    intent = new Intent();
+                    intent.setComponent(new ComponentName(pkgName, className));
+                    try {
+                        if (extra.containsKey(PushConstants.EXTRA_PARAM_INTENT_FLAG)) {
+                            intent.setFlags(Integer.parseInt(extra.get(PushConstants.EXTRA_PARAM_INTENT_FLAG)));
+                        }
+                    } catch (NumberFormatException e4) {
+                        MyLog.e("Cause by intent_flag: " + e4.getMessage());
+                    }
+
+                }
+            }
+        } else if (PushConstants.NOTIFICATION_CLICK_WEB_PAGE.equals(typeId)) {
+            String uri = (String) extra.get(PushConstants.EXTRA_PARAM_WEB_URI);
+
+            MalformedURLException e;
+
+            if (uri != null) {
+                String tmp = uri.trim();
+                if (!(tmp.startsWith("http://") || tmp.startsWith("https://"))) {
+                    tmp = "http://" + tmp;
+                }
+                try {
+                    String protocol = new URL(tmp).getProtocol();
+                    if (!"http".equals(protocol)) {
+                        if (!"https".equals(protocol)) {
+                            //why ?
+                        }
+                    }
+                    Intent intent2 = new Intent("android.intent.action.VIEW");
+                    intent2.setData(Uri.parse(tmp));
+                    intent = intent2;
+                } catch (MalformedURLException e6) {
+                    e = e6;
+                    MyLog.e("Cause: " + e.getMessage());
+                    return null;
+                }
+            }
+        }
+
+
+        if (intent != null) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            if (context.getPackageManager().resolveActivity(intent, 65536) != null) {
+                //TODO fixit
+//                String payload = actualMsg.getPayload();
+//                if (!TextUtils.isEmpty(payload)) {
+//                    intent.putExtra(PushServiceConstants.EXTENSION_ELEMENT_PAYLOAD, payload);
+//                }
+
+                return intent;
+            }
+        }
+
+        return null;
     }
 
     private static PendingIntent startServicePendingIntent(Context paramContext, XmPushActionContainer paramXmPushActionContainer, PushMetaInfo paramPushMetaInfo, byte[] paramArrayOfByte) {

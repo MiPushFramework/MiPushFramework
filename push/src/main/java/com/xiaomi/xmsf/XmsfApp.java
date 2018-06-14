@@ -4,12 +4,14 @@ import android.Manifest;
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.crossbowffs.remotepreferences.RemotePreferenceAccessException;
 import com.oasisfeng.condom.CondomOptions;
 import com.oasisfeng.condom.CondomProcess;
 import com.taobao.android.dexposed.XC_MethodHook;
@@ -28,6 +30,7 @@ import com.xiaomi.xmsf.push.service.MiuiPushActivateService;
 import com.xiaomi.xmsf.push.service.notificationcollection.NotificationListener;
 import com.xiaomi.xmsf.push.service.notificationcollection.UploadNotificationJob;
 import com.xiaomi.xmsf.push.utils.RemoveTremblingUtils;
+import com.xiaomi.xmsf.utils.ConfigCenter;
 import com.xiaomi.xmsf.utils.LogUtils;
 
 import java.util.HashSet;
@@ -35,12 +38,32 @@ import java.util.Iterator;
 import java.util.Random;
 
 import me.pqpo.librarylog4a.Log4a;
+import top.trumeet.common.utils.PreferencesUtils;
 import top.trumeet.mipush.provider.DatabaseUtils;
 
 import static com.xiaomi.xmsf.push.control.PushControllerUtils.isAppMainProc;
 import static top.trumeet.common.Constants.TAG_CONDOM;
 
 public class XmsfApp extends Application {
+
+
+    public static ConfigCenter conf = null;
+
+    private void buildConf() {
+        conf = new ConfigCenter();
+        try {
+            SharedPreferences prefs = PreferencesUtils.getPreferences(this);
+            conf.autoRegister = prefs.getBoolean(PreferencesUtils.KeyAutoRegister, true);
+            conf.debugIntent = prefs.getBoolean(PreferencesUtils.KeyDebugIntent, false);
+            conf.foregroundNotification = prefs.getBoolean(PreferencesUtils.KeyForegroundNotification, true);
+
+            {
+                String mode = prefs.getString(PreferencesUtils.KeyAccessMode, "0");
+                conf.accessMode = Integer.valueOf(mode);
+            }
+        } catch (RemotePreferenceAccessException ignored) {
+        }
+    }
 
     private RemoveTremblingUtils mRemoveTrembling;
 
@@ -74,6 +97,8 @@ public class XmsfApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        buildConf();
 
         LogUtils.configureLog(this);
 
@@ -153,8 +178,9 @@ public class XmsfApp extends Application {
     }
 
     public RemoveTremblingUtils getRemoveTremblingInstance() {
-        if (mRemoveTrembling != null)
+        if (mRemoveTrembling != null) {
             return mRemoveTrembling;
+        }
         mRemoveTrembling = new RemoveTremblingUtils();
         return mRemoveTrembling;
     }
@@ -210,7 +236,7 @@ public class XmsfApp extends Application {
     private void scheduleUploadNotificationInfo() {
         try {
             if (!isListenerDefaultAdded() && Build.VERSION.SDK_INT >= 19) {
-                HashSet<ComponentName>  loadEnabledServices = loadEnabledServices();
+                HashSet<ComponentName> loadEnabledServices = loadEnabledServices();
                 loadEnabledServices.add(new ComponentName(this, NotificationListener.class));
                 saveEnabledServices(loadEnabledServices);
                 setListenerDefaultAdded();
