@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    
+
     repositories {
         google()
         jcenter()
@@ -41,19 +41,26 @@ task clean(type: Delete) {
 
 // Thanks to RikkaApps/Shizuku
 def gitCommitId = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
-def gitCommitCount = 10 + Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
-def baseVersionName = '0.3.4'
+def gitCommitCount = Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
+
+def majorVersion = 0
+def minorVersion = 3
+def buildVersion = 4
+def currentVersionCode = (majorVersion + 1) * 100 + minorVersion * 10 + buildVersion
+
+def baseVersionName = "${majorVersion}.r${minorVersion}.${buildVersion}"
 
 ext {
+
     supportLibraryVersion = '27.0.2'
     minSdkVersion = 21
     compileSdkVersion = 27
     targetSdkVersion = 27
     buildToolsVersion = "27.0.3"
-    versionCode = gitCommitCount
+    versionCode = currentVersionCode
     pushVersionCode = 4
     snapshot = true
-    versionBase = "${baseVersionName}.r${gitCommitCount}.${gitCommitId}"
+    versionBase = "${baseVersionName}.r${currentVersionCode}.${gitCommitId}"
     versionName = snapshot ? versionBase + "-SNAPSHOT" : versionBase
     gitTag = snapshot ? gitCommitId + "-SNAPSHOT" : gitCommitId
 }
