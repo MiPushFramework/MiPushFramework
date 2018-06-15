@@ -41,7 +41,7 @@ task clean(type: Delete) {
 
 // Thanks to RikkaApps/Shizuku
 def gitCommitId = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
-def gitCommitCount = Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
+def gitCommitCount = 10 + Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
 def baseVersionName = '0.3.4'
 
 ext {
