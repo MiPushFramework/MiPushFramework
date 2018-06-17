@@ -41,14 +41,13 @@ task clean(type: Delete) {
 
 // Thanks to RikkaApps/Shizuku
 def gitCommitId = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
-def gitCommitCount = Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
 
 def majorVersion = 0
 def minorVersion = 3
 def buildVersion = 4
-def currentVersionCode = (majorVersion + 1) * 100 + minorVersion * 10 + buildVersion
+def currentVersionCode = (majorVersion + 1) * 200 + minorVersion * 20 + buildVersion
 
-def baseVersionName = "${majorVersion}.r${minorVersion}.${buildVersion}"
+def baseVersionName = "${majorVersion}.${minorVersion}.${buildVersion}"
 
 ext {
 
