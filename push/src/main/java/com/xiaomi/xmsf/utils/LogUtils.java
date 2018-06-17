@@ -95,8 +95,7 @@ public class LogUtils {
             context.startActivity(result);
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(context, context.getString(R.string.log_share_error,
-                    e.getMessage()), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.log_share_error, e.getMessage()), Toast.LENGTH_SHORT).show();
         }
     }
 }

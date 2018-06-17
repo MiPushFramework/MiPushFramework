@@ -7,6 +7,9 @@ import com.xiaomi.xmsf.utils.LogUtils;
 
 import me.pqpo.librarylog4a.Log4a;
 
+/**
+ * @author zts
+ */
 public class ClearLogActivity extends Activity {
     @Override
     public void onCreate (Bundle savedInstanceState) {

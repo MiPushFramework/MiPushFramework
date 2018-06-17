@@ -8,7 +8,9 @@ import com.xiaomi.xmsf.utils.LogUtils;
 import me.pqpo.librarylog4a.Log4a;
 
 /**
- * Created by Trumeet on 2017/12/29.
+ *
+ * @author Trumeet
+ * @date 2017/12/29
  */
 
 public class ShareLogActivity extends Activity {

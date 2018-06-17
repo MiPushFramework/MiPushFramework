@@ -12,7 +12,9 @@ import android.support.annotation.Nullable;
 import top.trumeet.common.push.PushServiceAccessibility;
 
 /**
- * Created by Trumeet on 2018/1/24.
+ *
+ * @author Trumeet
+ * @date 2018/1/24
  */
 
 public class RemoveDozeActivity extends Activity {
