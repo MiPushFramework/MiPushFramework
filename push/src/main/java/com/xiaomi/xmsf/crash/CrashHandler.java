@@ -5,7 +5,9 @@ import android.support.annotation.NonNull;
 import me.pqpo.librarylog4a.Log4a;
 
 /**
- * Created by Trumeet on 2018/2/4.
+ *
+ * @author Trumeet
+ * @date 2018/2/4
  *
  * Log crashes
  */
@@ -21,6 +23,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     public void uncaughtException(Thread t, Throwable e) {
         Log4a.e("Crash", t.toString() + ": Application crashed", e);
         Log4a.flush();
-        if (mBase != null) mBase.uncaughtException(t, e);
+        mBase.uncaughtException(t, e);
     }
 }

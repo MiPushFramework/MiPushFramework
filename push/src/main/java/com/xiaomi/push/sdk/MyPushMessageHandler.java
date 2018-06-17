@@ -6,8 +6,10 @@ import android.content.Intent;
 
 import com.xiaomi.helper.ITopActivity;
 import com.xiaomi.helper.TopActivityFactory;
+import com.xiaomi.push.service.MIPushNotificationHelper;
 import com.xiaomi.push.service.MyClientEventDispatcher;
 import com.xiaomi.push.service.MyMIPushNotificationHelper;
+import com.xiaomi.push.service.PushConstants;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
 import com.xiaomi.xmpush.thrift.XmPushThriftSerializeUtils;
@@ -25,7 +27,7 @@ public class MyPushMessageHandler extends IntentService {
     private static final String TAG = "MyPushMessageHandler";
 
     private static final int APP_CHECK_FRONT_MAX_RETRY = 6;
-    private static final int APP_CHECK_SLEEP_DURATION_MS = 500;
+    private static final int APP_CHECK_SLEEP_DURATION_MS = 300;
     private static final int APP_CHECK_SLEEP_MAX_TIMEOUT_MS = APP_CHECK_FRONT_MAX_RETRY * APP_CHECK_SLEEP_DURATION_MS;
 
     static ITopActivity iTopActivity = null;
@@ -45,7 +47,7 @@ public class MyPushMessageHandler extends IntentService {
             return;
         }
 
-        byte[] payload = intent.getByteArrayExtra("mipush_payload");
+        byte[] payload = intent.getByteArrayExtra(PushConstants.MIPUSH_EXTRA_PAYLOAD);
         if (payload == null) {
             Log4a.e(TAG, "mipush_payload is null");
             return;
@@ -62,12 +64,13 @@ public class MyPushMessageHandler extends IntentService {
         PushMetaInfo metaInfo = container.getMetaInfo();
         String targetPackage = container.getPackageName();
 
-        pullUpApp(metaInfo, targetPackage);
 
-        final Intent localIntent = new Intent("com.xiaomi.mipush.RECEIVE_MESSAGE");
+        pullUpApp(targetPackage, container);
+
+        final Intent localIntent = new Intent(PushConstants.MIPUSH_ACTION_NEW_MESSAGE);
         localIntent.setComponent(new ComponentName(targetPackage, "com.xiaomi.mipush.sdk.PushMessageHandler"));
-        localIntent.putExtra("mipush_payload", payload);
-        localIntent.putExtra("mipush_notified", true);
+        localIntent.putExtra(PushConstants.MIPUSH_EXTRA_PAYLOAD, payload);
+        localIntent.putExtra(MIPushNotificationHelper.FROM_NOTIFICATION, true);
         localIntent.addCategory(String.valueOf(metaInfo.getNotifyId()));
         try {
             Log4a.d(TAG, "send to service " + targetPackage);
@@ -84,8 +87,8 @@ public class MyPushMessageHandler extends IntentService {
     }
 
 
-    private Intent getJumpIntent(PushMetaInfo metaInfo, String targetPackage) {
-        Intent intent = MyMIPushNotificationHelper.getSdkIntent(this, targetPackage, metaInfo);
+    private Intent getJumpIntent(String targetPackage, XmPushActionContainer container) {
+        Intent intent = MyMIPushNotificationHelper.getSdkIntent(this, targetPackage, container);
         if (intent == null) {
             try {
                 intent = getPackageManager().getLaunchIntentForPackage(targetPackage);
@@ -96,7 +99,7 @@ public class MyPushMessageHandler extends IntentService {
         return intent;
     }
 
-    private long pullUpApp(PushMetaInfo metaInfo, String targetPackage) {
+    private long pullUpApp(String targetPackage, XmPushActionContainer container) {
         long start = System.currentTimeMillis();
 
         try {
@@ -105,19 +108,16 @@ public class MyPushMessageHandler extends IntentService {
             if (!iTopActivity.isAppForeground(this, targetPackage)) {
                 Log4a.d(TAG, "app is not at front , let's pull up");
 
-                Intent intent = getJumpIntent(metaInfo, targetPackage);
+                Intent intent = getJumpIntent(targetPackage, container);
 
                 if (intent == null) {
                     throw new RuntimeException("can not get default activity for " + targetPackage);
                 } else {
-
                     intent.addCategory(Intent.CATEGORY_DEFAULT);
-
                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+
                     startActivity(intent);
                     Log4a.d(TAG, "start activity " + targetPackage);
-
                 }
 
 

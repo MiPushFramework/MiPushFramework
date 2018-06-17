@@ -36,4 +36,5 @@
         如果需要，请锁定它。
         防止ROM停止MiPush后台服务。
     </string>
+    <string name="see_pass_though_msg">穿透消息，请打开APP查看</string>
 </resources>

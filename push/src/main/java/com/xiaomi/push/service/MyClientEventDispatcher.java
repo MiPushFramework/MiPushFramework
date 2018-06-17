@@ -120,39 +120,21 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
     }
 
     private static class EventProcessor extends MIPushEventProcessor {
-        private static void runProcessMIPushMessage(XMPushService var0, byte[] var1, long var2) {
-            XmPushActionContainer buildContainer = buildContainer(var1);
+        private static void runProcessMIPushMessage(XMPushService xmPushService, byte[] payload, long var2) {
+            XmPushActionContainer buildContainer = buildContainer(payload);
             Log4a.i(TAG, "buildContainer: " + buildContainer.toString());
-            //String targetPackage = MIPushNotificationHelper.getTargetPackage(buildContainer);
-            if (BuildConfig.DEBUG) Log4a.d(TAG, "packageName: " + buildContainer.packageName
-                    /*+ ", targetPackage: " +
-            targetPackage*/);
-            // 是否是透传
+
             EventType type = TypeFactory.create(buildContainer, buildContainer.packageName);
-            if (PushConstants.PUSH_SERVICE_PACKAGE_NAME.equals(buildContainer.packageName) ||
-                    MessageProcessor.shouldAllow(type, var0)) {
+            if (MessageProcessor.shouldAllow(type, xmPushService) ||
+                    PushConstants.PUSH_SERVICE_PACKAGE_NAME.equals(buildContainer.packageName)) {
 
-                if (BuildConfig.DEBUG) Log4a.d(TAG, "invoke original method");
-
-                Intent localIntent = buildIntent(var1, System.currentTimeMillis());
-
-                MyMIPushMessageProcessor.process(var0, buildContainer, var1, var2, localIntent);
-                //doProcessMIPushMessage(var0, var1, var2);
+                Intent localIntent = buildIntent(payload, System.currentTimeMillis());
+                MyMIPushMessageProcessor.process(xmPushService, buildContainer, payload, var2, localIntent);
 
             } else {
-                if (BuildConfig.DEBUG) Log4a.d(TAG, "denied.");
-            }
-        }
-
-        private static void doProcessMIPushMessage(XMPushService var0, byte[] var1, long var2) {
-            try {
-                Method method = MIPushEventProcessor.class.getDeclaredMethod("processMIPushMessage"
-                        , XMPushService.class,
-                        byte[].class, long.class);
-                method.setAccessible(true);
-                method.invoke(null, var0, var1, var2);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+                if (BuildConfig.DEBUG) {
+                    Log4a.d(TAG, "denied.");
+                }
             }
         }
 

@@ -132,8 +132,7 @@ public class XmsfApp extends Application {
 
         CondomOptions options = XMOutbound.create(this, TAG_CONDOM + "_PROCESS",
                 false);
-        CondomProcess.installExceptDefaultProcess(this,
-                options);
+        CondomProcess.installExceptDefaultProcess(this, options);
         LoggerInterface newLogger = new LoggerInterface() {
             private static final String TAG = "PushCore";
 
@@ -156,8 +155,7 @@ public class XmsfApp extends Application {
                 Log4a.d(TAG, content);
             }
         };
-        Logger.setLogger(PushControllerUtils.wrapContext(this)
-                , newLogger);
+        Logger.setLogger(PushControllerUtils.wrapContext(this), newLogger);
         if (PushControllerUtils.isPrefsEnable(this)) {
             PushControllerUtils.setAllEnable(true, this);
         }

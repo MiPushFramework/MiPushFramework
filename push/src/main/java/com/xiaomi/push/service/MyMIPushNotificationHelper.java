@@ -23,9 +23,11 @@ import com.xiaomi.channel.commonutils.logger.MyLog;
 import com.xiaomi.channel.commonutils.reflect.JavaCalls;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
+
 import com.xiaomi.xmsf.R;
 import com.xiaomi.xmsf.XmsfApp;
 import com.xiaomi.xmsf.push.notification.NotificationController;
+
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -40,15 +42,21 @@ import static com.xiaomi.push.service.MIPushNotificationHelper.drawableToBitmap;
 import static com.xiaomi.push.service.MIPushNotificationHelper.isBusinessMessage;
 
 /**
- * Created by zts1993 on 2018/2/8.
+ * @author zts1993
+ * @date 2018/2/8
  */
 
 public class MyMIPushNotificationHelper {
     private static final String NOTIFICATION_ICON = "mipush_notification";
     private static final String NOTIFICATION_SMALL_ICON = "mipush_small_notification";
 
-    private static final String TAG = "MyMIPushNotificationHelper";
+    private static final int NOTIFICATION_BIG_STYLE_MIN_LEN = 25;
 
+    private static final String TAG = "MyNotificationHelper";
+
+    /**
+     * @see MIPushNotificationHelper#notifyPushMessage
+     */
     static void notifyPushMessage(XMPushService var0, XmPushActionContainer buildContainer, byte[] var1, long var2) {
         PushMetaInfo metaInfo = buildContainer.getMetaInfo();
 
@@ -61,7 +69,7 @@ public class MyMIPushNotificationHelper {
 
         Log4a.i(TAG, "title:" + title + "  description:" + description);
 
-        if (description.length() > 30) { //TODO length 30 is constant
+        if (description.length() > NOTIFICATION_BIG_STYLE_MIN_LEN) {
             Notification.BigTextStyle style = new Notification.BigTextStyle();
             style.bigText(description);
             style.setBigContentTitle(title);
@@ -117,7 +125,6 @@ public class MyMIPushNotificationHelper {
 //                Log4a.e(TAG, e.getLocalizedMessage(), e);
 //            }
 
-            // Debug actions
             if (XmsfApp.conf.debugIntent) {
                 int i = R.drawable.ic_notifications_black_24dp;
 
@@ -131,7 +138,7 @@ public class MyMIPushNotificationHelper {
                     localBuilder.addAction(new Notification.Action(i, "Jump", pendingIntentJump));
                 }
 
-                Intent sdkIntentJump = getSdkIntent(var0, buildContainer.getPackageName(), metaInfo);
+                Intent sdkIntentJump = getSdkIntent(var0, buildContainer.getPackageName(), buildContainer);
                 if (sdkIntentJump != null) {
                     PendingIntent pendingIntent = PendingIntent.getActivity(var0, 0, sdkIntentJump, PendingIntent.FLAG_UPDATE_CURRENT);
                     localBuilder.addAction(new Notification.Action(i, "SDK Intent", pendingIntent));
@@ -148,8 +155,8 @@ public class MyMIPushNotificationHelper {
         localBuilder.setContentText(titleAndDesp[1]);
 
 
-        //for VERSION < N_MR1
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
+        //for VERSION <= N_MR1
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
             localBuilder.setDefaults(Notification.DEFAULT_ALL);
         }
 
@@ -234,17 +241,15 @@ public class MyMIPushNotificationHelper {
         if (isBusinessMessage(paramXmPushActionContainer)) {
             Intent localIntent = new Intent();
             localIntent.setComponent(new ComponentName("com.xiaomi.xmsf", "com.xiaomi.mipush.sdk.PushMessageHandler"));
-            localIntent.putExtra("mipush_payload", paramArrayOfByte);
-            localIntent.putExtra("mipush_notified", true);
+            localIntent.putExtra(PushConstants.MIPUSH_EXTRA_PAYLOAD, paramArrayOfByte);
+            localIntent.putExtra(MIPushNotificationHelper.FROM_NOTIFICATION, true);
             localIntent.addCategory(String.valueOf(paramPushMetaInfo.getNotifyId()));
             localPendingIntent = PendingIntent.getService(paramContext, id, localIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         } else {
             Intent localIntent = new Intent();
             localIntent.setComponent(new ComponentName("com.xiaomi.xmsf", "com.xiaomi.push.sdk.MyPushMessageHandler"));
-//            Intent localIntent = new Intent("com.xiaomi.mipush.RECEIVE_MESSAGE");
-//            localIntent.setComponent(new ComponentName(paramXmPushActionContainer.packageName, "com.xiaomi.mipush.sdk.PushMessageHandler"));
-            localIntent.putExtra("mipush_payload", paramArrayOfByte);
-            localIntent.putExtra("mipush_notified", true);
+            localIntent.putExtra(PushConstants.MIPUSH_EXTRA_PAYLOAD, paramArrayOfByte);
+            localIntent.putExtra(MIPushNotificationHelper.FROM_NOTIFICATION, true);
             localIntent.addCategory(String.valueOf(paramPushMetaInfo.getNotifyId()));
             localPendingIntent = PendingIntent.getService(paramContext, id, localIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -255,8 +260,8 @@ public class MyMIPushNotificationHelper {
     /**
      * @see com.xiaomi.mipush.sdk.PushMessageProcessor#getNotificationMessageIntent
      */
-    public static Intent getSdkIntent(Context context, String pkgName, PushMetaInfo paramPushMetaInfo) {
-
+    public static Intent getSdkIntent(Context context, String pkgName, XmPushActionContainer container) {
+        PushMetaInfo paramPushMetaInfo = container.getMetaInfo();
         Map<String, String> extra = paramPushMetaInfo.getExtra();
         if (extra == null) {
             return null;
@@ -268,7 +273,7 @@ public class MyMIPushNotificationHelper {
 
         Intent intent = null;
 
-        String typeId = (String) extra.get(PushConstants.EXTRA_PARAM_NOTIFY_EFFECT);
+        String typeId = extra.get(PushConstants.EXTRA_PARAM_NOTIFY_EFFECT);
         if (PushConstants.NOTIFICATION_CLICK_DEFAULT.equals(typeId)) {
             try {
                 intent = context.getPackageManager().getLaunchIntentForPackage(pkgName);
@@ -303,7 +308,7 @@ public class MyMIPushNotificationHelper {
                 }
             }
         } else if (PushConstants.NOTIFICATION_CLICK_WEB_PAGE.equals(typeId)) {
-            String uri = (String) extra.get(PushConstants.EXTRA_PARAM_WEB_URI);
+            String uri = extra.get(PushConstants.EXTRA_PARAM_WEB_URI);
 
             MalformedURLException e;
 
@@ -333,12 +338,14 @@ public class MyMIPushNotificationHelper {
 
         if (intent != null) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            if (context.getPackageManager().resolveActivity(intent, 65536) != null) {
+            if (context.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null) {
                 //TODO fixit
-//                String payload = actualMsg.getPayload();
-//                if (!TextUtils.isEmpty(payload)) {
-//                    intent.putExtra(PushServiceConstants.EXTENSION_ELEMENT_PAYLOAD, payload);
-//                }
+
+                //we don't have RegSecret we cannot decode push action
+
+                if (inFetchIntentBlackList(pkgName)) {
+                    return null;
+                }
 
                 return intent;
             }
@@ -346,6 +353,21 @@ public class MyMIPushNotificationHelper {
 
         return null;
     }
+
+    /**
+     * tmp black list
+     *
+     * @param pkg package name
+     * @return is in black list
+     */
+    private static boolean inFetchIntentBlackList(String pkg) {
+        if (pkg.contains("youku")) {
+            return true;
+        }
+
+        return false;
+    }
+
 
     private static PendingIntent startServicePendingIntent(Context paramContext, XmPushActionContainer paramXmPushActionContainer, PushMetaInfo paramPushMetaInfo, byte[] paramArrayOfByte) {
         if (paramPushMetaInfo == null) {
@@ -356,25 +378,27 @@ public class MyMIPushNotificationHelper {
         if (isBusinessMessage(paramXmPushActionContainer)) {
             Intent localIntent = new Intent();
             localIntent.setComponent(new ComponentName("com.xiaomi.xmsf", "com.xiaomi.mipush.sdk.PushMessageHandler"));
-            localIntent.putExtra("mipush_payload", paramArrayOfByte);
-            localIntent.putExtra("mipush_notified", true);
+            localIntent.putExtra(PushConstants.MIPUSH_EXTRA_PAYLOAD, paramArrayOfByte);
+            localIntent.putExtra(MIPushNotificationHelper.FROM_NOTIFICATION, true);
             localIntent.addCategory(String.valueOf(paramPushMetaInfo.getNotifyId()));
             localPendingIntent = PendingIntent.getService(paramContext, 0, localIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         } else {
             Intent localIntent = new Intent("com.xiaomi.mipush.RECEIVE_MESSAGE");
             localIntent.setComponent(new ComponentName(paramXmPushActionContainer.packageName, "com.xiaomi.mipush.sdk.PushMessageHandler"));
-            localIntent.putExtra("mipush_payload", paramArrayOfByte);
-            localIntent.putExtra("mipush_notified", true);
+            localIntent.putExtra(PushConstants.MIPUSH_EXTRA_PAYLOAD, paramArrayOfByte);
+            localIntent.putExtra(MIPushNotificationHelper.FROM_NOTIFICATION, true);
             localIntent.addCategory(String.valueOf(paramPushMetaInfo.getNotifyId()));
             localPendingIntent = PendingIntent.getService(paramContext, 0, localIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
         return localPendingIntent;
     }
 
+    /**
+     * @see MIPushNotificationHelper#determineTitleAndDespByDIP
+     */
     private static String[] determineTitleAndDespByDIP(Context paramContext, PushMetaInfo paramPushMetaInfo) {
 
         try {
-//            MIPushNotificationHelper.determineTitleAndDespByDIP(paramContext, paramPushMetaInfo);
             return JavaCalls.callStaticMethodOrThrow(MIPushNotificationHelper.class, "determineTitleAndDespByDIP", paramContext, paramPushMetaInfo);
         } catch (Exception e) {
             Log4a.e(TAG, e.getMessage(), e);
@@ -388,21 +412,6 @@ public class MyMIPushNotificationHelper {
 
     private static int getIconId(Context context, String str, String str2) {
         return context.getResources().getIdentifier(str2, "drawable", str);
-    }
-
-    private static int getIdForSmallIcon(Context context, String str) {
-        int iconId = getIconId(context, str, NOTIFICATION_ICON);
-        int iconId2 = getIconId(context, str, NOTIFICATION_SMALL_ICON);
-        ApplicationInfo info = null;
-        try {
-            info = context.getPackageManager().getApplicationInfo(str, 0);
-        } catch (PackageManager.NameNotFoundException ignored) {
-            return 0;
-        }
-        if (iconId <= 0) {
-            iconId = iconId2 > 0 ? iconId2 : info.icon;
-        }
-        return (iconId != 0 || Build.VERSION.SDK_INT < 9) ? iconId : info.logo;
     }
 
 
