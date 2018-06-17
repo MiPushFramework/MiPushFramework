@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.util.LruCache;
 
+/**
+ * @author zts
+ */
 public class ApplicationNameCache {
     private volatile static ApplicationNameCache cache = null;
     private LruCache<String, CharSequence> cacheInstance;

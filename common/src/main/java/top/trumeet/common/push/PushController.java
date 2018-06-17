@@ -101,8 +101,9 @@ public class PushController {
 
                         @Override
                         public void onDisconnected() {
-                            if (disconnectListener != null)
+                            if (disconnectListener != null) {
                                 disconnectListener.onDisconnected();
+                            }
                         }
                     });
             latch.await(10, TimeUnit.SECONDS);

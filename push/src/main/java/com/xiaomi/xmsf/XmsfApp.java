@@ -47,20 +47,22 @@ import static top.trumeet.common.Constants.TAG_CONDOM;
 public class XmsfApp extends Application {
 
 
-    public static ConfigCenter conf = null;
+    public static volatile ConfigCenter conf = null;
 
-    private void buildConf() {
-        conf = new ConfigCenter();
+    private static void reloadConf(Context ctx) {
+        ConfigCenter tmp = new ConfigCenter();
         try {
-            SharedPreferences prefs = PreferencesUtils.getPreferences(this);
-            conf.autoRegister = prefs.getBoolean(PreferencesUtils.KeyAutoRegister, true);
-            conf.debugIntent = prefs.getBoolean(PreferencesUtils.KeyDebugIntent, false);
-            conf.foregroundNotification = prefs.getBoolean(PreferencesUtils.KeyForegroundNotification, true);
+            SharedPreferences prefs = PreferencesUtils.getPreferences(ctx);
+            tmp.autoRegister = prefs.getBoolean(PreferencesUtils.KeyAutoRegister, true);
+            tmp.debugIntent = prefs.getBoolean(PreferencesUtils.KeyDebugIntent, false);
+            tmp.foregroundNotification = prefs.getBoolean(PreferencesUtils.KeyForegroundNotification, true);
 
             {
                 String mode = prefs.getString(PreferencesUtils.KeyAccessMode, "0");
-                conf.accessMode = Integer.valueOf(mode);
+                tmp.accessMode = Integer.valueOf(mode);
             }
+
+            conf = tmp;
         } catch (RemotePreferenceAccessException ignored) {
         }
     }
@@ -98,7 +100,7 @@ public class XmsfApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        buildConf();
+        reloadConf(this);
 
         LogUtils.configureLog(this);
 
