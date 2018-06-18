@@ -20,6 +20,7 @@ public class PreferencesUtils {
     public static String KeyForegroundNotification = "ForegroundNotification";
     public static String KeyEnableWakeupTarget = "EnableWakeupTarget";
     public static String KeyDisablePushNotification = "DisablePushNotification";
+    public static String KeyEnableGroupNotification = "EnableGroupNotification";
 
     public static SharedPreferences getPreferences(Context ctx) {
         return new RemotePreferences(ctx, PreferencesUtils.Authority, PreferencesUtils.MainPrefs, true);

@@ -13,6 +13,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 
+import com.xiaomi.xmsf.XmsfApp;
+
 import java.util.ArrayList;
 
 import top.trumeet.common.cache.ApplicationNameCache;
@@ -63,11 +65,6 @@ public class NotificationController {
 
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        CharSequence name = ApplicationNameCache.getInstance().getAppName(context, packageName);
-        if (name == null) {
-            return null;
-        }
-
         String channelId = getChannelIdByPkg(packageName);
         NotificationChannel notificationChannel = manager.getNotificationChannel(channelId);
 
@@ -79,6 +76,12 @@ public class NotificationController {
         }
 
         if (notificationChannel == null) {
+
+            CharSequence name = ApplicationNameCache.getInstance().getAppName(context, packageName);
+            if (name == null) {
+                return null;
+            }
+
             NotificationChannelGroup notificationChannelGroup = createGroupWithPackage(packageName, name);
             manager.createNotificationChannelGroup(notificationChannelGroup);
 
@@ -87,7 +90,6 @@ public class NotificationController {
 
             manager.createNotificationChannel(notificationChannel);
         }
-
 
         return notificationChannel;
 
@@ -98,9 +100,6 @@ public class NotificationController {
     private static void updateSummaryNotification(Context context, String packageName, String groupId) {
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         StatusBarNotification[] activeNotifications = manager.getActiveNotifications();
-        if (activeNotifications.length == 0) {
-            return;
-        }
 
         ArrayList<StatusBarNotification> statusBarNotifications = new ArrayList<>();
 
@@ -156,25 +155,27 @@ public class NotificationController {
         Notification notification = localBuilder.build();
         manager.notify(id, notification);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && XmsfApp.conf.enableGroupNotification) {
             updateSummaryNotification(context, packageName, getGroupIdByPkg(packageName));
         }
     }
 
 
     public static void cancel(Context context, int id) {
-
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         String groupId = null;
-        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            StatusBarNotification[] activeNotifications = manager.getActiveNotifications();
-            for (StatusBarNotification activeNotification : activeNotifications) {
-                if (activeNotification.getId() == id) {
-                    groupId = activeNotification.getNotification().getGroup();
-                    break;
-                }
 
+        if (XmsfApp.conf.enableGroupNotification) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                StatusBarNotification[] activeNotifications = manager.getActiveNotifications();
+                for (StatusBarNotification activeNotification : activeNotifications) {
+                    if (activeNotification.getId() == id) {
+                        groupId = activeNotification.getNotification().getGroup();
+                        break;
+                    }
+
+                }
             }
         }
 

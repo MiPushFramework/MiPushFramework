@@ -9,6 +9,7 @@ public class ConfigCenter {
     public boolean foregroundNotification = true;
     public boolean enableWakeupTarget = true;
     public boolean disablePushNotification = false;
+    public boolean enableGroupNotification = true;
 
     public int accessMode = 0;
 
