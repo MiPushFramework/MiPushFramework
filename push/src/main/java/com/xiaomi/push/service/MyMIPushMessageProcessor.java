@@ -14,6 +14,7 @@ import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
 import com.xiaomi.xmsf.BuildConfig;
 import com.xiaomi.xmsf.R;
+import com.xiaomi.xmsf.XmsfApp;
 
 import java.util.List;
 import java.util.Map;
@@ -42,12 +43,10 @@ public class MyMIPushMessageProcessor {
     public static void process(XMPushService paramXMPushService, XmPushActionContainer buildContainer,
                                byte[] payload, long var2, Intent localIntent) {
         try {
-            String targetPackage = MIPushNotificationHelper.getTargetPackage(buildContainer);
-            Long current = System.currentTimeMillis();
-//            Intent var6 = MIPushEventProcessor.buildIntent(var1, current);
+
             PushMetaInfo localPushMetaInfo = buildContainer.getMetaInfo();
             if (localPushMetaInfo != null) {
-                localPushMetaInfo.putToExtra("mrt", Long.toString(current));
+                localPushMetaInfo.putToExtra("mrt", Long.toString(System.currentTimeMillis()));
             }
 
             ActionType buildContainerAction = buildContainer.getAction();
@@ -136,21 +135,13 @@ public class MyMIPushMessageProcessor {
         //var5 buildContainer
         //var6 metaInfo
 
-//        if ((!MIPushNotificationHelper.isBusinessMessage(buildContainer) || !AppInfoUtils.isPkgInstalled(paramXMPushService, buildContainer.packageName))) {
-//            if (!AppInfoUtils.isPkgInstalled(paramXMPushService, buildContainer.packageName)) {
-//                sendAppNotInstallNotification(paramXMPushService, buildContainer);
-//            } else {
-//                Log4a.w(TAG, "receive a mipush message, we can see the app " + buildContainer.packageName+ ", but we can't see the receiver.");
-//            }
-//        }
-
         boolean pkgInstalled = AppInfoUtils.isPkgInstalled(paramXMPushService, buildContainer.packageName);
         if (!pkgInstalled) {
             sendAppNotInstallNotification(paramXMPushService, buildContainer);
             return;
         }
 
-        String paramString = MIPushNotificationHelper.getTargetPackage(buildContainer);
+        String targetPackage = MIPushNotificationHelper.getTargetPackage(buildContainer);
 
         if (MIPushNotificationHelper.isBusinessMessage(buildContainer)) {
             if (ActionType.Registration == buildContainer.getAction()) {
@@ -200,10 +191,13 @@ public class MyMIPushMessageProcessor {
                 Log4a.w(TAG, "drop a duplicate message, key=" + var8);
             } else {
 
-                MyMIPushNotificationHelper.notifyPushMessage(paramXMPushService, buildContainer, paramArrayOfByte, var2);
+                if (!XmsfApp.conf.disablePushNotification) {
+                    MyMIPushNotificationHelper.notifyPushMessage(paramXMPushService, buildContainer, paramArrayOfByte, var2);
+                }
 
                 //send broadcast
-                if (!MIPushNotificationHelper.isBusinessMessage(buildContainer)) {
+                if (!MIPushNotificationHelper.isBusinessMessage(buildContainer) && XmsfApp.conf.enableWakeupTarget) {
+
                     Intent localIntent = new Intent(PushConstants.MIPUSH_ACTION_MESSAGE_ARRIVED);
                     localIntent.putExtra(PushConstants.MIPUSH_EXTRA_PAYLOAD, paramArrayOfByte);
                     localIntent.setPackage(buildContainer.packageName);
@@ -212,9 +206,9 @@ public class MyMIPushMessageProcessor {
                         if ((localList != null) && (!localList.isEmpty())) {
                             paramXMPushService.sendBroadcast(localIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.getPackageName()));
                         }
-                    } catch (Exception localException) {
-                        paramXMPushService.sendBroadcast(localIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.getPackageName()));
+                    } catch (Exception ignore) {
                     }
+
                 }
 
             }
@@ -229,8 +223,10 @@ public class MyMIPushMessageProcessor {
                 metaInfo != null && metaInfo.getExtra() != null && metaInfo.getExtra().containsKey("ab")) {
             sendAckMessage(paramXMPushService, buildContainer);
             MyLog.i("receive abtest message. ack it." + metaInfo.getId());
-        } else if (shouldSendBroadcast(paramXMPushService, paramString, buildContainer, metaInfo)) {
-            paramXMPushService.sendBroadcast(paramIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.packageName));
+        } else if (shouldSendBroadcast(paramXMPushService, targetPackage, buildContainer, metaInfo)) {
+            if (XmsfApp.conf.enableWakeupTarget) {
+                paramXMPushService.sendBroadcast(paramIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.packageName));
+            }
         }
 
     }

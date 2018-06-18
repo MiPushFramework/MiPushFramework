@@ -49,13 +49,15 @@ public class XmsfApp extends Application {
 
     public static volatile ConfigCenter conf = null;
 
-    private static void reloadConf(Context ctx) {
+    public static void reloadConf(Context ctx) {
         ConfigCenter tmp = new ConfigCenter();
         try {
             SharedPreferences prefs = PreferencesUtils.getPreferences(ctx);
             tmp.autoRegister = prefs.getBoolean(PreferencesUtils.KeyAutoRegister, true);
             tmp.debugIntent = prefs.getBoolean(PreferencesUtils.KeyDebugIntent, false);
             tmp.foregroundNotification = prefs.getBoolean(PreferencesUtils.KeyForegroundNotification, true);
+            tmp.enableWakeupTarget = prefs.getBoolean(PreferencesUtils.KeyEnableWakeupTarget, true);
+            tmp.disablePushNotification = prefs.getBoolean(PreferencesUtils.KeyDisablePushNotification, false);
 
             {
                 String mode = prefs.getString(PreferencesUtils.KeyAccessMode, "0");

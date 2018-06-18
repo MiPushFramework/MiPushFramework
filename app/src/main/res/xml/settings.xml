@@ -1,45 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
-        android:title="@string/settings_deploy">
+    <PreferenceCategory android:title="@string/settings_deploy">
         <Preference
-            android:title="@string/settings_fake_build"
-            android:summary="@string/settings_fake_build_summary">
+            android:summary="@string/settings_fake_build_summary"
+            android:title="@string/settings_fake_build">
             <intent
-                android:targetPackage="top.trumeet.mipush"
-                android:targetClass="top.trumeet.mipushframework.wizard.fake.FakeBuildActivity" >
+                android:targetClass="top.trumeet.mipushframework.wizard.fake.FakeBuildActivity"
+                android:targetPackage="top.trumeet.mipush">
                 <extra
                     android:name="top.trumeet.xmsf.EXTRA_FINISH_ON_NEXT"
-                    android:value="true"/>
+                    android:value="true" />
             </intent>
         </Preference>
         <Preference
             android:key="key_check_service"
-            android:title="@string/settings_check_service"
-            android:summary="@string/settings_check_service_summary">
+            android:summary="@string/settings_check_service_summary"
+            android:title="@string/settings_check_service">
             <intent
-                android:targetPackage="top.trumeet.mipush"
-                android:targetClass="top.trumeet.mipushframework.wizard.CheckRunningStatusActivity">
+                android:targetClass="top.trumeet.mipushframework.wizard.CheckRunningStatusActivity"
+                android:targetPackage="top.trumeet.mipush">
                 <extra
                     android:name="top.trumeet.xmsf.EXTRA_FINISH_ON_NEXT"
-                    android:value="true"/>
+                    android:value="true" />
             </intent>
         </Preference>
         <Preference
             android:key="key_remove_doze"
-            android:title="@string/settings_skip_doze"
-            android:summary="@string/settings_skip_doze_summary" >
+            android:summary="@string/settings_skip_doze_summary"
+            android:title="@string/settings_skip_doze">
             <intent
-                android:targetPackage="top.trumeet.mipush"
-                android:targetClass="top.trumeet.mipushframework.wizard.CheckDozeActivity">
+                android:targetClass="top.trumeet.mipushframework.wizard.CheckDozeActivity"
+                android:targetPackage="top.trumeet.mipush">
                 <extra
                     android:name="top.trumeet.xmsf.EXTRA_FINISH_ON_NEXT"
-                    android:value="true"/>
+                    android:value="true" />
             </intent>
         </Preference>
+        <Preference
+            android:key="activity_keep_alive"
+            android:summary="@string/settings_summary_keep_alive"
+            android:title="@string/settings_activity_keep_alive" />
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/settings_options">
+
+    <PreferenceCategory android:title="@string/settings_options">
         <ListPreference
             android:defaultValue="0"
             android:entries="@array/pref_title_access_mode_list_titles"
@@ -48,6 +51,36 @@
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:title="@string/pref_title_access_mode" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="AutoRegister"
+            android:title="@string/settings_auto_register" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_enhance">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="ForegroundNotification"
+            android:summary="@string/disable_fg_notification_warning"
+            android:title="@string/settings_debug_foreground_notification" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="EnableWakeupTarget"
+            android:summary="@string/settings_summary_wakeup_target"
+            android:title="@string/settings_wakeup_target" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_debug">
+
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="DisablePushNotification"
+            android:title="@string/settings_disable_push_notification" />
 
 
         <SwitchPreference
@@ -60,46 +93,19 @@
             android:key="DebugIntent"
             android:title="@string/settings_debug_intent" />
 
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="ForegroundNotification"
-            android:summary="@string/disable_fg_notification_warning"
-            android:title="@string/settings_debug_foreground_notification" />
-
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="AutoRegister"
-            android:title="@string/settings_auto_register" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/settings_enhance">
-
-
-        <Preference
-            android:key="activity_keep_alive"
-            android:title="@string/settings_activity_keep_alive"
-            android:summary="@string/settings_summary_keep_alive"/>
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/settings_debug">
 
         <Preference
             android:key="key_get_log"
-            android:title="@string/settings_get_log"
-            android:summary="@string/settings_get_log_summary" />
+            android:summary="@string/settings_get_log_summary"
+            android:title="@string/settings_get_log" />
         <Preference
             android:key="key_clear_log"
             android:title="@string/settings_clear_log" />
 
-        <Preference
-            android:title="@string/helplib_title">
+        <Preference android:title="@string/helplib_title">
             <intent
-                android:targetPackage="top.trumeet.mipush"
-                android:targetClass="top.trumeet.mipushframework.help.HelpActivity">
-            </intent>
+                android:targetClass="top.trumeet.mipushframework.help.HelpActivity"
+                android:targetPackage="top.trumeet.mipush"></intent>
         </Preference>
     </PreferenceCategory>
 </PreferenceScreen>
