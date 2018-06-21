@@ -56,7 +56,7 @@ public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         mTargetPackage = getArguments() == null ? null :
                 getArguments().getString(EXTRA_TARGET_PACKAGE);
         mAdapter = new MultiTypeAdapter();
-        mAdapter.register(Event.class, new EventItemBinder(mTargetPackage == null));
+        mAdapter.register(Event.class, new EventItemBinder(mTargetPackage != null));
     }
 
     SwipeRefreshLayout swipeRefreshLayout;
@@ -71,7 +71,7 @@ public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(view.getContext(),
                 LinearLayoutManager.VERTICAL);
         view.addItemDecoration(dividerItemDecoration);
-        view.setOnScrollListener(new OnLoadMoreListener() {
+        view.addOnScrollListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
                 loadPage();
@@ -158,8 +158,9 @@ public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         @Override
         protected void onCancelled () {
             if (mSignal != null) {
-                if (!mSignal.isCanceled())
+                if (!mSignal.isCanceled()) {
                     mSignal.cancel();
+                }
                 mSignal = null;
             }
         }
