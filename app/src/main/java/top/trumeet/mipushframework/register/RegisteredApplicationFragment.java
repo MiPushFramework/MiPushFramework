@@ -2,7 +2,6 @@ package top.trumeet.mipushframework.register;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CancellationSignal;
@@ -21,10 +20,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
+import java.util.Set;
 
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
+import top.trumeet.common.db.EventDb;
 import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.register.RegisteredApplication;
 
@@ -79,8 +79,9 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
 
     private void loadPage() {
         Log.d(TAG, "loadPage");
-        if (mLoadTask != null && !mLoadTask.isCancelled())
+        if (mLoadTask != null && !mLoadTask.isCancelled()) {
             return;
+        }
         mLoadTask = new LoadTask(getActivity().getApplicationContext());
         mLoadTask.execute();
     }
@@ -120,10 +121,16 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
                 applicationInfoMap.put(installedApplication.packageName, installedApplication);
             }
 
+            Set<String> registeredPkgs = EventDb.queryRegistered(getActivity(), mSignal);
+
             List<RegisteredApplication> res = new ArrayList<>();
             for (RegisteredApplication application : RegisteredApplicationDb.getList(getActivity(), null, mSignal)) {
                 if (applicationInfoMap.containsKey(application.getPackageName())) {
+                    if (registeredPkgs.contains(application.getPackageName())) {
+                        application.setRegistered(true);
+                    }
                     res.add(application);
+
                 }
             }
 
@@ -148,8 +155,9 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
         @Override
         protected void onCancelled() {
             if (mSignal != null) {
-                if (!mSignal.isCanceled())
+                if (!mSignal.isCanceled()) {
                     mSignal.cancel();
+                }
                 mSignal = null;
             }
 

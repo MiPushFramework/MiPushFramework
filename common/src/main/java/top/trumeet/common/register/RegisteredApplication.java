@@ -18,7 +18,9 @@ import top.trumeet.common.utils.DatabaseUtils;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 /**
- * Created by Trumeet on 2017/12/24.
+ *
+ * @author Trumeet
+ * @date 2017/12/24
  * Common 中的不带 greenDao 的模型。Too bad
  */
 
@@ -42,6 +44,8 @@ public class RegisteredApplication implements Parcelable {
     private boolean allowReceivePush;
 
     private boolean allowReceiveRegisterResult;
+
+    private boolean registered;
 
     // Init(register) result is a kind of command, if disabled, register result WILL STILL BE RECEIVED
     private boolean allowReceiveCommand;
@@ -163,6 +167,14 @@ public class RegisteredApplication implements Parcelable {
 
     public void setAllowReceiveRegisterResult(boolean allowReceiveRegisterResult) {
         this.allowReceiveRegisterResult = allowReceiveRegisterResult;
+    }
+
+    public boolean isRegistered() {
+        return registered;
+    }
+
+    public void setRegistered(boolean registered) {
+        this.registered = registered;
     }
 
     @android.support.annotation.NonNull
