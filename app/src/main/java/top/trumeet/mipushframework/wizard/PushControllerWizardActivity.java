@@ -115,7 +115,7 @@ public abstract class PushControllerWizardActivity extends Activity {
             if (mController == null || !mController.isConnected()) {
                 try {
                     mController = PushController.getConnected(PushControllerWizardActivity.this,
-                            new PushController.AbstractOnReadyListener() {
+                            new PushController.AbstractConnectionStatusListener() {
                                 @Override
                                 public void onDisconnected() {
                                     PushControllerWizardActivity.this.

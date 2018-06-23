@@ -158,6 +158,7 @@ public class MyMIPushNotificationHelper {
         //for VERSION <= N_MR1
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
             localBuilder.setDefaults(Notification.DEFAULT_ALL);
+            localBuilder.setPriority(Notification.PRIORITY_HIGH);
         }
 
         // Fill app name

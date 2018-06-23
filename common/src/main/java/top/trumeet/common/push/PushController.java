@@ -28,7 +28,8 @@ import top.trumeet.common.utils.Utils;
  */
 
 public class PushController {
-    public static abstract class AbstractOnReadyListener {
+
+    public static abstract class AbstractConnectionStatusListener {
         public void onReady() {
         }
 
@@ -44,7 +45,7 @@ public class PushController {
 
     @RequiresPermission(Constants.permissions.BIND)
     public void connect(Context context,
-                        @Nullable final AbstractOnReadyListener listener) {
+                        @Nullable final AbstractConnectionStatusListener listener) {
         if (!Utils.isServiceInstalled()) {
             Log.e("PushController", "Service not installed.");
             return;
@@ -67,7 +68,9 @@ public class PushController {
                         Log.e("PushController", "disconnected");
                         mService = null;
                         mConnection = null;
-                        listener.onDisconnected();
+                        if (listener != null) {
+                            listener.onDisconnected();
+                        }
                     }
                 });
     }
@@ -83,7 +86,7 @@ public class PushController {
      */
     @NonNull
     @RequiresPermission(Constants.permissions.BIND)
-    public static PushController getConnected(@NonNull Context context, @Nullable final AbstractOnReadyListener disconnectListener) {
+    public static PushController getConnected(@NonNull Context context, @Nullable final AbstractConnectionStatusListener disconnectListener) {
         PushController controller = new PushController();
         if (!Utils.isServiceInstalled()) {
             Log.e("PushController", "Service not installed.");
@@ -92,7 +95,7 @@ public class PushController {
         final CountDownLatch latch = new CountDownLatch(1);
         try {
             controller.connect(context,
-                    new AbstractOnReadyListener() {
+                    new AbstractConnectionStatusListener() {
                         @Override
                         public void onReady() {
                             Log.i("PushController", "Service ready.");

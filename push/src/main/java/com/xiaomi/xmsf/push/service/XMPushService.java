@@ -3,9 +3,7 @@ package com.xiaomi.xmsf.push.service;
 import android.app.IntentService;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.content.SharedPreferences;
 
-import com.crossbowffs.remotepreferences.RemotePreferenceAccessException;
 import com.xiaomi.push.service.PushServiceMain;
 import com.xiaomi.xmsf.XmsfApp;
 import com.xiaomi.xmsf.push.auth.AuthActivity;
@@ -18,9 +16,6 @@ import top.trumeet.common.db.EventDb;
 import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.event.Event;
 import top.trumeet.common.register.RegisteredApplication;
-import top.trumeet.common.utils.PreferencesUtils;
-
-import static com.xiaomi.xmsf.XmsfApp.conf;
 
 public class XMPushService extends IntentService {
     private static final String TAG = "XMPushService Bridge";
@@ -44,7 +39,7 @@ public class XMPushService extends IntentService {
         if (!XmsfApp.getSession(this)
                 .getRemoveTremblingInstance()
                 .onCallRegister(pkg)) {
-            Log4a.w(TAG, "Don't register multi request " + pkg);
+            Log4a.d(TAG, "Don't register multi request " + pkg);
             register = false;
         }
         NotificationController.registerChannelIfNeeded(this, pkg);
