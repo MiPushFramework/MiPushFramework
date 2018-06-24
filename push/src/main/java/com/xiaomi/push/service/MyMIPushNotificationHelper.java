@@ -152,8 +152,8 @@ public class MyMIPushNotificationHelper {
         localBuilder.setContentText(titleAndDesp[1]);
 
 
-        //for VERSION <= N_MR1
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
+        //for VERSION < Oero
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             localBuilder.setDefaults(Notification.DEFAULT_ALL);
             localBuilder.setPriority(Notification.PRIORITY_HIGH);
         }

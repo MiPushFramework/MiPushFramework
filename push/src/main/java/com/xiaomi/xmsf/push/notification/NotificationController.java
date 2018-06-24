@@ -149,7 +149,8 @@ public class NotificationController {
             localBuilder.setChannelId(getChannelIdByPkg(packageName));
             localBuilder.setGroup(getGroupIdByPkg(packageName));
             localBuilder.setGroupAlertBehavior(Notification.GROUP_ALERT_ALL);
-
+        } else {
+            localBuilder.setGroup(getGroupIdByPkg(packageName));
         }
 
         Notification notification = localBuilder.build();

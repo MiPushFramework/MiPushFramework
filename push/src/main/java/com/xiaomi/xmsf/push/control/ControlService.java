@@ -22,8 +22,9 @@ import top.trumeet.common.utils.Utils;
 public class ControlService extends Service {
 
     private static void enforcePermission (String permName) {
-        if (!checkPermission(permName))
+        if (!checkPermission(permName)) {
             throw new SecurityException("Uid " + Binder.getCallingUid() + " doesn't have permission " + permName);
+        }
     }
 
     private static boolean checkPermission (String permName) {
@@ -58,8 +59,9 @@ public class ControlService extends Service {
 
         @Override
         public int checkOp(int op) throws RemoteException {
-            if (!checkPermission(Constants.permissions.READ_SETTINGS))
-            enforcePermission(ManifestOverride.permission.GET_APP_OPS_STATS);
+            if (!checkPermission(Constants.permissions.READ_SETTINGS)) {
+                enforcePermission(ManifestOverride.permission.GET_APP_OPS_STATS);
+            }
             int mode = AppOpsManagerOverride.checkOpNoThrow(
                     op
                     , Process.myUid(), getPackageName(), ((AppOpsManager)getSystemService(APP_OPS_SERVICE)));

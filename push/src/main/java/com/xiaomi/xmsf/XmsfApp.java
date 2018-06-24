@@ -75,7 +75,7 @@ public class XmsfApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        ConfigCenter.reloadConf(this);
+        ConfigCenter.reloadConf(this, true);
 
         LogUtils.configureLog(this);
 

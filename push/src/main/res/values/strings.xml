@@ -11,6 +11,7 @@
     <string name="allow_once">允许一次</string>
 
     <!-- Log -->
+    <string name="log_push_err">PUSH服务异常</string>
     <string name="log_none">无日志</string>
     <string name="log_share_error">无法分享日志：%1$s</string>
     <string name="log_clear_done">清空日志成功</string>
