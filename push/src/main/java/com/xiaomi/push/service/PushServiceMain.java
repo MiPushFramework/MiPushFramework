@@ -14,8 +14,8 @@ import com.xiaomi.smack.packet.Message;
 import com.xiaomi.xmpush.thrift.ActionType;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmsf.R;
-import com.xiaomi.xmsf.XmsfApp;
 import com.xiaomi.xmsf.push.control.XMOutbound;
+import com.xiaomi.xmsf.utils.ConfigCenter;
 
 import org.apache.thrift.TBase;
 
@@ -98,14 +98,14 @@ public class PushServiceMain extends XMPushService {
             manager.createNotificationChannel(channel);
         }
 
-        if (XmsfApp.conf.foregroundNotification || Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (ConfigCenter.getInstance().foregroundNotification || Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Notification notification = new NotificationCompat.Builder(this,
                     CHANNEL_STATUS)
                     .setContentTitle(getString(R.string.notification_alive))
                     .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                     .setPriority(NotificationCompat.PRIORITY_MIN)
                     .setOngoing(true)
-                    .setShowWhen(false)
+                    .setShowWhen(true)
                     .build();
             manager.notify(NOTIFICATION_ALIVE_ID, notification);
             startForeground(NOTIFICATION_ALIVE_ID, notification);

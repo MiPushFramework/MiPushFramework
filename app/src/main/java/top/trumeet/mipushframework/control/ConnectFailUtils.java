@@ -2,7 +2,6 @@ package top.trumeet.mipushframework.control;
 
 import android.content.Context;
 
-import top.trumeet.common.plugin.PlatformUtils;
 import top.trumeet.common.utils.Utils;
 import top.trumeet.mipush.BuildConfig;
 import top.trumeet.mipush.R;
@@ -15,7 +14,8 @@ import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_UNKNOWN;
 
 /**
- * Created by Trumeet on 2017/12/30.
+ * @author Trumeet
+ * @date 2017/12/30
  */
 
 public class ConnectFailUtils {
@@ -23,7 +23,7 @@ public class ConnectFailUtils {
             "https://github.com/Trumeet/MiPushFramework/releases/download/" + BuildConfig.GIT_TAG +
                     "/manager.apk";
 
-   private static final String SERVICE_APK_URL =
+    private static final String SERVICE_APK_URL =
             "https://github.com/Trumeet/MiPushFramework/releases/download/" + BuildConfig.GIT_TAG +
                     "/xmsf_service.apk";
 
@@ -31,8 +31,8 @@ public class ConnectFailUtils {
             "https://github.com/Trumeet/MiPushFramework/releases/download/" + BuildConfig.GIT_TAG +
                     "/xmsf_service_platform.apk";
 
-    public static CharSequence getTitle (Context context,
-                                         @OnConnectStatusChangedListener.FailReason int reason) {
+    public static CharSequence getTitle(Context context,
+                                        @OnConnectStatusChangedListener.FailReason int reason) {
         switch (reason) {
             case FAIL_REASON_UNKNOWN:
             case FAIL_REASON_SECURITY_EXCEPTION:
@@ -48,12 +48,12 @@ public class ConnectFailUtils {
         }
     }
 
-    public static CharSequence getSummary (Context context,
-                                           @OnConnectStatusChangedListener.FailReason int reason,
-                                           int serviceVersionCode) {
+    public static CharSequence getSummary(Context context,
+                                          @OnConnectStatusChangedListener.FailReason int reason,
+                                          int serviceVersionCode) {
         switch (reason) {
             case FAIL_REASON_SECURITY_EXCEPTION:
-            return Utils.toHtml(context.getString(R.string.connect_fail_test_se, MANAGER_APK_URL));
+                return Utils.toHtml(context.getString(R.string.connect_fail_test_se, MANAGER_APK_URL));
             case FAIL_REASON_UNKNOWN:
                 return getString(R.string.connect_fail_text_unknown, context,
                         getString(top.trumeet.common.R.string.push_service_name, context));

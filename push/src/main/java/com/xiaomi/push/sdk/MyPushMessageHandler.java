@@ -13,8 +13,8 @@ import com.xiaomi.push.service.PushConstants;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
 import com.xiaomi.xmpush.thrift.XmPushThriftSerializeUtils;
-import com.xiaomi.xmsf.XmsfApp;
 import com.xiaomi.xmsf.push.notification.NotificationController;
+import com.xiaomi.xmsf.utils.ConfigCenter;
 
 import me.pqpo.librarylog4a.Log4a;
 
@@ -39,7 +39,7 @@ public class MyPushMessageHandler extends IntentService {
     @Override
     protected void onHandleIntent(final Intent intent) {
         if (iTopActivity == null) {
-            iTopActivity = TopActivityFactory.newInstance(XmsfApp.conf.accessMode);
+            iTopActivity = TopActivityFactory.newInstance(ConfigCenter.getInstance().accessMode);
         }
 
         if (!iTopActivity.isEnabled(this)) {

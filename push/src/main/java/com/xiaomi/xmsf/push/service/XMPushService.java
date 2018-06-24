@@ -3,14 +3,13 @@ package com.xiaomi.xmsf.push.service;
 import android.app.IntentService;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.content.SharedPreferences;
 
-import com.crossbowffs.remotepreferences.RemotePreferenceAccessException;
 import com.xiaomi.push.service.PushServiceMain;
 import com.xiaomi.xmsf.XmsfApp;
 import com.xiaomi.xmsf.push.auth.AuthActivity;
 import com.xiaomi.xmsf.push.control.PushControllerUtils;
 import com.xiaomi.xmsf.push.notification.NotificationController;
+import com.xiaomi.xmsf.utils.ConfigCenter;
 
 import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.common.Constants;
@@ -18,9 +17,6 @@ import top.trumeet.common.db.EventDb;
 import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.event.Event;
 import top.trumeet.common.register.RegisteredApplication;
-import top.trumeet.common.utils.PreferencesUtils;
-
-import static com.xiaomi.xmsf.XmsfApp.conf;
 
 public class XMPushService extends IntentService {
     private static final String TAG = "XMPushService Bridge";
@@ -44,7 +40,7 @@ public class XMPushService extends IntentService {
         if (!XmsfApp.getSession(this)
                 .getRemoveTremblingInstance()
                 .onCallRegister(pkg)) {
-            Log4a.w(TAG, "Don't register multi request " + pkg);
+            Log4a.d(TAG, "Don't register multi request " + pkg);
             register = false;
         }
         NotificationController.registerChannelIfNeeded(this, pkg);
@@ -59,7 +55,7 @@ public class XMPushService extends IntentService {
                 Log4a.w(TAG, "Denied register request: " + pkg);
                 result = Event.ResultType.DENY_USER;
             } else {
-                if (XmsfApp.conf.autoRegister && application.getType() == RegisteredApplication.Type.ASK) {
+                if (ConfigCenter.getInstance().autoRegister && application.getType() == RegisteredApplication.Type.ASK) {
                     application.setType(RegisteredApplication.Type.ALLOW);
                     RegisteredApplicationDb.update(application, this);
                 }

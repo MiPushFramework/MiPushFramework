@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Icon;
@@ -23,11 +22,9 @@ import com.xiaomi.channel.commonutils.logger.MyLog;
 import com.xiaomi.channel.commonutils.reflect.JavaCalls;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
-
 import com.xiaomi.xmsf.R;
-import com.xiaomi.xmsf.XmsfApp;
 import com.xiaomi.xmsf.push.notification.NotificationController;
-
+import com.xiaomi.xmsf.utils.ConfigCenter;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -125,7 +122,7 @@ public class MyMIPushNotificationHelper {
 //                Log4a.e(TAG, e.getLocalizedMessage(), e);
 //            }
 
-            if (XmsfApp.conf.debugIntent) {
+            if (ConfigCenter.getInstance().debugIntent) {
                 int i = R.drawable.ic_notifications_black_24dp;
 
                 PendingIntent pendingIntentOpenActivity = openActivityPendingIntent(var0, buildContainer, metaInfo, var1);
@@ -155,9 +152,10 @@ public class MyMIPushNotificationHelper {
         localBuilder.setContentText(titleAndDesp[1]);
 
 
-        //for VERSION <= N_MR1
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
+        //for VERSION < Oero
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             localBuilder.setDefaults(Notification.DEFAULT_ALL);
+            localBuilder.setPriority(Notification.PRIORITY_HIGH);
         }
 
         // Fill app name

@@ -37,6 +37,7 @@ import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener
 
 /**
  * Main activity
+ *
  * @author Trumeet
  */
 public abstract class MainActivity extends AppCompatActivity implements PermissionUtils.PermissionGrantListener {
@@ -46,7 +47,7 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
     private ConnectTask mConnectTask;
     private MainFragment mFragment;
 
-    public PushController getController () {
+    public PushController getController() {
         return mController;
     }
 
@@ -58,7 +59,7 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
     }
 
     @UiThread
-    private void checkAndConnect () {
+    private void checkAndConnect() {
         Log.d("MainActivity", "checkAndConnect");
         if (!Utils.isServiceInstalled()) {
             showConnectFail(FAIL_REASON_NOT_INSTALLED);
@@ -67,13 +68,13 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
         PermissionUtils.requestPermissions(this, new String[]{Constants.permissions.WRITE_SETTINGS});
     }
 
-    private void connect () {
+    private void connect() {
         mConnectTask = new ConnectTask();
         mConnectTask.execute();
     }
 
     @Override
-    public void  onConfigurationChanged(Configuration newConfiguration) {
+    public void onConfigurationChanged(Configuration newConfiguration) {
         super.onConfigurationChanged(newConfiguration);
     }
 
@@ -92,7 +93,7 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
     }
 
     @Override
-    public void onDestroy () {
+    public void onDestroy() {
         if (mController != null) {
             mController.disconnectIfNeeded();
             mController = null;
@@ -112,7 +113,7 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
 
     private class ConnectTask extends AsyncTask<Void, Void, Pair<Boolean /* success */, Integer /* reason */>> {
         @Override
-        protected void onPreExecute () {
+        protected void onPreExecute() {
             mConnectProgress = LayoutInflater.from(MainActivity.this)
                     .inflate(R.layout.layout_progress, null);
             setContentView(mConnectProgress);
@@ -130,18 +131,25 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
             if (mController == null || !mController.isConnected()) {
                 try {
                     mController = PushController.getConnected(MainActivity.this,
-                            new PushController.AbstractOnReadyListener() {
+                            new PushController.AbstractConnectionStatusListener() {
+
+                                @Override
+                                public void onReady() {
+                                    mFragment.onChange(OnConnectStatusChangedListener.CONNECTED);
+                                }
+
                                 @Override
                                 public void onDisconnected() {
                                     mFragment.onChange(OnConnectStatusChangedListener.DISCONNECTED);
-
                                     checkAndConnect();
                                 }
+
                             });
                 } catch (java.lang.SecurityException e) {
                     return new Pair<>(false, FAIL_REASON_SECURITY_EXCEPTION);
                 }
             }
+
             boolean success = (mController != null) && mController.isConnected();
             if (success) {
                 int version = mController.getVersionCode();
@@ -155,10 +163,10 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
         }
 
         @Override
-        protected void onPostExecute (Pair<Boolean, Integer> success) {
+        protected void onPostExecute(Pair<Boolean, Integer> success) {
             if (mFragment != null) {
                 mFragment.onChange(success.first ? OnConnectStatusChangedListener.CONNECTED :
-                OnConnectStatusChangedListener.DISCONNECTED);
+                        OnConnectStatusChangedListener.DISCONNECTED);
             }
             if (success.first) {
                 mProgressFadeOutAnimate = mConnectProgress.animate()
@@ -189,27 +197,27 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
         }
     }
 
-    private synchronized void showConnectFail (@OnConnectStatusChangedListener.FailReason
-                                          int reason) {
+    private synchronized void showConnectFail(@OnConnectStatusChangedListener.FailReason
+                                                      int reason) {
         new LinkAlertDialog.Builder(this)
                 .setTitle(ConnectFailUtils.getTitle(this, reason))
                 .setMessage(ConnectFailUtils.getSummary(this, reason,
                         (mController != null && mController.isConnected()) ?
-                mController.getVersionCode() : -1))
-        .setCancelable(false)
-        .setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                checkAndConnect();
-            }
-        })
-        .setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        })
-        .show();
+                                mController.getVersionCode() : -1))
+                .setCancelable(false)
+                .setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        checkAndConnect();
+                    }
+                })
+                .setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .show();
         if (mController != null && mController.isConnected()) {
             mController.disconnectIfNeeded();
         }
@@ -225,14 +233,14 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
     }
 
     @Override
-    public void onResult (boolean granted, boolean blocked, String permName) {
+    public void onResult(boolean granted, boolean blocked, String permName) {
         if (DEBUG) {
             Log.d("MainActivity", "onResult -> " + granted + ", " + blocked + ", " + permName);
         }
         if (Constants.permissions.WRITE_SETTINGS.equalsIgnoreCase(permName)) {
             String permDisplayName = PermissionUtils.getName(permName);
 
-            if (granted || (permDisplayName==null)) {
+            if (granted || (permDisplayName == null)) {
                 connect();
             } else {
                 Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission, permDisplayName), Toast.LENGTH_LONG)
@@ -250,7 +258,7 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
         }
     }
 
-    private void checkAndShowPlatformNotice () {
+    private void checkAndShowPlatformNotice() {
         if (PlatformUtils.isPlatformModeSupported() &&
                 !PlatformUtils.isServicePlatformSign()) {
             Toast.makeText(this, Utils.getString(R.string.platform_suggestion_toast,

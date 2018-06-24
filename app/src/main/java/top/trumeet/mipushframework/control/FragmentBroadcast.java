@@ -7,36 +7,40 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Trumeet on 2017/12/30.
+ * @author Trumeet
+ * @date 2017/12/30
  */
 
 public class FragmentBroadcast {
     private Map<String, Fragment> mChildFragments;
 
-    public void registerFragment (@NonNull String tag,
-                                   @NonNull Fragment fragment) {
-        if (mChildFragments == null)
+    public void registerFragment(@NonNull String tag,
+                                 @NonNull Fragment fragment) {
+        if (mChildFragments == null) {
             mChildFragments = new HashMap<>(1);
+        }
         mChildFragments.put(tag, fragment);
     }
 
-    public void unregisterFragment (@NonNull String tag) {
-        if (mChildFragments == null)
+    public void unregisterFragment(@NonNull String tag) {
+        if (mChildFragments == null) {
             return;
+        }
         mChildFragments.remove(tag);
-        if (mChildFragments.isEmpty())
+        if (mChildFragments.isEmpty()) {
             mChildFragments = null;
+        }
     }
 
-    public boolean hasFragment (@NonNull String tag) {
+    public boolean hasFragment(@NonNull String tag) {
         return mChildFragments != null && mChildFragments.containsKey(tag);
     }
 
-    public Fragment getFragment (@NonNull String tag) {
+    public Fragment getFragment(@NonNull String tag) {
         return mChildFragments.get(tag);
     }
 
-    public void broadcast (@OnConnectStatusChangedListener.Status int status) {
+    public void broadcast(@OnConnectStatusChangedListener.Status int status) {
         if (mChildFragments != null) {
             for (Fragment fragment : mChildFragments.values()) {
                 if (fragment instanceof OnConnectStatusChangedListener) {
@@ -47,8 +51,9 @@ public class FragmentBroadcast {
         }
     }
 
-    public void unregisterAll () {
-        if (mChildFragments != null)
-        mChildFragments = null;
+    public void unregisterAll() {
+        if (mChildFragments != null) {
+            mChildFragments = null;
+        }
     }
 }

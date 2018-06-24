@@ -10,13 +10,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by Trumeet on 2017/12/30.
+ *
+ * @author Trumeet
+ * @date 2017/12/30
  */
 
 public interface OnConnectStatusChangedListener {
     @Retention(RetentionPolicy.CLASS)
     @Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE, ElementType.METHOD,
-    ElementType.FIELD, ElementType.PARAMETER})
+            ElementType.FIELD, ElementType.PARAMETER})
     @IntDef({CONNECTED, DISCONNECTED})
     @interface Status {
     }
@@ -25,7 +27,7 @@ public interface OnConnectStatusChangedListener {
     @Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE, ElementType.METHOD,
             ElementType.FIELD, ElementType.PARAMETER})
     @IntDef({FAIL_REASON_NOT_INSTALLED, FAIL_REASON_UNKNOWN, FAIL_REASON_SECURITY_EXCEPTION,
-    FAIL_REASON_LOW_VERSION, FAIL_REASON_MIUI})
+            FAIL_REASON_LOW_VERSION, FAIL_REASON_MIUI})
     @interface FailReason {
     }
 
@@ -55,5 +57,5 @@ public interface OnConnectStatusChangedListener {
     int CONNECTED = 0;
     int DISCONNECTED = 1;
 
-    void onChange (@Status int newStatus);
+    void onChange(@Status int newStatus);
 }

@@ -37,25 +37,25 @@ public class MainFragment extends Fragment implements OnConnectStatusChangedList
     private SwitchCompat mSwitchEnablePush;
 
     private FragmentBroadcast mBroadcaster;
-    
+
     private static final String FRAGMENT_EVENT = "event";
     private static final String FRAGMENT_APPLICATIONS = "applications";
     private static final String FRAGMENT_SETTINGS = "settings";
-    
-    private PushController getPushController () {
-        return ((MainActivity)getActivity())
+
+    private PushController getPushController() {
+        return ((MainActivity) getActivity())
                 .getController();
     }
 
     @Override
-    public void onCreate (Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         mBroadcaster = new FragmentBroadcast();
     }
 
     @Override
-    public boolean onOptionsItemSelected (MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_about) {
             new LinkAlertDialog.Builder(getContext())
                     .setTitle(R.string.action_about)
@@ -64,15 +64,15 @@ public class MainFragment extends Fragment implements OnConnectStatusChangedList
             return true;
         } else if (item.getItemId() == R.id.action_update) {
             startActivity(new Intent(Intent.ACTION_VIEW)
-            .setData(Uri.parse("https://github.com/Trumeet/MiPushFramework/releases")));
+                    .setData(Uri.parse("https://github.com/Trumeet/MiPushFramework/releases")));
             Toast.makeText(getActivity(), R.string.update_toast, Toast.LENGTH_LONG)
-            .show();
+                    .show();
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onCreateOptionsMenu (Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_main, menu);
         MenuItem item = menu.findItem(R.id.action_enable);
         item.setActionView(R.layout.switch_layout);
@@ -82,8 +82,8 @@ public class MainFragment extends Fragment implements OnConnectStatusChangedList
 
 
     @Override
-    public View onCreateView (LayoutInflater inflater,
-                              ViewGroup parent, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup parent, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_main, parent, false);
 
         final BottomNavigationView bottomNavigationView =
@@ -121,22 +121,25 @@ public class MainFragment extends Fragment implements OnConnectStatusChangedList
             @Override
             public Fragment getItem(int position) {
                 switch (position) {
-                    case 0 :
-                        if (mBroadcaster.hasFragment(FRAGMENT_EVENT))
+                    case 0:
+                        if (mBroadcaster.hasFragment(FRAGMENT_EVENT)) {
                             return mBroadcaster.getFragment(FRAGMENT_EVENT);
+                        }
                         EventFragment eventFragment = new EventFragment();
                         mBroadcaster.registerFragment(FRAGMENT_EVENT, eventFragment);
                         return eventFragment;
-                    case 1 :
-                        if (mBroadcaster.hasFragment(FRAGMENT_APPLICATIONS))
+                    case 1:
+                        if (mBroadcaster.hasFragment(FRAGMENT_APPLICATIONS)) {
                             return mBroadcaster.getFragment(FRAGMENT_APPLICATIONS);
-                        RegisteredApplicationFragment registeredApplicationFragment = 
+                        }
+                        RegisteredApplicationFragment registeredApplicationFragment =
                                 new RegisteredApplicationFragment();
                         mBroadcaster.registerFragment(FRAGMENT_APPLICATIONS, registeredApplicationFragment);
                         return registeredApplicationFragment;
-                    case 2 :
-                        if (mBroadcaster.hasFragment(FRAGMENT_SETTINGS))
+                    case 2:
+                        if (mBroadcaster.hasFragment(FRAGMENT_SETTINGS)) {
                             return mBroadcaster.getFragment(FRAGMENT_SETTINGS);
+                        }
                         SettingsFragment settingsFragment = new SettingsFragment();
                         mBroadcaster.registerFragment(FRAGMENT_SETTINGS, settingsFragment);
                         return settingsFragment;
@@ -162,20 +165,20 @@ public class MainFragment extends Fragment implements OnConnectStatusChangedList
         return view;
     }
 
-    private void refreshStatus () {
-        if (getPushController().isConnected())
-            mSwitchEnablePush.setChecked(getPushController().isEnable(false));
+    private void refreshStatus() {
+        PushController controller = getPushController();
+        if (controller != null && controller.isConnected()) {
+            mSwitchEnablePush.setChecked(controller.isEnable(false));
+        }
     }
 
-    private void initSwitch () {
+    private void initSwitch() {
         refreshStatus();
         mSwitchEnablePush.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 getPushController().setEnable(b);
-                Toast.makeText(getContext(),
-                        b ? R.string.msg_enable : R.string.msg_disable
-                        , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), b ? R.string.msg_enable : R.string.msg_disable, Toast.LENGTH_SHORT).show();
             }
         });
         mSwitchEnablePush.setEnabled(true);
@@ -189,7 +192,7 @@ public class MainFragment extends Fragment implements OnConnectStatusChangedList
     }
 
     @Override
-    public void onDetach () {
+    public void onDetach() {
         if (mBroadcaster != null) {
             mBroadcaster.unregisterAll();
         }
