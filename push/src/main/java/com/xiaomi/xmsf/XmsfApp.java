@@ -4,14 +4,11 @@ import android.Manifest;
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
-import com.crossbowffs.remotepreferences.RemotePreferenceAccessException;
 import com.oasisfeng.condom.CondomOptions;
 import com.oasisfeng.condom.CondomProcess;
 import com.taobao.android.dexposed.XC_MethodHook;
@@ -38,37 +35,12 @@ import java.util.Iterator;
 import java.util.Random;
 
 import me.pqpo.librarylog4a.Log4a;
-import top.trumeet.common.utils.PreferencesUtils;
 import top.trumeet.mipush.provider.DatabaseUtils;
 
 import static com.xiaomi.xmsf.push.control.PushControllerUtils.isAppMainProc;
 import static top.trumeet.common.Constants.TAG_CONDOM;
 
 public class XmsfApp extends Application {
-
-
-    public static volatile ConfigCenter conf = null;
-
-    public static void reloadConf(Context ctx) {
-        ConfigCenter tmp = new ConfigCenter();
-        try {
-            SharedPreferences prefs = PreferencesUtils.getPreferences(ctx);
-            tmp.autoRegister = prefs.getBoolean(PreferencesUtils.KeyAutoRegister, tmp.autoRegister);
-            tmp.debugIntent = prefs.getBoolean(PreferencesUtils.KeyDebugIntent, tmp.debugIntent);
-            tmp.foregroundNotification = prefs.getBoolean(PreferencesUtils.KeyForegroundNotification, tmp.foregroundNotification);
-            tmp.enableWakeupTarget = prefs.getBoolean(PreferencesUtils.KeyEnableWakeupTarget,   tmp.enableWakeupTarget);
-            tmp.disablePushNotification = prefs.getBoolean(PreferencesUtils.KeyDisablePushNotification,  tmp.disablePushNotification );
-            tmp.enableGroupNotification = prefs.getBoolean(PreferencesUtils.KeyEnableGroupNotification, tmp.enableGroupNotification );
-
-            {
-                String mode = prefs.getString(PreferencesUtils.KeyAccessMode, "0");
-                tmp.accessMode = Integer.valueOf(mode);
-            }
-
-            conf = tmp;
-        } catch (RemotePreferenceAccessException ignored) {
-        }
-    }
 
     private RemoveTremblingUtils mRemoveTrembling;
 
@@ -103,7 +75,7 @@ public class XmsfApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        reloadConf(this);
+        ConfigCenter.reloadConf(this);
 
         LogUtils.configureLog(this);
 
@@ -117,7 +89,7 @@ public class XmsfApp extends Application {
 
             @Override
             public void log(String content) {
-                Log.v(this.mTag, content);
+                Log4a.d(this.mTag, content);
             }
 
             @Override
@@ -125,7 +97,11 @@ public class XmsfApp extends Application {
                 if (content.contains("isMIUI")) {
                     return;
                 }
-                Log.v(this.mTag, content, t);
+                if (t == null) {
+                    Log4a.i(mTag, content);
+                } else {
+                    Log4a.e(mTag, content, t);
+                }
             }
         });
 

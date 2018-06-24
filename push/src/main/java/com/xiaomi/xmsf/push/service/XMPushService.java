@@ -9,6 +9,7 @@ import com.xiaomi.xmsf.XmsfApp;
 import com.xiaomi.xmsf.push.auth.AuthActivity;
 import com.xiaomi.xmsf.push.control.PushControllerUtils;
 import com.xiaomi.xmsf.push.notification.NotificationController;
+import com.xiaomi.xmsf.utils.ConfigCenter;
 
 import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.common.Constants;
@@ -54,7 +55,7 @@ public class XMPushService extends IntentService {
                 Log4a.w(TAG, "Denied register request: " + pkg);
                 result = Event.ResultType.DENY_USER;
             } else {
-                if (XmsfApp.conf.autoRegister && application.getType() == RegisteredApplication.Type.ASK) {
+                if (ConfigCenter.getInstance().autoRegister && application.getType() == RegisteredApplication.Type.ASK) {
                     application.setType(RegisteredApplication.Type.ALLOW);
                     RegisteredApplicationDb.update(application, this);
                 }

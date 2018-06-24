@@ -14,7 +14,7 @@ import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
 import com.xiaomi.xmsf.BuildConfig;
 import com.xiaomi.xmsf.R;
-import com.xiaomi.xmsf.XmsfApp;
+import com.xiaomi.xmsf.utils.ConfigCenter;
 
 import java.util.List;
 import java.util.Map;
@@ -191,12 +191,12 @@ public class MyMIPushMessageProcessor {
                 Log4a.w(TAG, "drop a duplicate message, key=" + var8);
             } else {
 
-                if (!XmsfApp.conf.disablePushNotification) {
+                if (!ConfigCenter.getInstance().disablePushNotification) {
                     MyMIPushNotificationHelper.notifyPushMessage(paramXMPushService, buildContainer, paramArrayOfByte, var2);
                 }
 
                 //send broadcast
-                if (!MIPushNotificationHelper.isBusinessMessage(buildContainer) && XmsfApp.conf.enableWakeupTarget) {
+                if (!MIPushNotificationHelper.isBusinessMessage(buildContainer) && ConfigCenter.getInstance().enableWakeupTarget) {
 
                     Intent localIntent = new Intent(PushConstants.MIPUSH_ACTION_MESSAGE_ARRIVED);
                     localIntent.putExtra(PushConstants.MIPUSH_EXTRA_PAYLOAD, paramArrayOfByte);
@@ -224,7 +224,7 @@ public class MyMIPushMessageProcessor {
             sendAckMessage(paramXMPushService, buildContainer);
             MyLog.i("receive abtest message. ack it." + metaInfo.getId());
         } else if (shouldSendBroadcast(paramXMPushService, targetPackage, buildContainer, metaInfo)) {
-            if (XmsfApp.conf.enableWakeupTarget) {
+            if (ConfigCenter.getInstance().enableWakeupTarget) {
                 paramXMPushService.sendBroadcast(paramIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.packageName));
             }
         }

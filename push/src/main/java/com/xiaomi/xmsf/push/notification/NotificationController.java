@@ -13,7 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 
-import com.xiaomi.xmsf.XmsfApp;
+import com.xiaomi.xmsf.utils.ConfigCenter;
 
 import java.util.ArrayList;
 
@@ -155,7 +155,7 @@ public class NotificationController {
         Notification notification = localBuilder.build();
         manager.notify(id, notification);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && XmsfApp.conf.enableGroupNotification) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && ConfigCenter.getInstance().enableGroupNotification) {
             updateSummaryNotification(context, packageName, getGroupIdByPkg(packageName));
         }
     }
@@ -166,7 +166,7 @@ public class NotificationController {
 
         String groupId = null;
 
-        if (XmsfApp.conf.enableGroupNotification) {
+        if (ConfigCenter.getInstance().enableGroupNotification) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 StatusBarNotification[] activeNotifications = manager.getActiveNotifications();
                 for (StatusBarNotification activeNotification : activeNotifications) {
