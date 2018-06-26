@@ -1,6 +1,10 @@
 <resources>
     <string name="push_service_name">Push</string>
 
+
+    <string name="perm_change_settings">Manage push service</string>
+    <string name="perm_read_settings">Get push settings</string>
+
     <!-- Event -->
     <string name="event_register">Register push</string>
     <string name="event_register_result">收到注册结果</string>

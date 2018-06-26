@@ -50,25 +50,27 @@ public class MyMIPushMessageProcessor {
             }
 
             ActionType buildContainerAction = buildContainer.getAction();
-            if (ActionType.SendMessage == buildContainerAction && MIPushAppInfo.getInstance(paramXMPushService).isUnRegistered(buildContainer.packageName) && !MIPushNotificationHelper.isBusinessMessage(buildContainer)) {
-                String var20 = "";
-                if (localPushMetaInfo != null) {
-                    var20 = localPushMetaInfo.getId();
-                }
+            if (ActionType.SendMessage == buildContainerAction) {
+                if (MIPushAppInfo.getInstance(paramXMPushService).isUnRegistered(buildContainer.packageName) && !MIPushNotificationHelper.isBusinessMessage(buildContainer)) {
+                    String var20 = "";
+                    if (localPushMetaInfo != null) {
+                        var20 = localPushMetaInfo.getId();
+                    }
 
-                Log4a.w(TAG, "Drop a message for unregistered, msgid=" + var20);
-                sendAppAbsentAck(paramXMPushService, buildContainer, buildContainer.packageName);
-            } else if (ActionType.SendMessage == buildContainerAction && MIPushAppInfo.getInstance(paramXMPushService).isPushDisabled4User(buildContainer.packageName) && !MIPushNotificationHelper.isBusinessMessage(buildContainer)) {
-                String var19 = "";
-                if (localPushMetaInfo != null) {
-                    var19 = localPushMetaInfo.getId();
-                }
+                    Log4a.w(TAG, "Drop a message for unregistered, msgid=" + var20);
+                    sendAppAbsentAck(paramXMPushService, buildContainer, buildContainer.packageName);
+                } else if (MIPushAppInfo.getInstance(paramXMPushService).isPushDisabled4User(buildContainer.packageName) && !MIPushNotificationHelper.isBusinessMessage(buildContainer)) {
+                    String var19 = "";
+                    if (localPushMetaInfo != null) {
+                        var19 = localPushMetaInfo.getId();
+                    }
 
-                Log4a.w(TAG, "Drop a message for push closed, msgid=" + var19);
-                sendAppAbsentAck(paramXMPushService, buildContainer, buildContainer.packageName);
-            } else if (ActionType.SendMessage == buildContainerAction && !TextUtils.equals(paramXMPushService.getPackageName(), "com.xiaomi.xmsf") && !TextUtils.equals(paramXMPushService.getPackageName(), buildContainer.packageName)) {
-                Log4a.w(TAG, "Receive a message with wrong package name, expect " + paramXMPushService.getPackageName() + ", received " + buildContainer.packageName);
-                sendErrorAck(paramXMPushService, buildContainer, "unmatched_package", "package should be " + paramXMPushService.getPackageName() + ", but got " + buildContainer.packageName);
+                    Log4a.w(TAG, "Drop a message for push closed, msgid=" + var19);
+                    sendAppAbsentAck(paramXMPushService, buildContainer, buildContainer.packageName);
+                } else if (!TextUtils.equals(paramXMPushService.getPackageName(), "com.xiaomi.xmsf") && !TextUtils.equals(paramXMPushService.getPackageName(), buildContainer.packageName)) {
+                    Log4a.w(TAG, "Receive a message with wrong package name, expect " + paramXMPushService.getPackageName() + ", received " + buildContainer.packageName);
+                    sendErrorAck(paramXMPushService, buildContainer, "unmatched_package", "package should be " + paramXMPushService.getPackageName() + ", but got " + buildContainer.packageName);
+                }
             } else {
                 if (localPushMetaInfo != null && localPushMetaInfo.getId() != null) {
                     Log4a.d(TAG, String.format("receive a message, appid=%s, msgid= %s", buildContainer.getAppid(), localPushMetaInfo.getId()));
@@ -155,6 +157,14 @@ public class MyMIPushMessageProcessor {
 
         PushMetaInfo metaInfo = buildContainer.getMetaInfo();
 
+        //abtest
+        if (BuildConfig.APPLICATION_ID.contains(buildContainer.packageName) && !buildContainer.isEncryptAction() &&
+                metaInfo != null && metaInfo.getExtra() != null && metaInfo.getExtra().containsKey("ab")) {
+            sendAckMessage(paramXMPushService, buildContainer);
+            MyLog.i("receive abtest message. ack it." + metaInfo.getId());
+            return;
+        }
+
         if (metaInfo != null) {
             String title = metaInfo.getTitle();
             String description = metaInfo.getDescription();
@@ -219,11 +229,9 @@ public class MyMIPushMessageProcessor {
                 sendAckMessage(paramXMPushService, buildContainer);
 
             }
-        } else if (BuildConfig.APPLICATION_ID.contains(buildContainer.packageName) && !buildContainer.isEncryptAction() &&
-                metaInfo != null && metaInfo.getExtra() != null && metaInfo.getExtra().containsKey("ab")) {
-            sendAckMessage(paramXMPushService, buildContainer);
-            MyLog.i("receive abtest message. ack it." + metaInfo.getId());
-        } else if (shouldSendBroadcast(paramXMPushService, targetPackage, buildContainer, metaInfo)) {
+        }
+
+        if (shouldSendBroadcast(paramXMPushService, targetPackage, buildContainer, metaInfo)) {
             if (ConfigCenter.getInstance().enableWakeupTarget) {
                 paramXMPushService.sendBroadcast(paramIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.packageName));
             }
