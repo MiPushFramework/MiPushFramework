@@ -29,8 +29,6 @@
     <string name="notification_stats_permission_title">Please grant usage stats permission</string>
     <string name="notification_stats_permission_text">We need usage rights to process your request, click grant permissions</string>
 
-    <string name="perm_change_settings">Manage push service</string>
-    <string name="perm_read_settings">Get push settings</string>
     <string name="title_activity_keepalive">后台服务保活界面</string>
     <string name="activity_rom_keepalive">
         这是一个空白activity。
