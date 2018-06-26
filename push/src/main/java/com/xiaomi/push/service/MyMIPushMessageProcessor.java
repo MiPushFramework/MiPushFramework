@@ -40,46 +40,43 @@ import static com.xiaomi.push.service.PushServiceConstants.PREF_KEY_REGISTERED_P
 public class MyMIPushMessageProcessor {
     private static final String TAG = "MyMIPushMessageProcessor";
 
-    public static void process(XMPushService paramXMPushService, XmPushActionContainer buildContainer,
-                               byte[] payload, long var2, Intent localIntent) {
+    public static void process(XMPushService paramXMPushService, XmPushActionContainer buildContainer, byte[] paramArrayOfByte, long var2, Intent localIntent) {
         try {
-
+            String targetPackage = MIPushNotificationHelper.getTargetPackage(buildContainer);
+            Long current = System.currentTimeMillis();
+//            Intent var6 = MIPushEventProcessor.buildIntent(var1, current);
             PushMetaInfo localPushMetaInfo = buildContainer.getMetaInfo();
             if (localPushMetaInfo != null) {
-                localPushMetaInfo.putToExtra("mrt", Long.toString(System.currentTimeMillis()));
+                localPushMetaInfo.putToExtra("mrt", Long.toString(current));
             }
-
-            ActionType buildContainerAction = buildContainer.getAction();
-            if (ActionType.SendMessage == buildContainerAction) {
-                if (MIPushAppInfo.getInstance(paramXMPushService).isUnRegistered(buildContainer.packageName) && !MIPushNotificationHelper.isBusinessMessage(buildContainer)) {
-                    String var20 = "";
-                    if (localPushMetaInfo != null) {
-                        var20 = localPushMetaInfo.getId();
-                    }
-
-                    Log4a.w(TAG, "Drop a message for unregistered, msgid=" + var20);
-                    sendAppAbsentAck(paramXMPushService, buildContainer, buildContainer.packageName);
-                } else if (MIPushAppInfo.getInstance(paramXMPushService).isPushDisabled4User(buildContainer.packageName) && !MIPushNotificationHelper.isBusinessMessage(buildContainer)) {
-                    String var19 = "";
-                    if (localPushMetaInfo != null) {
-                        var19 = localPushMetaInfo.getId();
-                    }
-
-                    Log4a.w(TAG, "Drop a message for push closed, msgid=" + var19);
-                    sendAppAbsentAck(paramXMPushService, buildContainer, buildContainer.packageName);
-                } else if (!TextUtils.equals(paramXMPushService.getPackageName(), "com.xiaomi.xmsf") && !TextUtils.equals(paramXMPushService.getPackageName(), buildContainer.packageName)) {
-                    Log4a.w(TAG, "Receive a message with wrong package name, expect " + paramXMPushService.getPackageName() + ", received " + buildContainer.packageName);
-                    sendErrorAck(paramXMPushService, buildContainer, "unmatched_package", "package should be " + paramXMPushService.getPackageName() + ", but got " + buildContainer.packageName);
+            if (ActionType.SendMessage == buildContainer.getAction() && MIPushAppInfo.getInstance(paramXMPushService).isUnRegistered(buildContainer.packageName) && !MIPushNotificationHelper.isBusinessMessage(buildContainer)) {
+                String var20 = "";
+                if (localPushMetaInfo != null) {
+                    var20 = localPushMetaInfo.getId();
                 }
+
+                Log4a.w(TAG, "Drop a message for unregistered, msgid=" + var20);
+                sendAppAbsentAck(paramXMPushService, buildContainer, buildContainer.packageName);
+            } else if (ActionType.SendMessage == buildContainer.getAction() && MIPushAppInfo.getInstance(paramXMPushService).isPushDisabled4User(buildContainer.packageName) && !MIPushNotificationHelper.isBusinessMessage(buildContainer)) {
+                String var19 = "";
+                if (localPushMetaInfo != null) {
+                    var19 = localPushMetaInfo.getId();
+                }
+
+                Log4a.w(TAG, "Drop a message for push closed, msgid=" + var19);
+                sendAppAbsentAck(paramXMPushService, buildContainer, buildContainer.packageName);
+            } else if (ActionType.SendMessage == buildContainer.getAction() && !TextUtils.equals(paramXMPushService.getPackageName(), "com.xiaomi.xmsf") && !TextUtils.equals(paramXMPushService.getPackageName(), buildContainer.packageName)) {
+                Log4a.w(TAG, "Receive a message with wrong package name, expect " + paramXMPushService.getPackageName() + ", received " + buildContainer.packageName);
+                sendErrorAck(paramXMPushService, buildContainer, "unmatched_package", "package should be " + paramXMPushService.getPackageName() + ", but got " + buildContainer.packageName);
             } else {
                 if (localPushMetaInfo != null && localPushMetaInfo.getId() != null) {
-                    Log4a.d(TAG, String.format("receive a message, appid=%s, msgid= %s", buildContainer.getAppid(), localPushMetaInfo.getId()));
+                    Log4a.i(TAG, String.format("receive a message, appid=%s, msgid= %s", buildContainer.getAppid(), localPushMetaInfo.getId()));
                 }
 
                 if (localPushMetaInfo != null) {
                     Map<String, String> var17 = localPushMetaInfo.getExtra();
                     if (var17 != null && var17.containsKey("hide") && "true".equalsIgnoreCase(var17.get("hide"))) {
-                        Log4a.d(TAG, String.format("hide a message, appid=%s, msgid= %s", buildContainer.getAppid(), localPushMetaInfo.getId()));
+                        Log4a.i(TAG, String.format("hide a message, appid=%s, msgid= %s", buildContainer.getAppid(), localPushMetaInfo.getId()));
                         sendAckMessage(paramXMPushService, buildContainer);
                         return;
                     }
@@ -113,14 +110,14 @@ public class MyMIPushMessageProcessor {
                         return;
                     }
 
-                    boolean var10 = processGeoMessage(paramXMPushService, localPushMetaInfo, payload);
+                    boolean var10 = processGeoMessage(paramXMPushService, localPushMetaInfo, paramArrayOfByte);
                     MIPushEventProcessor.sendGeoAck(paramXMPushService, buildContainer, true, false, false);
                     if (!var10) {
                         return;
                     }
                 }
 
-                userProcessMIPushMessage(paramXMPushService, buildContainer, payload, var2, localIntent, isGeoMessage);
+                userProcessMIPushMessage(paramXMPushService, buildContainer, paramArrayOfByte, var2, localIntent, isGeoMessage);
             }
 
 
