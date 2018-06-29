@@ -26,7 +26,7 @@
         android:name="top.trumeet.mipush.permissions.WRITE_SETTINGS"
         android:label="@string/perm_change_settings"
         android:logo="@drawable/ic_notifications_black_24dp"
-        android:protectionLevel="dangerous" />
+        android:protectionLevel="signature" />
     <permission
         android:name="top.trumeet.mipush.permissions.BIND"
         android:protectionLevel="normal" />

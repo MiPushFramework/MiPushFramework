@@ -18,7 +18,6 @@ import android.view.ViewPropertyAnimator;
 import android.widget.Toast;
 
 import top.trumeet.common.Constants;
-import top.trumeet.common.plugin.PlatformUtils;
 import top.trumeet.common.push.PushController;
 import top.trumeet.common.utils.PermissionUtils;
 import top.trumeet.common.utils.Utils;
@@ -240,7 +239,7 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
         if (Constants.permissions.WRITE_SETTINGS.equalsIgnoreCase(permName)) {
             String permDisplayName = PermissionUtils.getName(permName);
 
-            if (granted || (permDisplayName == null)) {
+            if (granted) {
                 connect();
             } else {
                 Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission, permDisplayName), Toast.LENGTH_LONG)
@@ -258,11 +257,4 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
         }
     }
 
-    private void checkAndShowPlatformNotice() {
-        if (PlatformUtils.isPlatformModeSupported() &&
-                !PlatformUtils.isServicePlatformSign()) {
-            Toast.makeText(this, Utils.getString(R.string.platform_suggestion_toast,
-                    this), Toast.LENGTH_LONG).show();
-        }
-    }
 }
