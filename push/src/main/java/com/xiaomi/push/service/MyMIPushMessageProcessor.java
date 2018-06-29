@@ -198,9 +198,7 @@ public class MyMIPushMessageProcessor {
                 Log4a.w(TAG, "drop a duplicate message, key=" + var8);
             } else {
 
-                if (!ConfigCenter.getInstance().disablePushNotification) {
-                    MyMIPushNotificationHelper.notifyPushMessage(paramXMPushService, buildContainer, paramArrayOfByte, var2);
-                }
+                MyMIPushNotificationHelper.notifyPushMessage(paramXMPushService, buildContainer, paramArrayOfByte, var2);
 
                 //send broadcast
                 if (!MIPushNotificationHelper.isBusinessMessage(buildContainer) && ConfigCenter.getInstance().enableWakeupTarget) {
@@ -229,9 +227,9 @@ public class MyMIPushMessageProcessor {
         }
 
         if (shouldSendBroadcast(paramXMPushService, targetPackage, buildContainer, metaInfo)) {
-            if (ConfigCenter.getInstance().enableWakeupTarget) {
-                paramXMPushService.sendBroadcast(paramIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.packageName));
-            }
+//            if (ConfigCenter.getInstance().enableWakeupTarget) {
+            paramXMPushService.sendBroadcast(paramIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.packageName));
+//            }
         }
 
     }
