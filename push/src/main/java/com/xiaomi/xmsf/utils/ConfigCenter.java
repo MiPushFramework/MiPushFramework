@@ -36,7 +36,6 @@ public class ConfigCenter {
             tmp.debugIntent = prefs.getBoolean(PreferencesUtils.KeyDebugIntent, tmp.debugIntent);
             tmp.foregroundNotification = prefs.getBoolean(PreferencesUtils.KeyForegroundNotification, tmp.foregroundNotification);
             tmp.enableWakeupTarget = prefs.getBoolean(PreferencesUtils.KeyEnableWakeupTarget, tmp.enableWakeupTarget);
-            tmp.disablePushNotification = prefs.getBoolean(PreferencesUtils.KeyDisablePushNotification, tmp.disablePushNotification);
             tmp.enableGroupNotification = prefs.getBoolean(PreferencesUtils.KeyEnableGroupNotification, tmp.enableGroupNotification);
 
             {
@@ -60,7 +59,6 @@ public class ConfigCenter {
     public boolean debugIntent = false;
     public boolean foregroundNotification = true;
     public boolean enableWakeupTarget = true;
-    public boolean disablePushNotification = false;
     public boolean enableGroupNotification = true;
 
     public int accessMode = 0;

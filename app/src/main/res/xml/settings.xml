@@ -85,13 +85,6 @@
 
     <PreferenceCategory android:title="@string/settings_debug">
 
-
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="DisablePushNotification"
-            android:title="@string/settings_disable_push_notification" />
-
-
         <SwitchPreference
             android:defaultValue="false"
             android:key="DebugIcon"

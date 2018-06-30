@@ -148,7 +148,7 @@
     <string name="settings_debug_foreground_notification">开启保活通知(适用于Oreo之前版本)</string>
     <string name="settings_debug_intent">调试跳转</string>
     <string name="settings_wakeup_target">唤醒目标应用</string>
-    <string name="settings_disable_push_notification">禁止框架发出推送通知</string>
+
     <string name="settings_summary_wakeup_target">禁用唤醒应用可以解决两次通知问题，但是有可能存在通知遗漏的可能</string>
     <string name="settings_debug_icon">调试透明图标</string>
     <string name="settings_auto_register">自动注册应用</string>

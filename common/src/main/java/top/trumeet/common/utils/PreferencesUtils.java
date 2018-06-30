@@ -19,7 +19,6 @@ public class PreferencesUtils {
     public static String KeyDebugIntent = "DebugIntent";
     public static String KeyForegroundNotification = "ForegroundNotification";
     public static String KeyEnableWakeupTarget = "EnableWakeupTarget";
-    public static String KeyDisablePushNotification = "DisablePushNotification";
     public static String KeyEnableGroupNotification = "EnableGroupNotification";
 
     public static SharedPreferences getPreferences(Context ctx) {
