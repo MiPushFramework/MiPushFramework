@@ -30,7 +30,9 @@ import top.trumeet.mipushframework.register.RegisteredApplicationFragment;
 import top.trumeet.mipushframework.settings.SettingsFragment;
 
 /**
- * Created by Trumeet on 2017/12/30.
+ *
+ * @author Trumeet
+ * @date 2017/12/30
  */
 
 public class MainFragment extends Fragment implements OnConnectStatusChangedListener {
@@ -168,7 +170,11 @@ public class MainFragment extends Fragment implements OnConnectStatusChangedList
     private void refreshStatus() {
         PushController controller = getPushController();
         if (controller != null && controller.isConnected()) {
-            mSwitchEnablePush.setChecked(controller.isEnable(false));
+            try {
+                mSwitchEnablePush.setChecked(controller.isEnable(false));
+            } catch (RuntimeException ignore) {
+
+            }
         }
     }
 
