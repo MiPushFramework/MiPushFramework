@@ -1,7 +1,10 @@
-package top.trumeet.mipushframework.xposed.hook;
+package com.xiaomi.xposed.hook;
 
 import android.content.Context;
 import android.util.Log;
+
+import com.xiaomi.xmsf.BuildConfig;
+import com.xiaomi.xposed.util.CommonUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,8 +17,6 @@ import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import top.trumeet.mipush.BuildConfig;
-import top.trumeet.mipushframework.xposed.util.CommonUtil;
 
 public class MiPushEnhanceHook implements IXposedHookLoadPackage {
 

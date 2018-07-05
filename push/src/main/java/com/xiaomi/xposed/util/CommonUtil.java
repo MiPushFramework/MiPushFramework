@@ -1,4 +1,4 @@
-package top.trumeet.mipushframework.xposed.util;
+package com.xiaomi.xposed.util;
 
 import android.content.pm.ApplicationInfo;
 
