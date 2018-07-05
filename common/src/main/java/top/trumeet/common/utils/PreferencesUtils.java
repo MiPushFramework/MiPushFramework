@@ -10,16 +10,16 @@ import com.crossbowffs.remotepreferences.RemotePreferences;
  */
 public class PreferencesUtils {
 
-    public static String Authority = "top.trumeet.mipushframework.preferences";
-    public static String MainPrefs = "top.trumeet.mipush_preferences";
+    public static final String Authority = "top.trumeet.mipushframework.preferences";
+    public static final String MainPrefs = "top.trumeet.mipush_preferences";
 
-    public static String KeyAccessMode = "AccessMode";
-    public static String KeyDebugIcon = "DebugIcon";
-    public static String KeyAutoRegister = "AutoRegister";
-    public static String KeyDebugIntent = "DebugIntent";
-    public static String KeyForegroundNotification = "ForegroundNotification";
-    public static String KeyEnableWakeupTarget = "EnableWakeupTarget";
-    public static String KeyEnableGroupNotification = "EnableGroupNotification";
+    public static final String KeyAccessMode = "AccessMode";
+    public static final String KeyDebugIcon = "DebugIcon";
+    public static final String KeyAutoRegister = "AutoRegister";
+    public static final String KeyDebugIntent = "DebugIntent";
+    public static final String KeyForegroundNotification = "ForegroundNotification";
+    public static final String KeyEnableWakeupTarget = "EnableWakeupTarget";
+    public static final String KeyEnableGroupNotification = "EnableGroupNotification";
 
     public static SharedPreferences getPreferences(Context ctx) {
         return new RemotePreferences(ctx, PreferencesUtils.Authority, PreferencesUtils.MainPrefs, true);
