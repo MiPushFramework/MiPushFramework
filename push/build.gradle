@@ -21,18 +21,6 @@ android {
         }
     }
 
-    flavorDimensions "runMode"
-    productFlavors {
-        // User will install as a normal app
-        normal {
-            dimension "runMode"
-        }
-        // Platform built-in mode, should signing with platform signature
-        platform {
-            dimension "runMode"
-        }
-    }
-
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
