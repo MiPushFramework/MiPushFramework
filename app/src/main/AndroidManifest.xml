@@ -17,6 +17,11 @@
         android:name="top.trumeet.mipush.permissions.BIND"
         android:protectionLevel="normal" />
 
+    <!-- Allow an application to use manager api (PushServiceAPIProvider).
+        protectionLevel: normal (Enabled components only) -->
+    <permission android:name="moe.yutua.mipush.permissions.USE_PUSH_MANAGER_API"
+        android:protectionLevel="normal" />
+
     <uses-permission android:name="top.trumeet.mipush.permissions.GET_VERSION" />
 
     <uses-permission android:name="top.trumeet.mipush.permissions.READ_SETTINGS" />
@@ -77,5 +82,10 @@
             android:name="top.trumeet.mipushframework.preferences.MiPushAppPreferenceProvider"
             android:authorities="top.trumeet.mipushframework.preferences"
             android:exported="true"/>
+
+        <!-- Push API -->
+        <provider
+            android:authorities="moe.yuuta.mipush.push.api.PushServiceAPI"
+            android:name="top.trumeet.mipushframework.plugin.PushServiceAPIProvider" />
     </application>
 </manifest>
