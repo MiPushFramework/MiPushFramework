@@ -57,7 +57,7 @@ ext {
     buildToolsVersion = "27.0.3"
     versionCode = currentVersionCode
     pushVersionCode = 5
-    snapshot = true
+    snapshot = false
     versionBase = "${baseVersionName}.r${currentVersionCode}.${gitCommitId}"
     versionName = snapshot ? versionBase + "-SNAPSHOT" : versionBase
     gitTag = gitCommitId
