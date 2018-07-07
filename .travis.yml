@@ -15,7 +15,7 @@ before_install:
 - chmod +x gradlew
 before_deploy:
   # Create tag
-  - export VERSION=$(git rev-parse --short HEAD)"-SNAPSHOT"
+  - export VERSION=$(git rev-parse --short HEAD)
   - git tag $VERSION
   # Rename
   - mv "app/build/outputs/apk/release/app-release.apk" "app/build/outputs/apk/release/manager.apk"
