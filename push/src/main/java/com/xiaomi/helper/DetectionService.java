@@ -32,8 +32,10 @@ public class DetectionService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-            foregroundPackageName = event.getPackageName().toString();
-
+            CharSequence packageName = event.getPackageName();
+            if (packageName != null) {
+                foregroundPackageName = packageName.toString();
+            }
         }
     }
 
