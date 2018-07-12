@@ -32,7 +32,7 @@ public class HookPkgUninstallReceiver implements IHook {
                     protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
                         Context context = (Context) param.args[0];
                         Intent intent = (Intent) param.args[1];
-                        if (intent != null) {
+                        if (intent != null && intent.getExtras() !=null) {
                             if ("android.intent.action.PACKAGE_REMOVED".equals(intent.getAction())) {
                                 boolean isReplaced = intent.getExtras().getBoolean("android.intent.extra.REPLACING");
                                 Uri data = intent.getData();
