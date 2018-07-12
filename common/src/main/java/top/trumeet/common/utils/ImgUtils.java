@@ -227,8 +227,8 @@ public class ImgUtils {
     private static void getGreyHistogram(Bitmap bitmap, int[] histogram) {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
-        for (int x = 0; x < height; x++) {
-            for (int y = 0; y < width; y++) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 int dot = bitmap.getPixel(x, y);
                 int red = ((dot & 0x00FF0000) >> 16);
                 int green = ((dot & 0x0000FF00) >> 8);
@@ -267,7 +267,7 @@ public class ImgUtils {
     }
 
 
-    public static int calculateThresholdByOSTU(Bitmap bitmap, int[] histogram) {
+    private static int calculateThresholdByOSTU(Bitmap bitmap, int[] histogram) {
 
         int total = bitmap.getWidth() * bitmap.getHeight();
         double sum = 0;
@@ -277,7 +277,6 @@ public class ImgUtils {
 
         double sumB = 0;
         int wB = 0;
-        int wF = 0;
 
         double varMax = 0;
         int threshold = 0;
@@ -287,7 +286,7 @@ public class ImgUtils {
             if (wB == 0) {
                 continue;
             }
-            wF = total - wB;
+            int wF = total - wB;
 
             if (wF == 0) {
                 break;
@@ -308,7 +307,7 @@ public class ImgUtils {
         return threshold;
     }
 
-    public static int calculateThresholdByMinimum(int[] histogram) {
+    private static int calculateThresholdByMinimum(int[] histogram) {
 
         int y, iter = 0;
         double[] histgramc = new double[NUM_256];
@@ -344,7 +343,7 @@ public class ImgUtils {
     }
 
 
-    public static int calculateThresholdByMean(int[] histogram) {
+    private static int calculateThresholdByMean(int[] histogram) {
 
         int sum = 0, amount = 0;
         for (int i = 0; i < NUM_256; i++) {
