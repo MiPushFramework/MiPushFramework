@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -15,6 +16,15 @@ android {
         versionName rootProject.ext.versionName + "_framework"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        def fabricKey = null
+        if (project.rootProject.file('local.properties').exists()) {
+            Properties properties = new Properties()
+            properties.load(project.rootProject.file('local.properties').newDataInputStream())
+            fabricKey = properties.getProperty('FABRIC_KEY')
+        }
+        manifestPlaceholders = [fabricKey: fabricKey != null ?
+                fabricKey : System.getenv("FABRIC_KEY")]
 
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'mips', 'x86'
@@ -85,4 +95,9 @@ dependencies {
     implementation project(':extenders')
     implementation "com.android.support:palette-v7:$supportLibraryVersion"
     compileOnly 'de.robv.android.xposed:api:82'
+
+    // Fabric
+    implementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
+        transitive = true
+    }
 }

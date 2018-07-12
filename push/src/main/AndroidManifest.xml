@@ -207,6 +207,10 @@
             android:label="@string/title_activity_keepalive"
             android:exported="true" />
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="${fabricKey}" />
+
     </application>
 
 </manifest>

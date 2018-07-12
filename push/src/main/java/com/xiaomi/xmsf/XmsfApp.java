@@ -9,6 +9,7 @@ import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 
+import com.crashlytics.android.Crashlytics;
 import com.oasisfeng.condom.CondomOptions;
 import com.oasisfeng.condom.CondomProcess;
 import com.taobao.android.dexposed.XC_MethodHook;
@@ -34,6 +35,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
 
+import io.fabric.sdk.android.Fabric;
 import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.mipush.provider.DatabaseUtils;
 
@@ -74,6 +76,13 @@ public class XmsfApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (!BuildConfig.DEBUG) {
+            final Fabric fabric = new Fabric.Builder(this)
+                    .kits(new Crashlytics())
+                    .build();
+            Fabric.with(fabric);
+        }
 
         ConfigCenter.reloadConf(this, true);
 
