@@ -62,3 +62,10 @@ ext {
     versionName = snapshot ? versionBase + "-SNAPSHOT" : versionBase
     gitTag = gitCommitId
 }
+
+task exportVersion(type: Exec) {
+    commandLine 'sh'
+    doLast {
+        file("$projectDir/version.txt").text = """$versionBase"""
+    }
+}
