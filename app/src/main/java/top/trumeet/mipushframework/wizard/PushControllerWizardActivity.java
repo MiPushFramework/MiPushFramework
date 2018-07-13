@@ -106,7 +106,7 @@ public abstract class PushControllerWizardActivity extends Activity {
         @Override
         protected Pair<Boolean, Integer> doInBackground(Void... voids) {
             SystemClock.sleep(1000);
-            if (RomUtils.isMiui()) {
+            if (RomUtils.getOs() == RomUtils.ROM_MIUI) {
                 return new Pair<>(false, FAIL_REASON_MIUI);
             }
             if (!Utils.isServiceInstalled()) {

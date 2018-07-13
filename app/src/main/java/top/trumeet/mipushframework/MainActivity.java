@@ -120,7 +120,7 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
 
         @Override
         protected Pair<Boolean, Integer> doInBackground(Void... voids) {
-            if (RomUtils.isMiui()) {
+            if (RomUtils.getOs() == RomUtils.ROM_MIUI) {
                 return new Pair<>(false, FAIL_REASON_MIUI);
             }
             if (!Utils.isServiceInstalled()) {
