@@ -3,7 +3,10 @@ package com.xiaomi.xmsf.push.service;
 import android.app.IntentService;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.CrashlyticsInitProvider;
 import com.xiaomi.push.service.PushServiceMain;
 import com.xiaomi.xmsf.XmsfApp;
 import com.xiaomi.xmsf.push.auth.AuthActivity;
@@ -49,8 +52,12 @@ public class XMPushService extends IntentService {
             result = Event.ResultType.DENY_DISABLED;
         } else {
             RegisteredApplication application = RegisteredApplicationDb
-                    .registerApplication(pkg,
-                            true, this, null);
+                    .registerApplication(pkg, true, this, null);
+            if (application == null) {
+                Crashlytics.log(Log.WARN,  TAG, "registerApplication failed " + pkg);
+                Log4a.w(TAG, "registerApplication failed " + pkg);
+                return;
+            }
             if (application.getType() == RegisteredApplication.Type.DENY) {
                 Log4a.w(TAG, "Denied register request: " + pkg);
                 result = Event.ResultType.DENY_USER;
