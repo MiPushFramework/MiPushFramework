@@ -5,6 +5,15 @@ android:
   - build-tools-27.0.3
   - android-27
   - extra-android-m2repository
+before_cache:
+  # Do not cache a few Gradle files/directories (see https://docs.travis-ci.com/user/languages/java/#Caching)
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    # Gradle dependencies
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
 script:
 - "./gradlew exportVersion"
 - "./gradlew :app:assembleRelease"
