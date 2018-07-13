@@ -25,9 +25,9 @@ before_install:
 - chmod +x gradlew
 before_deploy:
   # Create tag
-  - export VERSION=$(git rev-parse --short HEAD)
-  - git tag $VERSION
   - export MIPUSH_VERSION=$(cat version.txt)
+  - export VERSION=$(cat gitTag.txt)
+  - git tag $VERSION
   # Rename
   - mv "app/build/outputs/apk/release/app-release.apk" "app/build/outputs/apk/release/manager.apk"
   - mv "push/build/outputs/apk/release/push-release.apk" "push/build/outputs/apk/release/xmsf_service.apk"
