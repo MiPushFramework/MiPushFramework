@@ -72,7 +72,7 @@ public class EventDb {
     @RequiresPermission(value = Constants.permissions.READ_SETTINGS)
     public static Set<String> queryRegistered(Context context, CancellationSignal signal) {
 
-        List<Event> registered = getInstance(context).queryAndConvert(signal, Event.KEY_TYPE + "=" + Event.Type.Registration, null,
+        List<Event> registered = getInstance(context).queryAndConvert(signal, Event.KEY_TYPE + "=" + Event.Type.RegistrationResult, null,
                 DatabaseUtils.order(Event.KEY_DATE, "desc"),
                 new DatabaseUtils.Converter<Event>() {
                     @Override
