@@ -117,6 +117,8 @@ public class PushController {
             if (mConnection != null) {
                 mConnection.disconnect();
             }
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
         } catch (IllegalStateException e) {
             // Too bad, 不支持服务版本之后点重试就会 not registered
             e.printStackTrace();

@@ -120,7 +120,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name="com.xiaomi.push.service.receivers.PkgUninstallReceiver"
+            android:name="com.xiaomi.xmsf.push.service.receivers.PkgUninstallReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
@@ -206,6 +206,10 @@
             android:name=".EmptyActivity"
             android:label="@string/title_activity_keepalive"
             android:exported="true" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="${fabricKey}" />
 
     </application>
 

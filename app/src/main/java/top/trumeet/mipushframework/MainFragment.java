@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -30,7 +31,6 @@ import top.trumeet.mipushframework.register.RegisteredApplicationFragment;
 import top.trumeet.mipushframework.settings.SettingsFragment;
 
 /**
- *
  * @author Trumeet
  * @date 2017/12/30
  */
@@ -45,7 +45,11 @@ public class MainFragment extends Fragment implements OnConnectStatusChangedList
     private static final String FRAGMENT_SETTINGS = "settings";
 
     private PushController getPushController() {
-        return ((MainActivity) getActivity())
+        FragmentActivity fragmentActivity = getActivity();
+        if (fragmentActivity == null) {
+            return null;
+        }
+        return ((MainActivity) fragmentActivity)
                 .getController();
     }
 

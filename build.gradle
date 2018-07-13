@@ -48,6 +48,10 @@ def currentVersionCode = (majorVersion + 1) * 200 + minorVersion * 20 + buildVer
 
 def baseVersionName = "${majorVersion}.${minorVersion}.${buildVersion}"
 
+def releaseTime() {
+    return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
+}
+
 ext {
 
     supportLibraryVersion = '27.0.2'
@@ -57,8 +61,16 @@ ext {
     buildToolsVersion = "27.0.3"
     versionCode = currentVersionCode
     pushVersionCode = 5
-    snapshot = true
-    versionBase = "${baseVersionName}.r${currentVersionCode}.${gitCommitId}"
+    snapshot = false
+    versionBase = "${baseVersionName}.${releaseTime()}.${gitCommitId}"
     versionName = snapshot ? versionBase + "-SNAPSHOT" : versionBase
-    gitTag = snapshot ? gitCommitId + "-SNAPSHOT" : gitCommitId
+    gitTag = versionName
+}
+
+task exportVersion(type: Exec) {
+    commandLine 'sh'
+    doLast {
+        file("$projectDir/version.txt").text = """$versionName"""
+        file("$projectDir/gitTag.txt").text = """$gitTag"""
+    }
 }

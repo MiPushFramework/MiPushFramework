@@ -32,6 +32,8 @@ public class MiPushEnhanceHook implements IXposedHookLoadPackage {
         blackList.add("de.robv.android.xposed.installer");
         blackList.add("com.xiaomi.xmsf");
         blackList.add("com.tencent.mm");
+        blackList.add("top.trumeet.mipush");
+        blackList.add("com.google.android.GoogleCamera");
 
         fakeMap.put("ro.miui.ui.version.name", "V9");
         fakeMap.put("ro.miui.ui.version.code", "7");
