@@ -120,7 +120,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name="com.xiaomi.push.service.receivers.PkgUninstallReceiver"
+            android:name="com.xiaomi.xmsf.push.service.receivers.PkgUninstallReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
