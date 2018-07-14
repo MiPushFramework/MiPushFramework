@@ -3,6 +3,7 @@ package top.trumeet.common.utils.rom;
 import android.support.annotation.IntDef;
 import android.support.annotation.RestrictTo;
 
+import top.trumeet.common.utils.rom.h2os.H2OSChecker;
 import top.trumeet.common.utils.rom.miui.MiuiChecker;
 
 /**
@@ -28,13 +29,15 @@ public class RomUtils {
 
     /**
      * 判断 ROM
-     * @return
      */
     @RomType
     public static int getOs() {
         // 先看看是不是厂商 ROM。因为类原生都类似。
         if (new MiuiChecker().check()) {
             return ROM_MIUI;
+        }
+        if (new H2OSChecker().check()) {
+            return ROM_H2OS;
         }
 
         // 权当是 AOSP 了
