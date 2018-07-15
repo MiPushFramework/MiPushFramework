@@ -6,9 +6,15 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.ContentObserver;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
+import com.crossbowffs.remotepreferences.RemotePreferences;
 import com.oasisfeng.condom.CondomContext;
 import com.xiaomi.smack.packet.Message;
 import com.xiaomi.xmpush.thrift.ActionType;
@@ -20,6 +26,7 @@ import com.xiaomi.xmsf.utils.ConfigCenter;
 import org.apache.thrift.TBase;
 
 import me.pqpo.librarylog4a.Log4a;
+import top.trumeet.common.utils.PreferencesUtils;
 
 import static top.trumeet.common.Constants.TAG_CONDOM;
 
@@ -77,6 +84,15 @@ public class PushServiceMain extends XMPushService {
     public static final String CHANNEL_STATUS = "status";
     public static final int NOTIFICATION_ALIVE_ID = 0;
 
+    private SettingsObserver mSettingsObserver;
+    private SharedPreferences.OnSharedPreferenceChangeListener mListener;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mSettingsObserver = new SettingsObserver(new Handler(Looper.myLooper()));
+        mListener = PreferencesUtils.subscribe((RemotePreferences)PreferencesUtils.getPreferences(this), mSettingsObserver);
+    }
 
     @Override
     public void attachBaseContext(Context base) {
@@ -88,7 +104,39 @@ public class PushServiceMain extends XMPushService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
+        // 首次启动先刷新设置
+        onConfigChanged();
+        return Service.START_STICKY;
+    }
 
+    @Override
+    public ClientEventDispatcher createClientEventDispatcher() {
+        return new MyClientEventDispatcher();
+    }
+
+    @Override
+    public void onDestroy() {
+        // getContentResolver().unregisterContentObserver(mSettingsObserver);
+        PreferencesUtils.unsubscribe((RemotePreferences) PreferencesUtils.getPreferences(this), mListener);
+        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
+                .cancel(NOTIFICATION_ALIVE_ID);
+        super.onDestroy();
+    }
+
+    private final class SettingsObserver extends ContentObserver {
+        public SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            Log.i("SettingsObserver", "-> settings changed");
+            ConfigCenter.reloadConf(PushServiceMain.this, true);
+            onConfigChanged();
+        }
+    }
+
+    private void onConfigChanged () {
         NotificationManager manager = (NotificationManager)
                 getSystemService(NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -97,7 +145,6 @@ public class PushServiceMain extends XMPushService {
                     NotificationManager.IMPORTANCE_MIN);
             manager.createNotificationChannel(channel);
         }
-
         if (ConfigCenter.getInstance().foregroundNotification || Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Notification notification = new NotificationCompat.Builder(this,
                     CHANNEL_STATUS)
@@ -110,20 +157,5 @@ public class PushServiceMain extends XMPushService {
             manager.notify(NOTIFICATION_ALIVE_ID, notification);
             startForeground(NOTIFICATION_ALIVE_ID, notification);
         }
-
-
-        return Service.START_STICKY;
-    }
-
-    @Override
-    public ClientEventDispatcher createClientEventDispatcher() {
-        return new MyClientEventDispatcher();
-    }
-
-    @Override
-    public void onDestroy() {
-        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
-                .cancel(NOTIFICATION_ALIVE_ID);
-        super.onDestroy();
     }
 }
