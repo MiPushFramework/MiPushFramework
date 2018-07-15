@@ -11,17 +11,23 @@ import top.trumeet.common.utils.rom.miui.MiuiChecker;
  */
 
 public class RomUtils {
-    // AOSP 及类原生
+    // AOSP 及类原生（除 CM / Los）
     public static final int ROM_AOSP = 0;
     // MIUI 官方（国际/中国版）、官改
     public static final int ROM_MIUI = 1;
     // 氢 OS
     public static final int ROM_H2OS = 2;
+    // CyanogenMod
+    public static final int ROM_CYANOGEN_MOD = 3;
+    // LineageOS
+    public static final int ROM_LINEAGE_OS = 4;
 
     @IntDef(value = {
             ROM_AOSP,
             ROM_MIUI,
-            ROM_H2OS
+            ROM_H2OS,
+            ROM_CYANOGEN_MOD,
+            ROM_LINEAGE_OS
     })
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     private @interface RomType {
@@ -39,7 +45,12 @@ public class RomUtils {
         if (new H2OSChecker().check()) {
             return ROM_H2OS;
         }
-
+        if (new CyanogenModChecker().check()) {
+            return ROM_CYANOGEN_MOD;
+        }
+        if (new LineageOSChecker().check()) {
+            return ROM_LINEAGE_OS;
+        }
         // 权当是 AOSP 了
         return ROM_AOSP;
     }
