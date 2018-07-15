@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,11 +19,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import top.trumeet.common.push.PushController;
-import top.trumeet.common.utils.Utils;
-import top.trumeet.common.widget.LinkAlertDialog;
+import top.trumeet.mipush.BuildConfig;
 import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.control.FragmentBroadcast;
 import top.trumeet.mipushframework.control.OnConnectStatusChangedListener;
@@ -63,10 +64,10 @@ public class MainFragment extends Fragment implements OnConnectStatusChangedList
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_about) {
-            new LinkAlertDialog.Builder(getContext())
-                    .setTitle(R.string.action_about)
-                    .setMessage(Utils.getString(R.string.about_descr, getContext()))
-                    .show();
+            ((TextView)(new AlertDialog.Builder(getContext())
+                    .setView(R.layout.dialog_about)
+                    .show().findViewById(R.id.text_version))).setText(getString(R.string.about_version,
+                    BuildConfig.VERSION_NAME));
             return true;
         } else if (item.getItemId() == R.id.action_update) {
             startActivity(new Intent(Intent.ACTION_VIEW)

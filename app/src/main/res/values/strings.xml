@@ -209,4 +209,6 @@
 
     <string name="settings_group_notification">启用通知合并</string>
     <string name="settings_summary_group_notification">可能会增加耗电，如果遇到PUSH耗电异常，可以关闭</string>
+
+    <string name="about_version">版本%1$s</string>
 </resources>
