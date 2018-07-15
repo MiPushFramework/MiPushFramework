@@ -2,6 +2,7 @@ package top.trumeet.mipushframework.settings;
 
 import android.content.ComponentName;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -9,8 +10,13 @@ import moe.shizuku.preference.Preference;
 import moe.shizuku.preference.PreferenceFragment;
 import top.trumeet.common.Constants;
 import top.trumeet.common.push.PushServiceAccessibility;
+import top.trumeet.common.utils.rom.RomUtils;
 import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.MainActivity;
+
+import static top.trumeet.common.utils.rom.RomUtils.ROM_H2OS;
+import static top.trumeet.common.utils.rom.RomUtils.ROM_MIUI;
+import static top.trumeet.common.utils.rom.RomUtils.ROM_UNKNOWN;
 
 /**
  * Created by Trumeet on 2017/8/27.
@@ -24,6 +30,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private Preference mDozePreference;
     private Preference mCheckServicePreference;
+    private CheckROMTask mTask;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -65,9 +72,27 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
 
+       checkROM();
+    }
 
+    private void checkROM () {
+        cancelTask();
+        mTask = new CheckROMTask((result) -> {
+            Preference preference = getPreferenceScreen().findPreference("activity_keep_alive");
+            if (preference != null) {
+                preference.setVisible(result == ROM_MIUI || result == ROM_H2OS ||
+                result == ROM_UNKNOWN);
+            }
+        });
+        mTask.execute();
+    }
 
-
+    private void cancelTask () {
+        if (mTask != null) {
+            if (!mTask.isCancelled())
+                mTask.cancel(true);
+            mTask = null;
+        }
     }
 
     private void setPreferenceOnclick(String key, Preference.OnPreferenceClickListener onPreferenceClickListener) {
@@ -82,5 +107,28 @@ public class SettingsFragment extends PreferenceFragment {
         mDozePreference.setVisible(!PushServiceAccessibility.isInDozeWhiteList(getActivity()));
         Log.d(TAG, "rebuild UI took: " + String.valueOf(System.currentTimeMillis() -
                 time));
+    }
+
+    @FunctionalInterface
+    private interface CheckListener {
+        void result (int value);
+    }
+
+    private class CheckROMTask extends AsyncTask<Void, Void, Integer> {
+        private final CheckListener mListener;
+
+        public CheckROMTask(CheckListener mListener) {
+            this.mListener = mListener;
+        }
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            return RomUtils.getOs();
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+        }
     }
 }

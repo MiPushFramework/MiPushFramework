@@ -21,8 +21,11 @@ public class RomUtils {
     public static final int ROM_CYANOGEN_MOD = 3;
     // LineageOS
     public static final int ROM_LINEAGE_OS = 4;
+    // 未知（没有这个 case）
+    public static final int ROM_UNKNOWN = -1;
 
     @IntDef(value = {
+            ROM_UNKNOWN,
             ROM_AOSP,
             ROM_MIUI,
             ROM_H2OS,
@@ -51,8 +54,7 @@ public class RomUtils {
         if (new LineageOSChecker().check()) {
             return ROM_LINEAGE_OS;
         }
-        // 权当是 AOSP 了
-        return ROM_AOSP;
+        return ROM_UNKNOWN;
     }
 
     /**
