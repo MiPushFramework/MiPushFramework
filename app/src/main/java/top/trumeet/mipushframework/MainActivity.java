@@ -134,12 +134,14 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
 
                                 @Override
                                 public void onReady() {
-                                    mFragment.onChange(OnConnectStatusChangedListener.CONNECTED);
+                                    if (mFragment != null)
+                                        mFragment.onChange(OnConnectStatusChangedListener.CONNECTED);
                                 }
 
                                 @Override
                                 public void onDisconnected() {
-                                    mFragment.onChange(OnConnectStatusChangedListener.DISCONNECTED);
+                                    if (mFragment != null)
+                                        mFragment.onChange(OnConnectStatusChangedListener.DISCONNECTED);
                                     checkAndConnect();
                                 }
 

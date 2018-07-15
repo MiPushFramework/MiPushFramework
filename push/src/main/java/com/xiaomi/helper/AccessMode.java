@@ -1,7 +1,16 @@
 package com.xiaomi.helper;
 
-public class AccessMode {
-    public static int USAGE_STATS = 0;
-    public static int ACCESSIBILITY = 1;
+import android.support.annotation.IntDef;
+import android.support.annotation.RestrictTo;
 
+public class AccessMode {
+    public static final int USAGE_STATS = 0;
+    public static final int ACCESSIBILITY = 1;
+
+    @IntDef(value = {
+            USAGE_STATS, ACCESSIBILITY
+    })
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    public @interface Mode {
+    }
 }

@@ -211,6 +211,12 @@
             android:name="io.fabric.ApiKey"
             android:value="${fabricKey}" />
 
+        <provider
+            android:authorities="com.xiaomi.xmsf.push.control.APIProvider"
+            android:name=".push.control.APIProvider"
+            android:exported="true"
+            tools:ignore="ExportedContentProvider" />
+
     </application>
 
 </manifest>
