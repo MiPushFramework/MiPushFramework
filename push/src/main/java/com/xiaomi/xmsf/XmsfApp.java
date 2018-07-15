@@ -19,7 +19,6 @@ import com.xiaomi.channel.commonutils.misc.ScheduledJobManager;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.push.service.OnlineConfig;
 import com.xiaomi.xmpush.thrift.ConfigKey;
-import com.xiaomi.xmsf.crash.CrashHandler;
 import com.xiaomi.xmsf.push.control.PushControllerUtils;
 import com.xiaomi.xmsf.push.control.XMOutbound;
 import com.xiaomi.xmsf.push.hooks.PushSdkHooks;
@@ -113,10 +112,6 @@ public class XmsfApp extends Application {
                 }
             }
         });
-
-        Thread.currentThread().setUncaughtExceptionHandler(
-                new CrashHandler(Thread.currentThread().getUncaughtExceptionHandler())
-        );
 
         mUnHooks = new PushSdkHooks().getHooks();
 
