@@ -32,14 +32,14 @@ public class ConfigCenter {
             tmp.inited = true;
 
             SharedPreferences prefs = PreferencesUtils.getPreferences(ctx);
-            tmp.autoRegister = prefs.getBoolean(PreferencesUtils.KeyAutoRegister, tmp.autoRegister);
-            tmp.debugIntent = prefs.getBoolean(PreferencesUtils.KeyDebugIntent, tmp.debugIntent);
-            tmp.foregroundNotification = prefs.getBoolean(PreferencesUtils.KeyForegroundNotification, tmp.foregroundNotification);
-            tmp.enableWakeupTarget = prefs.getBoolean(PreferencesUtils.KeyEnableWakeupTarget, tmp.enableWakeupTarget);
-            tmp.enableGroupNotification = prefs.getBoolean(PreferencesUtils.KeyEnableGroupNotification, tmp.enableGroupNotification);
+            tmp.autoRegister = prefs.getBoolean(PreferencesUtils.AUTO_REGISTER, tmp.autoRegister);
+            tmp.debugIntent = prefs.getBoolean(PreferencesUtils.KEY_DEBUG_INTENT, tmp.debugIntent);
+            tmp.foregroundNotification = prefs.getBoolean(PreferencesUtils.KEY_FOREGROUND_NOTIFICATION, tmp.foregroundNotification);
+            tmp.enableWakeupTarget = prefs.getBoolean(PreferencesUtils.KEY_ENABLE_WAKEUP_TARGET, tmp.enableWakeupTarget);
+            tmp.enableGroupNotification = prefs.getBoolean(PreferencesUtils.KEY_ENABLE_GROUP_NOTIFICATION, tmp.enableGroupNotification);
 
             {
-                String mode = prefs.getString(PreferencesUtils.KeyAccessMode, "0");
+                String mode = prefs.getString(PreferencesUtils.KEY_ACCESS_MODE, "0");
                 tmp.accessMode = Integer.valueOf(mode);
             }
 

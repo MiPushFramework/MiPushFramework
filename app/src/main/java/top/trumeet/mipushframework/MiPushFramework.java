@@ -39,7 +39,7 @@ public class MiPushFramework extends Application {
         //debugIcon init
         try {
             SharedPreferences prefs = PreferencesUtils.getPreferences(this);
-            BaseAppsBinder.debugIcon = prefs.getBoolean(PreferencesUtils.KeyDebugIcon, false);
+            BaseAppsBinder.debugIcon = prefs.getBoolean(PreferencesUtils.KEY_DEBUG_ICON, false);
         } catch (RemotePreferenceAccessException e) {
         }
     }
