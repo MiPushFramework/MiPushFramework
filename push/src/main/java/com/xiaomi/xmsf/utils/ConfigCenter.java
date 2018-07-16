@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 
+import com.xiaomi.xmsf.BuildConfig;
 import com.xiaomi.xmsf.R;
 
 import me.pqpo.librarylog4a.Log4a;
@@ -33,10 +34,8 @@ public class ConfigCenter {
 
             SharedPreferences prefs = PreferencesUtils.getPreferences(ctx);
             tmp.autoRegister = prefs.getBoolean(PreferencesUtils.KeyAutoRegister, tmp.autoRegister);
-            tmp.debugIntent = prefs.getBoolean(PreferencesUtils.KeyDebugIntent, tmp.debugIntent);
             tmp.foregroundNotification = prefs.getBoolean(PreferencesUtils.KeyForegroundNotification, tmp.foregroundNotification);
             tmp.enableWakeupTarget = prefs.getBoolean(PreferencesUtils.KeyEnableWakeupTarget, tmp.enableWakeupTarget);
-            tmp.enableGroupNotification = prefs.getBoolean(PreferencesUtils.KeyEnableGroupNotification, tmp.enableGroupNotification);
 
             {
                 String mode = prefs.getString(PreferencesUtils.KeyAccessMode, "0");
@@ -53,13 +52,11 @@ public class ConfigCenter {
     }
 
 
-    public boolean inited = false;
+    private boolean inited = false;
 
     public boolean autoRegister = true;
-    public boolean debugIntent = false;
     public boolean foregroundNotification = true;
     public boolean enableWakeupTarget = true;
-    public boolean enableGroupNotification = true;
 
     public int accessMode = 0;
 

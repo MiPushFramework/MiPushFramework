@@ -61,14 +61,6 @@
 
     <PreferenceCategory android:title="@string/settings_enhance">
 
-
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="EnableGroupNotification"
-            android:summary="@string/settings_summary_group_notification"
-            android:title="@string/settings_group_notification" />
-
-
         <SwitchPreference
             android:defaultValue="true"
             android:key="ForegroundNotification"
@@ -89,12 +81,6 @@
             android:defaultValue="false"
             android:key="DebugIcon"
             android:title="@string/settings_debug_icon" />
-
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="DebugIntent"
-            android:title="@string/settings_debug_intent" />
-
 
         <Preference
             android:key="key_get_log"

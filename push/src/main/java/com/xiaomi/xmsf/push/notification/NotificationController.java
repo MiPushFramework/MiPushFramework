@@ -156,7 +156,7 @@ public class NotificationController {
         Notification notification = localBuilder.build();
         manager.notify(id, notification);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && ConfigCenter.getInstance().enableGroupNotification) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             updateSummaryNotification(context, packageName, getGroupIdByPkg(packageName));
         }
     }
@@ -167,16 +167,14 @@ public class NotificationController {
 
         String groupId = null;
 
-        if (ConfigCenter.getInstance().enableGroupNotification) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                StatusBarNotification[] activeNotifications = manager.getActiveNotifications();
-                for (StatusBarNotification activeNotification : activeNotifications) {
-                    if (activeNotification.getId() == id) {
-                        groupId = activeNotification.getNotification().getGroup();
-                        break;
-                    }
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            StatusBarNotification[] activeNotifications = manager.getActiveNotifications();
+            for (StatusBarNotification activeNotification : activeNotifications) {
+                if (activeNotification.getId() == id) {
+                    groupId = activeNotification.getNotification().getGroup();
+                    break;
                 }
+
             }
         }
 

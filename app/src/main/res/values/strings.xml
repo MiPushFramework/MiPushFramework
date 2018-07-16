@@ -146,7 +146,6 @@
         <item>1</item>
     </string-array>
     <string name="settings_debug_foreground_notification">开启保活通知(适用于Oreo之前版本)</string>
-    <string name="settings_debug_intent">调试跳转</string>
     <string name="settings_wakeup_target">唤醒目标应用</string>
 
     <string name="settings_summary_wakeup_target">禁用唤醒应用可以解决两次通知问题，但是有可能存在通知遗漏的可能</string>
@@ -206,7 +205,4 @@
     ]]></string>
     <string name="disable_fg_notification_warning">关闭可能会导致通知不及时</string>
 
-
-    <string name="settings_group_notification">启用通知合并</string>
-    <string name="settings_summary_group_notification">可能会增加耗电，如果遇到PUSH耗电异常，可以关闭</string>
 </resources>
