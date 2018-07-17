@@ -29,7 +29,7 @@ public class UsageStatsPermissionActivity extends PushControllerWizardActivity i
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             nextPage();
             finish();
             return;
