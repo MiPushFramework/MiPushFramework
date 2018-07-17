@@ -27,7 +27,7 @@ android {
                 fabricKey : System.getenv("FABRIC_KEY")]
 
         ndk {
-            abiFilters 'armeabi', 'armeabi-v7a', 'mips', 'x86'
+            abiFilters 'armeabi', 'armeabi-v7a', 'x86'
         }
     }
 

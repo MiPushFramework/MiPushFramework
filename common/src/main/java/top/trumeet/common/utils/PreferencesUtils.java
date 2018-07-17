@@ -16,10 +16,8 @@ public class PreferencesUtils {
     public static final String KeyAccessMode = "AccessMode";
     public static final String KeyDebugIcon = "DebugIcon";
     public static final String KeyAutoRegister = "AutoRegister";
-    public static final String KeyDebugIntent = "DebugIntent";
     public static final String KeyForegroundNotification = "ForegroundNotification";
     public static final String KeyEnableWakeupTarget = "EnableWakeupTarget";
-    public static final String KeyEnableGroupNotification = "EnableGroupNotification";
 
     public static SharedPreferences getPreferences(Context ctx) {
         return new RemotePreferences(ctx, PreferencesUtils.Authority, PreferencesUtils.MainPrefs, true);
