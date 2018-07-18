@@ -1,10 +1,12 @@
 package com.xiaomi.xmsf.push.control;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import moe.yuuta.mipush.sdk.app.ControlAPIProvider;
 
+import static com.xiaomi.xmsf.push.control.PushControllerUtils.*;
 import static top.trumeet.common.Constants.PUSH_SERVICE_VERSION_CODE;
 import static top.trumeet.common.push.PushController.ARG_STRICT;
 
@@ -17,17 +19,13 @@ public class APIProvider extends ControlAPIProvider {
 
     @Override
     public boolean isEnable(@Nullable Bundle args) {
+        Context context = getContext();
         boolean strict = args.getBoolean(ARG_STRICT, false);
-        return strict ?
-                PushControllerUtils.isAllEnable(getContext())
-                :
-                (PushControllerUtils.isPrefsEnable(getContext())
-                        && PushControllerUtils.isServiceRunning(getContext())
-                        && PushControllerUtils.isBootReceiverEnable(getContext()));
+        return strict ? isAllEnable(context) : isPrefsEnable(context);
     }
 
     @Override
     public void setEnable(boolean enable, @Nullable Bundle args) {
-        PushControllerUtils.setAllEnable(enable, getContext());
+        setAllEnable(enable, getContext());
     }
 }
