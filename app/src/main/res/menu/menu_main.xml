@@ -7,8 +7,16 @@
         android:actionLayout="@layout/switch_layout"
         />
     <item
+        android:id="@+id/action_help"
+        android:title="@string/action_help"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_help_outline_24"
+
+         />
+    <item
         android:id="@+id/action_update"
-        android:title="@string/action_update" />
+        android:title="@string/action_update"
+        />
     <item
         android:id="@+id/action_about"
         android:title="@string/action_about" />

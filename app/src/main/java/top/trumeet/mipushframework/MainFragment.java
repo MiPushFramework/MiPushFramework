@@ -27,6 +27,7 @@ import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.control.FragmentBroadcast;
 import top.trumeet.mipushframework.control.OnConnectStatusChangedListener;
 import top.trumeet.mipushframework.event.EventFragment;
+import top.trumeet.mipushframework.help.HelpActivity;
 import top.trumeet.mipushframework.register.RegisteredApplicationFragment;
 import top.trumeet.mipushframework.settings.SettingsFragment;
 
@@ -73,6 +74,11 @@ public class MainFragment extends Fragment implements OnConnectStatusChangedList
                     .setData(Uri.parse("https://github.com/Trumeet/MiPushFramework/releases")));
             Toast.makeText(getActivity(), R.string.update_toast, Toast.LENGTH_LONG)
                     .show();
+        } else if (item.getItemId() == R.id.action_help) {
+            Intent intent = new Intent();
+            intent.setClass(this.getContext(), HelpActivity.class);
+            startActivity(intent);
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -176,14 +182,14 @@ public class MainFragment extends Fragment implements OnConnectStatusChangedList
         if (controller != null && controller.isConnected()) {
             try {
                 mSwitchEnablePush.setChecked(controller.isEnable(false));
+                return;
             } catch (RuntimeException ignore) {
-
             }
         }
+        mSwitchEnablePush.setEnabled(true);
     }
 
     private void initSwitch() {
-        refreshStatus();
         mSwitchEnablePush.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -191,7 +197,7 @@ public class MainFragment extends Fragment implements OnConnectStatusChangedList
                 Toast.makeText(getContext(), b ? R.string.msg_enable : R.string.msg_disable, Toast.LENGTH_SHORT).show();
             }
         });
-        mSwitchEnablePush.setEnabled(true);
+        refreshStatus();
     }
 
     @Override
