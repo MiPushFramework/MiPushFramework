@@ -168,6 +168,7 @@
     <string name="recent_activity_title">近期活动</string>
 
     <!-- Update -->
+    <string name="action_help">帮助</string>
     <string name="action_update">检查更新</string>
     <string name="update_toast">请从 Release 页面下载最新的版本。（请下载 manager.apk）</string>
 
