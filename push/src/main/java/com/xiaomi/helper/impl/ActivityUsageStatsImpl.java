@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.provider.Settings;
+import android.widget.Toast;
 
 import com.xiaomi.helper.ITopActivity;
 
@@ -46,10 +47,17 @@ public class ActivityUsageStatsImpl implements ITopActivity {
 
     @Override
     public boolean isAppForeground(Context context, String packageName) {
-        int level = ActivityManagerOverride.getPackageImportance(packageName,
-                ((ActivityManager) context.getSystemService(ACTIVITY_SERVICE)));
-        Log4a.d(TAG, "Importance flag: " + level);
-        return level == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
+        try {
+            int level = ActivityManagerOverride.getPackageImportance(packageName,
+                    ((ActivityManager) context.getSystemService(ACTIVITY_SERVICE)));
+            Log4a.d(TAG, "Importance flag: " + level);
+            return level == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
+
+        } catch (RuntimeException e) {
+            Toast.makeText(context, top.trumeet.common.R.string.error_usage_stats, Toast.LENGTH_LONG)
+                    .show();
+            return false;
+        }
     }
 
 }

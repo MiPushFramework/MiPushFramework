@@ -33,10 +33,8 @@ public class ConfigCenter {
 
             SharedPreferences prefs = PreferencesUtils.getPreferences(ctx);
             tmp.autoRegister = prefs.getBoolean(PreferencesUtils.AUTO_REGISTER, tmp.autoRegister);
-            tmp.debugIntent = prefs.getBoolean(PreferencesUtils.KEY_DEBUG_INTENT, tmp.debugIntent);
             tmp.foregroundNotification = prefs.getBoolean(PreferencesUtils.KEY_FOREGROUND_NOTIFICATION, tmp.foregroundNotification);
             tmp.enableWakeupTarget = prefs.getBoolean(PreferencesUtils.KEY_ENABLE_WAKEUP_TARGET, tmp.enableWakeupTarget);
-            tmp.enableGroupNotification = prefs.getBoolean(PreferencesUtils.KEY_ENABLE_GROUP_NOTIFICATION, tmp.enableGroupNotification);
 
             {
                 String mode = prefs.getString(PreferencesUtils.KEY_ACCESS_MODE, "0");
@@ -53,13 +51,11 @@ public class ConfigCenter {
     }
 
 
-    public boolean inited = false;
+    private boolean inited = false;
 
     public boolean autoRegister = true;
-    public boolean debugIntent = false;
     public boolean foregroundNotification = true;
     public boolean enableWakeupTarget = true;
-    public boolean enableGroupNotification = true;
 
     public int accessMode = 0;
 

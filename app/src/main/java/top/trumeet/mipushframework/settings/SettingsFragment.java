@@ -37,40 +37,29 @@ public class SettingsFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.settings);
         mDozePreference = getPreferenceScreen()
                 .findPreference("key_remove_doze");
-        mCheckServicePreference = getPreferenceScreen()
-                .findPreference("key_check_service");
 
-       setPreferenceOnclick("key_get_log", new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent()
-                .setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
-                        Constants.SHARE_LOG_COMPONENT_NAME)));
-                return true;
-            }
-        });
+       setPreferenceOnclick("key_get_log", preference -> {
+           startActivity(new Intent()
+           .setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
+                   Constants.SHARE_LOG_COMPONENT_NAME)));
+           return true;
+       });
 
-       setPreferenceOnclick("key_clear_log", new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent()
-                .setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
-                        Constants.CLEAR_LOG_COMPONENT_NAME)));
-                return true;
-            }
-        });
+       setPreferenceOnclick("key_clear_log", preference -> {
+           startActivity(new Intent()
+           .setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
+                   Constants.CLEAR_LOG_COMPONENT_NAME)));
+           return true;
+       });
 
 
-       setPreferenceOnclick("activity_keep_alive", new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent().setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
-                        Constants.KEEPLIVE_COMPONENT_NAME));
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                return true;
-            }
-        });
+       setPreferenceOnclick("activity_keep_alive", preference -> {
+           Intent intent = new Intent().setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
+                   Constants.KEEPLIVE_COMPONENT_NAME));
+           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+           startActivity(intent);
+           return true;
+       });
 
        checkROM();
     }

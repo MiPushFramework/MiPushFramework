@@ -45,26 +45,10 @@ public final class Utils {
 
     public static boolean isAppInstalled(String packageName) {
         try {
-            return getPackageManager()
-                    .getPackageInfo(packageName, 0)
-                    != null;
+            return getPackageManager().getPackageInfo(packageName, 0) != null;
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
             return false;
         }
-    }
-
-    public static final String getXiaomiUserId(Context context) {
-        @SuppressLint("MissingPermission") Account[] accounts = AccountManager.get(context).getAccounts();
-        for (int i = 0; i < accounts.length; i++) {
-            if (accounts[i].type.equals("com.xiaomi")) {
-                String str = accounts[i].name;
-                if (!str.trim().isEmpty()) {
-                    return str;
-                }
-            }
-        }
-        return null;
     }
 
     @ColorInt
@@ -74,19 +58,6 @@ public final class Utils {
         ta.recycle();
         return colorAccent;
     }
-
-    public static void forceCustomPadding(View view, boolean additive) {
-        final Resources res = view.getResources();
-        final int paddingSide = res.getDimensionPixelSize(R.dimen.settings_side_margin);
-
-        final int paddingStart = paddingSide + (additive ? view.getPaddingStart() : 0);
-        final int paddingEnd = paddingSide + (additive ? view.getPaddingEnd() : 0);
-        final int paddingBottom = res.getDimensionPixelSize(
-                R.dimen.preference_fragment_padding_bottom);
-
-        view.setPaddingRelative(paddingStart, 0, paddingEnd, paddingBottom);
-    }
-
 
     public static Date getUTC(Date date) {
         Calendar cal = Calendar.getInstance();
@@ -107,7 +78,7 @@ public final class Utils {
         return toHtml(context.getString(id, formatArgs));
     }
 
-    public static CharSequence toHtml (String str) {
+    public static CharSequence toHtml(String str) {
         return Html.fromHtml(str);
     }
 }

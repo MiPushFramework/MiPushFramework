@@ -22,6 +22,7 @@ import com.xiaomi.channel.commonutils.logger.MyLog;
 import com.xiaomi.channel.commonutils.reflect.JavaCalls;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
+import com.xiaomi.xmsf.BuildConfig;
 import com.xiaomi.xmsf.R;
 import com.xiaomi.xmsf.push.notification.NotificationController;
 import com.xiaomi.xmsf.utils.ConfigCenter;
@@ -122,7 +123,7 @@ public class MyMIPushNotificationHelper {
 //                Log4a.e(TAG, e.getLocalizedMessage(), e);
 //            }
 
-            if (ConfigCenter.getInstance().debugIntent) {
+            if (BuildConfig.DEBUG) {
                 int i = R.drawable.ic_notifications_black_24dp;
 
                 PendingIntent pendingIntentOpenActivity = openActivityPendingIntent(var0, buildContainer, metaInfo, var1);

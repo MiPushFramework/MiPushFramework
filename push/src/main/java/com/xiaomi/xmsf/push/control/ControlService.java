@@ -37,12 +37,8 @@ public class ControlService extends Service {
         @Override
         public boolean isEnable(boolean strict) throws RemoteException {
             enforcePermission(Constants.permissions.READ_SETTINGS);
-            return strict ?
-                    PushControllerUtils.isAllEnable(ControlService.this)
-                    :
-                    (PushControllerUtils.isPrefsEnable(ControlService.this)
-                    && PushControllerUtils.isServiceRunning(ControlService.this)
-                    && PushControllerUtils.isBootReceiverEnable(ControlService.this));
+            return strict ? PushControllerUtils.isAllEnable(ControlService.this) :
+                    PushControllerUtils.isPrefsEnable(ControlService.this);
         }
 
         @Override
