@@ -198,10 +198,13 @@
     <string-array name="help_articles" translatable="false">
         <item>help_article_can_not_receive_push|can_not_receive_push</item>
         <item>help_article_register_error|register_error</item>
+        <item>help_article_no_register|no_register</item>
     </string-array>
 
     <string name="help_article_can_not_receive_push">无法收到推送</string>
     <string name="help_article_register_error">注册异常</string>
+    <string name="register_error_detected">检测到注册异常，请按照帮助文章自行排查，如果属于误报，请忽略</string>
+    <string name="help_article_no_register">注册列表为空</string>
 
     <string name="connect_fail_test_se"><![CDATA[
     <b>权限不足通常是由于升级所致，请重再一次安装manager APP，注意不要清空数据。
@@ -214,4 +217,6 @@
     <string name="settings_summary_group_notification">可能会增加耗电，如果遇到PUSH耗电异常，可以关闭</string>
 
     <string name="about_version">版本%1$s</string>
+    <string name="app_registered">已注册</string>
+    <string name="app_registered_error">注册异常</string>
 </resources>

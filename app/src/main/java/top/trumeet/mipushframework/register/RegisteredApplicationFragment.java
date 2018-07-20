@@ -1,6 +1,8 @@
 package top.trumeet.mipushframework.register;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,6 +29,10 @@ import me.drakeet.multitype.MultiTypeAdapter;
 import top.trumeet.common.db.EventDb;
 import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.register.RegisteredApplication;
+import top.trumeet.common.widget.LinkAlertDialog;
+import top.trumeet.mipush.R;
+import top.trumeet.mipushframework.control.ConnectFailUtils;
+import top.trumeet.mipushframework.help.HelpActivity;
 
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 import static top.trumeet.common.Constants.TAG;
@@ -82,7 +88,7 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
         if (mLoadTask != null && !mLoadTask.isCancelled()) {
             return;
         }
-        mLoadTask = new LoadTask(getActivity().getApplicationContext());
+        mLoadTask = new LoadTask(getActivity());
         mLoadTask.execute();
     }
 
@@ -139,6 +145,27 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
 
         @Override
         protected void onPostExecute(List<RegisteredApplication> list) {
+
+            boolean showWarn = (list.size() == 0);
+            for (RegisteredApplication registeredApplication : list) {
+                if (!registeredApplication.isRegistered()) {
+                    showWarn = true;
+                }
+            }
+
+            if (showWarn) {
+                new LinkAlertDialog.Builder(context)
+                        .setTitle(R.string.help_article_register_error)
+                        .setMessage(R.string.register_error_detected)
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.action_help, (dialog, which) -> {
+                            Intent intent = new Intent();
+                            intent.setClass(context, HelpActivity.class);
+                            startActivity(intent);
+                        })
+                        .show();
+            }
+
             mAdapter.notifyItemRangeRemoved(0, mAdapter.getItemCount());
             mAdapter.getItems().clear();
 

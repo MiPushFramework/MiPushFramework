@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 
 import top.trumeet.common.register.RegisteredApplication;
+import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.permissions.ManagePermissionsActivity;
 import top.trumeet.mipushframework.utils.BaseAppsBinder;
 
@@ -26,21 +27,16 @@ public class RegisteredApplicationBinder extends BaseAppsBinder<RegisteredApplic
                 holder);
         //todo res color
         if (item.isRegistered()) {
-            holder.text2.setText("已注册");
+            holder.text2.setText(R.string.app_registered);
             holder.text2.setTextColor(Color.parseColor("#FF0B5B27"));
         } else {
-            holder.text2.setText("注册异常");
+            holder.text2.setText(R.string.app_registered_error);
             holder.text2.setTextColor(Color.parseColor("#FFF41804"));
         }
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                holder.itemView.getContext()
-                        .startActivity(new Intent(holder.itemView.getContext(),
-                                ManagePermissionsActivity.class)
-                        .putExtra(ManagePermissionsActivity.EXTRA_PACKAGE_NAME,
-                                item.getPackageName()));
-            }
-        });
+        holder.itemView.setOnClickListener(view -> holder.itemView.getContext()
+                .startActivity(new Intent(holder.itemView.getContext(),
+                        ManagePermissionsActivity.class)
+                .putExtra(ManagePermissionsActivity.EXTRA_PACKAGE_NAME,
+                        item.getPackageName())));
     }
 }
