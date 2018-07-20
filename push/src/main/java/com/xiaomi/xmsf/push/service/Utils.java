@@ -32,15 +32,5 @@ public final class Utils {
         return colorAccent;
     }
 
-    public static void forceCustomPadding(View view, boolean additive) {
-        final Resources res = view.getResources();
-        final int paddingSide = res.getDimensionPixelSize(R.dimen.settings_side_margin);
 
-        final int paddingStart = paddingSide + (additive ? view.getPaddingStart() : 0);
-        final int paddingEnd = paddingSide + (additive ? view.getPaddingEnd() : 0);
-        final int paddingBottom = res.getDimensionPixelSize(
-                R.dimen.preference_fragment_padding_bottom);
-
-        view.setPaddingRelative(paddingStart, 0, paddingEnd, paddingBottom);
-    }
 }
