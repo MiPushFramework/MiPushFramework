@@ -31,11 +31,11 @@
     <string name="notification_stats_permission_title">Please grant usage stats permission</string>
     <string name="notification_stats_permission_text">We need usage rights to process your request, click grant permissions</string>
 
-    <string name="title_activity_keepalive">后台服务保活界面</string>
+    <string name="title_activity_keepalive">ROM 支持</string>
     <string name="activity_rom_keepalive">
-        这是一个空白activity。
-        如果需要，请锁定它。
-        防止ROM停止MiPush后台服务。
+        <![CDATA[
+您的 ROM（%1$s）可能会阻止推送正常运行。请遵照您的 ROM 的设置方式将 Push 加入白名单，如 MIUI 等 ROM 可以选择 <b>近期任务</b>，然后将本界面 <b>锁定</b>。
+        ]]>
     </string>
     <string name="see_pass_though_msg">穿透消息，请打开APP查看</string>
 </resources>
