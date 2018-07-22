@@ -111,4 +111,9 @@ dependencies {
         exclude group: 'moe.shizuku.preference'
         exclude group: 'com.android.support'
     })
+    // RxJava & RxAndroid
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+    implementation "io.reactivex.rxjava2:rxjava:$rxVersion"
+    // RxActivityResult
+    implementation 'com.github.VictorAlbertos:RxActivityResult:0.4.5-2.x'
 }

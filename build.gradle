@@ -65,6 +65,10 @@ ext {
     versionBase = "${baseVersionName}.${releaseTime()}.${gitCommitId}"
     versionName = snapshot ? versionBase + "-SNAPSHOT" : versionBase
     gitTag = versionName
+
+    // RxJava
+    rxVersion = "2.1.16"
+    rxAndroidVersion = "2.0.2"
 }
 
 task exportVersion(type: Exec) {
