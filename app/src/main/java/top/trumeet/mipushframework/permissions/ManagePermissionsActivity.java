@@ -1,6 +1,8 @@
 package top.trumeet.mipushframework.permissions;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
@@ -19,20 +21,24 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.android.settings.widget.EntityHeaderController;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
 import moe.shizuku.preference.Preference;
 import moe.shizuku.preference.PreferenceCategory;
 import moe.shizuku.preference.PreferenceFragment;
 import moe.shizuku.preference.PreferenceScreen;
 import moe.shizuku.preference.SimpleMenuPreference;
 import moe.shizuku.preference.SwitchPreferenceCompat;
+import rx_activity_result2.RxActivityResult;
 import top.trumeet.common.Constants;
 import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.register.RegisteredApplication;
-import top.trumeet.common.utils.PermissionUtils;
 import top.trumeet.common.utils.Utils;
 import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.event.RecentActivityActivity;
+import top.trumeet.mipushframework.models.ActivityResultAndPermissionResult;
 
 import static android.os.Build.VERSION_CODES.O;
 import static android.provider.Settings.EXTRA_APP_PACKAGE;
@@ -44,10 +50,12 @@ import static top.trumeet.common.utils.NotificationUtils.getChannelIdByPkg;
  * @author Trumeet
  */
 
-public class ManagePermissionsActivity extends AppCompatActivity implements PermissionUtils.PermissionGrantListener {
+public class ManagePermissionsActivity extends AppCompatActivity {
     public static final String EXTRA_PACKAGE_NAME =
             ManagePermissionsActivity.class.getName()
             + ".EXTRA_PACKAGE_NAME";
+
+    private CompositeDisposable composite = new CompositeDisposable();
 
     private LoadTask mTask;
     private String mPkg;
@@ -58,11 +66,46 @@ public class ManagePermissionsActivity extends AppCompatActivity implements Perm
         if (savedInstanceState == null &&
                 getIntent().hasExtra(EXTRA_PACKAGE_NAME)) {
             mPkg = getIntent().getStringExtra(EXTRA_PACKAGE_NAME);
-            PermissionUtils.requestPermissionsIfNeeded(this,
-                    new String[]{Constants.permissions.WRITE_SETTINGS});
+            checkAndStart();
         }
         getSupportActionBar()
                 .setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void checkAndStart () {
+        composite.add(Observable.zip(RxActivityResult.on(this)
+                        .startIntent(new Intent()
+                                .setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
+                                        Constants.REMOVE_DOZE_COMPONENT_NAME)))
+                , new RxPermissions(this)
+                        .requestEachCombined(Constants.permissions.WRITE_SETTINGS),
+                ActivityResultAndPermissionResult::new)
+                .subscribe(result -> {
+                    if (result.permissionResult.granted &&
+                            result.activityResult.resultCode() == Activity.RESULT_OK) {
+                        mTask = new LoadTask(mPkg);
+                        mTask.execute();
+                    } else {
+                        if (!result.permissionResult.granted) {
+                            Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission,
+                                    result.permissionResult.name), Toast.LENGTH_LONG)
+                                    .show();
+                            if (!result.permissionResult.shouldShowRequestPermissionRationale) {
+                                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                                startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                        .setData(uri)
+                                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                            } else {
+                                checkAndStart();
+                            }
+                        }
+                        if (result.activityResult.resultCode() != Activity.RESULT_OK) {
+                            Toast.makeText(this, getString(R.string.request_battery_whitelist), Toast.LENGTH_LONG)
+                                    .show();
+                            checkAndStart();
+                        }
+                    }
+                }));
     }
 
     @Override
@@ -79,6 +122,10 @@ public class ManagePermissionsActivity extends AppCompatActivity implements Perm
         if (mTask != null && !mTask.isCancelled()) {
             mTask.cancel(true);
             mTask = null;
+        }
+        // Activity request should cancel in onPause?
+        if (composite != null && !composite.isDisposed()) {
+            composite.dispose();
         }
         super.onDestroy();
     }
@@ -331,37 +378,5 @@ public class ManagePermissionsActivity extends AppCompatActivity implements Perm
                 getActivity().finish();
             }
         }
-    }
-
-    @Override
-    public void onResult (boolean granted, boolean blocked, String permName) {
-        if (Constants.permissions.WRITE_SETTINGS.equalsIgnoreCase(permName)) {
-            if (granted) {
-                mTask = new LoadTask(mPkg);
-                mTask.execute();
-            } else {
-                Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission,
-                        PermissionUtils.getName(permName)), Toast.LENGTH_LONG)
-                        .show();
-                if (blocked) {
-                    Uri uri = Uri.fromParts("package", getPackageName(), null);
-                    startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                            .setData(uri)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                } else {
-                    PermissionUtils.requestPermissionsIfNeeded(this,
-                            new String[]{permName});
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (PermissionUtils.handle(this, requestCode, permissions,
-                grantResults)) {
-            return;
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

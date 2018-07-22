@@ -219,4 +219,6 @@
     <string name="about_version">版本%1$s</string>
     <string name="app_registered">已注册</string>
     <string name="app_registered_error">注册异常</string>
+
+    <string name="request_battery_whitelist">Push 需要被加入 电池优化白名单 才能正常工作</string>
 </resources>

@@ -112,8 +112,18 @@ dependencies {
         exclude group: 'com.android.support'
     })
     // RxJava & RxAndroid
-    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
-    implementation "io.reactivex.rxjava2:rxjava:$rxVersion"
+    implementation ("io.reactivex.rxjava2:rxandroid:$rxAndroidVersion", {
+        exclude group: 'com.android.support'
+    })
+    implementation ("io.reactivex.rxjava2:rxjava:$rxVersion", {
+        exclude group: 'com.android.support'
+    })
     // RxActivityResult
-    implementation 'com.github.VictorAlbertos:RxActivityResult:0.4.5-2.x'
+    implementation ('com.github.VictorAlbertos:RxActivityResult:0.4.5-2.x', {
+        exclude group: 'com.android.support'
+    })
+    // RxPermissions
+    implementation ('com.github.tbruyelle:rxpermissions:0.10.2', {
+        exclude group: 'com.android.support'
+    })
 }

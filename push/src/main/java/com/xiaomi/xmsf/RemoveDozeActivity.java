@@ -22,13 +22,18 @@ public class RemoveDozeActivity extends Activity {
     private static final int RC_REQUEST = 0;
     private static final String TAG = "RemoveDozeActivity";
 
+    private void setResultAndFinish (int result) {
+        setResult(result);
+        finish();
+    }
+
     @Override
     @SuppressLint("BatteryLife")
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
                 PushServiceAccessibility.isInDozeWhiteList(this)) {
-            finish();
+            setResult(Activity.RESULT_OK);
             return;
         }
         Intent intent = new Intent();
@@ -42,14 +47,14 @@ public class RemoveDozeActivity extends Activity {
             Toast.makeText(this, this.getString(R.string.common_err,
                     e.getMessage()), Toast.LENGTH_SHORT).show();
         }
-        finish();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case RC_REQUEST:
-                finish();
+                setResultAndFinish(PushServiceAccessibility.isInDozeWhiteList(this) ?
+                Activity.RESULT_OK : Activity.RESULT_CANCELED);
                 break;
         }
     }

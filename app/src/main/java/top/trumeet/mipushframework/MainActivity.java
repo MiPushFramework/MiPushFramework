@@ -1,6 +1,8 @@
 package top.trumeet.mipushframework;
 
 import android.animation.Animator;
+import android.app.Activity;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -17,17 +19,21 @@ import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.widget.Toast;
 
+import com.tbruyelle.rxpermissions2.RxPermissions;
+
+import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
+import rx_activity_result2.RxActivityResult;
 import top.trumeet.common.Constants;
 import top.trumeet.common.push.PushController;
-import top.trumeet.common.utils.PermissionUtils;
 import top.trumeet.common.utils.Utils;
 import top.trumeet.common.utils.rom.RomUtils;
 import top.trumeet.common.widget.LinkAlertDialog;
 import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.control.ConnectFailUtils;
 import top.trumeet.mipushframework.control.OnConnectStatusChangedListener;
+import top.trumeet.mipushframework.models.ActivityResultAndPermissionResult;
 
-import static top.trumeet.mipush.BuildConfig.DEBUG;
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_LOW_VERSION;
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_MIUI;
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_NOT_INSTALLED;
@@ -39,12 +45,13 @@ import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener
  *
  * @author Trumeet
  */
-public abstract class MainActivity extends AppCompatActivity implements PermissionUtils.PermissionGrantListener {
+public abstract class MainActivity extends AppCompatActivity {
     private PushController mController;
     private View mConnectProgress;
     private ViewPropertyAnimator mProgressFadeOutAnimate;
     private ConnectTask mConnectTask;
     private MainFragment mFragment;
+    private CompositeDisposable composite = new CompositeDisposable();
 
     public PushController getController() {
         return mController;
@@ -64,7 +71,38 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
             showConnectFail(FAIL_REASON_NOT_INSTALLED);
             return;
         }
-        PermissionUtils.requestPermissions(this, new String[]{Constants.permissions.WRITE_SETTINGS});
+        composite.add(Observable.zip(RxActivityResult.on(this)
+                        .startIntent(new Intent()
+                                .setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
+                                        Constants.REMOVE_DOZE_COMPONENT_NAME)))
+                , new RxPermissions(this)
+                        .requestEachCombined(Constants.permissions.WRITE_SETTINGS),
+                ActivityResultAndPermissionResult::new)
+        .subscribe(result -> {
+            if (result.permissionResult.granted &&
+                    result.activityResult.resultCode() == Activity.RESULT_OK) {
+                connect();
+            } else {
+                if (!result.permissionResult.granted) {
+                    Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission,
+                            result.permissionResult.name), Toast.LENGTH_LONG)
+                            .show();
+                    if (!result.permissionResult.shouldShowRequestPermissionRationale) {
+                        Uri uri = Uri.fromParts("package", getPackageName(), null);
+                        startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                .setData(uri)
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    } else {
+                        checkAndConnect();
+                    }
+                }
+                if (result.activityResult.resultCode() != Activity.RESULT_OK) {
+                    Toast.makeText(this, getString(R.string.request_battery_whitelist), Toast.LENGTH_LONG)
+                            .show();
+                    checkAndConnect();
+                }
+            }
+        }));
     }
 
     private void connect() {
@@ -106,6 +144,10 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
         if (mProgressFadeOutAnimate != null) {
             mProgressFadeOutAnimate.cancel();
             mProgressFadeOutAnimate = null;
+        }
+        // Activity request should cancel in onPause?
+        if (composite != null && !composite.isDisposed()) {
+            composite.dispose();
         }
         super.onDestroy();
     }
@@ -223,40 +265,4 @@ public abstract class MainActivity extends AppCompatActivity implements Permissi
             mController.disconnectIfNeeded();
         }
     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (PermissionUtils.handle(this, requestCode, permissions,
-                grantResults)) {
-            return;
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    @Override
-    public void onResult(boolean granted, boolean blocked, String permName) {
-        if (DEBUG) {
-            Log.d("MainActivity", "onResult -> " + granted + ", " + blocked + ", " + permName);
-        }
-        if (Constants.permissions.WRITE_SETTINGS.equalsIgnoreCase(permName)) {
-            String permDisplayName = PermissionUtils.getName(permName);
-
-            if (granted) {
-                connect();
-            } else {
-                Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission, permDisplayName), Toast.LENGTH_LONG)
-                        .show();
-                if (blocked) {
-                    Uri uri = Uri.fromParts("package", getPackageName(), null);
-                    startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                            .setData(uri)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                } else {
-                    PermissionUtils.requestPermissionsIfNeeded(this,
-                            new String[]{permName});
-                }
-            }
-        }
-    }
-
 }
