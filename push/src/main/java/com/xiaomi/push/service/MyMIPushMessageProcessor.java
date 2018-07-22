@@ -14,7 +14,6 @@ import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
 import com.xiaomi.xmsf.BuildConfig;
 import com.xiaomi.xmsf.R;
-import com.xiaomi.xmsf.utils.ConfigCenter;
 
 import java.util.List;
 import java.util.Map;
@@ -201,7 +200,7 @@ public class MyMIPushMessageProcessor {
                 MyMIPushNotificationHelper.notifyPushMessage(paramXMPushService, buildContainer, paramArrayOfByte, var2);
 
                 //send broadcast
-                if (!MIPushNotificationHelper.isBusinessMessage(buildContainer) && ConfigCenter.getInstance().enableWakeupTarget) {
+                if (!MIPushNotificationHelper.isBusinessMessage(buildContainer)) {
 
                     Intent localIntent = new Intent(PushConstants.MIPUSH_ACTION_MESSAGE_ARRIVED);
                     localIntent.putExtra(PushConstants.MIPUSH_EXTRA_PAYLOAD, paramArrayOfByte);

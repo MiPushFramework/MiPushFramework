@@ -29,18 +29,18 @@ public class LogUtils {
     public static void configureLog(Context context) {
         AndroidAppender.Builder androidBuild = new AndroidAppender.Builder();
 
-        String log_path = getLogFile(context);
-        Log4a.d("Log", log_path);
-        if (!new File(log_path).exists()) {
+        String logPath = getLogFile(context);
+        Log4a.d("Log", logPath);
+        if (!new File(logPath).exists()) {
             try {
-                new File(log_path).createNewFile();
+                new File(logPath).createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         FileAppender.Builder fileBuild = new FileAppender.Builder(context)
                 .setLevel(Level.INFO)
-                .setLogFilePath(log_path);
+                .setLogFilePath(logPath);
 
         Logger logger = new Logger.Builder()
                 .enableAndroidAppender(androidBuild)

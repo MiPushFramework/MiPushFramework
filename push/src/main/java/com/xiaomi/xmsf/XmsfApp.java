@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
@@ -26,12 +27,10 @@ import com.xiaomi.xmsf.push.notification.NotificationController;
 import com.xiaomi.xmsf.push.service.MiuiPushActivateService;
 import com.xiaomi.xmsf.push.service.notificationcollection.NotificationListener;
 import com.xiaomi.xmsf.push.service.notificationcollection.UploadNotificationJob;
-import com.xiaomi.xmsf.push.utils.RemoveTremblingUtils;
 import com.xiaomi.xmsf.utils.ConfigCenter;
 import com.xiaomi.xmsf.utils.LogUtils;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Random;
 
 import io.fabric.sdk.android.Fabric;
@@ -43,15 +42,7 @@ import static top.trumeet.common.Constants.TAG_CONDOM;
 
 public class XmsfApp extends Application {
 
-    private RemoveTremblingUtils mRemoveTrembling;
-
-    private long getLastStartupTime() {
-        return getSharedPreferences("mipush_extra", 0).getLong("xmsf_startup", 0);
-    }
-
-    private boolean setStartupTime(long j) {
-        return getSharedPreferences("mipush_extra", 0).edit().putLong("xmsf_startup", j).commit();
-    }
+    private static final String MIPUSH_EXTRA = "mipush_extra";
 
     private XC_MethodHook.Unhook[] mUnHooks;
 
@@ -83,42 +74,41 @@ public class XmsfApp extends Application {
             Fabric.with(fabric);
         }
 
-        ConfigCenter.reloadConf(this, true);
+        ConfigCenter.reloadConf(this);
 
         LogUtils.configureLog(this);
 
-        MyLog.setLogger(new LoggerInterface() {
-            private String mTag = "xiaomi-patched";
-
-            @Override
-            public void setTag(String tag) {
-                this.mTag = tag;
-            }
-
-            @Override
-            public void log(String content) {
-                Log4a.d(this.mTag, content);
-            }
-
-            @Override
-            public void log(String content, Throwable t) {
-                if (content.contains("isMIUI")) {
-                    return;
-                }
-                if (t == null) {
-                    Log4a.i(mTag, content);
-                } else {
-                    Log4a.e(mTag, content, t);
-                }
-            }
-        });
+        initMiSdkLogger();
 
         mUnHooks = new PushSdkHooks().getHooks();
 
         CondomOptions options = XMOutbound.create(this, TAG_CONDOM + "_PROCESS",
                 false);
         CondomProcess.installExceptDefaultProcess(this, options);
-        LoggerInterface newLogger = new LoggerInterface() {
+
+        initPushLogger();
+
+        if (PushControllerUtils.isPrefsEnable(this)) {
+            PushControllerUtils.setAllEnable(true, this);
+        }
+        scheduleUploadNotificationInfo();
+        long currentTimeMillis = System.currentTimeMillis();
+        long lastStartupTime = getLastStartupTime();
+        if (isAppMainProc(this)) {
+            if ((currentTimeMillis - lastStartupTime > 300000 || currentTimeMillis - lastStartupTime < 0)) {
+                setStartupTime(currentTimeMillis);
+                MiuiPushActivateService.awakePushActivateService(PushControllerUtils.wrapContext(this)
+                        , "com.xiaomi.xmsf.push.SCAN");
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationController.deleteOldNotificationChannelGroup(this);
+        }
+    }
+
+    private void initPushLogger() {
+        Logger.setLogger(PushControllerUtils.wrapContext(this), new LoggerInterface() {
             private static final String TAG = "PushCore";
 
             @Override
@@ -139,37 +129,34 @@ public class XmsfApp extends Application {
             public void log(String content) {
                 Log4a.d(TAG, content);
             }
-        };
-        Logger.setLogger(PushControllerUtils.wrapContext(this), newLogger);
-        if (PushControllerUtils.isPrefsEnable(this)) {
-            PushControllerUtils.setAllEnable(true, this);
-        }
-        scheduleUploadNotificationInfo();
-        long currentTimeMillis = System.currentTimeMillis();
-        long lastStartupTime = getLastStartupTime();
-        if (isAppMainProc(this)) {
-            if ((currentTimeMillis - lastStartupTime > 300000 || currentTimeMillis - lastStartupTime < 0)) {
-                setStartupTime(currentTimeMillis);
-                MiuiPushActivateService.awakePushActivateService(PushControllerUtils.wrapContext(this)
-                        , "com.xiaomi.xmsf.push.SCAN");
+        });
+    }
+
+    private void initMiSdkLogger() {
+        MyLog.setLogger(new LoggerInterface() {
+            private static final String M_TAG = "xiaomi-patched";
+
+            @Override
+            public void setTag(String tag) {
             }
-        }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationController.deleteOldNotificationChannelGroup(this);
-        }
-    }
+            @Override
+            public void log(String content) {
+                Log4a.d(M_TAG, content);
+            }
 
-    public RemoveTremblingUtils getRemoveTremblingInstance() {
-        if (mRemoveTrembling != null) {
-            return mRemoveTrembling;
-        }
-        mRemoveTrembling = new RemoveTremblingUtils();
-        return mRemoveTrembling;
-    }
-
-    public static XmsfApp getSession(Context context) {
-        return ((XmsfApp) context.getApplicationContext());
+            @Override
+            public void log(String content, Throwable t) {
+                if (content.contains("isMIUI")) {
+                    return;
+                }
+                if (t == null) {
+                    Log4a.i(M_TAG, content);
+                } else {
+                    Log4a.e(M_TAG, content, t);
+                }
+            }
+        });
     }
 
     private HashSet<ComponentName> loadEnabledServices() {
@@ -194,31 +181,41 @@ public class XmsfApp extends Application {
                 != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        StringBuilder stringBuilder = null;
-        Iterator it = hashSet.iterator();
-        while (it.hasNext()) {
-            ComponentName componentName = (ComponentName) it.next();
-            if (stringBuilder == null) {
-                stringBuilder = new StringBuilder();
-            } else {
-                stringBuilder.append(':');
-            }
-            stringBuilder.append(componentName.flattenToString());
+
+        StringBuilder sb = new StringBuilder();
+        for (ComponentName componentName : hashSet) {
+            sb.append(componentName.flattenToString()).append(':');
         }
-        Settings.Secure.putString(getContentResolver(), "enabled_notification_listeners", stringBuilder != null ? stringBuilder.toString() : "");
+        if (sb.length() > 0) {
+            sb.setLength(sb.length() - 1);
+        }
+        Settings.Secure.putString(getContentResolver(), "enabled_notification_listeners", sb.toString());
     }
 
     private void setListenerDefaultAdded() {
-        getSharedPreferences("mipush_extra", 0).edit().putBoolean("notification_listener_added", true).apply();
+        getDefaultPreferences().edit().putBoolean("notification_listener_added", true).apply();
     }
 
     private boolean isListenerDefaultAdded() {
-        return getSharedPreferences("mipush_extra", 0).getBoolean("notification_listener_added", false);
+        return getDefaultPreferences().getBoolean("notification_listener_added", false);
+    }
+
+
+    private long getLastStartupTime() {
+        return getDefaultPreferences().getLong("xmsf_startup", 0);
+    }
+
+    private boolean setStartupTime(long j) {
+        return getDefaultPreferences().edit().putLong("xmsf_startup", j).commit();
+    }
+
+    private SharedPreferences getDefaultPreferences() {
+        return getSharedPreferences(MIPUSH_EXTRA, 0);
     }
 
     private void scheduleUploadNotificationInfo() {
         try {
-            if (!isListenerDefaultAdded() && Build.VERSION.SDK_INT >= 19) {
+            if (!isListenerDefaultAdded()) {
                 HashSet<ComponentName> loadEnabledServices = loadEnabledServices();
                 loadEnabledServices.add(new ComponentName(this, NotificationListener.class));
                 saveEnabledServices(loadEnabledServices);

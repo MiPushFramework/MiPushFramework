@@ -131,7 +131,7 @@ public class PushServiceMain extends XMPushService {
         @Override
         public void onChange(boolean selfChange) {
             Log.i("SettingsObserver", "-> settings changed");
-            ConfigCenter.reloadConf(PushServiceMain.this, true);
+            ConfigCenter.reloadConf(PushServiceMain.this);
             onConfigChanged();
         }
     }

@@ -6,7 +6,9 @@ import android.support.v7.graphics.Palette;
 
 
 /**
- * Created by Trumeet on 2018/2/18.
+ *
+ * @author Trumeet
+ * @date 2018/2/18
  */
 
 public class ColorUtils {

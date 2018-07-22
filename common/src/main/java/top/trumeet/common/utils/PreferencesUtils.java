@@ -19,7 +19,6 @@ public class PreferencesUtils {
     public static final String KEY_DEBUG_ICON = "DebugIcon";
     public static final String AUTO_REGISTER = "AutoRegister";
     public static final String KEY_FOREGROUND_NOTIFICATION = "ForegroundNotification";
-    public static final String KEY_ENABLE_WAKEUP_TARGET = "EnableWakeupTarget";
     private static SharedPreferences mPreference;
 
 
