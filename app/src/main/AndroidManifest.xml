@@ -42,13 +42,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="top.trumeet.mipushframework.wizard.CheckRunningStatusActivity"
-            android:theme="@style/AppTheme.Wizard" />
-        <activity android:name="top.trumeet.mipushframework.wizard.StartFailFAQActivity"
-            android:theme="@style/AppTheme.Wizard" />
         <activity android:name="top.trumeet.mipushframework.wizard.CheckRunInBackgroundActivity"
-            android:theme="@style/AppTheme.Wizard" />
-        <activity android:name="top.trumeet.mipushframework.wizard.CheckDozeActivity"
             android:theme="@style/AppTheme.Wizard" />
         <activity android:name="top.trumeet.mipushframework.wizard.fake.FakeBuildActivity"
             android:theme="@style/AppTheme.Wizard" />

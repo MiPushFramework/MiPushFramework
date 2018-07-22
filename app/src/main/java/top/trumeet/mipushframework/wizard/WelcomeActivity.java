@@ -49,6 +49,6 @@ public class WelcomeActivity extends AppCompatActivity implements NavigationBar.
 
     @Override
     public void onNavigateNext() {
-        startActivity(new Intent(this, CheckRunningStatusActivity.class));
+        startActivity(new Intent(this, CheckRunInBackgroundActivity.class));
     }
 }
