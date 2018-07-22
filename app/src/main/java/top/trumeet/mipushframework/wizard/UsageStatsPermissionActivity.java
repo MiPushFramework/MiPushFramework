@@ -13,9 +13,7 @@ import com.android.setupwizardlib.view.NavigationBar;
 
 import top.trumeet.common.override.AppOpsManagerOverride;
 import top.trumeet.common.push.PushController;
-import top.trumeet.common.utils.Utils;
 import top.trumeet.mipush.R;
-import top.trumeet.mipushframework.utils.ShellUtils;
 import top.trumeet.mipushframework.wizard.fake.FakeBuildActivity;
 
 /**

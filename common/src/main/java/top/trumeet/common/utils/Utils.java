@@ -1,26 +1,20 @@
 package top.trumeet.common.utils;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.annotation.SuppressLint;
 import android.app.AppGlobals;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.Process;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.text.Html;
-import android.view.View;
 
 import java.util.Calendar;
 import java.util.Date;
 
 import top.trumeet.common.Constants;
-import top.trumeet.common.R;
 
 public final class Utils {
     public static int myUid() {

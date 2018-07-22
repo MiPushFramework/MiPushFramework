@@ -6,7 +6,9 @@ import android.support.annotation.Nullable;
 
 import moe.yuuta.mipush.sdk.app.ControlAPIProvider;
 
-import static com.xiaomi.xmsf.push.control.PushControllerUtils.*;
+import static com.xiaomi.xmsf.push.control.PushControllerUtils.isAllEnable;
+import static com.xiaomi.xmsf.push.control.PushControllerUtils.isPrefsEnable;
+import static com.xiaomi.xmsf.push.control.PushControllerUtils.setAllEnable;
 import static top.trumeet.common.Constants.PUSH_SERVICE_VERSION_CODE;
 import static top.trumeet.common.push.PushController.ARG_STRICT;
 

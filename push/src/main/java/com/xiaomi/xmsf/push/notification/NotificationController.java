@@ -13,8 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 
-import com.xiaomi.xmsf.utils.ConfigCenter;
-
 import java.util.ArrayList;
 
 import top.trumeet.common.cache.ApplicationNameCache;

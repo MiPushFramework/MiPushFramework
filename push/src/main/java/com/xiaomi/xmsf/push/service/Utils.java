@@ -3,12 +3,8 @@ package com.xiaomi.xmsf.push.service;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.support.annotation.ColorInt;
-import android.view.View;
-
-import com.xiaomi.xmsf.R;
 
 public final class Utils {
     public static final String getXiaomiUserId(Context context) {
