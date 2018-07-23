@@ -33,7 +33,7 @@ public class RemoveDozeActivity extends Activity {
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
                 PushServiceAccessibility.isInDozeWhiteList(this)) {
-            setResult(Activity.RESULT_OK);
+            setResultAndFinish(Activity.RESULT_OK);
             return;
         }
         Intent intent = new Intent();
