@@ -40,7 +40,7 @@
 * 如果使用了绿色守护小米推送处方会无法启动推送服务
 * 不建议使用 黑域、绿色守护、Xposed一些模块 对 `Push` 做操作，可能导致推送不稳定
 * 只有推送功能。其他完整功能（如查找手机）请体验 MIUI
-* 对 `Push` 启用电池优化会无法后台
+* 对 `Push` 启用电池优化会无法后台运行
 
 
 
@@ -83,18 +83,20 @@
 ## 参与项目
 
 * 欢迎提交 PR、Issues 帮助这个项目更好。
-* 代码规范: Alibaba Java Coding Guidelines
+* 代码规范: Alibaba Java Coding Guidelines / Google Java 编程规范
+* 尽量丰富注释和文档
+* Git commit message 规范：Angular
 
 ## 已知问题
 
-* 努比亚ROM应用（第三方使用MiPush的应用）可能不会自动禁用其XMPushService并启动服务，请尝试将框架设为系统应用
+* 努比亚ROM应用（第三方使用 MiPush 的应用）可能不会自动禁用其XMPushService并启动服务，请尝试将框架设为系统应用
 * 开发者学生党，开学了更新可能不太及时，请谅解
 * 一些通知 Feature 可能无法使用（如通知都会显示为推送框架发出，而不是目标应用 `MIPushNotificationHelper#setTargetPackage`）
 
 ## 感谢
 
 * @Rachel030219 提供文件
-* Android Open Source Project, MultiType, greenDao, SetupWizardLibCompat, Condom, MaterialPreference，GreenDaoUpgradeHelper, epic, Log4a，helplib
+* Android Open Source Project, MultiType, greenDao, SetupWizardLibCompat, Condom, MaterialPreference，GreenDaoUpgradeHelper, epic, Log4a，helplib，RxJava RxAndroid，RxActivityResult，RxPermissions
 * 酷安 @PzHown @lmnm011223 @`苏沐晨风丶`（未采纳） 提供图标
 
 # License
