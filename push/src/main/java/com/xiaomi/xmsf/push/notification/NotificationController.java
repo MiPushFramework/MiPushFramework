@@ -95,7 +95,7 @@ public class NotificationController {
     }
 
 
-    @TargetApi(Build.VERSION_CODES.N)
+    @TargetApi(Build.VERSION_CODES.O)
     private static void updateSummaryNotification(Context context, String packageName, String groupId) {
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         StatusBarNotification[] activeNotifications = manager.getActiveNotifications();
@@ -114,14 +114,7 @@ public class NotificationController {
             Notification notifyDefault = statusBarNotifications.get(0).getNotification();
 
             Bundle extras = new Bundle();
-            Notification.Builder builder;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                builder = new Notification.Builder(context, notifyDefault.getChannelId());
-            }
-            else {
-                builder = new Notification.Builder(context);
-            }
-
+            Notification.Builder builder = new Notification.Builder(context, notifyDefault.getChannelId());
             int color = notifyDefault.color;
 
             CharSequence subText = createColorSubtext(appName, color);
@@ -135,12 +128,14 @@ public class NotificationController {
                     .setLargeIcon(notifyDefault.getLargeIcon())
                     .setCategory(Notification.CATEGORY_EVENT)
                     .setGroupSummary(true)
+                    .setChannelId(notifyDefault.getChannelId())
                     .setGroup(groupId);
             Notification notification = builder.build();
             manager.notify(packageName.hashCode(), notification);
         } else {
             manager.cancel(packageName.hashCode());
         }
+
     }
 
     public static void publish(Context context, int id, String packageName, Notification.Builder localBuilder) {
@@ -160,7 +155,7 @@ public class NotificationController {
         Notification notification = localBuilder.build();
         manager.notify(id, notification);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             updateSummaryNotification(context, packageName, getGroupIdByPkg(packageName));
         }
     }
