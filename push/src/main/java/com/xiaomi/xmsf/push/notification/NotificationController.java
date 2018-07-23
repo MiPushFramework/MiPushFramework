@@ -29,6 +29,7 @@ import static top.trumeet.common.utils.NotificationUtils.getGroupIdByPkg;
 
 public class NotificationController {
     private static final String ID_GROUP_APPLICATIONS = "applications";
+    public static final String CHANNEL_WARN = "warn";
 
     @TargetApi(26)
     public static void deleteOldNotificationChannelGroup(@NonNull Context context) {

@@ -3,7 +3,9 @@ package com.xiaomi.xposed.util;
 import android.content.pm.ApplicationInfo;
 
 /**
- * Created by zts1993 on 2018/3/20.
+ * common util
+ * @author zts1993
+ * @date 2018/3/20
  */
 
 public class CommonUtil {

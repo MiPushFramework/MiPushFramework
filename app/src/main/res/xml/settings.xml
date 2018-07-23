@@ -43,12 +43,6 @@
             android:summary="@string/disable_fg_notification_warning"
             android:title="@string/settings_debug_foreground_notification" />
 
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="EnableWakeupTarget"
-            android:summary="@string/settings_summary_wakeup_target"
-            android:title="@string/settings_wakeup_target" />
-
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/settings_debug">

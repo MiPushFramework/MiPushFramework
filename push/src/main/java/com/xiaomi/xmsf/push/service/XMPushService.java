@@ -6,12 +6,11 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.CrashlyticsInitProvider;
 import com.xiaomi.push.service.PushServiceMain;
-import com.xiaomi.xmsf.XmsfApp;
 import com.xiaomi.xmsf.push.auth.AuthActivity;
 import com.xiaomi.xmsf.push.control.PushControllerUtils;
 import com.xiaomi.xmsf.push.notification.NotificationController;
+import com.xiaomi.xmsf.push.utils.RemoveTremblingUtils;
 import com.xiaomi.xmsf.utils.ConfigCenter;
 
 import me.pqpo.librarylog4a.Log4a;
@@ -40,9 +39,7 @@ public class XMPushService extends IntentService {
         int result;
         boolean register = true;
         // Check multi request
-        if (!XmsfApp.getSession(this)
-                .getRemoveTremblingInstance()
-                .onCallRegister(pkg)) {
+        if (!RemoveTremblingUtils.getIntance().onCallRegister(pkg)) {
             Log4a.d(TAG, "Don't register multi request " + pkg);
             register = false;
         }

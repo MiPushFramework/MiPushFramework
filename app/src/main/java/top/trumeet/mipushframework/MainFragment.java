@@ -3,6 +3,8 @@ package top.trumeet.mipushframework;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -65,7 +67,7 @@ public class MainFragment extends Fragment implements OnConnectStatusChangedList
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_about) {
-            ((TextView)(new AlertDialog.Builder(getContext())
+            ((TextView) (new AlertDialog.Builder(getContext())
                     .setView(R.layout.dialog_about)
                     .show().findViewById(R.id.text_version))).setText(getString(R.string.about_version,
                     BuildConfig.VERSION_NAME));
@@ -179,10 +181,16 @@ public class MainFragment extends Fragment implements OnConnectStatusChangedList
     }
 
     private void refreshStatus() {
+        boolean enable = true;
         PushController controller = getPushController();
         if (controller != null && controller.isConnected()) {
             try {
-                mSwitchEnablePush.setChecked(controller.isEnable(false));
+                boolean running = controller.isEnable(true);
+                enable = controller.isEnable(false);
+                mSwitchEnablePush.setChecked(enable);
+                if (enable && !running) {
+                    controller.setEnable(true);
+                }
                 return;
             } catch (RuntimeException ignore) {
             }
@@ -191,14 +199,13 @@ public class MainFragment extends Fragment implements OnConnectStatusChangedList
     }
 
     private void initSwitch() {
-        mSwitchEnablePush.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                getPushController().setEnable(b);
-                Toast.makeText(getContext(), b ? R.string.msg_enable : R.string.msg_disable, Toast.LENGTH_SHORT).show();
-            }
+        mSwitchEnablePush.setOnCheckedChangeListener((compoundButton, b) -> {
+            getPushController().setEnable(b);
+            Toast.makeText(getContext(), b ? R.string.msg_enable : R.string.msg_disable, Toast.LENGTH_SHORT).show();
         });
-        refreshStatus();
+
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(this::refreshStatus, 100);
     }
 
     @Override
