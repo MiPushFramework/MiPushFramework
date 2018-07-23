@@ -22,4 +22,10 @@
 
 
 
+    <string name="wizard_title_doze_whitelist">移除电池优化</string>
+    <string name="wizard_descr_doze_whitelist">当您对推送服务启用电池优化后，将无法保持推送。请点按下面的按钮请求去除优化（部分 ROM 并没有这个设定，如果您点按后没有反应，请直接点击 下一步）</string>
+    <string name="wizard_button_remove_doze">请求移除优化</string>
+
+
+
 </resources>

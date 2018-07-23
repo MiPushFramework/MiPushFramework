@@ -1,33 +1,36 @@
 package com.xiaomi.xposed.hook;
 
-import android.content.Context;
 import android.util.Log;
 
-import com.xiaomi.xmsf.BuildConfig;
 import com.xiaomi.xposed.util.CommonUtil;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
+/**
+ * XiaoMi fake build hook for xposed
+ * @author zts1993
+ * @date 2018/3/20
+ */
 public class MiPushEnhanceHook implements IXposedHookLoadPackage {
 
     private static final String TAG = "MiPushEnhanceHook";
+    private static final String STORAGE_PATH = "/sdcard/";
 
-    private Set<String> blackList = new CopyOnWriteArraySet<>();
-    private Map<String, String> fakeMap = new HashMap<>();
+    private static Set<String> blackList = new HashSet<>();
+    private static Map<String, String> fakeMap = new HashMap<>();
 
     private static String BRAND = "Xiaomi";
 
-    {
+    static {
         blackList.add("android");
         blackList.add("de.robv.android.xposed.installer");
         blackList.add("com.xiaomi.xmsf");
@@ -38,7 +41,7 @@ public class MiPushEnhanceHook implements IXposedHookLoadPackage {
         fakeMap.put("ro.miui.ui.version.name", "V9");
         fakeMap.put("ro.miui.ui.version.code", "7");
         fakeMap.put("ro.miui.version.code_time", "1527550858");
-        fakeMap.put("ro.miui.internal.storage", "/sdcard/");
+        fakeMap.put("ro.miui.internal.storage", STORAGE_PATH);
         fakeMap.put("ro.product.manufacturer", BRAND);
         fakeMap.put("ro.product.brand", BRAND);
         fakeMap.put("ro.product.name", BRAND);
@@ -49,22 +52,9 @@ public class MiPushEnhanceHook implements IXposedHookLoadPackage {
         return blackList.contains(pkgName.toLowerCase());
     }
 
-    private volatile Context applicationContext = null;
-
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         try {
-            if (lpparam.packageName.equals(BuildConfig.APPLICATION_ID)) {
-                XposedHelpers.findAndHookMethod("top.trumeet.mipushframework.MiPushFramework", lpparam.classLoader, "isXposedWork",
-                        new XC_MethodReplacement() {
-                            @Override
-                            protected Object replaceHookedMethod(MethodHookParam methodHookParam) throws Throwable {
-                                return true;
-                            }
-                        });
-                return;
-            }
-
             if (!CommonUtil.isUserApplication(lpparam.appInfo)) {
                 return;
             }
@@ -74,7 +64,8 @@ public class MiPushEnhanceHook implements IXposedHookLoadPackage {
             }
 
 
-            XposedBridge.hookAllMethods(XposedHelpers.findClass("android.os.SystemProperties", lpparam.classLoader), "get", new XC_MethodHook() {
+            XposedBridge.hookAllMethods(XposedHelpers.findClass("android.os.SystemProperties", lpparam.classLoader),
+                    "get", new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     if (fakeMap.containsKey(param.args[0].toString())) {

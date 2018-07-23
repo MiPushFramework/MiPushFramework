@@ -19,8 +19,9 @@ import top.trumeet.mipush.provider.gen.db.RegisteredApplicationDao;
 public class DatabaseUtils {
     public static DaoSession daoSession;
     public static void init (Context context) {
-        if (daoSession != null)
+        if (daoSession != null) {
             return;
+        }
         MigrationHelper.DEBUG = true;
         MySQLiteOpenHelper helper = new MySQLiteOpenHelper(context
                 , "db",

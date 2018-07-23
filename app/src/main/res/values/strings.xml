@@ -46,10 +46,6 @@
 
     <string name="wizard_connect">正在连接</string>
 
-    <string name="wizard_title_doze_whitelist">移除电池优化</string>
-    <string name="wizard_descr_doze_whitelist">当您对推送服务启用电池优化后，将无法保持推送。请点按下面的按钮请求去除优化（部分 ROM 并没有这个设定，如果您点按后没有反应，请直接点击 下一步）</string>
-    <string name="wizard_button_remove_doze">请求移除优化</string>
-
     <string name="wizard_title_run_in_background">允许后台活动</string>
     <string name="wizard_descr_run_in_background">您禁用了推送服务的后台运行权限，它将无法后台推送，您%1$s，然后点按下一步。</string>
 

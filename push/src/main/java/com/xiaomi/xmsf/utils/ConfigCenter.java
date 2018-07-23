@@ -22,19 +22,14 @@ public class ConfigCenter {
         return conf;
     }
 
-    public static boolean reloadConf(Context ctx, boolean force) {
-        if (conf.inited && !force) {
-            return false;
-        }
-
+    public static boolean reloadConf(Context ctx) {
         ConfigCenter tmp = new ConfigCenter();
+
         try {
-            tmp.inited = true;
 
             SharedPreferences prefs = PreferencesUtils.getPreferences(ctx);
             tmp.autoRegister = prefs.getBoolean(PreferencesUtils.AUTO_REGISTER, tmp.autoRegister);
             tmp.foregroundNotification = prefs.getBoolean(PreferencesUtils.KEY_FOREGROUND_NOTIFICATION, tmp.foregroundNotification);
-            tmp.enableWakeupTarget = prefs.getBoolean(PreferencesUtils.KEY_ENABLE_WAKEUP_TARGET, tmp.enableWakeupTarget);
 
             {
                 String mode = prefs.getString(PreferencesUtils.KEY_ACCESS_MODE, "0");
@@ -50,12 +45,8 @@ public class ConfigCenter {
         }
     }
 
-
-    private boolean inited = false;
-
     public boolean autoRegister = true;
     public boolean foregroundNotification = true;
-    public boolean enableWakeupTarget = true;
 
     public int accessMode = 0;
 
