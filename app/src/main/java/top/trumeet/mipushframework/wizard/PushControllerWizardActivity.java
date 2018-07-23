@@ -1,20 +1,31 @@
 package top.trumeet.mipushframework.wizard;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
+import android.support.v4.app.FragmentActivity;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.setupwizardlib.SetupWizardLayout;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
+import rx_activity_result2.RxActivityResult;
 import top.trumeet.common.Constants;
 import top.trumeet.common.push.PushController;
 import top.trumeet.common.utils.Utils;
@@ -22,6 +33,7 @@ import top.trumeet.common.utils.rom.RomUtils;
 import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.control.ConnectFailUtils;
 import top.trumeet.mipushframework.control.OnConnectStatusChangedListener;
+import top.trumeet.mipushframework.models.ActivityResultAndPermissionResult;
 
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_LOW_VERSION;
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_MIUI;
@@ -33,12 +45,14 @@ import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener
  * Created by Trumeet on 2017/12/30.
  */
 
-public abstract class PushControllerWizardActivity extends Activity {
+public abstract class PushControllerWizardActivity extends FragmentActivity {
     public TextView mText;
     private PushController mController;
     public SetupWizardLayout layout;
     private ConnectTask mConnectTask;
     private Bundle savedInstanceState;
+
+    private CompositeDisposable composite = new CompositeDisposable();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +70,55 @@ public abstract class PushControllerWizardActivity extends Activity {
         setContentView(layout);
     }
 
+    @UiThread
+    private void checkAndConnect() {
+        Log.d("MainActivity", "checkAndConnect");
+        if (!Utils.isServiceInstalled()) {
+            showConnectFail(FAIL_REASON_NOT_INSTALLED);
+            return;
+        }
+        composite.add(Observable.zip(RxActivityResult.on(this)
+                        .startIntent(new Intent()
+                                .setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
+                                        Constants.REMOVE_DOZE_COMPONENT_NAME)))
+                , new RxPermissions(this)
+                        .requestEachCombined(Constants.permissions.WRITE_SETTINGS),
+                ActivityResultAndPermissionResult::new)
+                .subscribe(result -> {
+                    if (result.permissionResult.granted &&
+                            result.activityResult.resultCode() == Activity.RESULT_OK) {
+                        // Connect
+                        if (mConnectTask != null) {
+                            if (!mConnectTask.isCancelled()) {
+                                mConnectTask.cancel(true);
+                            }
+                            mConnectTask = null;
+                        }
+                        mConnectTask = new ConnectTask();
+                        mConnectTask.execute();
+                    } else {
+                        if (!result.permissionResult.granted) {
+                            Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission,
+                                    result.permissionResult.name), Toast.LENGTH_LONG)
+                                    .show();
+                            if (!result.permissionResult.shouldShowRequestPermissionRationale) {
+                                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                                startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                        .setData(uri)
+                                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                            } else {
+                                checkAndConnect();
+                            }
+                        }
+                        if (result.activityResult.resultCode() != Activity.RESULT_OK) {
+                            Toast.makeText(this, getString(R.string.request_battery_whitelist), Toast.LENGTH_LONG)
+                                    .show();
+                            checkAndConnect();
+                        }
+                    }
+                }));
+    }
+
     @Override
     public void onDestroy () {
         if (mConnectTask != null && !mConnectTask.isCancelled()) {
@@ -68,14 +131,7 @@ public abstract class PushControllerWizardActivity extends Activity {
     }
 
     public void connect () {
-        if (mConnectTask != null) {
-            if (!mConnectTask.isCancelled()) {
-                mConnectTask.cancel(true);
-            }
-            mConnectTask = null;
-        }
-        mConnectTask = new ConnectTask();
-        mConnectTask.execute();
+        checkAndConnect();
     }
 
     private class ConnectTask extends AsyncTask<Void, Void, Pair<Boolean /* success */, Integer /* reason */>> {
