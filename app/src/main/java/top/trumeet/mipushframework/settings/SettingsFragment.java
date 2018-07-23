@@ -9,7 +9,6 @@ import android.util.Log;
 import moe.shizuku.preference.Preference;
 import moe.shizuku.preference.PreferenceFragment;
 import top.trumeet.common.Constants;
-import top.trumeet.common.push.PushServiceAccessibility;
 import top.trumeet.common.utils.rom.RomUtils;
 import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.MainActivity;
@@ -28,16 +27,11 @@ import static top.trumeet.common.utils.rom.RomUtils.ROM_UNKNOWN;
 public class SettingsFragment extends PreferenceFragment {
     private static final String TAG = SettingsFragment.class.getSimpleName();
 
-    private Preference mDozePreference;
-    private Preference mCheckServicePreference;
     private CheckROMTask mTask;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.settings);
-        mDozePreference = getPreferenceScreen()
-                .findPreference("key_remove_doze");
-
        setPreferenceOnclick("key_get_log", preference -> {
            startActivity(new Intent()
            .setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
@@ -93,7 +87,6 @@ public class SettingsFragment extends PreferenceFragment {
     public void onStart () {
         super.onStart();
         long time = System.currentTimeMillis();
-        mDozePreference.setVisible(!PushServiceAccessibility.isInDozeWhiteList(getActivity()));
         Log.d(TAG, "rebuild UI took: " + String.valueOf(System.currentTimeMillis() -
                 time));
     }
