@@ -2,12 +2,19 @@ package com.xiaomi.xmsf;
 
 import android.Manifest;
 import android.app.Application;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationChannelGroup;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 
 import com.crashlytics.android.Crashlytics;
@@ -35,12 +42,16 @@ import java.util.Random;
 
 import io.fabric.sdk.android.Fabric;
 import me.pqpo.librarylog4a.Log4a;
+import top.trumeet.common.Constants;
+import top.trumeet.common.push.PushServiceAccessibility;
 import top.trumeet.mipush.provider.DatabaseUtils;
 
 import static com.xiaomi.xmsf.push.control.PushControllerUtils.isAppMainProc;
+import static com.xiaomi.xmsf.push.notification.NotificationController.CHANNEL_WARN;
 import static top.trumeet.common.Constants.TAG_CONDOM;
 
 public class XmsfApp extends Application {
+    private static final String TAG = XmsfApp.class.getSimpleName();
 
     private static final String MIPUSH_EXTRA = "mipush_extra";
 
@@ -104,6 +115,43 @@ public class XmsfApp extends Application {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationController.deleteOldNotificationChannelGroup(this);
+        }
+
+        try {
+
+
+            if (!PushServiceAccessibility.isInDozeWhiteList(this)) {
+                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    NotificationChannel channel = new NotificationChannel(CHANNEL_WARN,
+                            getString(R.string.wizard_title_doze_whitelist),
+                            NotificationManager.IMPORTANCE_HIGH);
+
+                    NotificationChannelGroup notificationChannelGroup = new NotificationChannelGroup(CHANNEL_WARN, CHANNEL_WARN);
+                    manager.createNotificationChannelGroup(notificationChannelGroup);
+
+                    channel.setGroup(notificationChannelGroup.getId());
+                    manager.createNotificationChannel(channel);
+                }
+
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent()
+                        .setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
+                                Constants.REMOVE_DOZE_COMPONENT_NAME)), PendingIntent.FLAG_UPDATE_CURRENT);
+                Notification notification = new NotificationCompat.Builder(this,
+                        CHANNEL_WARN)
+                        .setContentTitle(getString(R.string.wizard_title_doze_whitelist))
+                        .setContentInfo(getString(R.string.wizard_descr_doze_whitelist))
+                        .setTicker(getString(R.string.wizard_descr_doze_whitelist))
+                        .setSmallIcon(R.drawable.ic_notifications_black_24dp)
+                        .setPriority(NotificationCompat.PRIORITY_MAX)
+                        .setContentIntent(pendingIntent)
+                        .setShowWhen(true)
+                        .setAutoCancel(true)
+                        .build();
+                manager.notify((int) (System.currentTimeMillis() / 1000), notification);
+            }
+        } catch (RuntimeException e) {
+            Log4a.e(TAG , e.getLocalizedMessage(), e);
         }
     }
 

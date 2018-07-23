@@ -56,14 +56,9 @@ public class CheckDozeActivity extends AppCompatActivity implements NavigationBa
         params.rightMargin = padding;
         params.bottomMargin = padding;
         button.setLayoutParams(params);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(new Intent()
-                .setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
-                        Constants.REMOVE_DOZE_COMPONENT_NAME)), RC_REQUEST);
-            }
-        });
+        button.setOnClickListener(v -> startActivityForResult(new Intent()
+        .setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
+                Constants.REMOVE_DOZE_COMPONENT_NAME)), RC_REQUEST));
 
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
