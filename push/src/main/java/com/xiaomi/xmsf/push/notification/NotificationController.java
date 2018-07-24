@@ -128,6 +128,7 @@ public class NotificationController {
                     .setLargeIcon(notifyDefault.getLargeIcon())
                     .setCategory(Notification.CATEGORY_EVENT)
                     .setGroupSummary(true)
+                     .setGroupAlertBehavior(Notification.GROUP_ALERT_CHILDREN)
                     .setChannelId(notifyDefault.getChannelId())
                     .setGroup(groupId);
             Notification notification = builder.build();
