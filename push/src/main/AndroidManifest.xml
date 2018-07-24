@@ -193,7 +193,7 @@
             android:exported="true" />
 
         <service
-            android:name="com.xiaomi.helper.DetectionService"
+            android:name="top.trumeet.common.ita.DetectionService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />

@@ -1,20 +1,20 @@
-package com.xiaomi.helper.impl;
+package top.trumeet.common.ita.impl;
 
 import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
+import android.util.Log;
 
-import com.xiaomi.helper.DetectionService;
-import com.xiaomi.helper.ITopActivity;
+import top.trumeet.common.ita.DetectionService;
+import top.trumeet.common.ita.ITopActivity;
 
-import me.pqpo.librarylog4a.Log4a;
 
 /**
  * Created by zts1993 on 2018/2/18.
  */
 
 public class ActivityAccessibilityImpl implements ITopActivity {
-    final static String TAG = "ActivityAccessibilityImpl";
+    private final static String TAG = "ActivityAccessibility";
 
     @Override
     public boolean isEnabled(Context context) {
@@ -23,7 +23,7 @@ public class ActivityAccessibilityImpl implements ITopActivity {
             accessibilityEnabled = Settings.Secure.getInt(context.getContentResolver(),
                     Settings.Secure.ACCESSIBILITY_ENABLED);
         } catch (Settings.SettingNotFoundException e) {
-            Log4a.e(TAG, e.getMessage(), e);
+            Log.e(TAG, e.getMessage(), e);
         }
 
         if (accessibilityEnabled == 1) {

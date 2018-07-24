@@ -1,4 +1,4 @@
-package com.xiaomi.helper;
+package top.trumeet.common.ita;
 
 import android.support.annotation.IntDef;
 import android.support.annotation.RestrictTo;
