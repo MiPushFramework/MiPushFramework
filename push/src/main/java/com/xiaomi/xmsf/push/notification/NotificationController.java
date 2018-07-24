@@ -95,7 +95,7 @@ public class NotificationController {
     }
 
 
-    @TargetApi(Build.VERSION_CODES.O)
+    @TargetApi(Build.VERSION_CODES.N)
     private static void updateSummaryNotification(Context context, String packageName, String groupId) {
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         StatusBarNotification[] activeNotifications = manager.getActiveNotifications();
@@ -114,7 +114,15 @@ public class NotificationController {
             Notification notifyDefault = statusBarNotifications.get(0).getNotification();
 
             Bundle extras = new Bundle();
-            Notification.Builder builder = new Notification.Builder(context, notifyDefault.getChannelId());
+            Notification.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                builder = new Notification.Builder(context, notifyDefault.getChannelId());
+                builder.setGroupAlertBehavior(Notification.GROUP_ALERT_CHILDREN);
+            }
+            else {
+                builder = new Notification.Builder(context);
+            }
+
             int color = notifyDefault.color;
 
             CharSequence subText = createColorSubtext(appName, color);
@@ -128,15 +136,12 @@ public class NotificationController {
                     .setLargeIcon(notifyDefault.getLargeIcon())
                     .setCategory(Notification.CATEGORY_EVENT)
                     .setGroupSummary(true)
-                     .setGroupAlertBehavior(Notification.GROUP_ALERT_CHILDREN)
-                    .setChannelId(notifyDefault.getChannelId())
                     .setGroup(groupId);
             Notification notification = builder.build();
             manager.notify(packageName.hashCode(), notification);
         } else {
             manager.cancel(packageName.hashCode());
         }
-
     }
 
     public static void publish(Context context, int id, String packageName, Notification.Builder localBuilder) {
@@ -156,7 +161,7 @@ public class NotificationController {
         Notification notification = localBuilder.build();
         manager.notify(id, notification);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             updateSummaryNotification(context, packageName, getGroupIdByPkg(packageName));
         }
     }
