@@ -58,7 +58,7 @@ public abstract class PushController {
         else return ControllerImpl.getConnected(context, disconnectListener);
     }
 
-    private static boolean isLegacySupported (@NonNull Context context) {
+    public static boolean isLegacySupported (@NonNull Context context) {
         // 存在且不存在的时候走 Legacy
         boolean support =
                 context.getPackageManager().resolveService(new Intent().setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
