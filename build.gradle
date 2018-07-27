@@ -69,6 +69,8 @@ ext {
     // RxJava
     rxVersion = "2.1.16"
     rxAndroidVersion = "2.0.2"
+    // Work
+    work_version = "1.0.0-alpha05"
 }
 
 task exportVersion(type: Exec) {
