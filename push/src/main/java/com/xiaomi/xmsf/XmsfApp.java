@@ -118,8 +118,6 @@ public class XmsfApp extends Application {
         }
 
         try {
-
-
             if (!PushServiceAccessibility.isInDozeWhiteList(this)) {
                 NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -129,7 +127,6 @@ public class XmsfApp extends Application {
 
                     NotificationChannelGroup notificationChannelGroup = new NotificationChannelGroup(CHANNEL_WARN, CHANNEL_WARN);
                     manager.createNotificationChannelGroup(notificationChannelGroup);
-
                     channel.setGroup(notificationChannelGroup.getId());
                     manager.createNotificationChannel(channel);
                 }
@@ -148,7 +145,7 @@ public class XmsfApp extends Application {
                         .setShowWhen(true)
                         .setAutoCancel(true)
                         .build();
-                manager.notify((int) (System.currentTimeMillis() / 1000), notification);
+                manager.notify(TAG.hashCode(), notification);
             }
         } catch (RuntimeException e) {
             Log4a.e(TAG , e.getLocalizedMessage(), e);

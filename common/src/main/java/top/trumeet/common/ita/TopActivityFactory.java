@@ -1,10 +1,10 @@
-package com.xiaomi.helper;
+package top.trumeet.common.ita;
 
 import android.os.Build;
 
-import com.xiaomi.helper.impl.ActivityAccessibilityImpl;
-import com.xiaomi.helper.impl.ActivityUsageStatsImpl;
-import com.xiaomi.helper.impl.FakeImpl;
+import top.trumeet.common.ita.impl.ActivityAccessibilityImpl;
+import top.trumeet.common.ita.impl.ActivityUsageStatsImpl;
+import top.trumeet.common.ita.impl.FakeImpl;
 
 /**
  * Created by zts1993 on 2018/2/18.

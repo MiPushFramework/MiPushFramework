@@ -1,4 +1,4 @@
-package com.xiaomi.helper.impl;
+package top.trumeet.common.ita.impl;
 
 import android.app.ActivityManager;
 import android.app.AppOpsManager;
@@ -7,11 +7,14 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.provider.Settings;
+import android.support.annotation.RequiresPermission;
+import android.util.Log;
 import android.widget.Toast;
 
-import com.xiaomi.helper.ITopActivity;
+import top.trumeet.common.ita.ITopActivity;
 
-import me.pqpo.librarylog4a.Log4a;
+import java.util.Objects;
+
 import top.trumeet.common.override.ActivityManagerOverride;
 
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -21,18 +24,19 @@ import static android.content.Context.ACTIVITY_SERVICE;
  */
 
 public class ActivityUsageStatsImpl implements ITopActivity {
-    static final String TAG = "ActivityUsageStatsImpl";
+    private static final String TAG = "ActivityUsageStatsImpl";
 
     @Override
     public boolean isEnabled(Context context) {
         try {
             PackageManager packageManager = context.getPackageManager();
-            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), 0);
             AppOpsManager appOpsManager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
-            return appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
+
+            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), 0);
+            return Objects.requireNonNull(appOpsManager).checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
                     applicationInfo.uid, applicationInfo.packageName) == AppOpsManager.MODE_ALLOWED;
         } catch (Exception e) {
-            //ignore
+            Log.e(TAG, e.getMessage(), e);
         }
 
         return false;
@@ -46,11 +50,11 @@ public class ActivityUsageStatsImpl implements ITopActivity {
     }
 
     @Override
+    @RequiresPermission("android.permission.PACKAGE_USAGE_STATS")
     public boolean isAppForeground(Context context, String packageName) {
         try {
             int level = ActivityManagerOverride.getPackageImportance(packageName,
-                    ((ActivityManager) context.getSystemService(ACTIVITY_SERVICE)));
-            Log4a.d(TAG, "Importance flag: " + level);
+                    ((ActivityManager) Objects.requireNonNull(context.getSystemService(ACTIVITY_SERVICE))));
             return level == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
 
         } catch (RuntimeException e) {

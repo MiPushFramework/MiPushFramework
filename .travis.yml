@@ -15,9 +15,9 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 script:
-- "./gradlew exportVersion"
-- "./gradlew :app:assembleRelease"
-- "./gradlew :push:assembleRelease"
+- "./gradlew exportVersion --daemon"
+- "./gradlew :app:assembleRelease --daemon --parallel"
+- "./gradlew :push:assembleRelease --daemon --parallel"
 before_install:
 - yes | sdkmanager "platforms;android-27"
 - openssl aes-256-cbc -K $encrypted_66a7d5f7594e_key -iv $encrypted_66a7d5f7594e_iv
