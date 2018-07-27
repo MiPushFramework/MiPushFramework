@@ -146,7 +146,7 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
         @Override
         protected void onPostExecute(List<RegisteredApplication> list) {
 
-            boolean showWarn = (list.size() == 0);
+            boolean showWarn = false;
             for (RegisteredApplication registeredApplication : list) {
                 if (!registeredApplication.isRegistered()) {
                     showWarn = true;

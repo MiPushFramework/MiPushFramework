@@ -1,15 +1,14 @@
-package com.xiaomi.helper.impl;
+package top.trumeet.common.ita.impl;
 
 import android.content.Context;
 
-import com.xiaomi.helper.ITopActivity;
+import top.trumeet.common.ita.ITopActivity;
 
 /**
  * Created by zts1993 on 2018/2/18.
  */
 
 public class FakeImpl implements ITopActivity {
-    static final String TAG = "FakeImpl";
 
     @Override
     public boolean isEnabled(Context context) {

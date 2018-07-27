@@ -4,8 +4,8 @@ import android.app.IntentService;
 import android.content.ComponentName;
 import android.content.Intent;
 
-import com.xiaomi.helper.ITopActivity;
-import com.xiaomi.helper.TopActivityFactory;
+import top.trumeet.common.ita.ITopActivity;
+import top.trumeet.common.ita.TopActivityFactory;
 import com.xiaomi.push.service.MIPushNotificationHelper;
 import com.xiaomi.push.service.MyClientEventDispatcher;
 import com.xiaomi.push.service.MyMIPushNotificationHelper;

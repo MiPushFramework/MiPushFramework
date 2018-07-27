@@ -16,7 +16,6 @@ public class PreferencesUtils {
     public static final String MAIN_PREFS = "top.trumeet.mipush_preferences";
 
     public static final String KEY_ACCESS_MODE = "AccessMode";
-    public static final String KEY_DEBUG_ICON = "DebugIcon";
     public static final String AUTO_REGISTER = "AutoRegister";
     public static final String KEY_FOREGROUND_NOTIFICATION = "ForegroundNotification";
     private static SharedPreferences mPreference;

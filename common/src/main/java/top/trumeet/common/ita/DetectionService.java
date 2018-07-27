@@ -1,4 +1,4 @@
-package com.xiaomi.helper;
+package top.trumeet.common.ita;
 
 import android.accessibilityservice.AccessibilityService;
 import android.app.Service;
@@ -9,8 +9,6 @@ import android.view.accessibility.AccessibilityEvent;
  * Created by zts1993 on 2018/2/9.
  */
 public class DetectionService extends AccessibilityService {
-
-    final static String TAG = "DetectionService";
 
     static String foregroundPackageName;
 
@@ -27,7 +25,7 @@ public class DetectionService extends AccessibilityService {
     /**
      * 重载辅助功能事件回调函数，对窗口状态变化事件进行处理
      *
-     * @param event
+     * @param event event
      */
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
