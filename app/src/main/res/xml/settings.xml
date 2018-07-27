@@ -47,11 +47,6 @@
 
     <PreferenceCategory android:title="@string/settings_debug">
 
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="DebugIcon"
-            android:title="@string/settings_debug_icon" />
-
         <Preference
             android:key="key_get_log"
             android:summary="@string/settings_get_log_summary"

@@ -248,18 +248,8 @@ public abstract class MainActivity extends AppCompatActivity {
                         (mController != null && mController.isConnected()) ?
                                 mController.getVersionCode() : -1))
                 .setCancelable(false)
-                .setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        checkAndConnect();
-                    }
-                })
-                .setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                })
+                .setPositiveButton(R.string.retry, (dialog, which) -> checkAndConnect())
+                .setNegativeButton(R.string.exit, (dialog, which) -> finish())
                 .show();
         if (mController != null && mController.isConnected()) {
             mController.disconnectIfNeeded();

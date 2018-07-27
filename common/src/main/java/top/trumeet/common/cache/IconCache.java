@@ -36,6 +36,10 @@ public class IconCache {
         return cache;
     }
 
+    public Bitmap getRawIconBitmapWithoutLoader(final Context ctx, final String pkg) {
+        return mIconMemoryCaches.get("raw_" + pkg);
+    }
+
     public Bitmap getRawIconBitmap(final Context ctx, final String pkg) {
         return new AbstractCacheAspect<Bitmap>(mIconMemoryCaches) {
             @Override
