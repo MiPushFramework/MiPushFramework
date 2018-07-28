@@ -2,7 +2,6 @@ package top.trumeet.mipushframework.permissions;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
@@ -15,15 +14,14 @@ import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.android.settings.widget.EntityHeaderController;
-import com.tbruyelle.rxpermissions2.RxPermissions;
 
-import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import moe.shizuku.preference.Preference;
 import moe.shizuku.preference.PreferenceCategory;
@@ -31,14 +29,13 @@ import moe.shizuku.preference.PreferenceFragment;
 import moe.shizuku.preference.PreferenceScreen;
 import moe.shizuku.preference.SimpleMenuPreference;
 import moe.shizuku.preference.SwitchPreferenceCompat;
-import rx_activity_result2.RxActivityResult;
 import top.trumeet.common.Constants;
 import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.register.RegisteredApplication;
 import top.trumeet.common.utils.Utils;
 import top.trumeet.mipush.R;
+import top.trumeet.mipushframework.control.CheckPermissionsUtils;
 import top.trumeet.mipushframework.event.RecentActivityActivity;
-import top.trumeet.mipushframework.models.ActivityResultAndPermissionResult;
 
 import static android.os.Build.VERSION_CODES.O;
 import static android.provider.Settings.EXTRA_APP_PACKAGE;
@@ -51,6 +48,8 @@ import static top.trumeet.common.utils.NotificationUtils.getChannelIdByPkg;
  */
 
 public class ManagePermissionsActivity extends AppCompatActivity {
+    private static final String TAG = ManagePermissionsActivity.class.getSimpleName();
+
     public static final String EXTRA_PACKAGE_NAME =
             ManagePermissionsActivity.class.getName()
             + ".EXTRA_PACKAGE_NAME";
@@ -73,14 +72,8 @@ public class ManagePermissionsActivity extends AppCompatActivity {
     }
 
     private void checkAndStart () {
-        composite.add(Observable.zip(RxActivityResult.on(this)
-                        .startIntent(new Intent()
-                                .setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
-                                        Constants.REMOVE_DOZE_COMPONENT_NAME)))
-                , new RxPermissions(this)
-                        .requestEachCombined(Constants.permissions.WRITE_SETTINGS),
-                ActivityResultAndPermissionResult::new)
-                .subscribe(result -> {
+        composite.add(CheckPermissionsUtils.checkPermissionsAndStartAsync(this,
+                result -> {
                     if (result.permissionResult.granted &&
                             result.activityResult.resultCode() == Activity.RESULT_OK) {
                         mTask = new LoadTask(mPkg);
@@ -105,7 +98,9 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                             checkAndStart();
                         }
                     }
-                }));
+                }, (throwable -> {
+                    Log.e(TAG, "Check Permissions", throwable);
+                })));
     }
 
     @Override

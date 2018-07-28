@@ -1,7 +1,6 @@
 package top.trumeet.mipushframework.wizard;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -21,19 +20,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.setupwizardlib.SetupWizardLayout;
-import com.tbruyelle.rxpermissions2.RxPermissions;
 
-import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
-import rx_activity_result2.RxActivityResult;
 import top.trumeet.common.Constants;
 import top.trumeet.common.push.PushController;
 import top.trumeet.common.utils.Utils;
 import top.trumeet.common.utils.rom.RomUtils;
 import top.trumeet.mipush.R;
+import top.trumeet.mipushframework.control.CheckPermissionsUtils;
 import top.trumeet.mipushframework.control.ConnectFailUtils;
 import top.trumeet.mipushframework.control.OnConnectStatusChangedListener;
-import top.trumeet.mipushframework.models.ActivityResultAndPermissionResult;
 
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_LOW_VERSION;
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_MIUI;
@@ -46,6 +42,8 @@ import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener
  */
 
 public abstract class PushControllerWizardActivity extends FragmentActivity {
+    private static final String TAG = PushControllerWizardActivity.class.getSimpleName();
+
     public TextView mText;
     private PushController mController;
     public SetupWizardLayout layout;
@@ -77,14 +75,8 @@ public abstract class PushControllerWizardActivity extends FragmentActivity {
             showConnectFail(FAIL_REASON_NOT_INSTALLED);
             return;
         }
-        composite.add(Observable.zip(RxActivityResult.on(this)
-                        .startIntent(new Intent()
-                                .setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
-                                        Constants.REMOVE_DOZE_COMPONENT_NAME)))
-                , new RxPermissions(this)
-                        .requestEachCombined(Constants.permissions.WRITE_SETTINGS),
-                ActivityResultAndPermissionResult::new)
-                .subscribe(result -> {
+        composite.add(CheckPermissionsUtils.checkPermissionsAndStartAsync(this,
+                (result) -> {
                     if (result.permissionResult.granted &&
                             result.activityResult.resultCode() == Activity.RESULT_OK) {
                         // Connect
@@ -94,7 +86,7 @@ public abstract class PushControllerWizardActivity extends FragmentActivity {
                             }
                             mConnectTask = null;
                         }
-                        mConnectTask = new ConnectTask();
+                        mConnectTask = new PushControllerWizardActivity.ConnectTask();
                         mConnectTask.execute();
                     } else {
                         if (!result.permissionResult.granted) {
@@ -116,6 +108,8 @@ public abstract class PushControllerWizardActivity extends FragmentActivity {
                             checkAndConnect();
                         }
                     }
+                }, (throwable) -> {
+                    Log.e(TAG, "CheckPermissions", throwable);
                 }));
     }
 
