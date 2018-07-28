@@ -13,10 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.graphics.ColorUtils;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 
 import com.xiaomi.channel.commonutils.logger.MyLog;
 import com.xiaomi.channel.commonutils.reflect.JavaCalls;
@@ -25,7 +22,7 @@ import com.xiaomi.xmpush.thrift.XmPushActionContainer;
 import com.xiaomi.xmsf.BuildConfig;
 import com.xiaomi.xmsf.R;
 import com.xiaomi.xmsf.push.notification.NotificationController;
-import com.xiaomi.xmsf.utils.ConfigCenter;
+import com.xiaomi.xmsf.utils.ColorUtil;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -165,7 +162,7 @@ public class MyMIPushNotificationHelper {
 
         if (iconBitmap != null && !TextUtils.isEmpty(appName)) {
             int color = getIconColor(iconBitmap);
-            CharSequence subText = createColorSubtext(appName, color);
+            CharSequence subText = ColorUtil.createColorSubtext(appName, color);
             if (subText != null) {
                 extras.putCharSequence(NotificationCompat.EXTRA_SUB_TEXT, subText);
             }
@@ -179,7 +176,7 @@ public class MyMIPushNotificationHelper {
     }
 
     private static int getIconColor(Bitmap bitmap) {
-        int color = com.xiaomi.xmsf.utils.ColorUtils.getIconColor(bitmap);
+        int color = ColorUtil.getIconColor(bitmap);
         if (color != Notification.COLOR_DEFAULT) {
             final float[] hsl = new float[3];
             ColorUtils.colorToHSL(color, hsl);
@@ -190,14 +187,6 @@ public class MyMIPushNotificationHelper {
         return color;
     }
 
-    public static Spannable createColorSubtext(CharSequence appName,
-                                               int color) {
-        final Spannable amened = new SpannableStringBuilder(appName);
-        // 弄一个自己的颜色 TODO：不知道小米有没有这个 API，或者抄袭 AOSP 的实现
-        amened.setSpan(new ForegroundColorSpan(color),
-                0, amened.length(), 0);
-        return amened;
-    }
 
 
     private static PendingIntent openActivityPendingIntent(Context paramContext, XmPushActionContainer paramXmPushActionContainer, PushMetaInfo paramPushMetaInfo, byte[] paramArrayOfByte) {
