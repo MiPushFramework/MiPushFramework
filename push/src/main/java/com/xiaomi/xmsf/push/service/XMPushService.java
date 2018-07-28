@@ -39,7 +39,7 @@ public class XMPushService extends IntentService {
         int result;
         boolean register = true;
         // Check multi request
-        if (!RemoveTremblingUtils.getIntance().onCallRegister(pkg)) {
+        if (!RemoveTremblingUtils.getInstance().onCallRegister(pkg)) {
             Log4a.d(TAG, "Don't register multi request " + pkg);
             register = false;
         }

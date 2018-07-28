@@ -25,7 +25,7 @@ public class RemoveTremblingUtils {
 
     private static RemoveTremblingUtils instance = null;
 
-    public static RemoveTremblingUtils getIntance() {
+    public static RemoveTremblingUtils getInstance() {
         if (instance == null) {
             synchronized (RemoveTremblingUtils.class) {
                 if (instance == null) {
