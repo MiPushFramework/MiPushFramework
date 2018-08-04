@@ -12,15 +12,18 @@ import com.xiaomi.channel.commonutils.logger.MyLog;
 import com.xiaomi.xmpush.thrift.ActionType;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
+import com.xiaomi.xmpush.thrift.XmPushThriftSerializeUtils;
 import com.xiaomi.xmsf.BuildConfig;
 import com.xiaomi.xmsf.R;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.common.cache.ApplicationNameCache;
 
+import static com.xiaomi.push.service.MIPushNotificationHelper.EXTRA_PARAM_NOTIFY_FOREGROUND;
 import static com.xiaomi.push.service.MiPushMsgAck.geoMessageIsValidated;
 import static com.xiaomi.push.service.MiPushMsgAck.processGeoMessage;
 import static com.xiaomi.push.service.MiPushMsgAck.sendAckMessage;
@@ -182,6 +185,7 @@ public class MyMIPushMessageProcessor {
             }
         }
 
+        boolean notified = false;
         if (metaInfo != null && !TextUtils.isEmpty(metaInfo.getTitle()) && !TextUtils.isEmpty(metaInfo.getDescription())) {
 
             String var8 = null;
@@ -198,12 +202,29 @@ public class MyMIPushMessageProcessor {
             } else {
 
                 MyMIPushNotificationHelper.notifyPushMessage(paramXMPushService, buildContainer, paramArrayOfByte, var2);
+                notified = true;
+
+//                if (metaInfo.extra == null) {
+//                    metaInfo.extra = new HashMap<>();
+//                    metaInfo.extra.put(EXTRA_PARAM_NOTIFY_FOREGROUND, "0");
+//                } else {
+//                    if (!metaInfo.extra.containsKey(EXTRA_PARAM_NOTIFY_FOREGROUND)) {
+//                        metaInfo.extra.put(EXTRA_PARAM_NOTIFY_FOREGROUND, "0");
+//                    }
+//                }
+//
+//                try {
+//                    paramArrayOfByte =  XmPushThriftSerializeUtils.convertThriftObjectToBytes(buildContainer);
+//                } catch (Throwable var3) {
+//                    MyLog.e(var3);
+//                }
 
                 //send broadcast
                 if (!MIPushNotificationHelper.isBusinessMessage(buildContainer)) {
 
                     Intent localIntent = new Intent(PushConstants.MIPUSH_ACTION_MESSAGE_ARRIVED);
                     localIntent.putExtra(PushConstants.MIPUSH_EXTRA_PAYLOAD, paramArrayOfByte);
+                    localIntent.putExtra(MIPushNotificationHelper.FROM_NOTIFICATION, notified);
                     localIntent.setPackage(buildContainer.packageName);
                     try {
                         List<ResolveInfo> localList = paramXMPushService.getPackageManager().queryBroadcastReceivers(localIntent, 0);
@@ -226,9 +247,14 @@ public class MyMIPushMessageProcessor {
         }
 
         if (shouldSendBroadcast(paramXMPushService, targetPackage, buildContainer, metaInfo)) {
-//            if (ConfigCenter.getInstance().enableWakeupTarget) {
-            paramXMPushService.sendBroadcast(paramIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.packageName));
-//            }
+
+            Intent localIntent = new Intent(PushConstants.MIPUSH_ACTION_MESSAGE_ARRIVED);
+            localIntent.putExtra(PushConstants.MIPUSH_EXTRA_PAYLOAD, paramArrayOfByte);
+            localIntent.putExtra(MIPushNotificationHelper.FROM_NOTIFICATION, notified);
+            localIntent.setPackage(buildContainer.packageName);
+
+            paramXMPushService.sendBroadcast(localIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.packageName));
+
         }
 
     }

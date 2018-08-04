@@ -13,12 +13,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 
+import com.xiaomi.xmsf.utils.ColorUtil;
+
 import java.util.ArrayList;
 
 import top.trumeet.common.cache.ApplicationNameCache;
 import top.trumeet.common.utils.NotificationUtils;
 
-import static com.xiaomi.push.service.MyMIPushNotificationHelper.createColorSubtext;
 import static top.trumeet.common.utils.NotificationUtils.getChannelIdByPkg;
 import static top.trumeet.common.utils.NotificationUtils.getGroupIdByPkg;
 
@@ -125,7 +126,7 @@ public class NotificationController {
 
             int color = notifyDefault.color;
 
-            CharSequence subText = createColorSubtext(appName, color);
+            CharSequence subText = ColorUtil.createColorSubtext(appName, color);
             if (subText != null) {
                 extras.putCharSequence(NotificationCompat.EXTRA_SUB_TEXT, subText);
             }

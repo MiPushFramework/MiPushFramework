@@ -2,6 +2,7 @@ package com.xiaomi.push.service;
 
 import android.content.Context;
 import android.content.Intent;
+import java.lang.reflect.Field;
 
 import com.xiaomi.slim.Blob;
 import com.xiaomi.smack.packet.CommonPacketExtension;
@@ -12,10 +13,9 @@ import com.xiaomi.xmpush.thrift.ActionType;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
 import com.xiaomi.xmsf.push.type.TypeFactory;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 import me.pqpo.librarylog4a.Log4a;
+
 import top.trumeet.common.BuildConfig;
 import top.trumeet.common.db.EventDb;
 import top.trumeet.common.db.RegisteredApplicationDb;
@@ -53,7 +53,7 @@ import top.trumeet.common.register.RegisteredApplication;
 public class MyClientEventDispatcher extends ClientEventDispatcher {
     private static final String TAG = "MyClientEventDispatcher";
 
-    public MyClientEventDispatcher() {
+    MyClientEventDispatcher() {
         try {
             // Patch mPushEventProcessor
             Field mPushEventProcessorField = ClientEventDispatcher.class

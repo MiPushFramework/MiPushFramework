@@ -6,7 +6,6 @@ import android.content.Intent;
 import com.xiaomi.mipush.sdk.MiPushCommandMessage;
 import com.xiaomi.mipush.sdk.MiPushMessage;
 import com.xiaomi.mipush.sdk.PushMessageReceiver;
-import com.xiaomi.xmsf.push.service.MyLog;
 import com.xiaomi.xmsf.push.service.XMAccountManager;
 
 import me.pqpo.librarylog4a.Log4a;
@@ -24,7 +23,7 @@ public class MiuiPushMessageReceiver extends PushMessageReceiver {
             }
             return;
         }
-        MyLog.m17e(miPushCommandMessage.toString());
+        Log4a.e(TAG, miPushCommandMessage.toString());
     }
 
     public void onReceiveMessage(Context context, MiPushMessage miPushMessage) {

@@ -2,8 +2,6 @@ package top.trumeet.mipushframework;
 
 import android.animation.Animator;
 import android.app.Activity;
-import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -19,20 +17,16 @@ import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.widget.Toast;
 
-import com.tbruyelle.rxpermissions2.RxPermissions;
-
-import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
-import rx_activity_result2.RxActivityResult;
 import top.trumeet.common.Constants;
 import top.trumeet.common.push.PushController;
 import top.trumeet.common.utils.Utils;
 import top.trumeet.common.utils.rom.RomUtils;
 import top.trumeet.common.widget.LinkAlertDialog;
 import top.trumeet.mipush.R;
+import top.trumeet.mipushframework.control.CheckPermissionsUtils;
 import top.trumeet.mipushframework.control.ConnectFailUtils;
 import top.trumeet.mipushframework.control.OnConnectStatusChangedListener;
-import top.trumeet.mipushframework.models.ActivityResultAndPermissionResult;
 
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_LOW_VERSION;
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_MIUI;
@@ -46,6 +40,8 @@ import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener
  * @author Trumeet
  */
 public abstract class MainActivity extends AppCompatActivity {
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     private PushController mController;
     private View mConnectProgress;
     private ViewPropertyAnimator mProgressFadeOutAnimate;
@@ -71,38 +67,34 @@ public abstract class MainActivity extends AppCompatActivity {
             showConnectFail(FAIL_REASON_NOT_INSTALLED);
             return;
         }
-        composite.add(Observable.zip(RxActivityResult.on(this)
-                        .startIntent(new Intent()
-                                .setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
-                                        Constants.REMOVE_DOZE_COMPONENT_NAME)))
-                , new RxPermissions(this)
-                        .requestEachCombined(Constants.permissions.WRITE_SETTINGS),
-                ActivityResultAndPermissionResult::new)
-        .subscribe(result -> {
-            if (result.permissionResult.granted &&
-                    result.activityResult.resultCode() == Activity.RESULT_OK) {
-                connect();
-            } else {
-                if (!result.permissionResult.granted) {
-                    Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission,
-                            result.permissionResult.name), Toast.LENGTH_LONG)
-                            .show();
-                    if (!result.permissionResult.shouldShowRequestPermissionRationale) {
-                        Uri uri = Uri.fromParts("package", getPackageName(), null);
-                        startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                                .setData(uri)
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        composite.add(CheckPermissionsUtils.checkPermissionsAndStartAsync(this,
+                (result) -> {
+                    if (result.permissionResult.granted &&
+                            result.activityResult.resultCode() == Activity.RESULT_OK) {
+                        connect();
                     } else {
-                        checkAndConnect();
+                        if (!result.permissionResult.granted) {
+                            Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission,
+                                    result.permissionResult.name), Toast.LENGTH_LONG)
+                                    .show();
+                            if (!result.permissionResult.shouldShowRequestPermissionRationale) {
+                                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                                startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                        .setData(uri)
+                                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                            } else {
+                                checkAndConnect();
+                            }
+                        }
+                        if (result.activityResult.resultCode() != Activity.RESULT_OK) {
+                            Toast.makeText(this, getString(R.string.request_battery_whitelist), Toast.LENGTH_LONG)
+                                    .show();
+                            checkAndConnect();
+                        }
                     }
-                }
-                if (result.activityResult.resultCode() != Activity.RESULT_OK) {
-                    Toast.makeText(this, getString(R.string.request_battery_whitelist), Toast.LENGTH_LONG)
-                            .show();
-                    checkAndConnect();
-                }
-            }
-        }));
+                }, (throwable -> {
+                    Log.e(TAG, "check permissions", throwable);
+                })));
     }
 
     private void connect() {
