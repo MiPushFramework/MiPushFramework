@@ -4,8 +4,10 @@ import android.util.Log;
 
 import com.xiaomi.xposed.util.CommonUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,6 +28,7 @@ public class MiPushEnhanceHook implements IXposedHookLoadPackage {
     private static final String STORAGE_PATH = "/sdcard/";
 
     private static Set<String> blackList = new HashSet<>();
+    private static List<String> blackList_in = new ArrayList<>();
     private static Map<String, String> fakeMap = new HashMap<>();
 
     private static String BRAND = "Xiaomi";
@@ -36,7 +39,7 @@ public class MiPushEnhanceHook implements IXposedHookLoadPackage {
         blackList.add("com.xiaomi.xmsf");
         blackList.add("com.tencent.mm");
         blackList.add("top.trumeet.mipush");
-        blackList.add("com.google.android.GoogleCamera");
+        blackList_in.add("com.google.android");
 
         fakeMap.put("ro.miui.ui.version.name", "V9");
         fakeMap.put("ro.miui.ui.version.code", "7");
@@ -61,6 +64,12 @@ public class MiPushEnhanceHook implements IXposedHookLoadPackage {
 
             if (inBlackList(lpparam.appInfo.packageName)) {
                 return;
+            }
+
+            for (String s : blackList_in) {
+                if (lpparam.appInfo.packageName.startsWith(s)) {
+                    return;
+                }
             }
 
 
