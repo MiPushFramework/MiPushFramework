@@ -60,7 +60,7 @@ ext {
     targetSdkVersion = 27
     buildToolsVersion = "27.0.3"
     versionCode = currentVersionCode
-    pushVersionCode = 5
+    pushVersionCode = 6
     snapshot = false
     versionBase = "${baseVersionName}.${releaseTime()}.${gitCommitId}"
     versionName = snapshot ? versionBase + "-SNAPSHOT" : versionBase
