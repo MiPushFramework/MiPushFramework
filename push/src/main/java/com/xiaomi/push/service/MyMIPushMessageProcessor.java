@@ -202,34 +202,14 @@ public class MyMIPushMessageProcessor {
             } else {
 
                 MyMIPushNotificationHelper.notifyPushMessage(paramXMPushService, buildContainer, paramArrayOfByte, var2);
-                notified = true;
-
-//                if (metaInfo.extra == null) {
-//                    metaInfo.extra = new HashMap<>();
-//                    metaInfo.extra.put(EXTRA_PARAM_NOTIFY_FOREGROUND, "0");
-//                } else {
-//                    if (!metaInfo.extra.containsKey(EXTRA_PARAM_NOTIFY_FOREGROUND)) {
-//                        metaInfo.extra.put(EXTRA_PARAM_NOTIFY_FOREGROUND, "0");
-//                    }
-//                }
-//
-//                try {
-//                    paramArrayOfByte =  XmPushThriftSerializeUtils.convertThriftObjectToBytes(buildContainer);
-//                } catch (Throwable var3) {
-//                    MyLog.e(var3);
-//                }
 
                 //send broadcast
                 if (!MIPushNotificationHelper.isBusinessMessage(buildContainer)) {
-
-                    Intent localIntent = new Intent(PushConstants.MIPUSH_ACTION_MESSAGE_ARRIVED);
-                    localIntent.putExtra(PushConstants.MIPUSH_EXTRA_PAYLOAD, paramArrayOfByte);
-                    localIntent.putExtra(MIPushNotificationHelper.FROM_NOTIFICATION, notified);
-                    localIntent.setPackage(buildContainer.packageName);
+                    paramIntent.putExtra(MIPushNotificationHelper.FROM_NOTIFICATION, true);
                     try {
-                        List<ResolveInfo> localList = paramXMPushService.getPackageManager().queryBroadcastReceivers(localIntent, 0);
+                        List<ResolveInfo> localList = paramXMPushService.getPackageManager().queryBroadcastReceivers(paramIntent, 0);
                         if ((localList != null) && (!localList.isEmpty())) {
-                            paramXMPushService.sendBroadcast(localIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.getPackageName()));
+                            paramXMPushService.sendBroadcast(paramIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.getPackageName()));
                         }
                     } catch (Exception ignore) {
                     }
@@ -244,16 +224,9 @@ public class MyMIPushMessageProcessor {
                 sendAckMessage(paramXMPushService, buildContainer);
 
             }
-        }
+        } else if (shouldSendBroadcast(paramXMPushService, targetPackage, buildContainer, metaInfo)) {
 
-        if (shouldSendBroadcast(paramXMPushService, targetPackage, buildContainer, metaInfo)) {
-
-            Intent localIntent = new Intent(PushConstants.MIPUSH_ACTION_MESSAGE_ARRIVED);
-            localIntent.putExtra(PushConstants.MIPUSH_EXTRA_PAYLOAD, paramArrayOfByte);
-            localIntent.putExtra(MIPushNotificationHelper.FROM_NOTIFICATION, notified);
-            localIntent.setPackage(buildContainer.packageName);
-
-            paramXMPushService.sendBroadcast(localIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.packageName));
+            paramXMPushService.sendBroadcast(paramIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.packageName));
 
         }
 
