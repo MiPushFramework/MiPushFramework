@@ -93,6 +93,7 @@
 ## 已知问题
 
 * 努比亚ROM应用（第三方使用 MiPush 的应用）可能不会自动禁用其XMPushService并启动服务，请尝试将框架设为系统应用
+* 锤子ROM下，push可以正确收到通知，但是通知栏没有提示
 * 开发者学生党，开学了更新可能不太及时，请谅解
 * 一些通知 Feature 可能无法使用（如通知都会显示为推送框架发出，而不是目标应用 `MIPushNotificationHelper#setTargetPackage`）
 

@@ -12,18 +12,15 @@ import com.xiaomi.channel.commonutils.logger.MyLog;
 import com.xiaomi.xmpush.thrift.ActionType;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
-import com.xiaomi.xmpush.thrift.XmPushThriftSerializeUtils;
 import com.xiaomi.xmsf.BuildConfig;
 import com.xiaomi.xmsf.R;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.common.cache.ApplicationNameCache;
 
-import static com.xiaomi.push.service.MIPushNotificationHelper.EXTRA_PARAM_NOTIFY_FOREGROUND;
 import static com.xiaomi.push.service.MiPushMsgAck.geoMessageIsValidated;
 import static com.xiaomi.push.service.MiPushMsgAck.processGeoMessage;
 import static com.xiaomi.push.service.MiPushMsgAck.sendAckMessage;
@@ -36,7 +33,9 @@ import static com.xiaomi.push.service.PushServiceConstants.PREF_KEY_REGISTERED_P
 
 
 /**
- * Created by zts1993 on 2018/2/8.
+ *
+ * @author zts1993
+ * @date 2018/2/8
  */
 
 public class MyMIPushMessageProcessor {
@@ -46,7 +45,6 @@ public class MyMIPushMessageProcessor {
         try {
             String targetPackage = MIPushNotificationHelper.getTargetPackage(buildContainer);
             Long current = System.currentTimeMillis();
-//            Intent var6 = MIPushEventProcessor.buildIntent(var1, current);
             PushMetaInfo localPushMetaInfo = buildContainer.getMetaInfo();
             if (localPushMetaInfo != null) {
                 localPushMetaInfo.putToExtra("mrt", Long.toString(current));
@@ -67,7 +65,7 @@ public class MyMIPushMessageProcessor {
 
                 Log4a.w(TAG, "Drop a message for push closed, msgid=" + var19);
                 sendAppAbsentAck(paramXMPushService, buildContainer, buildContainer.packageName);
-            } else if (ActionType.SendMessage == buildContainer.getAction() && !TextUtils.equals(paramXMPushService.getPackageName(), "com.xiaomi.xmsf") && !TextUtils.equals(paramXMPushService.getPackageName(), buildContainer.packageName)) {
+            } else if (ActionType.SendMessage == buildContainer.getAction() && !TextUtils.equals(paramXMPushService.getPackageName(), PushConstants.PUSH_SERVICE_PACKAGE_NAME) && !TextUtils.equals(paramXMPushService.getPackageName(), buildContainer.packageName)) {
                 Log4a.w(TAG, "Receive a message with wrong package name, expect " + paramXMPushService.getPackageName() + ", received " + buildContainer.packageName);
                 sendErrorAck(paramXMPushService, buildContainer, "unmatched_package", "package should be " + paramXMPushService.getPackageName() + ", but got " + buildContainer.packageName);
             } else {
@@ -205,11 +203,17 @@ public class MyMIPushMessageProcessor {
 
                 //send broadcast
                 if (!MIPushNotificationHelper.isBusinessMessage(buildContainer)) {
-                    paramIntent.putExtra(MIPushNotificationHelper.FROM_NOTIFICATION, true);
+
+
+                    Intent localIntent = new Intent(PushConstants.MIPUSH_ACTION_MESSAGE_ARRIVED);
+                    localIntent.putExtra(PushConstants.MIPUSH_EXTRA_PAYLOAD, paramArrayOfByte);
+                    localIntent.putExtra(MIPushNotificationHelper.FROM_NOTIFICATION, true);
+                    localIntent.setPackage(buildContainer.packageName);
+
                     try {
-                        List<ResolveInfo> localList = paramXMPushService.getPackageManager().queryBroadcastReceivers(paramIntent, 0);
+                        List<ResolveInfo> localList = paramXMPushService.getPackageManager().queryBroadcastReceivers(localIntent, 0);
                         if ((localList != null) && (!localList.isEmpty())) {
-                            paramXMPushService.sendBroadcast(paramIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.getPackageName()));
+                            paramXMPushService.sendBroadcast(localIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.getPackageName()));
                         }
                     } catch (Exception ignore) {
                     }
