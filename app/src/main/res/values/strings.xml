@@ -198,7 +198,6 @@
 
     <string name="help_article_can_not_receive_push">无法收到推送</string>
     <string name="help_article_register_error">注册异常</string>
-    <string name="register_error_detected">检测到注册异常，请按照帮助文章自行排查，如果属于误报，请忽略</string>
     <string name="help_article_no_register">注册列表为空</string>
 
     <string name="connect_fail_test_se"><![CDATA[
