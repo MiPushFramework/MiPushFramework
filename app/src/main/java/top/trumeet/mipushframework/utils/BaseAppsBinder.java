@@ -1,16 +1,12 @@
 package top.trumeet.mipushframework.utils;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.LruCache;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -22,7 +18,6 @@ import android.widget.TextView;
 import me.drakeet.multitype.ItemViewBinder;
 import top.trumeet.common.cache.ApplicationNameCache;
 import top.trumeet.common.cache.IconCache;
-import top.trumeet.mipush.BuildConfig;
 import top.trumeet.mipush.R;
 
 /**
@@ -34,7 +29,7 @@ import top.trumeet.mipush.R;
 
 public abstract class BaseAppsBinder<T> extends ItemViewBinder<T, BaseAppsBinder.ViewHolder> {
 
-    public static boolean debugIcon = BuildConfig.DEBUG;
+    private static final boolean DEBUG_ICON = false;
 
     public BaseAppsBinder() {
         super();
@@ -93,7 +88,7 @@ public abstract class BaseAppsBinder<T> extends ItemViewBinder<T, BaseAppsBinder
             String pkg = params[0];
             Bitmap icon = null;
             if (!TextUtils.isEmpty(pkg)) {
-                if (debugIcon) {
+                if (DEBUG_ICON) {
                     icon = IconCache.getInstance().getWhiteIconBitmap(context, pkg);
                 } else {
                     icon = IconCache.getInstance().getRawIconBitmap(context, pkg);
@@ -110,7 +105,7 @@ public abstract class BaseAppsBinder<T> extends ItemViewBinder<T, BaseAppsBinder
         protected void onPostExecute(Bitmap bitmap) {
             if (imageView != null) {
                 imageView.setImageBitmap(bitmap);
-                if (debugIcon) {
+                if (DEBUG_ICON) {
                     imageView.setBackgroundColor(Color.BLACK);
                 }
             }
