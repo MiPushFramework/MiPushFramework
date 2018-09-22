@@ -76,7 +76,8 @@ public class RegisteredApplicationDb {
                         , RegisteredApplication.Type.ASK,
                         true /* Allow push */,
                         true /* Allow receive result */,
-                        true /* Allow receive command */);
+                        true /* Allow receive command */,
+                        0 /* registeredType Don't store to DB */);
         insert(registeredApplication, context);
 
         // Very bad

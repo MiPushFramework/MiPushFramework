@@ -45,7 +45,12 @@ public class RegisteredApplication implements Parcelable {
 
     private boolean allowReceiveRegisterResult;
 
-    private boolean registered;
+    /**
+     * 0: Not registered
+     * 1: Registered (both RegisteredApplication & Event)
+     * 2: Unregistered
+     */
+    private int registeredType;
 
     // Init(register) result is a kind of command, if disabled, register result WILL STILL BE RECEIVED
     private boolean allowReceiveCommand;
@@ -116,7 +121,7 @@ public class RegisteredApplication implements Parcelable {
 
     public RegisteredApplication(Long id, String packageName, int type,
                                  boolean allowReceivePush, boolean allowReceiveRegisterResult,
-                                 boolean allowReceiveCommand) {
+                                 boolean allowReceiveCommand, int registeredType) {
         this.id = id;
         this.packageName = packageName;
         this.type = type;
@@ -169,12 +174,12 @@ public class RegisteredApplication implements Parcelable {
         this.allowReceiveRegisterResult = allowReceiveRegisterResult;
     }
 
-    public boolean isRegistered() {
-        return registered;
+    public int getRegisteredType() {
+        return registeredType;
     }
 
-    public void setRegistered(boolean registered) {
-        this.registered = registered;
+    public void setRegisteredType(int registeredType) {
+        this.registeredType = registeredType;
     }
 
     @android.support.annotation.NonNull
@@ -219,7 +224,8 @@ public class RegisteredApplication implements Parcelable {
                 cursor.getInt(cursor.getColumnIndex(KEY_ALLOW_RECEIVE_PUSH)) > 0 /* allow receive push */,
                 cursor.getInt(cursor.getColumnIndex(KEY_ALLOW_RECEIVE_REGISTER_RESULT)) > 0
                 /* allow receive register result */,
-                cursor.getInt(cursor.getColumnIndex(KEY_ALLOW_RECEIVE_COMMAND)) > 0 /* allow receive command */);
+                cursor.getInt(cursor.getColumnIndex(KEY_ALLOW_RECEIVE_COMMAND)) > 0 /* allow receive command */,
+                0 /* RegisteredType, Do not save to DB */);
     }
 
     /**
@@ -245,6 +251,7 @@ public class RegisteredApplication implements Parcelable {
                 ", type=" + type +
                 ", allowReceivePush=" + allowReceivePush +
                 ", allowReceiveRegisterResult=" + allowReceiveRegisterResult +
+                ", registeredType=" + registeredType +
                 '}';
     }
 
