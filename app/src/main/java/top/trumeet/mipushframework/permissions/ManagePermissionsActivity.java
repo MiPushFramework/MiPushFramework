@@ -27,6 +27,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import moe.shizuku.preference.Preference;
 import moe.shizuku.preference.PreferenceCategory;
 import moe.shizuku.preference.PreferenceFragment;
+import moe.shizuku.preference.PreferenceGroup;
 import moe.shizuku.preference.PreferenceScreen;
 import moe.shizuku.preference.SimpleMenuPreference;
 import moe.shizuku.preference.SwitchPreferenceCompat;
@@ -155,6 +156,9 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                 application = new RegisteredApplication();
                 application.setPackageName(pkg);
                 application.setRegisteredType(0);
+            } else if (application != null) {
+                // TODO: Add unregistered application detection
+                application.setRegisteredType(1);
             }
             return application;
         }
@@ -314,6 +318,14 @@ public class ManagePermissionsActivity extends AppCompatActivity {
             screen.addPreference(preferenceRegisterMode);
             screen.addPreference(viewRecentActivityPreference);
 
+            addItem(mApplicationItem.isNotificationOnRegister(),
+                    (preference, newValue) -> {
+                        mApplicationItem.setNotificationOnRegister(((Boolean)newValue));
+                        return true;
+                    },
+                    getString(R.string.permission_notification_on_register),
+                    screen);
+
             PreferenceCategory category = new PreferenceCategory(getActivity(), null, moe.shizuku.preference.R.attr.preferenceCategoryStyle,
                     R.style.Preference_Category_Material);
             category.setTitle(R.string.permissions);
@@ -369,7 +381,7 @@ public class ManagePermissionsActivity extends AppCompatActivity {
         }
 
         private void addItem (boolean value, Preference.OnPreferenceChangeListener listener
-                , CharSequence title, PreferenceCategory parent) {
+                , CharSequence title, PreferenceGroup parent) {
             SwitchPreferenceCompat preference = new SwitchPreferenceCompat(getActivity(),
                     null, moe.shizuku.preference.R.attr.switchPreferenceStyle,
                     R.style.Preference_SwitchPreferenceCompat);

@@ -104,6 +104,7 @@
     <string name="permission_allow_receive">接收通知栏消息</string>
     <string name="permission_allow_receive_command">接收命令</string>
     <string name="permission_allow_receive_register_result">回掉注册结果（暂时无效）</string>
+    <string name="permission_notification_on_register">注册时显示通知</string>
 
     <string name="permission_register_type">注册方式</string>
     <string name="register_type_allow">允许，自动注册</string>

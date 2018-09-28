@@ -37,5 +37,7 @@
 您的 ROM（%1$s）可能会阻止推送正常运行。请遵照您的 ROM 的设置方式将 Push 加入白名单，如 MIUI 等 ROM 可以选择 <b>近期任务</b>，然后将本界面 <b>锁定</b>。
         ]]>
     </string>
-    <string name="see_pass_though_msg">穿透消息，请打开APP查看</string>
+    <string name="see_pass_though_msg">穿透消息，请打开应用查看</string>
+
+    <string name="notification_register">%1$s 已被%2$s注册小米推送</string>
 </resources>
