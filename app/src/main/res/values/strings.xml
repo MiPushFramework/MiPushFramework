@@ -219,12 +219,19 @@
 
     <string name="status_app_not_registered">使用小米推送，但尚未注册</string>
     <string name="footer_app_ignored_not_registered">已忽略 %1$s 个尚未使用小米推送的应用</string>
-    <string name="status_app_not_registered_detail"><![CDATA[
+    <string name="status_app_not_registered_detail_without_fake_suggest"><![CDATA[
+是否注册由应用自行决定，一般启动时会自动注册。部分应用只会在小米设备上注册。欢迎参阅 <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BC%8F%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">应用程式注册问题解决方案</a></b> 和 <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E5%BA%94%E7%94%A8%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98">[帮助] 应用注册问题</a></b>。
+    ]]></string>
+    <string name="status_app_not_registered_detail_with_fake_suggest"><![CDATA[
 是否注册由应用自行决定，一般启动时会自动注册。部分应用只会在小米设备上注册，使用 <b><a href="https://github.com/Magisk-Modules-Repo/MiPushFake">Magisk 全局伪装模块</a></b> 和 <b><a href="https://github.com/TimothyZhang023/Riru-MiPushFake">Magisk 单应用伪装</a></b> 可以加大注册机率。同时，欢迎参阅 <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BC%8F%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">应用程式注册问题解决方案</a></b> 和 <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E5%BA%94%E7%94%A8%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98">[帮助] 应用注册问题</a></b>。
     ]]></string>
     <string name="status_app_not_registered_title"><![CDATA[
 <b>尚未注册</b>
     ]]></string>
+
+    <string name="fake_enable_title">伪装为小米设备</string>
+    <string name="fake_enable_detail">通过 Xposed 伪装模块或 Magisk 单应用伪装模块，让该应用误认为是小米设备，以增强注册机率（修改需要 ROOT 权限）</string>
+    <string name="fake_enable_detail_not_suggested">不建议开启，可能会影响应用正常功能</string>
 
     <string name="settings_summary_push_icon">开启图标可以解决部分应用和系统找不到Push应用问题 (例如小米手环推送，一加应用锁管理)，关闭请切换两次</string>
     <string name="settings_push_icon">开启Push服务图标</string>

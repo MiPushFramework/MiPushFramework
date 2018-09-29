@@ -116,7 +116,8 @@ public final class Constants {
         public static final String GET_VERSION = "top.trumeet.mipush.permissions.GET_VERSION";
     }
 
-    public static final String AUTHORITIES_PUSH_API = "moe.yuuta.mipush.push.api.PushServiceAPI";
+    public static final String FAKE_CONFIGURATION_PATH = "/data/riru/modules/mipush_fake/";
+    public static final String FAKE_CONFIGURATION_NAME_TEMPLATE = FAKE_CONFIGURATION_PATH + "%1$s.%2$s";
 
     public static final String ENABLE_LAUNCHER = "enableLauncher";
 }

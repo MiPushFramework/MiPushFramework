@@ -2,20 +2,18 @@ package com.xiaomi.xposed.hook;
 
 import android.util.Log;
 
-import com.xiaomi.xposed.util.CommonUtil;
-
-import java.util.ArrayList;
+import java.io.File;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import top.trumeet.common.override.UserHandleOverride;
+
+import static top.trumeet.common.Constants.FAKE_CONFIGURATION_NAME_TEMPLATE;
 
 /**
  * XiaoMi fake build hook for xposed
@@ -27,58 +25,42 @@ public class MiPushEnhanceHook implements IXposedHookLoadPackage {
     private static final String TAG = "MiPushEnhanceHook";
     private static final String STORAGE_PATH = "/sdcard/";
 
-    private static Set<String> blackList = new HashSet<>();
-    private static List<String> blackList_in = new ArrayList<>();
-    private static Map<String, String> fakeMap = new HashMap<>();
+    private static final Map<String, String> FAKE_VARS = new HashMap<>();
 
-    private static String BRAND = "Xiaomi";
+    private static final String BRAND = "Xiaomi";
 
     static {
-        blackList.add("android");
-        blackList.add("de.robv.android.xposed.installer");
-        blackList.add("com.xiaomi.xmsf");
-        blackList.add("com.tencent.mm");
-        blackList.add("top.trumeet.mipush");
-        blackList_in.add("com.google.android");
+        FAKE_VARS.put("ro.miui.ui.version.name", "V9");
+        FAKE_VARS.put("ro.miui.ui.version.code", "7");
+        FAKE_VARS.put("ro.miui.version.code_time", "1527550858");
+        FAKE_VARS.put("ro.miui.internal.storage", STORAGE_PATH);
+        FAKE_VARS.put("ro.product.manufacturer", BRAND);
+        FAKE_VARS.put("ro.product.brand", BRAND);
+        FAKE_VARS.put("ro.product.name", BRAND);
 
-        fakeMap.put("ro.miui.ui.version.name", "V9");
-        fakeMap.put("ro.miui.ui.version.code", "7");
-        fakeMap.put("ro.miui.version.code_time", "1527550858");
-        fakeMap.put("ro.miui.internal.storage", STORAGE_PATH);
-        fakeMap.put("ro.product.manufacturer", BRAND);
-        fakeMap.put("ro.product.brand", BRAND);
-        fakeMap.put("ro.product.name", BRAND);
-
-    }
-
-    private boolean inBlackList(String pkgName) {
-        return blackList.contains(pkgName.toLowerCase());
     }
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         try {
-            if (!CommonUtil.isUserApplication(lpparam.appInfo)) {
-                return;
-            }
-
-            if (inBlackList(lpparam.appInfo.packageName)) {
-                return;
-            }
-
-            for (String s : blackList_in) {
-                if (lpparam.appInfo.packageName.startsWith(s)) {
+            try {
+                // TODO: Remove hidden api usage
+                if (!new File(String.format(FAKE_CONFIGURATION_NAME_TEMPLATE,
+                        UserHandleOverride.getUserHandleForUid(lpparam.appInfo.uid).hashCode(),
+                        lpparam.packageName)).exists())
+                    // Skipped according user's settings
                     return;
-                }
+            } catch (Throwable e) {
+                // TODO: Not tested
+                XposedBridge.log(TAG + ": get config: " + Log.getStackTraceString(e));
             }
-
 
             XposedBridge.hookAllMethods(XposedHelpers.findClass("android.os.SystemProperties", lpparam.classLoader),
                     "get", new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    if (fakeMap.containsKey(param.args[0].toString())) {
-                        param.setResult(fakeMap.get(param.args[0].toString()));
+                    if (FAKE_VARS.containsKey(param.args[0].toString())) {
+                        param.setResult(FAKE_VARS.get(param.args[0].toString()));
                     }
                 }
             });
@@ -89,10 +71,7 @@ public class MiPushEnhanceHook implements IXposedHookLoadPackage {
 
         } catch (Throwable throwable) {
             Log.e(TAG, "hook meet exception : " + throwable.getLocalizedMessage(), throwable);
-            XposedBridge.log(throwable);
+            XposedBridge.log(TAG + ": hook: " + throwable);
         }
-
     }
-
-
 }

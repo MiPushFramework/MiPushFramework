@@ -176,6 +176,11 @@ public final class ShellUtils {
                 return false;
             }
         }
+
+        @Override
+        public String toString () {
+            return result + ":" + successMsg + "," + errorMsg;
+        }
     }
 
     /**

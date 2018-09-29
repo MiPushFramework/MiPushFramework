@@ -23,6 +23,11 @@ import android.widget.Toast;
 
 import com.android.settings.widget.EntityHeaderController;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import io.reactivex.disposables.CompositeDisposable;
 import moe.shizuku.preference.Preference;
 import moe.shizuku.preference.PreferenceCategory;
@@ -33,16 +38,19 @@ import moe.shizuku.preference.SimpleMenuPreference;
 import moe.shizuku.preference.SwitchPreferenceCompat;
 import top.trumeet.common.Constants;
 import top.trumeet.common.db.RegisteredApplicationDb;
+import top.trumeet.common.override.UserHandleOverride;
 import top.trumeet.common.register.RegisteredApplication;
 import top.trumeet.common.utils.Utils;
 import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.control.CheckPermissionsUtils;
 import top.trumeet.mipushframework.event.RecentActivityActivity;
+import top.trumeet.mipushframework.utils.ShellUtils;
 import top.trumeet.mipushframework.widgets.InfoPreference;
 
 import static android.os.Build.VERSION_CODES.O;
 import static android.provider.Settings.EXTRA_APP_PACKAGE;
 import static android.provider.Settings.EXTRA_CHANNEL_ID;
+import static top.trumeet.common.Constants.FAKE_CONFIGURATION_PATH;
 import static top.trumeet.common.utils.NotificationUtils.getChannelIdByPkg;
 
 /**
@@ -190,6 +198,9 @@ public class ManagePermissionsActivity extends AppCompatActivity {
         private RegisteredApplication mApplicationItem;
         private SaveTask mSaveTask;
         private MenuItem menuOk;
+        // Will be used in SaveTask, null = not changed
+        // Isn't a good idea
+        private Boolean changeFakeSettings = null;
 
         /**
          * Not using {@link android.os.Parcelable}, too bad
@@ -213,7 +224,6 @@ public class ManagePermissionsActivity extends AppCompatActivity {
             DrawableCompat.setTint(iconOk, Utils.getColorAttr(getContext(), R.attr.colorAccent));
             menuOk.setIcon(iconOk);
             menuOk.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-            if (mApplicationItem != null) menuOk.setVisible(mApplicationItem.getRegisteredType() != 0);
         }
 
         @Override
@@ -238,6 +248,16 @@ public class ManagePermissionsActivity extends AppCompatActivity {
             super.onDetach();
         }
 
+        private boolean suggestEnableFake (String pkg) {
+            List<String> pkgsEqual = Arrays.asList(getResources().getStringArray(R.array.fake_blacklist_equals));
+            if (pkgsEqual.contains(pkg)) return false;
+            List<String> pkgsContains = Arrays.asList(getResources().getStringArray(R.array.fake_blacklist_contains));
+            for (String p : pkgsContains)
+                if (pkg.contains(p)) return false;
+            if (!Utils.isUserApplication(pkg)) return false;
+            return true;
+        }
+
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             PreferenceScreen screen = getPreferenceManager()
@@ -255,18 +275,21 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                     .done((AppCompatActivity)getActivity(), getContext());
             screen.addPreference(appPreferenceOreo);
 
+            boolean suggestFake = suggestEnableFake(mApplicationItem.getPackageName());
+
             if (mApplicationItem.getRegisteredType() == 0) {
                 InfoPreference preferenceStatus = new InfoPreference(getActivity(), null, moe.shizuku.preference.R.attr.preferenceStyle,
                         R.style.Preference_Material);
                 preferenceStatus.setTitle(Html.fromHtml(getString(R.string.status_app_not_registered_title)));
-                preferenceStatus.setSummary(Html.fromHtml(getString(R.string.status_app_not_registered_detail)));
+                preferenceStatus.setSummary(Html.fromHtml(getString(
+                        suggestFake ? R.string.status_app_not_registered_detail_with_fake_suggest :
+                                R.string.status_app_not_registered_detail_without_fake_suggest
+                )));
                 Drawable iconError = ContextCompat.getDrawable(getActivity(), R.drawable.ic_error_outline_black_24dp);
                 DrawableCompat.setTint(iconError, Color.parseColor("#D50000"));
                 preferenceStatus.setIcon(iconError);
                 screen.addPreference(preferenceStatus);
             }
-
-            if (menuOk != null) menuOk.setVisible(mApplicationItem.getRegisteredType() != 0);
 
             if (Build.VERSION.SDK_INT >= O) {
                 Preference manageNotificationPreference = new Preference(getActivity());
@@ -317,6 +340,18 @@ public class ManagePermissionsActivity extends AppCompatActivity {
             }
             screen.addPreference(preferenceRegisterMode);
             screen.addPreference(viewRecentActivityPreference);
+
+            // TODO: Switch HEAVY works to background thread
+            addItem(new File(String.format(Constants.FAKE_CONFIGURATION_NAME_TEMPLATE,
+                    UserHandleOverride.getUserHandleForUid(mApplicationItem.getUid(getActivity())).hashCode(),
+                    mApplicationItem.getPackageName())).exists(),
+                    (preference, newValue) -> {
+                        changeFakeSettings = (boolean) newValue;
+                        return true;
+                    },
+                    getString(R.string.fake_enable_title),
+                    getString(suggestFake ? R.string.fake_enable_detail : R.string.fake_enable_detail_not_suggested),
+                    screen);
 
             addItem(mApplicationItem.isNotificationOnRegister(),
                     (preference, newValue) -> {
@@ -380,25 +415,59 @@ public class ManagePermissionsActivity extends AppCompatActivity {
             [index]);
         }
 
-        private void addItem (boolean value, Preference.OnPreferenceChangeListener listener
-                , CharSequence title, PreferenceGroup parent) {
+        private void addItem (boolean value, Preference.OnPreferenceChangeListener listener,
+                              CharSequence title, CharSequence summary, PreferenceGroup parent) {
             SwitchPreferenceCompat preference = new SwitchPreferenceCompat(getActivity(),
                     null, moe.shizuku.preference.R.attr.switchPreferenceStyle,
                     R.style.Preference_SwitchPreferenceCompat);
             preference.setOnPreferenceChangeListener(listener);
             preference.setTitle(title);
+            preference.setSummary(summary);
             preference.setChecked(value);
             parent.addPreference(preference);
+        }
+
+        /**
+         * @deprecated Use {@link #addItem(boolean, Preference.OnPreferenceChangeListener, CharSequence, CharSequence, PreferenceGroup)} instead.
+         */
+        @Deprecated
+        private void addItem (boolean value, Preference.OnPreferenceChangeListener listener
+                , CharSequence title, PreferenceGroup parent) {
+            addItem(value, listener, title, null, parent);
         }
 
         private class SaveTask extends AsyncTask<Void, Void, Void> {
 
             @Override
             protected Void doInBackground(Void... voids) {
-                if (mApplicationItem == null || mApplicationItem.getRegisteredType() == 0)
-                    return null;
-                RegisteredApplicationDb.update(mApplicationItem,
-                        getActivity());
+                if (mApplicationItem != null && mApplicationItem.getRegisteredType() != 0) {
+                    RegisteredApplicationDb.update(mApplicationItem,
+                            getActivity());
+                }
+                if (changeFakeSettings != null) {
+                    String path = String.format(Constants.FAKE_CONFIGURATION_NAME_TEMPLATE,
+                            UserHandleOverride.getUserHandleForUid(mApplicationItem.getUid(getActivity())).hashCode(),
+                            mApplicationItem.getPackageName());
+                    Log.d(TAG, "path: " + path);
+                    List<String> commands = new ArrayList<>(3);
+                    if (changeFakeSettings) {
+                        if (new File(FAKE_CONFIGURATION_PATH).isFile()) {
+                            commands.add("rm -rf " + FAKE_CONFIGURATION_PATH);
+                        }
+                        if (!new File(FAKE_CONFIGURATION_PATH).exists()) {
+                            commands.add("mkdir -p " + FAKE_CONFIGURATION_PATH);
+                        }
+                    }
+
+                    if (changeFakeSettings) {
+                        if (!new File(path).exists()) commands.add("touch " + path);
+                    } else {
+                        commands.add("rm " + path);
+                    }
+                    Log.i(TAG, "Final Commands: " + commands.toString());
+                    // About permissions and groups: these commands below with root WILL make the file accessible (not editable) for all apps.
+                    Log.d(TAG, "Exit: " + ShellUtils.execCmd(commands, true, true).toString());
+                }
                 return null;
             }
 
