@@ -2,17 +2,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/settings_deploy">
         <Preference
-            android:summary="@string/settings_fake_build_summary"
-            android:title="@string/settings_fake_build">
-            <intent
-                android:targetClass="top.trumeet.mipushframework.wizard.fake.FakeBuildActivity"
-                android:targetPackage="top.trumeet.mipush">
-                <extra
-                    android:name="top.trumeet.xmsf.EXTRA_FINISH_ON_NEXT"
-                    android:value="true" />
-            </intent>
-        </Preference>
-        <Preference
             android:key="activity_keep_alive"
             android:summary="@string/settings_summary_keep_alive"
             android:title="@string/settings_activity_keep_alive" />
