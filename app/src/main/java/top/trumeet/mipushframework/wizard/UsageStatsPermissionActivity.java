@@ -37,6 +37,8 @@ public class UsageStatsPermissionActivity extends PushControllerWizardActivity i
     @Override
     public void onResume () {
         super.onResume();
+        if (!isConnected())
+            return;
         PushController controller = getController();
         if (controller != null && controller.isConnected() && !isConnecting()) {
             check(controller);

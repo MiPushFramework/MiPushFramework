@@ -42,6 +42,8 @@ public class CheckRunInBackgroundActivity extends PushControllerWizardActivity i
     @Override
     public void onResume() {
         super.onResume();
+        if (!isConnected())
+            return;
         if (!canFix()) {
             nextPage();
             finish();

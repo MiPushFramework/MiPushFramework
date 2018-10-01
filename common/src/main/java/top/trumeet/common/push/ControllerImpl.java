@@ -28,6 +28,11 @@ class ControllerImpl extends PushController {
         return getContext().getContentResolver().call(AUTHORITIES, method, arg, extras);
     }
 
+    @Override
+    public void connect(@Nullable AbstractConnectionStatusListener listener) {
+        if (listener != null) listener.onReady();
+    }
+
     @SuppressLint("MissingPermission")
     @NonNull
     @RestrictTo(RestrictTo.Scope.LIBRARY)
