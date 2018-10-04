@@ -1,7 +1,6 @@
 package top.trumeet.mipushframework;
 
 import android.animation.Animator;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -67,34 +66,34 @@ public abstract class MainActivity extends AppCompatActivity {
             showConnectFail(FAIL_REASON_NOT_INSTALLED);
             return;
         }
-        composite.add(CheckPermissionsUtils.checkPermissionsAndStartAsync(this,
-                (result) -> {
-                    if (result.permissionResult.granted &&
-                            result.activityResult.resultCode() == Activity.RESULT_OK) {
-                        connect();
-                    } else {
-                        if (!result.permissionResult.granted) {
-                            Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission,
-                                    result.permissionResult.name), Toast.LENGTH_LONG)
-                                    .show();
-                            if (!result.permissionResult.shouldShowRequestPermissionRationale) {
-                                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                                startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                                        .setData(uri)
-                                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                            } else {
-                                checkAndConnect();
-                            }
-                        }
-                        if (result.activityResult.resultCode() != Activity.RESULT_OK) {
-                            Toast.makeText(this, getString(R.string.request_battery_whitelist), Toast.LENGTH_LONG)
-                                    .show();
-                            checkAndConnect();
-                        }
-                    }
-                }, (throwable -> {
-                    Log.e(TAG, "check permissions", throwable);
-                })));
+        composite.add(CheckPermissionsUtils.checkAndRun(result -> {
+            switch (result) {
+                case OK:
+                    connect();
+                    break;
+                case PERMISSION_NEEDED:
+                    Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission), Toast.LENGTH_LONG)
+                            .show();
+                    // Restart to request permissions again.
+                    checkAndConnect();
+                    break;
+                case PERMISSION_NEEDED_SHOW_SETTINGS:
+                    Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission), Toast.LENGTH_LONG)
+                            .show();
+                    Uri uri = Uri.fromParts("package", getPackageName(), null);
+                    startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                            .setData(uri)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    break;
+                case REMOVE_DOZE_NEEDED:
+                    Toast.makeText(this, getString(R.string.request_battery_whitelist), Toast.LENGTH_LONG)
+                            .show();
+                    checkAndConnect();
+                    break;
+            }
+        }, throwable -> {
+            Log.e(TAG, "check permissions", throwable);
+        }, this));
     }
 
     private void connect() {

@@ -1,6 +1,5 @@
 package top.trumeet.mipushframework.wizard;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -92,41 +91,36 @@ public abstract class PushControllerWizardActivity extends FragmentActivity {
     }
 
     private void checkPermissionAndRun (@NonNull Runnable action) {
-        composite.add(CheckPermissionsUtils.checkPermissionsAndStartAsync(this,
-                (result) -> {
-                    if (result.permissionResult.granted &&
-                            result.activityResult.resultCode() == Activity.RESULT_OK) {
-                        // Connect
-                        if (mConnectTask != null) {
-                            if (!mConnectTask.isCancelled()) {
-                                mConnectTask.cancel(true);
-                            }
-                            mConnectTask = null;
-                        }
-                        action.run();
-                    } else {
-                        if (!result.permissionResult.granted) {
-                            Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission,
-                                    result.permissionResult.name), Toast.LENGTH_LONG)
-                                    .show();
-                            if (!result.permissionResult.shouldShowRequestPermissionRationale) {
-                                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                                startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                                        .setData(uri)
-                                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                            } else {
-                                checkPermissionAndRun(action);
-                            }
-                        }
-                        if (result.activityResult.resultCode() != Activity.RESULT_OK) {
-                            Toast.makeText(this, getString(R.string.request_battery_whitelist), Toast.LENGTH_LONG)
-                                    .show();
-                            action.run();
-                        }
-                    }
-                }, (throwable) -> {
-                    Log.e(TAG, "CheckPermissions", throwable);
-                }));
+        composite.add(CheckPermissionsUtils.checkAndRun(result -> {
+            switch (result) {
+                case OK:
+                    Log.d(TAG, "Check: OK");
+                    action.run();
+                    break;
+                case PERMISSION_NEEDED:
+                    Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission), Toast.LENGTH_LONG)
+                            .show();
+                    Log.d(TAG, "Check: PERMISSION_NEEDED");
+                    // Restart to request permissions again.
+                    checkPermissionAndRun(action);
+                    break;
+                case PERMISSION_NEEDED_SHOW_SETTINGS:
+                    Log.d(TAG, "Check: PERMISSION_NEEDED_SHOW_SETTINGS");
+                    Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission), Toast.LENGTH_LONG)
+                            .show();
+                    Uri uri = Uri.fromParts("package", getPackageName(), null);
+                    startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                            .setData(uri)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    break;
+                case REMOVE_DOZE_NEEDED:
+                    Log.d(TAG, "Check: REMOVE_DOZE_NEEDED");
+                    showConnectFail(getString(R.string.connect_fail_doze), getString(R.string.request_battery_whitelist));
+                    break;
+            }
+        }, throwable -> {
+            Log.e(TAG, "check permissions", throwable);
+        }, this));
     }
 
     @Override
@@ -220,12 +214,6 @@ public abstract class PushControllerWizardActivity extends FragmentActivity {
         layout.getNavigationBar()
                 .getNextButton()
                 .setVisibility(View.GONE);
-        layout.getNavigationBar()
-                .getNextButton()
-                .setText(R.string.retry);
-        layout.getNavigationBar()
-                .getNextButton()
-                .setOnClickListener(v -> connect());
     }
 
     private void showConnectSuccess () {
@@ -247,14 +235,24 @@ public abstract class PushControllerWizardActivity extends FragmentActivity {
 
     private void showConnectFail (@OnConnectStatusChangedListener.FailReason
                                           int reason) {
-        log("showConnectFail");
-        layout.setHeaderText(ConnectFailUtils.getTitle(this, reason));
-        mText.setText(ConnectFailUtils.getSummary(this, reason,
+        showConnectFail(ConnectFailUtils.getTitle(this, reason), ConnectFailUtils.getSummary(this, reason,
                 (mController != null && mController.isConnected()) ?
                         mController.getVersionCode() : -1));
+    }
+
+    private void showConnectFail (CharSequence title, CharSequence reason) {
+        log("showConnectFail");
+        layout.setHeaderText(title);
+        mText.setText(reason);
         layout.getNavigationBar()
                 .getNextButton()
                 .setVisibility(View.VISIBLE);
+        layout.getNavigationBar()
+                .getNextButton()
+                .setText(R.string.retry);
+        layout.getNavigationBar()
+                .getNextButton()
+                .setOnClickListener(v -> connect());
         if (mController != null && mController.isConnected())
             mController.disconnectIfNeeded();
     }

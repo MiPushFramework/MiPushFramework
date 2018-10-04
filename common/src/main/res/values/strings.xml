@@ -17,7 +17,7 @@
     <string name="event_command">Receive command</string>
 
     <!-- Permissions -->
-    <string name="request_permission">We need %1$s to work</string>
+    <string name="request_permission">We need permissions to work</string>
 
 
     <string name="error_usage_stats"> 检测到获取 UsageStats 异常，可能是您的系统不支持，建议在设置中切换 前台检测模式为 兼容模式 </string>

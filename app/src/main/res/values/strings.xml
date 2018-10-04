@@ -171,6 +171,7 @@
     <string name="connect_fail_title_low_version">请升级推送服务</string>
     <string name="connect_fail_title_not_installed">需要安装推送服务</string>
     <string name="connect_fail_title_rom">不支持您的 ROM</string>
+    <string name="connect_fail_doze">需要关闭优化</string>
 
     <string name="connect_fail_text_unknown"><![CDATA[
     <b>我们无法连接至推送服务</b>，请检查您是否在使用<b>唤醒拦截工具</b>、<b>国产 ROM （唤醒限制功能）</b>，请将 <b>%1$s</b> 加入白名单，然后重试。
