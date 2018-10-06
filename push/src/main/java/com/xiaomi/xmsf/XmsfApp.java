@@ -122,6 +122,11 @@ public class XmsfApp extends Application {
         }
 
         try {
+
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Intent.ACTION_SCREEN_ON);
+            registerReceiver(liveReceiver, filter);
+
             if (!PushServiceAccessibility.isInDozeWhiteList(this)) {
                 NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -155,9 +160,6 @@ public class XmsfApp extends Application {
             Log4a.e(TAG , e.getLocalizedMessage(), e);
         }
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_SCREEN_ON);
-        registerReceiver(liveReceiver, filter);
     }
 
     private void initPushLogger() {
@@ -286,16 +288,14 @@ public class XmsfApp extends Application {
     private BroadcastReceiver liveReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (Intent.ACTION_SCREEN_ON.equals(intent.getAction())) {
-                try {
-                    Log4a.i(TAG , "start service when ACTION_SCREEN_ON");
-                    Intent localIntent = new Intent(context, PushServiceMain.class);
-                    localIntent.putExtra(PushServiceConstants.EXTRA_TIME_STAMP, System.currentTimeMillis());
-                    localIntent.setAction(PushServiceConstants.ACTION_CHECK_ALIVE);
-                    context.startService(localIntent);
-                } catch (Exception localException) {
-                    MyLog.e(localException);
-                }
+            try {
+                Log4a.i(TAG, "start service when " + intent.getAction());
+                Intent localIntent = new Intent(context, PushServiceMain.class);
+                localIntent.putExtra(PushServiceConstants.EXTRA_TIME_STAMP, System.currentTimeMillis());
+                localIntent.setAction(PushServiceConstants.ACTION_CHECK_ALIVE);
+                context.startService(localIntent);
+            } catch (Exception localException) {
+                MyLog.e(localException);
             }
         }
     };
