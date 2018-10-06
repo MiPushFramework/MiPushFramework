@@ -145,7 +145,8 @@ public class PushServiceMain extends XMPushService {
                     NotificationManager.IMPORTANCE_MIN);
             manager.createNotificationChannel(channel);
         }
-        if (ConfigCenter.getInstance().foregroundNotification || Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        //if (ConfigCenter.getInstance().foregroundNotification || Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        {
             Notification notification = new NotificationCompat.Builder(this,
                     CHANNEL_STATUS)
                     .setContentTitle(getString(R.string.notification_alive))
