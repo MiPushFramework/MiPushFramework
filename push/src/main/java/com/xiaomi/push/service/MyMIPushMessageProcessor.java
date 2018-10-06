@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
+import android.support.v4.util.LruCache;
 import android.text.TextUtils;
 
 import com.xiaomi.channel.commonutils.android.AppInfoUtils;
@@ -133,6 +134,7 @@ public class MyMIPushMessageProcessor {
     private static void userProcessMIPushMessage(XMPushService paramXMPushService, XmPushActionContainer buildContainer, byte[] paramArrayOfByte, long var2, Intent paramIntent, boolean isGeoMessage) {
         //var5 buildContainer
         //var6 metaInfo
+        boolean shouldNotify = true;
 
         boolean pkgInstalled = AppInfoUtils.isPkgInstalled(paramXMPushService, buildContainer.packageName);
         if (!pkgInstalled) {
@@ -180,7 +182,13 @@ public class MyMIPushMessageProcessor {
                 if (TextUtils.isEmpty(description)) {
                     metaInfo.setDescription(paramXMPushService.getString(R.string.see_pass_though_msg));
                 }
+
+                if (isDupTextMsg(title, description)) {
+                    Log4a.w(TAG, "drop a duplicate message, judge by text from : " + buildContainer.packageName);
+                    shouldNotify = false;
+                }
             }
+
         }
 
         boolean notified = false;
@@ -199,7 +207,9 @@ public class MyMIPushMessageProcessor {
                 Log4a.w(TAG, "drop a duplicate message, key=" + var8);
             } else {
 
-                MyMIPushNotificationHelper.notifyPushMessage(paramXMPushService, buildContainer, paramArrayOfByte, var2);
+                if (shouldNotify) {
+                    MyMIPushNotificationHelper.notifyPushMessage(paramXMPushService, buildContainer, paramArrayOfByte, var2);
+                }
 
                 //send broadcast
                 if (!MIPushNotificationHelper.isBusinessMessage(buildContainer)) {
@@ -234,6 +244,28 @@ public class MyMIPushMessageProcessor {
 
         }
 
+    }
+
+
+    private static LruCache<String, String> cacheInstance = new LruCache<>(10);
+
+    private static boolean isDupTextMsg(String title, String content) {
+        if (TextUtils.isEmpty(title) || TextUtils.isEmpty(content)) {
+            return false;
+        }
+        String cached = cacheInstance.get(title);
+        if (cached == null) {
+            cacheInstance.put(title, content);
+            return false;
+        }
+
+        //TODO 使用简单的文本相似判断（如cosine similiarity），增强判重复能力
+        if (TextUtils.equals(content, cached)) {
+            return true;
+        } else {
+            cacheInstance.put(title, content);
+            return false;
+        }
     }
 
 }
