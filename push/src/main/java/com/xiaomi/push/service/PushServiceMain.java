@@ -138,7 +138,7 @@ public class PushServiceMain extends XMPushService {
 
     private void onConfigChanged () {
         NotificationManager manager = (NotificationManager)
-                getSystemService(NOTIFICATION_SERVICE);
+                getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(CHANNEL_STATUS,
                     getString(R.string.notification_category_alive),
