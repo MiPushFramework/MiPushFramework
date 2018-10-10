@@ -59,11 +59,21 @@ public class IconCache {
             @Override
             Bitmap gen() {
                 Bitmap rawIconBitmap = getRawIconBitmap(ctx, pkg);
-                return rawIconBitmap == null ? null : ImgUtils.convertToTransparentAndWhite(rawIconBitmap);
+                if (rawIconBitmap == null) {
+                    return null;
+                }
+
+                //scaleImage to 64dp
+                int dip2px = dip2px(ctx, 64);
+                return ImgUtils.scaleImage(ImgUtils.convertToTransparentAndWhite(rawIconBitmap), dip2px, dip2px);
             }
         }.get("white_" + pkg);
     }
 
 
+    public static int dip2px(Context context, float dipValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dipValue * scale + 0.5f);
+    }
 
 }
