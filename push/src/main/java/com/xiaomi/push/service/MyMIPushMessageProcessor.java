@@ -247,7 +247,7 @@ public class MyMIPushMessageProcessor {
     }
 
 
-    private static LruCache<String, String> cacheInstance = new LruCache<>(10);
+    private static LruCache<String, String> cacheInstance = new LruCache<>(5);
 
     private static boolean isDupTextMsg(String title, String content) {
         if (TextUtils.isEmpty(title) || TextUtils.isEmpty(content)) {
