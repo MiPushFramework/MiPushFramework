@@ -7,11 +7,9 @@ import android.app.NotificationChannel;
 import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -28,8 +26,6 @@ import com.xiaomi.channel.commonutils.logger.MyLog;
 import com.xiaomi.channel.commonutils.misc.ScheduledJobManager;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.push.service.OnlineConfig;
-import com.xiaomi.push.service.PushServiceConstants;
-import com.xiaomi.push.service.PushServiceMain;
 import com.xiaomi.xmpush.thrift.ConfigKey;
 import com.xiaomi.xmsf.push.control.PushControllerUtils;
 import com.xiaomi.xmsf.push.control.XMOutbound;
@@ -122,11 +118,6 @@ public class XmsfApp extends Application {
         }
 
         try {
-
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(Intent.ACTION_SCREEN_ON);
-            registerReceiver(liveReceiver, filter);
-
             if (!PushServiceAccessibility.isInDozeWhiteList(this)) {
                 NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -284,21 +275,5 @@ public class XmsfApp extends Application {
             MyLog.e(th);
         }
     }
-
-    private BroadcastReceiver liveReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            try {
-                Log4a.i(TAG, "start service when " + intent.getAction());
-                Intent localIntent = new Intent(context, PushServiceMain.class);
-                localIntent.putExtra(PushServiceConstants.EXTRA_TIME_STAMP, System.currentTimeMillis());
-                localIntent.setAction(PushServiceConstants.ACTION_CHECK_ALIVE);
-                context.startService(localIntent);
-            } catch (Exception localException) {
-                MyLog.e(localException);
-            }
-        }
-    };
-
 
 }
