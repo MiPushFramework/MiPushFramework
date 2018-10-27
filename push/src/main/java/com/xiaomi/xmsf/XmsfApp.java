@@ -150,6 +150,7 @@ public class XmsfApp extends Application {
         } catch (RuntimeException e) {
             Log4a.e(TAG , e.getLocalizedMessage(), e);
         }
+
     }
 
     private void initPushLogger() {
@@ -274,4 +275,5 @@ public class XmsfApp extends Application {
             MyLog.e(th);
         }
     }
+
 }

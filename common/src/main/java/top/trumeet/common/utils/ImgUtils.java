@@ -3,6 +3,7 @@ package top.trumeet.common.utils;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
@@ -367,5 +368,24 @@ public class ImgUtils {
             return bitmap;
         }
     }
+
+    public static Bitmap scaleImage(Bitmap bm, int newWidth, int newHeight) {
+        if (bm == null) {
+            return null;
+        }
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+        Bitmap newbm = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, true);
+        if (!bm.isRecycled()) {
+            bm.recycle();
+        }
+        return newbm;
+    }
+
+
 
 }
