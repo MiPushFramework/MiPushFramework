@@ -75,7 +75,7 @@ public class MiPushManifestChecker {
             if (!isIllegalManifestException(e)) {
                 Log.e(TAG, "checkServices", e);
             } else {
-                Log.e(TAG, "checkServices: " + packageInfo.packageName + "," + ((InvocationTargetException) e).getCause().getMessage());
+                Log.w(TAG, "checkServices: " + packageInfo.packageName + "," + ((InvocationTargetException) e).getCause().getMessage());
             }
             return false;
         }

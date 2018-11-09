@@ -1,7 +1,6 @@
 package top.trumeet.mipushframework.register;
 
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
@@ -14,28 +13,36 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
 import top.trumeet.common.db.EventDb;
 import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.register.RegisteredApplication;
+import top.trumeet.mipush.BuildConfig;
 import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.utils.MiPushManifestChecker;
 import top.trumeet.mipushframework.widgets.Footer;
 import top.trumeet.mipushframework.widgets.FooterItemBinder;
 
-import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 import static top.trumeet.common.Constants.SERVICE_APP_NAME;
 import static top.trumeet.common.Constants.TAG;
 
@@ -133,66 +140,77 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
         protected Result doInBackground(Integer... integers) {
             mSignal = new CancellationSignal();
 
-            List<ApplicationInfo> installedApplications = context.getPackageManager().getInstalledApplications(GET_UNINSTALLED_PACKAGES);
-
-            Map<String, ApplicationInfo> applicationInfoMap = new HashMap<>();
-            for (ApplicationInfo installedApplication : installedApplications) {
-                applicationInfoMap.put(installedApplication.packageName, installedApplication);
-            }
-
             Map<String /* pkg */, RegisteredApplication> registeredPkgs = new HashMap<>();
-            for (RegisteredApplication application : RegisteredApplicationDb.getList(getActivity(), null, mSignal)) {
+            for (RegisteredApplication application : RegisteredApplicationDb.getList(context, null, mSignal)) {
                 registeredPkgs.put(application.getPackageName(), application);
             }
-            Set<String> actuallyRegisteredPkgs = EventDb.queryRegistered(getActivity(), mSignal);
+            Set<String> actuallyRegisteredPkgs = EventDb.queryRegistered(context, mSignal);
 
             MiPushManifestChecker checker = null;
             try {
-                checker = MiPushManifestChecker.create(getActivity());
+                checker = MiPushManifestChecker.create(context);
             } catch (PackageManager.NameNotFoundException | ClassNotFoundException e) {
                 Log.e(RegisteredApplicationFragment.class.getSimpleName(), "Create mi push checker", e);
             }
 
-            List<RegisteredApplication> res = new ArrayList<>();
+            List<RegisteredApplication> res = new Vector<>();
 
-            int notUseMiPushCount = 0;
-            for (PackageInfo info : getActivity().getPackageManager().getInstalledPackages(PackageManager.GET_DISABLED_COMPONENTS|
-                    PackageManager.GET_SERVICES | PackageManager.GET_RECEIVERS)) {
-                if (info.services == null) info.services = new ServiceInfo[]{};
-                if (info.packageName.equals(SERVICE_APP_NAME))
-                    continue;
-                System.out.println("Not Registered:: " + info.packageName);
-                RegisteredApplication application;
-                if (registeredPkgs.containsKey(info.packageName)) {
-                    System.out.println("Reg Pkg Con " + info.packageName);
-                    application = registeredPkgs.get(info.packageName);
-                    if (actuallyRegisteredPkgs.contains(info.packageName)) {
-                        application.setRegisteredType(1);
-                    } else {
-                        application.setRegisteredType(2);
+            int threadCount = Runtime.getRuntime().availableProcessors();
+            ExecutorService pool = new ThreadPoolExecutor(
+                    threadCount,
+                    threadCount * 2,
+                    1,
+                    TimeUnit.SECONDS,
+                    new ArrayBlockingQueue<>(10), new ThreadPoolExecutor.CallerRunsPolicy());
+
+            final AtomicInteger notUseMiPushCount = new AtomicInteger();
+            final List<PackageInfo> packageInfos = context.getPackageManager().getInstalledPackages(PackageManager.GET_DISABLED_COMPONENTS | PackageManager.GET_SERVICES | PackageManager.GET_RECEIVERS);
+
+            for (PackageInfo packageInfo : packageInfos) {
+
+                final PackageInfo info = packageInfo;
+                MiPushManifestChecker finalChecker = checker;
+
+                pool.submit(() -> {
+                    String currentAppPkgName = info.packageName;
+                    if (info.services == null) info.services = new ServiceInfo[]{};
+                    if (TextUtils.equals(SERVICE_APP_NAME, currentAppPkgName) ||
+                            TextUtils.equals(BuildConfig.APPLICATION_ID, currentAppPkgName)) {
+                        return;
                     }
-                } else {
-                    System.out.println("Reg Pkg NoCon " + info.packageName);
-                    if (checker != null) {
-                        // checkReceivers will use Class#forName, but we can't change our classloader to target app's.
-                        if (!checker.checkServices(info)) {
-                            notUseMiPushCount++;
-                            System.out.println("Not MiPush " + info.packageName);
-                            continue;
+
+                    if (registeredPkgs.containsKey(currentAppPkgName)) {
+                        RegisteredApplication application = registeredPkgs.get(currentAppPkgName);
+                        application.setRegisteredType(actuallyRegisteredPkgs.contains(currentAppPkgName) ? 1 : 2);
+                        res.add(application);
+                    } else {
+                        if (finalChecker != null && finalChecker.checkServices(info)) {
+                            // checkReceivers will use Class#forName, but we can't change our classloader to target app's.
+                            RegisteredApplication application = new RegisteredApplication();
+                            application.setPackageName(currentAppPkgName);
+                            application.setRegisteredType(0);
+                            res.add(application);
+                        } else {
+                            Log.i(TAG, "not use mipush : " + currentAppPkgName);
+                            notUseMiPushCount.addAndGet(1);
                         }
-                    } else {
-                        notUseMiPushCount++;
-                        continue;
                     }
-                    application = new RegisteredApplication();
-                    application.setPackageName(info.packageName);
-                    application.setRegisteredType(0);
-                }
-                System.out.println("Not registered: " + application.getPackageName() + ": " + application.getPackageName());
-                res.add(application);
+                });
             }
 
-            return new Result(notUseMiPushCount, res);
+            pool.shutdown();
+            try {
+                if (!pool.awaitTermination(60, TimeUnit.SECONDS)) {
+                    pool.shutdownNow(); // Cancel currently executing tasks
+                    if (!pool.awaitTermination(60, TimeUnit.SECONDS))
+                        System.err.println("Pool did not terminate");
+                }
+            } catch (InterruptedException ie) {
+                pool.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
+
+            return new Result(notUseMiPushCount.get(), res);
         }
 
         @Override
