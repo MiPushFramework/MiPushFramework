@@ -33,7 +33,6 @@ import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.common.cache.ApplicationNameCache;
 import top.trumeet.common.cache.IconCache;
 
-import static com.xiaomi.push.service.MIPushNotificationHelper.drawableToBitmap;
 import static com.xiaomi.push.service.MIPushNotificationHelper.isBusinessMessage;
 
 /**
@@ -42,7 +41,7 @@ import static com.xiaomi.push.service.MIPushNotificationHelper.isBusinessMessage
  */
 
 public class MyMIPushNotificationHelper {
-    private static final String NOTIFICATION_ICON = "mipush_notification";
+
     private static final String NOTIFICATION_SMALL_ICON = "mipush_small_notification";
 
     private static final int NOTIFICATION_BIG_STYLE_MIN_LEN = 25;
@@ -72,22 +71,10 @@ public class MyMIPushNotificationHelper {
             localBuilder.setStyle(style);
         }
 
-        Bitmap iconBitmap = IconCache.getInstance().getRawIconBitmap(var0, buildContainer.getPackageName());
 
         // Set small icon
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int iconLargeId = getIconId(var0, buildContainer.getPackageName(), NOTIFICATION_ICON);
             int iconSmallId = getIconId(var0, buildContainer.getPackageName(), NOTIFICATION_SMALL_ICON);
-            Log4a.d(TAG, "id: " + iconLargeId + ", id2: " + iconSmallId);
-
-            if (iconLargeId <= 0) {
-                if (iconBitmap != null) {
-                    localBuilder.setLargeIcon(iconBitmap);
-                }
-            } else {
-                localBuilder.setLargeIcon(getBitmapFromId(var0, iconLargeId));
-            }
-
             if (iconSmallId <= 0) {
 
                 Bitmap whiteIconBitmap = IconCache.getInstance().getWhiteIconBitmap(var0, buildContainer.getPackageName());
@@ -160,8 +147,8 @@ public class MyMIPushNotificationHelper {
         Bundle extras = new Bundle();
         CharSequence appName = ApplicationNameCache.getInstance().getAppName(var0, buildContainer.getPackageName());
 
-        if (iconBitmap != null && !TextUtils.isEmpty(appName)) {
-            int color = getIconColor(iconBitmap);
+        int color = getIconColor(var0, buildContainer.getPackageName());
+        if (color != -1 && !TextUtils.isEmpty(appName)) {
             CharSequence subText = ColorUtil.createColorSubtext(appName, color);
             if (subText != null) {
                 extras.putCharSequence(NotificationCompat.EXTRA_SUB_TEXT, subText);
@@ -175,18 +162,29 @@ public class MyMIPushNotificationHelper {
 
     }
 
-    private static int getIconColor(Bitmap bitmap) {
-        int color = ColorUtil.getIconColor(bitmap);
-        if (color != Notification.COLOR_DEFAULT) {
-            final float[] hsl = new float[3];
-            ColorUtils.colorToHSL(color, hsl);
-            hsl[1] = 0.94f;
-            hsl[2] = Math.min(hsl[2] * 0.6f, 0.31f);
-            return ColorUtils.HSLToColor(hsl);
-        }
-        return color;
-    }
 
+    /**
+     * @param ctx context
+     * @param pkg packageName
+     * @return -1 if not processed
+     */
+    private static int getIconColor(final Context ctx, final String pkg) {
+        return IconCache.getInstance().getAppColor(ctx, pkg, (ctx1, iconBitmap) -> {
+            if (iconBitmap == null) {
+                return -1;
+            }
+            int color = ColorUtil.getIconColor(iconBitmap);
+            if (color != Notification.COLOR_DEFAULT) {
+                final float[] hsl = new float[3];
+                ColorUtils.colorToHSL(color, hsl);
+                hsl[1] = 0.94f;
+                hsl[2] = Math.min(hsl[2] * 0.6f, 0.31f);
+                return ColorUtils.HSLToColor(hsl);
+            } else {
+                return -1;
+            }
+        });
+    }
 
 
     private static PendingIntent openActivityPendingIntent(Context paramContext, XmPushActionContainer paramXmPushActionContainer, PushMetaInfo paramPushMetaInfo, byte[] paramArrayOfByte) {
@@ -392,10 +390,6 @@ public class MyMIPushNotificationHelper {
             Log4a.e(TAG, e.getMessage(), e);
             return new String[]{paramPushMetaInfo.getTitle(), paramPushMetaInfo.getDescription()};
         }
-    }
-
-    private static Bitmap getBitmapFromId(Context context, int i) {
-        return drawableToBitmap(context.getResources().getDrawable(i));
     }
 
     private static int getIconId(Context context, String str, String str2) {
