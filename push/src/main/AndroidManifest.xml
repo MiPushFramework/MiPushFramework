@@ -209,6 +209,16 @@
             android:label="@string/title_activity_keepalive"
             android:exported="true" />
 
+        <activity
+            android:name=".EmptyActivity$OnePlus"
+            android:label="@string/push_service_name"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="${fabricKey}" />

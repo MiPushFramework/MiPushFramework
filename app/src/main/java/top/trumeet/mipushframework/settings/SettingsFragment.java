@@ -8,6 +8,7 @@ import android.util.Log;
 
 import moe.shizuku.preference.Preference;
 import moe.shizuku.preference.PreferenceFragment;
+import moe.shizuku.preference.TwoStatePreference;
 import top.trumeet.common.Constants;
 import top.trumeet.common.utils.rom.RomUtils;
 import top.trumeet.mipush.R;
@@ -51,6 +52,17 @@ public class SettingsFragment extends PreferenceFragment {
            Intent intent = new Intent().setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
                    Constants.KEEPLIVE_COMPONENT_NAME));
            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+           startActivity(intent);
+           return true;
+       });
+
+
+       setPreferenceOnclick("activity_push_icon", preference -> {
+           Intent intent = new Intent().setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
+                   Constants.KEEPLIVE_COMPONENT_NAME));
+           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+           TwoStatePreference switchPreference = (TwoStatePreference) preference;
+           intent.putExtra(Constants.ENABLE_LAUNCHER, switchPreference.isChecked() ? R.string.enable : R.string.disable);
            startActivity(intent);
            return true;
        });

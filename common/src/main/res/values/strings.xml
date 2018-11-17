@@ -1,5 +1,7 @@
 <resources>
     <string name="push_service_name">Push</string>
+    <string name="enable">启用</string>
+    <string name="disable">禁用</string>
 
 
     <string name="perm_change_settings">Manage push service</string>

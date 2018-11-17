@@ -117,4 +117,6 @@ public final class Constants {
     }
 
     public static final String AUTHORITIES_PUSH_API = "moe.yuuta.mipush.push.api.PushServiceAPI";
+
+    public static final String ENABLE_LAUNCHER = "enableLauncher";
 }

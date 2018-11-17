@@ -183,7 +183,7 @@ public class MyMIPushMessageProcessor {
                     metaInfo.setDescription(paramXMPushService.getString(R.string.see_pass_though_msg));
                 }
 
-                if (isDupTextMsg(title, description)) {
+                if (isDupTextMsg(targetPackage, title, description)) {
                     Log4a.w(TAG, "drop a duplicate message, judge by text from : " + buildContainer.packageName);
                     shouldNotify = false;
                 }
@@ -191,7 +191,6 @@ public class MyMIPushMessageProcessor {
 
         }
 
-        boolean notified = false;
         if (metaInfo != null && !TextUtils.isEmpty(metaInfo.getTitle()) && !TextUtils.isEmpty(metaInfo.getDescription())) {
 
             String var8 = null;
@@ -247,25 +246,37 @@ public class MyMIPushMessageProcessor {
     }
 
 
-    private static LruCache<String, String> cacheInstance = new LruCache<>(5);
+    private static LruCache<String, CacheItem> cacheInstance = new LruCache<>(15);
 
-    private static boolean isDupTextMsg(String title, String content) {
+    private static class CacheItem {
+        String title; String content; long time;
+
+        CacheItem(String title, String content, long time) {
+            this.title = title;
+            this.content = content;
+            this.time = time;
+        }
+    }
+    private static boolean isDupTextMsg(String packageName, String title, String content) {
         if (TextUtils.isEmpty(title) || TextUtils.isEmpty(content)) {
             return false;
         }
-        String cached = cacheInstance.get(title);
-        if (cached == null) {
-            cacheInstance.put(title, content);
-            return false;
+        long currentTimeMillis = System.currentTimeMillis();
+        CacheItem cached = cacheInstance.get(packageName);
+        boolean isDup = false;
+
+        if (cached != null) {
+            if (TextUtils.equals(title + content, cached.title + cached.content)) {
+                if ((currentTimeMillis - cached.time) < (60 * 1000)) {
+                    isDup = true;
+                }
+            }
+        }
+        if (!isDup) {
+            cacheInstance.put(packageName, new CacheItem(title, content, currentTimeMillis));
         }
 
-        //TODO 使用简单的文本相似判断（如cosine similiarity），增强判重复能力
-        if (TextUtils.equals(content, cached)) {
-            return true;
-        } else {
-            cacheInstance.put(title, content);
-            return false;
-        }
+        return isDup;
     }
 
 }

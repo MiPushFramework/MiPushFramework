@@ -216,4 +216,7 @@
     <string name="app_registered_error">注册异常</string>
 
     <string name="request_battery_whitelist">Push 应用需要被加入 电池优化白名单 才能正常工作</string>
+
+    <string name="settings_summary_push_icon">开启图标可以解决部分应用和系统找不到Push应用问题 (例如小米手环推送，一加应用锁管理)，关闭请切换两次</string>
+    <string name="settings_push_icon">开启Push服务图标</string>
 </resources>
