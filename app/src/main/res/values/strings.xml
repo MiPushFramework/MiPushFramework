@@ -150,8 +150,8 @@
     <string name="settings_get_log_summary">点按分享日志，请在需要的时候随 Issues 一起提交。</string>
     <string name="settings_clear_log">清空日志</string>
     <string name="settings_activity_keep_alive">后台服务保活</string>
-    <string name="settings_summary_keep_alive">很多ROM(比如一加)有自己的后台清理逻辑，但是可以通过应用切换界面锁定功能设置白名单。
-    点击之后，请在应用切换界面找到刚刚打开的后台服务保活界面并锁定。[注意]手机每次重启之后需要点击这里开启保活界面。
+    <string name="settings_summary_keep_alive">很多ROM(比如一加)有自己的后台清理逻辑，但是可以通过应用切换界面锁定功能设置白名单。\n
+        点击之后，请在应用切换界面找到刚刚打开的界面并锁定。
     </string>
 
     <!-- Recent Activity -->
@@ -228,8 +228,9 @@
     <string name="fake_enable_title">伪装为小米设备</string>
     <string name="fake_enable_detail">通过 Xposed 伪装模块或 Magisk 单应用伪装模块，让该应用误认为是小米设备，以增强注册机率（修改需要 ROOT 权限）</string>
     <string name="fake_enable_detail_not_suggested">不建议开启，可能会影响应用正常功能</string>
+    <string name="fake_enable_globe">全局伪装已开启</string>
 
-    <string name="settings_summary_push_icon">开启图标可以解决部分应用和系统找不到Push应用问题 (例如小米手环推送，一加应用锁管理)，关闭请切换两次</string>
+    <string name="settings_summary_push_icon">开启图标可以解决部分应用和系统找不到Push应用问题 (例如小米手环推送，一加应用锁管理) \n 关闭请切换两次</string>
     <string name="settings_push_icon">开启Push服务图标</string>
 
 </resources>

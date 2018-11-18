@@ -5,6 +5,8 @@ import android.util.Log;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
@@ -13,6 +15,7 @@ import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import top.trumeet.common.override.UserHandleOverride;
 
+import static top.trumeet.common.Constants.FAKE_CONFIGURATION_GLOBE;
 import static top.trumeet.common.Constants.FAKE_CONFIGURATION_NAME_TEMPLATE;
 
 /**
@@ -25,9 +28,21 @@ public class MiPushEnhanceHook implements IXposedHookLoadPackage {
     private static final String TAG = "MiPushEnhanceHook";
     private static final String STORAGE_PATH = "/sdcard/";
 
+    private Set<String> blackList = new CopyOnWriteArraySet<>();
+
     private static final Map<String, String> FAKE_VARS = new HashMap<>();
 
     private static final String BRAND = "Xiaomi";
+
+
+    {
+        blackList.add("google");
+        blackList.add("android");
+        blackList.add("de.robv.android.xposed.installer");
+        blackList.add("com.xiaomi.xmsf");
+        blackList.add("com.tencent.mm");
+        blackList.add("top.trumeet.mipush");
+    }
 
     static {
         FAKE_VARS.put("ro.miui.ui.version.name", "V9");
@@ -40,19 +55,39 @@ public class MiPushEnhanceHook implements IXposedHookLoadPackage {
 
     }
 
+
+    private boolean inBlackList(String pkgName) {
+        for (String b : blackList) {
+            if (pkgName.contains(b)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         try {
             try {
-                // TODO: Remove hidden api usage
-                if (!new File(String.format(FAKE_CONFIGURATION_NAME_TEMPLATE,
-                        UserHandleOverride.getUserHandleForUid(lpparam.appInfo.uid).hashCode(),
-                        lpparam.packageName)).exists())
-                    // Skipped according user's settings
-                    return;
+
+                if (!new File(FAKE_CONFIGURATION_GLOBE).exists()){
+
+                    // TODO: Remove hidden api usage
+                    if (!new File(String.format(FAKE_CONFIGURATION_NAME_TEMPLATE,
+                            UserHandleOverride.getUserHandleForUid(lpparam.appInfo.uid).hashCode(),
+                            lpparam.packageName)).exists())
+                        // Skipped according user's settings
+                        return;
+
+                }
+
             } catch (Throwable e) {
-                // TODO: Not tested
                 XposedBridge.log(TAG + ": get config: " + Log.getStackTraceString(e));
+            }
+
+            if (inBlackList(lpparam.appInfo.packageName)) {
+                return;
             }
 
             XposedBridge.hookAllMethods(XposedHelpers.findClass("android.os.SystemProperties", lpparam.classLoader),

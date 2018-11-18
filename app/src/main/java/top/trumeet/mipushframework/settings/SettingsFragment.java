@@ -6,14 +6,22 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import moe.shizuku.preference.Preference;
 import moe.shizuku.preference.PreferenceFragment;
+import moe.shizuku.preference.PreferenceGroup;
+import moe.shizuku.preference.SwitchPreferenceCompat;
 import moe.shizuku.preference.TwoStatePreference;
 import top.trumeet.common.Constants;
 import top.trumeet.common.utils.rom.RomUtils;
 import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.MainActivity;
+import top.trumeet.mipushframework.utils.ShellUtils;
 
+import static top.trumeet.common.Constants.FAKE_CONFIGURATION_PATH;
 import static top.trumeet.common.utils.rom.RomUtils.ROM_H2OS;
 import static top.trumeet.common.utils.rom.RomUtils.ROM_MIUI;
 import static top.trumeet.common.utils.rom.RomUtils.ROM_UNKNOWN;
@@ -26,6 +34,7 @@ import static top.trumeet.common.utils.rom.RomUtils.ROM_UNKNOWN;
  */
 
 public class SettingsFragment extends PreferenceFragment {
+
     private static final String TAG = SettingsFragment.class.getSimpleName();
 
     private CheckROMTask mTask;
@@ -67,7 +76,49 @@ public class SettingsFragment extends PreferenceFragment {
            return true;
        });
 
+        String globeFake = Constants.FAKE_CONFIGURATION_GLOBE;
+        addItem(new File(globeFake).exists(), (preference, newValue) -> {
+                    boolean enabled = (boolean) newValue;
+
+                    List<String> commands = new ArrayList<>(3);
+                    if (!new File(FAKE_CONFIGURATION_PATH).exists()) {
+                        commands.add("mkdir -p " + FAKE_CONFIGURATION_PATH);
+                    }
+
+                    if (new File(FAKE_CONFIGURATION_PATH).isFile()) {
+                        commands.add("rm -rf " + FAKE_CONFIGURATION_PATH);
+                    }
+
+
+                    if (enabled) {
+                        if (!new File(globeFake).exists()) commands.add("touch " + globeFake);
+                    } else {
+                        commands.add("rm " + globeFake);
+                    }
+
+                    Log.i(TAG, "Final Commands: " + commands.toString());
+                    // About permissions and groups: these commands below with root WILL make the file accessible (not editable) for all apps.
+                    Log.d(TAG, "Exit: " + ShellUtils.execCmd(commands, true, true).toString());
+                    return true;
+                },
+                "全局" + getString(R.string.fake_enable_title),
+                getString(R.string.fake_enable_detail),
+                getPreferenceScreen().findPreference("activity_push_icon").getParent());
+
+
        checkROM();
+    }
+
+    private void addItem(boolean value, Preference.OnPreferenceChangeListener listener,
+                         CharSequence title, CharSequence summary, PreferenceGroup parent) {
+        SwitchPreferenceCompat preference = new SwitchPreferenceCompat(getContext(),
+                null, moe.shizuku.preference.R.attr.switchPreferenceStyle,
+                R.style.Preference_SwitchPreferenceCompat);
+        preference.setOnPreferenceChangeListener(listener);
+        preference.setTitle(title);
+        preference.setSummary(summary);
+        preference.setChecked(value);
+        parent.addPreference(preference);
     }
 
     private void checkROM () {

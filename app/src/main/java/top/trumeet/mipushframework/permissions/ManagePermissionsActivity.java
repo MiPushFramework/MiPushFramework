@@ -341,7 +341,7 @@ public class ManagePermissionsActivity extends AppCompatActivity {
             screen.addPreference(viewRecentActivityPreference);
 
             // TODO: Switch HEAVY works to background thread
-            addItem(new File(String.format(Constants.FAKE_CONFIGURATION_NAME_TEMPLATE,
+            SwitchPreferenceCompat fakeSwtich = addItem(new File(String.format(Constants.FAKE_CONFIGURATION_NAME_TEMPLATE,
                     UserHandleOverride.getUserHandleForUid(mApplicationItem.getUid(getActivity())).hashCode(),
                     mApplicationItem.getPackageName())).exists(),
                     (preference, newValue) -> {
@@ -351,6 +351,13 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                     getString(R.string.fake_enable_title),
                     getString(suggestFake ? R.string.fake_enable_detail : R.string.fake_enable_detail_not_suggested),
                     screen);
+
+            if (new File(Constants.FAKE_CONFIGURATION_GLOBE).exists()) {
+                fakeSwtich.setSummary(R.string.fake_enable_globe);
+                fakeSwtich.setEnabled(false);
+                fakeSwtich.setChecked(true);
+            }
+
 
             addItem(mApplicationItem.isNotificationOnRegister(),
                     (preference, newValue) -> {
@@ -414,7 +421,7 @@ public class ManagePermissionsActivity extends AppCompatActivity {
             [index]);
         }
 
-        private void addItem (boolean value, Preference.OnPreferenceChangeListener listener,
+        private SwitchPreferenceCompat addItem (boolean value, Preference.OnPreferenceChangeListener listener,
                               CharSequence title, CharSequence summary, PreferenceGroup parent) {
             SwitchPreferenceCompat preference = new SwitchPreferenceCompat(getActivity(),
                     null, moe.shizuku.preference.R.attr.switchPreferenceStyle,
@@ -424,6 +431,8 @@ public class ManagePermissionsActivity extends AppCompatActivity {
             preference.setSummary(summary);
             preference.setChecked(value);
             parent.addPreference(preference);
+
+            return preference;
         }
 
         /**
