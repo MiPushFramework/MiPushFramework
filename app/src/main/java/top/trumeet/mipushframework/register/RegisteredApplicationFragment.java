@@ -126,7 +126,7 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
 
         private Context context;
 
-        private class Result {
+        class Result {
             private final int notUseMiPushCount;
             private final List<RegisteredApplication> list;
 
@@ -163,7 +163,6 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
                     TimeUnit.SECONDS,
                     new ArrayBlockingQueue<>(10), new ThreadPoolExecutor.CallerRunsPolicy());
 
-            final AtomicInteger notUseMiPushCount = new AtomicInteger();
             final List<PackageInfo> packageInfos = context.getPackageManager().getInstalledPackages(PackageManager.GET_DISABLED_COMPONENTS | PackageManager.GET_SERVICES | PackageManager.GET_RECEIVERS);
 
             for (PackageInfo packageInfo : packageInfos) {
@@ -191,8 +190,7 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
                             application.setRegisteredType(0);
                             res.add(application);
                         } else {
-                            Log.i(TAG, "not use mipush : " + currentAppPkgName);
-                            notUseMiPushCount.addAndGet(1);
+                            Log.d(TAG, "not use mipush : " + currentAppPkgName);
                         }
                     }
                 });
@@ -210,7 +208,8 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
                 Thread.currentThread().interrupt();
             }
 
-            return new Result(notUseMiPushCount.get(), res);
+            int notUseMiPushCount = packageInfos.size() - registeredPkgs.size();
+            return new Result(notUseMiPushCount, res);
         }
 
         @Override
