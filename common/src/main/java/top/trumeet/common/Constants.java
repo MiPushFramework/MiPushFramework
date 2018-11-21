@@ -103,6 +103,9 @@ public final class Constants {
     public static final String KEEPLIVE_COMPONENT_NAME =
             SERVICE_APP_NAME + ".EmptyActivity";
 
+    public static final String ADVANCE_PUSH_SETTING_COMPONENT_NAME =
+            SERVICE_APP_NAME + ".ManageSpaceActivity";
+
     public static final String REMOVE_DOZE_COMPONENT_NAME =
             SERVICE_APP_NAME + ".RemoveDozeActivity";
 
@@ -119,5 +122,4 @@ public final class Constants {
     public static final String FAKE_CONFIGURATION_PATH = "/data/misc/riru/modules/mipush_fake/packages/";
     public static final String FAKE_CONFIGURATION_NAME_TEMPLATE = FAKE_CONFIGURATION_PATH + "%1$s.%2$s";
     public static final String FAKE_CONFIGURATION_GLOBE = Constants.FAKE_CONFIGURATION_PATH + "ALL";
-    public static final String ENABLE_LAUNCHER = "enableLauncher";
 }

@@ -85,8 +85,6 @@ public class XmsfApp extends Application {
             Fabric.with(fabric);
         }
 
-        ConfigCenter.reloadConf(this);
-
         LogUtils.configureLog(this);
 
         initMiSdkLogger();

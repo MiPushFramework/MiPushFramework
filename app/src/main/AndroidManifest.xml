@@ -70,11 +70,6 @@
             android:value="${fabricKey}" />
 
 
-        <provider
-            android:name="top.trumeet.mipushframework.preferences.MiPushAppPreferenceProvider"
-            android:authorities="top.trumeet.mipushframework.preferences"
-            android:exported="true"/>
-
         <!-- Push API -->
         <provider
             android:authorities="moe.yuuta.mipush.push.api.PushServiceAPI"

@@ -41,6 +41,7 @@
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/push_service_name"
+        android:manageSpaceActivity=".ManageSpaceActivity"
         android:persistent="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -122,7 +123,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name="com.xiaomi.xmsf.push.service.receivers.PkgUninstallReceiver"
+            android:name=".push.service.receivers.PkgUninstallReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
@@ -206,15 +207,15 @@
 
         <activity
             android:name=".EmptyActivity"
-            android:label="@string/title_activity_keepalive"
-            android:exported="true" />
-
+            android:exported="true"
+            android:label="@string/title_activity_keepalive" />
         <activity
             android:name=".EmptyActivity$OnePlus"
-            android:label="@string/push_service_name"
-            android:enabled="false">
+            android:enabled="false"
+            android:label="@string/push_service_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -224,10 +225,14 @@
             android:value="${fabricKey}" />
 
         <provider
-            android:authorities="com.xiaomi.xmsf.push.control.APIProvider"
             android:name=".push.control.APIProvider"
+            android:authorities="com.xiaomi.xmsf.push.control.APIProvider"
             android:exported="true"
             tools:ignore="ExportedContentProvider" />
+
+        <activity
+            android:name=".ManageSpaceActivity"
+            android:label="@string/title_activity_manager_space" />
 
     </application>
 

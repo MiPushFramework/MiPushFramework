@@ -14,7 +14,6 @@ import moe.shizuku.preference.Preference;
 import moe.shizuku.preference.PreferenceFragment;
 import moe.shizuku.preference.PreferenceGroup;
 import moe.shizuku.preference.SwitchPreferenceCompat;
-import moe.shizuku.preference.TwoStatePreference;
 import top.trumeet.common.Constants;
 import top.trumeet.common.utils.rom.RomUtils;
 import top.trumeet.mipush.R;
@@ -65,16 +64,14 @@ public class SettingsFragment extends PreferenceFragment {
            return true;
        });
 
-
-       setPreferenceOnclick("activity_push_icon", preference -> {
+       setPreferenceOnclick("activity_push_advance_setting", preference -> {
            Intent intent = new Intent().setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
-                   Constants.KEEPLIVE_COMPONENT_NAME));
+                   Constants.ADVANCE_PUSH_SETTING_COMPONENT_NAME));
            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-           TwoStatePreference switchPreference = (TwoStatePreference) preference;
-           intent.putExtra(Constants.ENABLE_LAUNCHER, switchPreference.isChecked() ? R.string.enable : R.string.disable);
            startActivity(intent);
            return true;
        });
+
 
         String globeFake = Constants.FAKE_CONFIGURATION_GLOBE;
         addItem(new File(globeFake).exists(), (preference, newValue) -> {
@@ -103,7 +100,8 @@ public class SettingsFragment extends PreferenceFragment {
                 },
                 "全局" + getString(R.string.fake_enable_title),
                 getString(R.string.fake_enable_detail),
-                getPreferenceScreen().findPreference("activity_push_icon").getParent());
+                getPreferenceScreen().findPreference("activity_keep_alive").getParent()
+        );
 
 
        checkROM();

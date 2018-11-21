@@ -66,7 +66,7 @@ public class XMPushService extends IntentService {
                     Log4a.w(TAG, "Denied register request: " + pkg);
                     result = Event.ResultType.DENY_USER;
                 } else {
-                    if (ConfigCenter.getInstance().autoRegister && application.getType() == RegisteredApplication.Type.ASK) {
+                    if (ConfigCenter.isAutoRegister(this) && application.getType() == RegisteredApplication.Type.ASK) {
                         application.setType(RegisteredApplication.Type.ALLOW);
                         RegisteredApplicationDb.update(application, this);
                     }
