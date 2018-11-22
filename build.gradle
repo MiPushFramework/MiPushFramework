@@ -43,7 +43,7 @@ def gitCommitId = 'git rev-parse --short HEAD'.execute([], project.rootDir).text
 
 def majorVersion = 0
 def minorVersion = 3
-def buildVersion = 4
+def buildVersion = 6
 def currentVersionCode = (majorVersion + 1) * 200 + minorVersion * 20 + buildVersion
 
 def baseVersionName = "${majorVersion}.${minorVersion}.${buildVersion}"
