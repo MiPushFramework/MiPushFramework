@@ -6,14 +6,11 @@
 
 在任何非 MIUI 设备上体验小米系统级推送。
 
-![](https://raw.githubusercontent.com/Trumeet/MiPushFramework/master/art/screenshot.png)
 ![](https://raw.githubusercontent.com/Trumeet/MiPushFramework/master/art/tab_events.jpg)
 ![](https://raw.githubusercontent.com/Trumeet/MiPushFramework/master/art/tab_permissions.jpg)
 ![](https://raw.githubusercontent.com/Trumeet/MiPushFramework/master/art/ask.jpg)
 ![](https://raw.githubusercontent.com/Trumeet/MiPushFramework/master/art/tab_settings.jpg)
 ![](https://raw.githubusercontent.com/Trumeet/MiPushFramework/master/art/tab_apps.jpg)
-
-从图1可以看出，`PushDemo`（使用小米推送的应用）并未启动后台推送服务，也成功收到了推送。
 
 ## 什么是小米系统级推送，为什么会有这个项目
 
