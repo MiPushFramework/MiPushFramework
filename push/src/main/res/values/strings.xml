@@ -41,8 +41,10 @@
 
     <string name="notification_register">%1$s 已被%2$s注册小米推送</string>
 
-    <string name="title_activity_manager_space">高级管理配置</string>
-    <string name="settings_clear_history_summary">清理7天前历史记录</string>
+    <string name="settings_clear">清理</string>
+
+    <string name="title_activity_advance_setting">高级配置</string>
+    <string name="settings_clear_history_summary">清理 7 天前消息记录</string>
     <string name="settings_clear_history">清理记录</string>
 
     <string name="settings_clear_log">清空日志</string>
@@ -50,14 +52,14 @@
 
 
 
-    <string name="settings_summary_push_icon">开启图标可以解决部分应用和系统找不到Push应用问题 (例如小米手环推送，一加应用锁管理) \n 关闭请切换两次</string>
-    <string name="settings_push_icon">开启Push服务图标</string>
+    <string name="settings_summary_push_icon">开启图标可以解决部分应用和系统找不到Push应用问题 (例如小米手环推送，一加应用锁管理) </string>
+    <string name="settings_push_icon">开启 Push 服务图标</string>
 
 
     <string name="settings_auto_register">自动注册应用</string>
 
 
-    <string name="settings_options">配置(重启应用和服务生效)</string>
+    <string name="settings_options">配置</string>
 
 
     <string name="pref_title_access_mode">前台APP检测模式</string>

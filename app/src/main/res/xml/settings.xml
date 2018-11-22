@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/settings_service">
+    <PreferenceCategory android:title="@string/settings_enhance">
         <Preference
             android:key="activity_keep_alive"
             android:summary="@string/settings_summary_keep_alive"
-            android:title="@string/settings_activity_keep_alive" />
+            android:title="@string/settings_activity_keep_alive">
+        </Preference>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_service_setting">
 
         <Preference
             android:key="activity_push_advance_setting"
             android:summary="@string/settings_summary_service_advance_setting"
-            android:title="@string/settings_service_advance_setting" />
+            android:title="@string/settings_service_advance_setting">
+            <intent
+                android:targetClass="com.xiaomi.xmsf.ManageSpaceActivity"
+                android:targetPackage="com.xiaomi.xmsf" />
+        </Preference>
+
 
     </PreferenceCategory>
 
@@ -19,10 +29,6 @@
             android:key="key_get_log"
             android:summary="@string/settings_get_log_summary"
             android:title="@string/settings_get_log" />
-        <Preference
-            android:key="key_clear_log"
-            android:title="@string/settings_clear_log"
-            />
 
         <Preference android:title="@string/helplib_title">
             <intent

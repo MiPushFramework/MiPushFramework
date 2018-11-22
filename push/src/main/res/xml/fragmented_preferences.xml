@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceCategory android:title="@string/title_activity_manager_space">
+    <PreferenceCategory android:title="@string/settings_clear">
 
         <Preference
             android:key="clear_history"
             android:summary="@string/settings_clear_history_summary"
-            android:title="@string/settings_clear_history" />
+            android:title="@string/settings_clear_history"
+            />
 
 
         <Preference
@@ -40,7 +41,9 @@
             android:key="AccessMode"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
-            android:title="@string/pref_title_access_mode" />
+            android:title="@string/pref_title_access_mode"
+            android:summary="@string/pref_summary_access_mode"
+            />
 
     </PreferenceCategory>
 

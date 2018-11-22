@@ -117,9 +117,10 @@
     </string-array>
 
     <!-- Settings -->
-    <string name="settings_service">服务</string>
-    <string name="settings_service_advance_setting">高级服务配置</string>
-    <string name="settings_summary_service_advance_setting">配置Push高级配置</string>
+    <string name="settings_enhance">增强</string>
+    <string name="settings_service_setting">服务配置</string>
+    <string name="settings_service_advance_setting">高级配置</string>
+    <string name="settings_summary_service_advance_setting">进入高级配置界面</string>
     <string name="settings_fake_build">伪装 Build.prop</string>
     <string name="settings_fake_build_summary">某些应用（如某东、某拜单车等）会使用自己的逻辑判断是否是 MIUI，如果是才启用小米推送，否则仍会使用其他推送方式驻留后台。这种判断逻辑通常是解析 build.prop。我们尝试通过向 build.prop 插入一些代表 MIUI 的键值对进行伪装，让这些应用使用小米推送。</string>
     <string name="settings_check_service">检查服务运行状态</string>
@@ -133,7 +134,6 @@
     <string name="settings_debug">诊断</string>
     <string name="settings_get_log">获取日志</string>
     <string name="settings_get_log_summary">点按分享日志，请在需要的时候随 Issues 一起提交。</string>
-    <string name="settings_clear_log">清空日志</string>
     <string name="settings_activity_keep_alive">后台服务保活</string>
     <string name="settings_summary_keep_alive">很多ROM(比如一加)有自己的后台清理逻辑，但是可以通过应用切换界面锁定功能设置白名单。\n
         点击之后，请在应用切换界面找到刚刚打开的界面并锁定。

@@ -1,12 +1,9 @@
 package com.xiaomi.xmsf;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.TwoStatePreference;
@@ -70,12 +67,11 @@ public class ManageSpaceActivity extends PreferenceActivity {
             TwoStatePreference preferencePushIcon = (TwoStatePreference) getPreferenceScreen().findPreference("activity_push_icon");
             preferencePushIcon.setChecked(!disabled);
             preferencePushIcon.setOnPreferenceClickListener(preference -> {
-                Intent intent = new Intent().setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
-                        Constants.KEEPLIVE_COMPONENT_NAME));
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                TwoStatePreference switchPreference =  (TwoStatePreference) preference;
-                intent.putExtra(EmptyActivity.ENABLE_LAUNCHER, switchPreference.isChecked());
-                startActivity(intent);
+                TwoStatePreference switchPreference = (TwoStatePreference) preference;
+                boolean enableLauncher = switchPreference.isChecked();
+                pm.setComponentEnabledSetting(componentName,
+                        enableLauncher ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP);
                 return true;
             });
 

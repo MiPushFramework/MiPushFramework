@@ -28,8 +28,9 @@ import static top.trumeet.common.utils.rom.RomUtils.ROM_UNKNOWN;
 /**
  * Created by Trumeet on 2017/8/27.
  * Main settings
- * @see MainActivity
+ *
  * @author Trumeet
+ * @see MainActivity
  */
 
 public class SettingsFragment extends PreferenceFragment {
@@ -41,36 +42,21 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.settings);
-       setPreferenceOnclick("key_get_log", preference -> {
-           startActivity(new Intent()
-           .setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
-                   Constants.SHARE_LOG_COMPONENT_NAME)));
-           return true;
-       });
-
-       setPreferenceOnclick("key_clear_log", preference -> {
-           startActivity(new Intent()
-           .setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
-                   Constants.CLEAR_LOG_COMPONENT_NAME)));
-           return true;
-       });
+        setPreferenceOnclick("key_get_log", preference -> {
+            startActivity(new Intent()
+                    .setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
+                            Constants.SHARE_LOG_COMPONENT_NAME)));
+            return true;
+        });
 
 
-       setPreferenceOnclick("activity_keep_alive", preference -> {
-           Intent intent = new Intent().setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
-                   Constants.KEEPLIVE_COMPONENT_NAME));
-           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-           startActivity(intent);
-           return true;
-       });
-
-       setPreferenceOnclick("activity_push_advance_setting", preference -> {
-           Intent intent = new Intent().setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
-                   Constants.ADVANCE_PUSH_SETTING_COMPONENT_NAME));
-           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-           startActivity(intent);
-           return true;
-       });
+        setPreferenceOnclick("activity_keep_alive", preference -> {
+            Intent intent = new Intent().setComponent(new ComponentName(Constants.SERVICE_APP_NAME,
+                    Constants.KEEPLIVE_COMPONENT_NAME));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            return true;
+        });
 
 
         String globeFake = Constants.FAKE_CONFIGURATION_GLOBE;
@@ -104,7 +90,7 @@ public class SettingsFragment extends PreferenceFragment {
         );
 
 
-       checkROM();
+        checkROM();
     }
 
     private void addItem(boolean value, Preference.OnPreferenceChangeListener listener,
@@ -119,19 +105,19 @@ public class SettingsFragment extends PreferenceFragment {
         parent.addPreference(preference);
     }
 
-    private void checkROM () {
+    private void checkROM() {
         cancelTask();
         mTask = new CheckROMTask((result) -> {
             Preference preference = getPreferenceScreen().findPreference("activity_keep_alive");
             if (preference != null) {
                 preference.setVisible(result == ROM_MIUI || result == ROM_H2OS ||
-                result == ROM_UNKNOWN);
+                        result == ROM_UNKNOWN);
             }
         });
         mTask.execute();
     }
 
-    private void cancelTask () {
+    private void cancelTask() {
         if (mTask != null) {
             if (!mTask.isCancelled())
                 mTask.cancel(true);
@@ -140,12 +126,12 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void setPreferenceOnclick(String key, Preference.OnPreferenceClickListener onPreferenceClickListener) {
-          getPreferenceScreen().findPreference(key).setOnPreferenceClickListener(onPreferenceClickListener);
+        getPreferenceScreen().findPreference(key).setOnPreferenceClickListener(onPreferenceClickListener);
 
     }
 
     @Override
-    public void onStart () {
+    public void onStart() {
         super.onStart();
         long time = System.currentTimeMillis();
         Log.d(TAG, "rebuild UI took: " + String.valueOf(System.currentTimeMillis() -
@@ -154,7 +140,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     @FunctionalInterface
     private interface CheckListener {
-        void result (int value);
+        void result(int value);
     }
 
     private class CheckROMTask extends AsyncTask<Void, Void, Integer> {
