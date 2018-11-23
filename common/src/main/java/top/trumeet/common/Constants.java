@@ -115,5 +115,5 @@ public final class Constants {
 
     public static final String FAKE_CONFIGURATION_PATH = "/data/misc/riru/modules/mipush_fake/packages/";
     public static final String FAKE_CONFIGURATION_NAME_TEMPLATE = FAKE_CONFIGURATION_PATH + "%1$s.%2$s";
-    public static final String FAKE_CONFIGURATION_GLOBE = Constants.FAKE_CONFIGURATION_PATH + "ALL";
+    public static final String FAKE_CONFIGURATION_GLOBAL = Constants.FAKE_CONFIGURATION_PATH + "ALL";
 }

@@ -352,7 +352,7 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                     getString(suggestFake ? R.string.fake_enable_detail : R.string.fake_enable_detail_not_suggested),
                     screen);
 
-            if (new File(Constants.FAKE_CONFIGURATION_GLOBE).exists()) {
+            if (new File(Constants.FAKE_CONFIGURATION_GLOBAL).exists()) {
                 fakeSwtich.setSummary(R.string.fake_enable_globe);
                 fakeSwtich.setEnabled(false);
                 fakeSwtich.setChecked(true);

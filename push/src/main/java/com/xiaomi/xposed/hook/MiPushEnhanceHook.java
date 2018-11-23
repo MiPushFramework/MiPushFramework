@@ -15,7 +15,7 @@ import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import top.trumeet.common.override.UserHandleOverride;
 
-import static top.trumeet.common.Constants.FAKE_CONFIGURATION_GLOBE;
+import static top.trumeet.common.Constants.FAKE_CONFIGURATION_GLOBAL;
 import static top.trumeet.common.Constants.FAKE_CONFIGURATION_NAME_TEMPLATE;
 
 /**
@@ -36,8 +36,7 @@ public class MiPushEnhanceHook implements IXposedHookLoadPackage {
 
 
     {
-        blackList.add("google");
-        blackList.add("android");
+        blackList.add("com.google.android");
         blackList.add("de.robv.android.xposed.installer");
         blackList.add("com.xiaomi.xmsf");
         blackList.add("com.tencent.mm");
@@ -69,24 +68,29 @@ public class MiPushEnhanceHook implements IXposedHookLoadPackage {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         try {
+            String packageName = lpparam.packageName;
+
             try {
 
-                if (!new File(FAKE_CONFIGURATION_GLOBE).exists()){
+                if (!new File(FAKE_CONFIGURATION_GLOBAL).exists()){
 
                     // TODO: Remove hidden api usage
                     if (!new File(String.format(FAKE_CONFIGURATION_NAME_TEMPLATE,
                             UserHandleOverride.getUserHandleForUid(lpparam.appInfo.uid).hashCode(),
-                            lpparam.packageName)).exists())
+                            packageName)).exists())
                         // Skipped according user's settings
                         return;
 
+                } else {
+                    Log.d(TAG, "using global fake config for " + packageName);
                 }
 
             } catch (Throwable e) {
                 XposedBridge.log(TAG + ": get config: " + Log.getStackTraceString(e));
             }
 
-            if (inBlackList(lpparam.appInfo.packageName)) {
+            if (inBlackList(packageName)) {
+                Log.d(TAG, "hit blacklist when fake build for " + packageName);
                 return;
             }
 

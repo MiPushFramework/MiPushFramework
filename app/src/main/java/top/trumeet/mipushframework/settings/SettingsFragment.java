@@ -59,8 +59,8 @@ public class SettingsFragment extends PreferenceFragment {
         });
 
 
-        String globeFake = Constants.FAKE_CONFIGURATION_GLOBE;
-        addItem(new File(globeFake).exists(), (preference, newValue) -> {
+        String globalFake = Constants.FAKE_CONFIGURATION_GLOBAL;
+        addItem(new File(globalFake).exists(), (preference, newValue) -> {
                     boolean enabled = (boolean) newValue;
 
                     List<String> commands = new ArrayList<>(3);
@@ -74,9 +74,9 @@ public class SettingsFragment extends PreferenceFragment {
 
 
                     if (enabled) {
-                        if (!new File(globeFake).exists()) commands.add("touch " + globeFake);
+                        if (!new File(globalFake).exists()) commands.add("touch " + globalFake);
                     } else {
-                        commands.add("rm " + globeFake);
+                        commands.add("rm " + globalFake);
                     }
 
                     Log.i(TAG, "Final Commands: " + commands.toString());
