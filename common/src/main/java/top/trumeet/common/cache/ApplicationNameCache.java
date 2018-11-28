@@ -32,12 +32,10 @@ public class ApplicationNameCache {
         return new AbstractCacheAspect<CharSequence>(cacheInstance) {
             @Override
             CharSequence gen() {
-                CharSequence name = null;
+                CharSequence name = pkg;
                 try {
                     name = ctx.getPackageManager().getApplicationInfo(pkg, 0).loadLabel(ctx.getPackageManager());
-                } catch (PackageManager.NameNotFoundException ignored) {
-
-                }
+                } catch (PackageManager.NameNotFoundException ignored) { }
 
                 return name;
             }
