@@ -85,8 +85,6 @@ public class XmsfApp extends Application {
             Fabric.with(fabric);
         }
 
-        ConfigCenter.reloadConf(this);
-
         LogUtils.configureLog(this);
 
         initMiSdkLogger();
@@ -136,8 +134,9 @@ public class XmsfApp extends Application {
                                 Constants.REMOVE_DOZE_COMPONENT_NAME)), PendingIntent.FLAG_UPDATE_CURRENT);
                 Notification notification = new NotificationCompat.Builder(this,
                         CHANNEL_WARN)
+                        .setContentInfo(getString(R.string.wizard_title_doze_whitelist))
                         .setContentTitle(getString(R.string.wizard_title_doze_whitelist))
-                        .setContentInfo(getString(R.string.wizard_descr_doze_whitelist))
+                        .setContentText(getString(R.string.wizard_descr_doze_whitelist))
                         .setTicker(getString(R.string.wizard_descr_doze_whitelist))
                         .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                         .setPriority(NotificationCompat.PRIORITY_MAX)

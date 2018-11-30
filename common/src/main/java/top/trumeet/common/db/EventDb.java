@@ -69,6 +69,12 @@ public class EventDb {
                         });
     }
 
+    @RequiresPermission(value = Constants.permissions.WRITE_SETTINGS)
+    public static void deleteHistory(Context context, CancellationSignal signal) {
+        String data =  (Utils.getUTC().getTime() - 1000L * 3600L * 24 * 7) + "";
+        getInstance(context).delete("type in (0, 2, 10) and date < ?", new String[]{data});
+    }
+
     @RequiresPermission(value = Constants.permissions.READ_SETTINGS)
     public static Set<String> queryRegistered(Context context, CancellationSignal signal) {
 

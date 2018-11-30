@@ -3,7 +3,6 @@ package top.trumeet.mipushframework.register;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.view.View;
 
 import top.trumeet.common.register.RegisteredApplication;
 import top.trumeet.mipush.R;
@@ -26,17 +25,27 @@ public class RegisteredApplicationBinder extends BaseAppsBinder<RegisteredApplic
         fillData(item.getPackageName(), true,
                 holder);
         //todo res color
-        if (item.isRegistered()) {
-            holder.text2.setText(R.string.app_registered);
-            holder.text2.setTextColor(Color.parseColor("#FF0B5B27"));
-        } else {
-            holder.text2.setText(R.string.app_registered_error);
-            holder.text2.setTextColor(Color.parseColor("#FFF41804"));
+        switch (item.getRegisteredType()) {
+            case 1: {
+                holder.text2.setText(R.string.app_registered);
+                holder.text2.setTextColor(Color.parseColor("#FF0B5B27"));
+                break;
+            }
+            case 2: {
+                holder.text2.setText(R.string.app_registered_error);
+                holder.text2.setTextColor(Color.parseColor("#FFF41804"));
+                break;
+            }
+            case 0: {
+                holder.text2.setText(R.string.status_app_not_registered);
+                break;
+            }
         }
         holder.itemView.setOnClickListener(view -> holder.itemView.getContext()
                 .startActivity(new Intent(holder.itemView.getContext(),
                         ManagePermissionsActivity.class)
                 .putExtra(ManagePermissionsActivity.EXTRA_PACKAGE_NAME,
-                        item.getPackageName())));
+                        item.getPackageName())
+                .putExtra(ManagePermissionsActivity.EXTRA_IGNORE_NOT_REGISTERED, true)));
     }
 }

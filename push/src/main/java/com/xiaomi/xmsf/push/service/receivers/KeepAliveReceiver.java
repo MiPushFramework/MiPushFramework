@@ -16,15 +16,25 @@ import me.pqpo.librarylog4a.Log4a;
 public class KeepAliveReceiver extends BroadcastReceiver {
     private static final String TAG = KeepAliveReceiver.class.getSimpleName();
 
-    public KeepAliveReceiver(){
+    private long lastActive = System.currentTimeMillis();
+
+    public KeepAliveReceiver() {
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
         try {
-            Log4a.i(TAG, "start service when " + intent.getAction());
+            long now = System.currentTimeMillis();
+
+            if ((now - lastActive) < (1000 * 60 * 2)) {
+                return;
+            }
+
+            lastActive = now;
+
+            Log4a.d(TAG, "start service when " + intent.getAction());
             Intent localIntent = new Intent(context, PushServiceMain.class);
-            localIntent.putExtra(PushServiceConstants.EXTRA_TIME_STAMP, System.currentTimeMillis());
+            localIntent.putExtra(PushServiceConstants.EXTRA_TIME_STAMP, now);
             localIntent.setAction(PushServiceConstants.ACTION_CHECK_ALIVE);
             context.startService(localIntent);
         } catch (Exception localException) {

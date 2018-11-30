@@ -14,7 +14,6 @@ import com.android.setupwizardlib.view.NavigationBar;
 import top.trumeet.common.override.AppOpsManagerOverride;
 import top.trumeet.common.push.PushController;
 import top.trumeet.mipush.R;
-import top.trumeet.mipushframework.wizard.fake.FakeBuildActivity;
 
 /**
  * Created by Trumeet on 2017/8/25.
@@ -38,6 +37,8 @@ public class UsageStatsPermissionActivity extends PushControllerWizardActivity i
     @Override
     public void onResume () {
         super.onResume();
+        if (!isConnected())
+            return;
         PushController controller = getController();
         if (controller != null && controller.isConnected() && !isConnecting()) {
             check(controller);
@@ -87,7 +88,7 @@ public class UsageStatsPermissionActivity extends PushControllerWizardActivity i
 
     private void nextPage () {
         startActivity(new Intent(this,
-                FakeBuildActivity.class));
+                FinishWizardActivity.class));
     }
 
 }

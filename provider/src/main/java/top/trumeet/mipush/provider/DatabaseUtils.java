@@ -37,7 +37,7 @@ public class DatabaseUtils {
         }
         @Override
         public void onUpgrade(Database db, int oldVersion, int newVersion) {
-            MigrationHelper.migrate(db, new MigrationHelper.ReCreateAllTableListener() {
+            MyMigrationHelper.migrate(db, new MigrationHelper.ReCreateAllTableListener() {
 
                 @Override
                 public void onCreateAllTables(Database db, boolean ifNotExists) {

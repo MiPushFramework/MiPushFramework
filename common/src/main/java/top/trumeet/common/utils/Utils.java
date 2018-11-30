@@ -3,6 +3,7 @@ package top.trumeet.common.utils;
 import android.app.AppGlobals;
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.os.Process;
@@ -74,5 +75,17 @@ public final class Utils {
 
     public static CharSequence toHtml(String str) {
         return Html.fromHtml(str);
+    }
+
+    public static boolean isUserApplication(ApplicationInfo applicationInfo) {
+        return (applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0;
+    }
+
+    public static boolean isUserApplication (String pkg) {
+        try {
+            return isUserApplication(getApplication().getPackageManager().getApplicationInfo(pkg, 0));
+        } catch (PackageManager.NameNotFoundException ignored) {
+            return false;
+        }
     }
 }

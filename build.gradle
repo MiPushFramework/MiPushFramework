@@ -11,7 +11,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
         classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2'
-        classpath 'io.fabric.tools:gradle:1.25.1'
+        classpath 'io.fabric.tools:gradle:1.25.4'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -43,7 +43,7 @@ def gitCommitId = 'git rev-parse --short HEAD'.execute([], project.rootDir).text
 
 def majorVersion = 0
 def minorVersion = 3
-def buildVersion = 4
+def buildVersion = 6
 def currentVersionCode = (majorVersion + 1) * 200 + minorVersion * 20 + buildVersion
 
 def baseVersionName = "${majorVersion}.${minorVersion}.${buildVersion}"
@@ -60,7 +60,7 @@ ext {
     targetSdkVersion = 27
     buildToolsVersion = "27.0.3"
     versionCode = currentVersionCode
-    pushVersionCode = 6
+    pushVersionCode = 7
     snapshot = false
     versionBase = "${baseVersionName}.${releaseTime()}.${gitCommitId}"
     versionName = snapshot ? versionBase + "-SNAPSHOT" : versionBase

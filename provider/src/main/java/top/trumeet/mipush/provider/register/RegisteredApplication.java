@@ -111,18 +111,21 @@ public class RegisteredApplication implements Parcelable {
     @Property(nameInDb = "allow_receive_command_without_register_result")
     private boolean allowReceiveCommand;
 
-    @Generated(hash = 45090013)
+    @Property(nameInDb = "notification_on_register")
+    private boolean notificationOnRegister;
+
+    @Generated(hash = 1033351065)
     public RegisteredApplication(Long id, String packageName, int type, boolean allowReceivePush,
-            boolean allowReceiveRegisterResult, boolean allowReceiveCommand) {
+            boolean allowReceiveRegisterResult, boolean allowReceiveCommand, boolean notificationOnRegister) {
         this.id = id;
         this.packageName = packageName;
         this.type = type;
         this.allowReceivePush = allowReceivePush;
         this.allowReceiveRegisterResult = allowReceiveRegisterResult;
         this.allowReceiveCommand = allowReceiveCommand;
+        this.notificationOnRegister = notificationOnRegister;
     }
 
-    @Generated(hash = 1216470554)
     public RegisteredApplication() {
     }
 
@@ -195,6 +198,13 @@ public class RegisteredApplication implements Parcelable {
         }
     }
 
+    public boolean isNotificationOnRegister() {
+        return notificationOnRegister;
+    }
+
+    public void setNotificationOnRegister(boolean notificationOnRegister) {
+        this.notificationOnRegister = notificationOnRegister;
+    }
 
     public top.trumeet.common.register.RegisteredApplication convertTo () {
         return convertTo(this);
@@ -213,14 +223,16 @@ public class RegisteredApplication implements Parcelable {
                 original.packageName,
                 original.type, original.allowReceivePush,
                 original.allowReceiveRegisterResult,
-                original.allowReceiveCommand);
+                original.allowReceiveCommand,
+                0,
+                original.notificationOnRegister);
     }
 
     @NonNull
     public static RegisteredApplication from (@NonNull top.trumeet.common.register.RegisteredApplication original) {
         return new RegisteredApplication(original.getId(), original.getPackageName(), original.getType(),
                 original.getAllowReceivePush(), original.getAllowReceiveRegisterResult(),
-                original.isAllowReceiveCommand());
+                original.isAllowReceiveCommand(), original.isNotificationOnRegister());
     }
 
     public boolean isAllowReceiveCommand() {
@@ -233,5 +245,9 @@ public class RegisteredApplication implements Parcelable {
 
     public boolean getAllowReceiveCommand() {
         return this.allowReceiveCommand;
+    }
+
+    public boolean getNotificationOnRegister() {
+        return this.notificationOnRegister;
     }
 }

@@ -44,8 +44,6 @@
         </activity>
         <activity android:name="top.trumeet.mipushframework.wizard.CheckRunInBackgroundActivity"
             android:theme="@style/AppTheme.Wizard" />
-        <activity android:name="top.trumeet.mipushframework.wizard.fake.FakeBuildActivity"
-            android:theme="@style/AppTheme.Wizard" />
         <activity android:name="top.trumeet.mipushframework.wizard.FinishWizardActivity"
             android:theme="@style/AppTheme.Wizard" />
         <activity android:name="top.trumeet.mipushframework.wizard.UsageStatsPermissionActivity"
@@ -71,11 +69,6 @@
             android:name="io.fabric.ApiKey"
             android:value="${fabricKey}" />
 
-
-        <provider
-            android:name="top.trumeet.mipushframework.preferences.MiPushAppPreferenceProvider"
-            android:authorities="top.trumeet.mipushframework.preferences"
-            android:exported="true"/>
 
         <!-- Push API -->
         <provider

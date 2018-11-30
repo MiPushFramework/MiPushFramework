@@ -39,7 +39,7 @@ public class MyPushMessageHandler extends IntentService {
     @Override
     protected void onHandleIntent(final Intent intent) {
         if (iTopActivity == null) {
-            iTopActivity = TopActivityFactory.newInstance(ConfigCenter.getInstance().accessMode);
+            iTopActivity = TopActivityFactory.newInstance(ConfigCenter.getAccessMode(this));
         }
 
         if (!iTopActivity.isEnabled(this)) {

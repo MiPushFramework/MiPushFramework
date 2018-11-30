@@ -1,9 +1,8 @@
 package top.trumeet.mipushframework.permissions;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -14,6 +13,7 @@ import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,24 +22,34 @@ import android.widget.Toast;
 
 import com.android.settings.widget.EntityHeaderController;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import io.reactivex.disposables.CompositeDisposable;
 import moe.shizuku.preference.Preference;
 import moe.shizuku.preference.PreferenceCategory;
 import moe.shizuku.preference.PreferenceFragment;
+import moe.shizuku.preference.PreferenceGroup;
 import moe.shizuku.preference.PreferenceScreen;
 import moe.shizuku.preference.SimpleMenuPreference;
 import moe.shizuku.preference.SwitchPreferenceCompat;
 import top.trumeet.common.Constants;
 import top.trumeet.common.db.RegisteredApplicationDb;
+import top.trumeet.common.override.UserHandleOverride;
 import top.trumeet.common.register.RegisteredApplication;
 import top.trumeet.common.utils.Utils;
 import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.control.CheckPermissionsUtils;
 import top.trumeet.mipushframework.event.RecentActivityActivity;
+import top.trumeet.mipushframework.utils.ShellUtils;
+import top.trumeet.mipushframework.widgets.InfoPreference;
 
 import static android.os.Build.VERSION_CODES.O;
 import static android.provider.Settings.EXTRA_APP_PACKAGE;
 import static android.provider.Settings.EXTRA_CHANNEL_ID;
+import static top.trumeet.common.Constants.FAKE_CONFIGURATION_PATH;
 import static top.trumeet.common.utils.NotificationUtils.getChannelIdByPkg;
 
 /**
@@ -53,6 +63,10 @@ public class ManagePermissionsActivity extends AppCompatActivity {
     public static final String EXTRA_PACKAGE_NAME =
             ManagePermissionsActivity.class.getName()
             + ".EXTRA_PACKAGE_NAME";
+
+    public static final String EXTRA_IGNORE_NOT_REGISTERED =
+            ManagePermissionsActivity.class.getName()
+            + ".EXTRA_IGNORE_NOT_REGISTERED";
 
     private CompositeDisposable composite = new CompositeDisposable();
 
@@ -72,35 +86,35 @@ public class ManagePermissionsActivity extends AppCompatActivity {
     }
 
     private void checkAndStart () {
-        composite.add(CheckPermissionsUtils.checkPermissionsAndStartAsync(this,
-                result -> {
-                    if (result.permissionResult.granted &&
-                            result.activityResult.resultCode() == Activity.RESULT_OK) {
-                        mTask = new LoadTask(mPkg);
-                        mTask.execute();
-                    } else {
-                        if (!result.permissionResult.granted) {
-                            Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission,
-                                    result.permissionResult.name), Toast.LENGTH_LONG)
-                                    .show();
-                            if (!result.permissionResult.shouldShowRequestPermissionRationale) {
-                                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                                startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                                        .setData(uri)
-                                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                            } else {
-                                checkAndStart();
-                            }
-                        }
-                        if (result.activityResult.resultCode() != Activity.RESULT_OK) {
-                            Toast.makeText(this, getString(R.string.request_battery_whitelist), Toast.LENGTH_LONG)
-                                    .show();
-                            checkAndStart();
-                        }
-                    }
-                }, (throwable -> {
-                    Log.e(TAG, "Check Permissions", throwable);
-                })));
+        composite.add(CheckPermissionsUtils.checkAndRun(result -> {
+            switch (result) {
+                case OK:
+                    mTask = new LoadTask(mPkg);
+                    mTask.execute();
+                    break;
+                case PERMISSION_NEEDED:
+                    Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission), Toast.LENGTH_LONG)
+                            .show();
+                    // Restart to request permissions again.
+                    checkAndStart();
+                    break;
+                case PERMISSION_NEEDED_SHOW_SETTINGS:
+                    Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission), Toast.LENGTH_LONG)
+                            .show();
+                    Uri uri = Uri.fromParts("package", getPackageName(), null);
+                    startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                            .setData(uri)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    break;
+                case REMOVE_DOZE_NEEDED:
+                    Toast.makeText(this, getString(R.string.request_battery_whitelist), Toast.LENGTH_LONG)
+                            .show();
+                    checkAndStart();
+                    break;
+            }
+        }, throwable -> {
+            Log.e(TAG, "check permissions", throwable);
+        }, this));
     }
 
     @Override
@@ -141,10 +155,19 @@ public class ManagePermissionsActivity extends AppCompatActivity {
         @Override
         protected RegisteredApplication doInBackground(Void... voids) {
             mSignal = new CancellationSignal();
-            return RegisteredApplicationDb.registerApplication(pkg /* Package */
+            RegisteredApplication application = RegisteredApplicationDb.registerApplication(pkg /* Package */
                     , false /* Auto Crate */,
                     ManagePermissionsActivity.this /* Context */,
                     mSignal);
+            if (application == null && getIntent().getBooleanExtra(EXTRA_IGNORE_NOT_REGISTERED, false)) {
+                application = new RegisteredApplication();
+                application.setPackageName(pkg);
+                application.setRegisteredType(0);
+            } else if (application != null) {
+                // TODO: Add unregistered application detection
+                application.setRegisteredType(1);
+            }
+            return application;
         }
 
         @Override
@@ -173,6 +196,10 @@ public class ManagePermissionsActivity extends AppCompatActivity {
     public static class ManagePermissionsFragment extends PreferenceFragment {
         private RegisteredApplication mApplicationItem;
         private SaveTask mSaveTask;
+        private MenuItem menuOk;
+        // Will be used in SaveTask, null = not changed
+        // Isn't a good idea
+        private Boolean changeFakeSettings = null;
 
         /**
          * Not using {@link android.os.Parcelable}, too bad
@@ -190,12 +217,12 @@ public class ManagePermissionsActivity extends AppCompatActivity {
 
         @Override
         public void onCreateOptionsMenu (Menu menu, MenuInflater inflater) {
-            MenuItem itemOk = menu.add(0, 0, 0, R.string.apply);
+            menuOk = menu.add(0, 0, 0, R.string.apply);
             Drawable iconOk = ContextCompat.getDrawable(getActivity(),
                     R.drawable.ic_check_black_24dp);
             DrawableCompat.setTint(iconOk, Utils.getColorAttr(getContext(), R.attr.colorAccent));
-            itemOk.setIcon(iconOk);
-            itemOk.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            menuOk.setIcon(iconOk);
+            menuOk.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         }
 
         @Override
@@ -220,6 +247,16 @@ public class ManagePermissionsActivity extends AppCompatActivity {
             super.onDetach();
         }
 
+        private boolean suggestEnableFake (String pkg) {
+            List<String> pkgsEqual = Arrays.asList(getResources().getStringArray(R.array.fake_blacklist_equals));
+            if (pkgsEqual.contains(pkg)) return false;
+            List<String> pkgsContains = Arrays.asList(getResources().getStringArray(R.array.fake_blacklist_contains));
+            for (String p : pkgsContains)
+                if (pkg.contains(p)) return false;
+            if (!Utils.isUserApplication(pkg)) return false;
+            return true;
+        }
+
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             PreferenceScreen screen = getPreferenceManager()
@@ -237,20 +274,35 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                     .done((AppCompatActivity)getActivity(), getContext());
             screen.addPreference(appPreferenceOreo);
 
+            boolean suggestFake = suggestEnableFake(mApplicationItem.getPackageName());
+
+            if (mApplicationItem.getRegisteredType() == 0) {
+                InfoPreference preferenceStatus = new InfoPreference(getActivity(), null, moe.shizuku.preference.R.attr.preferenceStyle,
+                        R.style.Preference_Material);
+                preferenceStatus.setTitle(Html.fromHtml(getString(R.string.status_app_not_registered_title)));
+                preferenceStatus.setSummary(Html.fromHtml(getString(
+                        suggestFake ? R.string.status_app_not_registered_detail_with_fake_suggest :
+                                R.string.status_app_not_registered_detail_without_fake_suggest
+                )));
+                Drawable iconError = ContextCompat.getDrawable(getActivity(), R.drawable.ic_error_outline_black_24dp);
+                DrawableCompat.setTint(iconError, Color.parseColor("#D50000"));
+                preferenceStatus.setIcon(iconError);
+                screen.addPreference(preferenceStatus);
+            }
+
             if (Build.VERSION.SDK_INT >= O) {
                 Preference manageNotificationPreference = new Preference(getActivity());
                 manageNotificationPreference.setTitle(R.string.settings_manage_app_notifications);
                 manageNotificationPreference.setSummary(R.string.settings_manage_app_notifications_summary);
-                manageNotificationPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    @Override
-                    @TargetApi(O)
-                    public boolean onPreferenceClick(Preference preference) {
-                        startActivity(new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
-                                .putExtra(EXTRA_APP_PACKAGE, Constants.SERVICE_APP_NAME)
-                                .putExtra(EXTRA_CHANNEL_ID, getChannelIdByPkg(mApplicationItem.getPackageName())));
-                        return true;
-                    }
+                manageNotificationPreference.setOnPreferenceClickListener(preference -> {
+                    startActivity(new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
+                            .putExtra(EXTRA_APP_PACKAGE, Constants.SERVICE_APP_NAME)
+                            .putExtra(EXTRA_CHANNEL_ID, getChannelIdByPkg(mApplicationItem.getPackageName())));
+                    return true;
                 });
+                if (mApplicationItem.getRegisteredType() == 0) {
+                    manageNotificationPreference.setEnabled(false);
+                }
                 screen.addPreference(manageNotificationPreference);
             }
 
@@ -261,67 +313,88 @@ public class ManagePermissionsActivity extends AppCompatActivity {
             preferenceRegisterMode.setEntries(R.array.register_types);
             preferenceRegisterMode.setEntryValues(R.array.register_entries);
             preferenceRegisterMode.setTitle(R.string.permission_register_type);
-            preferenceRegisterMode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    mApplicationItem.setType(Integer.parseInt(String.valueOf(newValue)));
-                    updateRegisterType(mApplicationItem.getType(),
-                            preferenceRegisterMode);
-                    return true;
-                }
+            preferenceRegisterMode.setOnPreferenceChangeListener((preference, newValue) -> {
+                mApplicationItem.setType(Integer.parseInt(String.valueOf(newValue)));
+                updateRegisterType(mApplicationItem.getType(),
+                        preferenceRegisterMode);
+                return true;
             });
+            if (mApplicationItem.getRegisteredType() == 0) {
+                preferenceRegisterMode.setEnabled(false);
+            }
             updateRegisterType(mApplicationItem.getType(),
                     preferenceRegisterMode);
 
             Preference viewRecentActivityPreference = new Preference(getActivity());
             viewRecentActivityPreference.setTitle(R.string.recent_activity_view);
-            viewRecentActivityPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    startActivity(new Intent(getActivity(),
-                            RecentActivityActivity.class)
-                    .setData(Uri.parse(mApplicationItem.getPackageName())));
-                    return true;
-                }
+            viewRecentActivityPreference.setOnPreferenceClickListener(preference -> {
+                startActivity(new Intent(getActivity(),
+                        RecentActivityActivity.class)
+                        .setData(Uri.parse(mApplicationItem.getPackageName())));
+                return true;
             });
 
+            if (mApplicationItem.getRegisteredType() == 0) {
+                preferenceRegisterMode.setEnabled(false);
+            }
             screen.addPreference(preferenceRegisterMode);
             screen.addPreference(viewRecentActivityPreference);
+
+            // TODO: Switch HEAVY works to background thread
+            SwitchPreferenceCompat fakeSwtich = addItem(new File(String.format(Constants.FAKE_CONFIGURATION_NAME_TEMPLATE,
+                    UserHandleOverride.getUserHandleForUid(mApplicationItem.getUid(getActivity())).hashCode(),
+                    mApplicationItem.getPackageName())).exists(),
+                    (preference, newValue) -> {
+                        changeFakeSettings = (boolean) newValue;
+                        return true;
+                    },
+                    getString(R.string.fake_enable_title),
+                    getString(suggestFake ? R.string.fake_enable_detail : R.string.fake_enable_detail_not_suggested),
+                    screen);
+
+            if (new File(Constants.FAKE_CONFIGURATION_GLOBAL).exists()) {
+                fakeSwtich.setSummary(R.string.fake_enable_globe);
+                fakeSwtich.setEnabled(false);
+                fakeSwtich.setChecked(true);
+            }
+
+
+            addItem(mApplicationItem.isNotificationOnRegister(),
+                    (preference, newValue) -> {
+                        mApplicationItem.setNotificationOnRegister(((Boolean)newValue));
+                        return true;
+                    },
+                    getString(R.string.permission_notification_on_register),
+                    screen);
 
             PreferenceCategory category = new PreferenceCategory(getActivity(), null, moe.shizuku.preference.R.attr.preferenceCategoryStyle,
                     R.style.Preference_Category_Material);
             category.setTitle(R.string.permissions);
+            if (mApplicationItem.getRegisteredType() == 0) {
+                category.setEnabled(false);
+            }
             screen.addPreference(category);
 
             addItem(mApplicationItem.getAllowReceivePush(),
-                    new Preference.OnPreferenceChangeListener() {
-                        @Override
-                        public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            mApplicationItem.setAllowReceivePush(((Boolean)newValue));
-                            return true;
-                        }
+                    (preference, newValue) -> {
+                        mApplicationItem.setAllowReceivePush(((Boolean)newValue));
+                        return true;
                     },
             getString(R.string.permission_allow_receive),
                     category);
 
             addItem(mApplicationItem.isAllowReceiveCommand(),
-                    new Preference.OnPreferenceChangeListener() {
-                        @Override
-                        public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            mApplicationItem.setAllowReceiveCommand(((Boolean)newValue));
-                            return true;
-                        }
+                    (preference, newValue) -> {
+                        mApplicationItem.setAllowReceiveCommand(((Boolean)newValue));
+                        return true;
                     },
                     getString(R.string.permission_allow_receive_command),
                     category);
 
             addItem(mApplicationItem.getAllowReceiveRegisterResult(),
-                    new Preference.OnPreferenceChangeListener() {
-                        @Override
-                        public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            mApplicationItem.setAllowReceiveRegisterResult(((Boolean)newValue));
-                            return true;
-                        }
+                    (preference, newValue) -> {
+                        mApplicationItem.setAllowReceiveRegisterResult(((Boolean)newValue));
+                        return true;
                     },
                     getString(R.string.permission_allow_receive_register_result),
                     category);
@@ -348,23 +421,61 @@ public class ManagePermissionsActivity extends AppCompatActivity {
             [index]);
         }
 
-        private void addItem (boolean value, Preference.OnPreferenceChangeListener listener
-                , CharSequence title, PreferenceCategory parent) {
+        private SwitchPreferenceCompat addItem (boolean value, Preference.OnPreferenceChangeListener listener,
+                              CharSequence title, CharSequence summary, PreferenceGroup parent) {
             SwitchPreferenceCompat preference = new SwitchPreferenceCompat(getActivity(),
                     null, moe.shizuku.preference.R.attr.switchPreferenceStyle,
                     R.style.Preference_SwitchPreferenceCompat);
             preference.setOnPreferenceChangeListener(listener);
             preference.setTitle(title);
+            preference.setSummary(summary);
             preference.setChecked(value);
             parent.addPreference(preference);
+
+            return preference;
+        }
+
+        /**
+         * @deprecated Use {@link #addItem(boolean, Preference.OnPreferenceChangeListener, CharSequence, CharSequence, PreferenceGroup)} instead.
+         */
+        @Deprecated
+        private void addItem (boolean value, Preference.OnPreferenceChangeListener listener
+                , CharSequence title, PreferenceGroup parent) {
+            addItem(value, listener, title, null, parent);
         }
 
         private class SaveTask extends AsyncTask<Void, Void, Void> {
 
             @Override
             protected Void doInBackground(Void... voids) {
-                RegisteredApplicationDb.update(mApplicationItem,
-                        getActivity());
+                if (mApplicationItem != null && mApplicationItem.getRegisteredType() != 0) {
+                    RegisteredApplicationDb.update(mApplicationItem,
+                            getActivity());
+                }
+                if (changeFakeSettings != null) {
+                    String path = String.format(Constants.FAKE_CONFIGURATION_NAME_TEMPLATE,
+                            UserHandleOverride.getUserHandleForUid(mApplicationItem.getUid(getActivity())).hashCode(),
+                            mApplicationItem.getPackageName());
+                    Log.d(TAG, "path: " + path);
+                    List<String> commands = new ArrayList<>(3);
+                    if (changeFakeSettings) {
+                        if (new File(FAKE_CONFIGURATION_PATH).isFile()) {
+                            commands.add("rm -rf " + FAKE_CONFIGURATION_PATH);
+                        }
+                        if (!new File(FAKE_CONFIGURATION_PATH).exists()) {
+                            commands.add("mkdir -p " + FAKE_CONFIGURATION_PATH);
+                        }
+                    }
+
+                    if (changeFakeSettings) {
+                        if (!new File(path).exists()) commands.add("touch " + path);
+                    } else {
+                        commands.add("rm " + path);
+                    }
+                    Log.i(TAG, "Final Commands: " + commands.toString());
+                    // About permissions and groups: these commands below with root WILL make the file accessible (not editable) for all apps.
+                    Log.d(TAG, "Exit: " + ShellUtils.execCmd(commands, true, true).toString());
+                }
                 return null;
             }
 

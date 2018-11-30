@@ -3,6 +3,9 @@ package com.xiaomi.xmsf.push.service;
 import android.app.IntentService;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -22,6 +25,8 @@ import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.event.Event;
 import top.trumeet.common.register.RegisteredApplication;
 
+import static com.xiaomi.xmsf.BuildConfig.DEBUG;
+
 public class XMPushService extends IntentService {
     private static final String TAG = "XMPushService Bridge";
 
@@ -31,9 +36,7 @@ public class XMPushService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-
         try {
-
             Log4a.d(TAG, "onHandleIntent -> A application want to register push");
             String pkg = intent.getStringExtra(Constants.EXTRA_MI_PUSH_PACKAGE);
             if (pkg == null) {
@@ -48,14 +51,14 @@ public class XMPushService extends IntentService {
                 register = false;
             }
             NotificationController.registerChannelIfNeeded(this, pkg);
+            RegisteredApplication application = RegisteredApplicationDb
+                    .registerApplication(pkg, true, this, null);
             if (!PushControllerUtils.isPrefsEnable(this)) {
                 Log4a.e(TAG, "Not allowed in SP! Just return!");
                 result = Event.ResultType.DENY_DISABLED;
             } else {
-                RegisteredApplication application = RegisteredApplicationDb
-                        .registerApplication(pkg, true, this, null);
                 if (application == null) {
-                    Crashlytics.log(Log.WARN, TAG, "registerApplication failed " + pkg);
+                    if (!DEBUG) Crashlytics.log(Log.WARN, TAG, "registerApplication failed " + pkg);
                     Log4a.w(TAG, "registerApplication failed " + pkg);
                     return;
                 }
@@ -63,7 +66,7 @@ public class XMPushService extends IntentService {
                     Log4a.w(TAG, "Denied register request: " + pkg);
                     result = Event.ResultType.DENY_USER;
                 } else {
-                    if (ConfigCenter.getInstance().autoRegister && application.getType() == RegisteredApplication.Type.ASK) {
+                    if (ConfigCenter.isAutoRegister(this) && application.getType() == RegisteredApplication.Type.ASK) {
                         application.setType(RegisteredApplication.Type.ALLOW);
                         RegisteredApplicationDb.update(application, this);
                     }
@@ -97,6 +100,39 @@ public class XMPushService extends IntentService {
                 }
             }
             if (register) {
+                if (application != null && application.isNotificationOnRegister()) {
+                    try {
+                        CharSequence appName = getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(pkg, 0));
+                        CharSequence typeString;
+                        switch (result) {
+                            case Event.ResultType.OK:
+                            case Event.ResultType.DENY_DISABLED:
+                                typeString = getString(R.string.allow);
+                                break;
+                            case Event.ResultType.DENY_USER:
+                                typeString = getString(R.string.deny);
+                                break;
+                            default:
+                                typeString = null;
+                                break;
+                        }
+                        if (typeString != null) {
+                            new Handler(Looper.getMainLooper()).post(() -> {
+                                try {
+                                    Toast.makeText(this, getString(R.string.notification_register,
+                                            appName, typeString),
+                                            Toast.LENGTH_SHORT)
+                                            .show();
+                                } catch (Throwable ignored) {
+                                    // TODO: It's a bad way to switch to main thread.
+                                    // Ignored service death
+                                }
+                            });
+                        }
+                    } catch (PackageManager.NameNotFoundException ignored) {}
+                } else {
+                    Log.e("XMPushService Bridge", "Notification disabled");
+                }
                 EventDb.insertEvent(result, new top.trumeet.common.event.type.RegistrationType(null, pkg), this);
             }
         } catch (RuntimeException e) {

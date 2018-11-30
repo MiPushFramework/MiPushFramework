@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/settings_clear">
+
+        <Preference
+            android:key="clear_history"
+            android:summary="@string/settings_clear_history_summary"
+            android:title="@string/settings_clear_history"
+            />
+
+
+        <Preference
+            android:key="clear_log"
+            android:summary="@string/settings_clear_log_summary"
+            android:title="@string/settings_clear_log" />
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_options">
+
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="activity_push_icon"
+            android:summary="@string/settings_summary_push_icon"
+            android:title="@string/settings_push_icon" />
+
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="AutoRegister"
+            android:title="@string/settings_auto_register" />
+
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/pref_title_access_mode_list_titles"
+            android:entryValues="@array/pref_title_access_mode_list_values"
+            android:key="AccessMode"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/pref_title_access_mode"
+            android:summary="@string/pref_summary_access_mode"
+            />
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

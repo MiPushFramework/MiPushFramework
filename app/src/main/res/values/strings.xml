@@ -59,11 +59,6 @@
     <string name="wizard_title_stats_permission">Usage stats</string>
     <string name="wizard_title_stats_permission_text">You need to grant "Usage" permission or you will not be able to receive notifications.</string>
 
-    <string name="wizard_title_fake_build">修改 Build.prop 深度伪装MIUI</string>
-    <string name="wizard_descr_fake_build"><![CDATA[某些应用（如京东、摩拜单车等）会使用自己的逻辑判断是否是 MIUI，如果是才启用小米推送，否则仍会使用其他推送方式驻留后台。这种判断逻辑通常是解析 build.prop。我们尝试通过向 build.prop 插入一些代表 MIUI 的键值对进行伪装，让这些应用使用小米推送。
-    <br /><br />如果您需要伪装，请先 <a href="http://forum.xda-developers.com/apps/magisk/official-magisk-v7-universal-systemless-t3473445">下载安装 Magisk，点这儿前往XDA</a>。安装完成后，打开 <b>Magisk Manager</b>，下载 <b><a href="https://github.com/cubesky/MiPushFake/releases/latest">MiPushFake</a></b> 模块并激活重启，随后即可完成伪装。]]></string>
-    <string name="toast_fake_build_already_enable">您已开启该项设置，如需取消，请前往 Magisk Manager 并卸载或取消激活 MiPushFake 模块。</string>
-
     <string name="wizard_descr_finish">大功告成！您可以开始使用了</string>
 
     <string name="status_ok">成功</string>
@@ -104,6 +99,7 @@
     <string name="permission_allow_receive">接收通知栏消息</string>
     <string name="permission_allow_receive_command">接收命令</string>
     <string name="permission_allow_receive_register_result">回掉注册结果（暂时无效）</string>
+    <string name="permission_notification_on_register">注册时显示通知</string>
 
     <string name="permission_register_type">注册方式</string>
     <string name="register_type_allow">允许，自动注册</string>
@@ -121,7 +117,10 @@
     </string-array>
 
     <!-- Settings -->
-    <string name="settings_deploy">部署</string>
+    <string name="settings_enhance">增强</string>
+    <string name="settings_service_setting">服务配置</string>
+    <string name="settings_service_advance_setting">高级配置</string>
+    <string name="settings_summary_service_advance_setting">进入高级配置界面</string>
     <string name="settings_fake_build">伪装 Build.prop</string>
     <string name="settings_fake_build_summary">某些应用（如某东、某拜单车等）会使用自己的逻辑判断是否是 MIUI，如果是才启用小米推送，否则仍会使用其他推送方式驻留后台。这种判断逻辑通常是解析 build.prop。我们尝试通过向 build.prop 插入一些代表 MIUI 的键值对进行伪装，让这些应用使用小米推送。</string>
     <string name="settings_check_service">检查服务运行状态</string>
@@ -129,33 +128,15 @@
     <string name="settings_skip_doze">移除电池优化</string>
     <string name="settings_skip_doze_summary">在 Android 6.0 及更高版本，电池优化会影响推送</string>
 
-    <string name="settings_options">配置(重启应用和服务生效)</string>
-    <string name="pref_title_access_mode">前台APP检测模式</string>
-    <string-array name="pref_title_access_mode_list_titles">
-        <item>使用情况访问 API (性能好-推荐)</item>
-        <item>辅助模式 (兼容性好)</item>
-    </string-array>
-
-    <string-array name="pref_title_access_mode_list_values">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
-    <string name="settings_debug_foreground_notification">开启保活通知(适用于Oreo之前版本)</string>
-    <string name="settings_wakeup_target">启动目标应用</string>
-
     <string name="settings_summary_wakeup_target">在收到通知时，我们会启动对方应用。禁用它可以防止部分应用再次发送通知，但也可能遗漏部分通知。</string>
     <string name="settings_debug_icon">调试透明图标</string>
-    <string name="settings_auto_register">自动注册应用</string>
 
-
-    <string name="settings_enhance">增强</string>
     <string name="settings_debug">诊断</string>
     <string name="settings_get_log">获取日志</string>
     <string name="settings_get_log_summary">点按分享日志，请在需要的时候随 Issues 一起提交。</string>
-    <string name="settings_clear_log">清空日志</string>
     <string name="settings_activity_keep_alive">后台服务保活</string>
-    <string name="settings_summary_keep_alive">很多ROM(比如一加)有自己的后台清理逻辑，但是可以通过应用切换界面锁定功能设置白名单。
-    点击之后，请在应用切换界面找到刚刚打开的后台服务保活界面并锁定。[注意]手机每次重启之后需要点击这里开启保活界面。
+    <string name="settings_summary_keep_alive">很多ROM(比如一加)有自己的后台清理逻辑，但是可以通过应用切换界面锁定功能设置白名单。\n
+        点击之后，请在应用切换界面找到刚刚打开的界面并锁定。
     </string>
 
     <!-- Recent Activity -->
@@ -175,6 +156,7 @@
     <string name="connect_fail_title_low_version">请升级推送服务</string>
     <string name="connect_fail_title_not_installed">需要安装推送服务</string>
     <string name="connect_fail_title_rom">不支持您的 ROM</string>
+    <string name="connect_fail_doze">需要关闭优化</string>
 
     <string name="connect_fail_text_unknown"><![CDATA[
     <b>我们无法连接至推送服务</b>，请检查您是否在使用<b>唤醒拦截工具</b>、<b>国产 ROM （唤醒限制功能）</b>，请将 <b>%1$s</b> 加入白名单，然后重试。
@@ -198,14 +180,12 @@
 
     <string name="help_article_can_not_receive_push">无法收到推送</string>
     <string name="help_article_register_error">注册异常</string>
-    <string name="register_error_detected">检测到注册异常，请按照帮助文章自行排查，如果属于误报，请忽略</string>
     <string name="help_article_no_register">注册列表为空</string>
 
     <string name="connect_fail_test_se"><![CDATA[
     <b>权限不足通常是由于升级所致，请重再一次安装 小米推送服务 APP（不要清空数据）。
     寻找当前版本安装包 <a href="%1$s">点击这里</a> </b>
     ]]></string>
-    <string name="disable_fg_notification_warning">关闭可能会导致通知不及时</string>
 
 
     <string name="settings_group_notification">启用通知合并</string>
@@ -216,4 +196,23 @@
     <string name="app_registered_error">注册异常</string>
 
     <string name="request_battery_whitelist">Push 应用需要被加入 电池优化白名单 才能正常工作</string>
+
+    <string name="status_app_not_registered">使用小米推送，但尚未注册</string>
+    <string name="footer_app_ignored_not_registered">已忽略 %1$s 个尚未使用小米推送的应用</string>
+    <string name="status_app_not_registered_detail_without_fake_suggest"><![CDATA[
+是否注册由应用自行决定，一般启动时会自动注册。部分应用只会在小米设备上注册。欢迎参阅 <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BC%8F%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">应用程式注册问题解决方案</a></b> 和 <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E5%BA%94%E7%94%A8%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98">[帮助] 应用注册问题</a></b>。
+    ]]></string>
+    <string name="status_app_not_registered_detail_with_fake_suggest"><![CDATA[
+是否注册由应用自行决定，一般启动时会自动注册。部分应用只会在小米设备上注册，使用 <b><a href="https://github.com/Magisk-Modules-Repo/MiPushFake">Magisk 全局伪装模块</a></b> 和 <b><a href="https://github.com/TimothyZhang023/Riru-MiPushFake">Magisk 单应用伪装</a></b> 可以加大注册机率。同时，欢迎参阅 <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BC%8F%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">应用程式注册问题解决方案</a></b> 和 <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E5%BA%94%E7%94%A8%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98">[帮助] 应用注册问题</a></b>。
+    ]]></string>
+    <string name="status_app_not_registered_title"><![CDATA[
+<b>尚未注册</b>
+    ]]></string>
+
+    <string name="fake_enable_title">伪装为小米设备</string>
+    <string name="fake_enable_detail">通过 Xposed 伪装模块或 Magisk 单应用伪装模块，让该应用误认为是小米设备，以增强注册机率（修改需要 ROOT 权限）</string>
+    <string name="fake_enable_detail_not_suggested">不建议开启，可能会影响应用正常功能</string>
+    <string name="fake_enable_globe">全局伪装已开启</string>
+
+
 </resources>

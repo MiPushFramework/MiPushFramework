@@ -14,19 +14,16 @@ import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.crossbowffs.remotepreferences.RemotePreferences;
 import com.oasisfeng.condom.CondomContext;
 import com.xiaomi.smack.packet.Message;
 import com.xiaomi.xmpush.thrift.ActionType;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmsf.R;
 import com.xiaomi.xmsf.push.control.XMOutbound;
-import com.xiaomi.xmsf.utils.ConfigCenter;
 
 import org.apache.thrift.TBase;
 
 import me.pqpo.librarylog4a.Log4a;
-import top.trumeet.common.utils.PreferencesUtils;
 
 import static top.trumeet.common.Constants.TAG_CONDOM;
 
@@ -91,7 +88,7 @@ public class PushServiceMain extends XMPushService {
     public void onCreate() {
         super.onCreate();
         mSettingsObserver = new SettingsObserver(new Handler(Looper.myLooper()));
-        mListener = PreferencesUtils.subscribe((RemotePreferences)PreferencesUtils.getPreferences(this), mSettingsObserver);
+
     }
 
     @Override
@@ -116,8 +113,6 @@ public class PushServiceMain extends XMPushService {
 
     @Override
     public void onDestroy() {
-        // getContentResolver().unregisterContentObserver(mSettingsObserver);
-        PreferencesUtils.unsubscribe((RemotePreferences) PreferencesUtils.getPreferences(this), mListener);
         ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
                 .cancel(NOTIFICATION_ALIVE_ID);
         super.onDestroy();
@@ -131,7 +126,6 @@ public class PushServiceMain extends XMPushService {
         @Override
         public void onChange(boolean selfChange) {
             Log.i("SettingsObserver", "-> settings changed");
-            ConfigCenter.reloadConf(PushServiceMain.this);
             onConfigChanged();
         }
     }

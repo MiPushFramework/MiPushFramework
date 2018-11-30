@@ -1,51 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/settings_deploy">
-        <Preference
-            android:summary="@string/settings_fake_build_summary"
-            android:title="@string/settings_fake_build">
-            <intent
-                android:targetClass="top.trumeet.mipushframework.wizard.fake.FakeBuildActivity"
-                android:targetPackage="top.trumeet.mipush">
-                <extra
-                    android:name="top.trumeet.xmsf.EXTRA_FINISH_ON_NEXT"
-                    android:value="true" />
-            </intent>
-        </Preference>
+    <PreferenceCategory android:title="@string/settings_enhance">
         <Preference
             android:key="activity_keep_alive"
             android:summary="@string/settings_summary_keep_alive"
-            android:title="@string/settings_activity_keep_alive" />
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/settings_options">
-        <ListPreference
-            android:defaultValue="0"
-            android:entries="@array/pref_title_access_mode_list_titles"
-            android:entryValues="@array/pref_title_access_mode_list_values"
-            android:key="AccessMode"
-            android:negativeButtonText="@null"
-            android:positiveButtonText="@null"
-            android:title="@string/pref_title_access_mode" />
-
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="AutoRegister"
-            android:title="@string/settings_auto_register" />
+            android:title="@string/settings_activity_keep_alive">
+        </Preference>
 
     </PreferenceCategory>
 
-    <!--
-    <PreferenceCategory android:title="@string/settings_enhance">
+    <PreferenceCategory android:title="@string/settings_service_setting">
 
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="ForegroundNotification"
-            android:summary="@string/disable_fg_notification_warning"
-            android:title="@string/settings_debug_foreground_notification" />
+        <Preference
+            android:key="activity_push_advance_setting"
+            android:summary="@string/settings_summary_service_advance_setting"
+            android:title="@string/settings_service_advance_setting">
+            <intent
+                android:targetClass="com.xiaomi.xmsf.ManageSpaceActivity"
+                android:targetPackage="com.xiaomi.xmsf" />
+        </Preference>
+
 
     </PreferenceCategory>
-    -->
 
     <PreferenceCategory android:title="@string/settings_debug">
 
@@ -53,9 +29,6 @@
             android:key="key_get_log"
             android:summary="@string/settings_get_log_summary"
             android:title="@string/settings_get_log" />
-        <Preference
-            android:key="key_clear_log"
-            android:title="@string/settings_clear_log" />
 
         <Preference android:title="@string/helplib_title">
             <intent

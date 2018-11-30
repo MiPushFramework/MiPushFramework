@@ -8,6 +8,7 @@ import android.os.CancellationSignal;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
+import android.util.Log;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import top.trumeet.common.Constants;
 import top.trumeet.common.register.RegisteredApplication;
 import top.trumeet.common.utils.DatabaseUtils;
 
+import static top.trumeet.common.BuildConfig.DEBUG;
 import static top.trumeet.common.register.RegisteredApplication.KEY_PACKAGE_NAME;
 
 /**
@@ -36,6 +38,9 @@ public class RegisteredApplicationDb {
     registerApplication (String pkg, boolean autoCreate, Context context,
                          CancellationSignal signal) {
         List<RegisteredApplication> list = getList(context, pkg, signal);
+        if (DEBUG) {
+            Log.d("RegisteredApplicationDb", "register -> existing list = " + list.toString());
+        }
         return list.isEmpty() ?
                 (autoCreate ? create(pkg, context) : null) : list.get(0);
     }
@@ -76,7 +81,9 @@ public class RegisteredApplicationDb {
                         , RegisteredApplication.Type.ASK,
                         true /* Allow push */,
                         true /* Allow receive result */,
-                        true /* Allow receive command */);
+                        true /* Allow receive command */,
+                        0 /* registeredType Don't store to DB */,
+                        true /* notification on register */);
         insert(registeredApplication, context);
 
         // Very bad

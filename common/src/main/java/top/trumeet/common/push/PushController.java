@@ -58,6 +58,10 @@ public abstract class PushController {
         else return ControllerImpl.getConnected(context, disconnectListener);
     }
 
+    public final boolean isLegacy () {
+        return this instanceof LegacyImpl;
+    }
+
     public static boolean isLegacySupported (@NonNull Context context) {
         // 存在且不存在的时候走 Legacy
         boolean support =
