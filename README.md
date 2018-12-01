@@ -1,7 +1,7 @@
 # MiPushFramework
 
 [![Build Status](https://travis-ci.org/Trumeet/MiPushFramework.svg?branch=master)](https://travis-ci.org/Trumeet/MiPushFramework)
-[![License GPL](https://img.shields.io/badge/license-GPL-blue.svg)](https://github.com/Trumeet/MiPushFramework/blob/master/LICENSE)
+[![License GPL-3.0](https://img.shields.io/badge/license-GPLv3.0-blue.svg)](https://github.com/Trumeet/MiPushFramework/blob/master/LICENSE)
 ![Min Android Version](https://img.shields.io/badge/android-lollipop-%23860597.svg)
 
 在任何非 MIUI 设备上体验小米系统级推送。
