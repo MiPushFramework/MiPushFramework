@@ -205,8 +205,14 @@
     <string name="status_app_not_registered_detail_with_fake_suggest"><![CDATA[
 是否注册由应用自行决定，一般启动时会自动注册。部分应用只会在小米设备上注册，使用 <b><a href="https://github.com/Magisk-Modules-Repo/MiPushFake">Magisk 全局伪装模块</a></b> 和 <b><a href="https://github.com/TimothyZhang023/Riru-MiPushFake">Magisk 单应用伪装</a></b> 可以加大注册机率。同时，欢迎参阅 <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BC%8F%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">应用程式注册问题解决方案</a></b> 和 <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E5%BA%94%E7%94%A8%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98">[帮助] 应用注册问题</a></b>。
     ]]></string>
+    <string name="status_app_registered_error_desc"><![CDATA[
+注册异常一般是应用注册后又进行了反注册（可能是应用中的推送设置已停用从而主动取消注册），或者应用已存储的推送注册信息与推送服务的注册信息不匹配。如果您不需要该应用的推送，或者该应用仍然正常推送消息，可以忽略此问题。另请参阅 <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E6%B3%A8%E5%86%8C%E5%BC%82%E5%B8%B8">[帮助] 注册异常</a></b>。
+    ]]></string>
     <string name="status_app_not_registered_title"><![CDATA[
 <b>尚未注册</b>
+    ]]></string>
+    <string name="status_app_registered_error_title"><![CDATA[
+<b>注册异常</b>
     ]]></string>
 
     <string name="fake_enable_title">伪装为小米设备</string>
