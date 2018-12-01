@@ -57,8 +57,8 @@
 
 安装步骤非常简单 ：
 
-* 前往 Release 标签，下载最新的 Release APK（共两个），并全部安装。
-* 跟着向导进行设置
+* 前往 [Releases 标签](https://github.com/Trumeet/MiPushFramework/releases)，下载最新的 Release APK（共两个），并全部安装。
+* 跟着向导进行设置。
 
 
 ## 反馈问题
