@@ -282,7 +282,7 @@ public class ManagePermissionsActivity extends AppCompatActivity {
             if (mApplicationItem.getRegisteredType() == 0) {
                 InfoPreference preferenceStatus = new InfoPreference(getActivity(), null, moe.shizuku.preference.R.attr.preferenceStyle,
                         R.style.Preference_Material);
-                preferenceStatus.setTitle(Html.fromHtml(getString(R.string.status_app_not_registered_title)));
+                preferenceStatus.setTitle(getString(R.string.status_app_not_registered_title));
                 preferenceStatus.setSummary(Html.fromHtml(getString(
                         suggestFake ? R.string.status_app_not_registered_detail_with_fake_suggest :
                                 R.string.status_app_not_registered_detail_without_fake_suggest
@@ -295,7 +295,7 @@ public class ManagePermissionsActivity extends AppCompatActivity {
             if (mApplicationItem.getRegisteredType() == 2) {
                 InfoPreference preferenceStatus = new InfoPreference(getActivity(), null, moe.shizuku.preference.R.attr.preferenceStyle,
                         R.style.Preference_Material);
-                preferenceStatus.setTitle(Html.fromHtml(getString(R.string.status_app_registered_error_title)));
+                preferenceStatus.setTitle(getString(R.string.status_app_registered_error_title));
                 preferenceStatus.setSummary(Html.fromHtml(getString(R.string.status_app_registered_error_desc)));
                 Drawable iconError = ContextCompat.getDrawable(getActivity(), R.drawable.ic_error_outline_black_24dp);
                 DrawableCompat.setTint(iconError, Color.parseColor("#D50000"));
