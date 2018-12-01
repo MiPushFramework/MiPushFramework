@@ -48,6 +48,7 @@ public class ManageSpaceActivity extends PreferenceActivity {
 
             //Too bad in ui thread
 
+            //TODO: Three messages seem to be too much, and need separate strings for toast.
             getPreferenceScreen().findPreference("clear_history").setOnPreferenceClickListener(preference -> {
                 Toast.makeText(context, getString(R.string.settings_clear_history) + getString(R.string.start), Toast.LENGTH_SHORT).show();
                 EventDb.deleteHistory(context, null);
