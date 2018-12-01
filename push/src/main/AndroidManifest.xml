@@ -186,9 +186,7 @@
         <activity
             android:name=".ShareLogActivity"
             android:exported="true" />
-        <activity
-            android:name=".ClearLogActivity"
-            android:exported="true" />
+
         <activity
             android:name=".RemoveDozeActivity"
             android:exported="true" />

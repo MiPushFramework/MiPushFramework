@@ -25,6 +25,7 @@
 
     <string name="error_usage_stats"> 检测到获取 UsageStats 异常，可能是您的系统不支持，建议在设置中切换 前台检测模式为 兼容模式 </string>
 
+    <string name="settings_debug">诊断</string>
 
 
     <string name="wizard_title_doze_whitelist">移除电池优化</string>

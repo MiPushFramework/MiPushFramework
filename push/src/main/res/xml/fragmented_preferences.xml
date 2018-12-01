@@ -18,6 +18,17 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/settings_debug">
+
+        <Preference
+            android:key="mock_notification"
+            android:summary="@string/settings_mock_notification_summary"
+            android:title="@string/settings_mock_notification" />
+
+
+
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/settings_options">
 
 

@@ -86,6 +86,8 @@ public final class Constants {
 
     public static final String SERVICE_APP_NAME = "com.xiaomi.xmsf";
 
+    public static final String MANAGER_APP_NAME = "top.trumeet.mipush";
+
     public static final int PUSH_SERVICE_VERSION_CODE = Integer.parseInt(BuildConfig.PUSH_VERSION_CODE);
 
     /**

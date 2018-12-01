@@ -64,6 +64,10 @@
 
     <string name="pref_title_access_mode">前台APP检测模式</string>
     <string name="pref_summary_access_mode">点击通知时，检测应用是否在前台的实现模式</string>
+    <string name="settings_mock_notification">模拟通知消息</string>
+    <string name="settings_mock_notification_summary">点击模拟通知到达消息</string>
+    <string name="debug_test_title">这是一个测试标题</string>
+    <string name="debug_test_content">这是一个测试内容</string>
 
 
     <string-array name="pref_title_access_mode_list_titles">

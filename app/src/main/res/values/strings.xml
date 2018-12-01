@@ -131,7 +131,6 @@
     <string name="settings_summary_wakeup_target">在收到通知时，我们会启动对方应用。禁用它可以防止部分应用再次发送通知，但也可能遗漏部分通知。</string>
     <string name="settings_debug_icon">调试透明图标</string>
 
-    <string name="settings_debug">诊断</string>
     <string name="settings_get_log">获取日志</string>
     <string name="settings_get_log_summary">点按分享日志，请在需要的时候随 Issues 一起提交。</string>
     <string name="settings_activity_keep_alive">后台服务保活</string>

@@ -121,34 +121,16 @@ public class MyMIPushNotificationHelper {
         localBuilder.setContentText(titleAndDesp[1]);
 
 
-        //for VERSION < Oero
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            localBuilder.setDefaults(Notification.DEFAULT_ALL);
-            localBuilder.setPriority(Notification.PRIORITY_HIGH);
-        }
-
         // Fill app name
         Bundle extras = new Bundle();
 
-        CharSequence appName = ApplicationNameCache.getInstance().getAppName(var0, packageName);
-        int color = NotificationController.getIconColor(var0, packageName);
-        if (color != Notification.COLOR_DEFAULT) {
-            CharSequence subText = ColorUtil.createColorSubtext(appName, color);
-            if (subText != null) {
-                extras.putCharSequence(NotificationCompat.EXTRA_SUB_TEXT, subText);
-            }
-            localBuilder.setColor(color);
-        } else {
-            extras.putCharSequence(NotificationCompat.EXTRA_SUB_TEXT, appName);
-        }
+        NotificationController.buildExtraSubText(var0, packageName, localBuilder, extras);
 
         localBuilder.setExtras(extras);
 
         NotificationController.publish(var0, id, packageName, localBuilder);
 
     }
-
-
 
     private static PendingIntent openActivityPendingIntent(Context paramContext, XmPushActionContainer paramXmPushActionContainer, PushMetaInfo paramPushMetaInfo, byte[] paramArrayOfByte) {
         String packageName = paramXmPushActionContainer.getPackageName();
