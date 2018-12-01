@@ -67,16 +67,16 @@
 ## 反馈问题
 
 遇到任何问题，请先看看 Issues 里面有没有人提过。（常见问题：无法收到推送）
-如果没有问题，请提交 Issues，并务必带上如下内容，以便开发者解决：
+如果没有找到答案，请为每个问题提交一份 Issue，并务必带上如下内容，以便开发者解决：
 
 * 你的 ROM 是什么，Android 版本是什么
 * 有没有使用框架等工具
 
-同时，请使用 设置， 诊断， 获取日志 获取日志文件，写进 Issue。
+同时，请使用 设置-获取日志 获取你的日志文件，写进 Issue。
 
 ## 日志
 
-框架会自动记录日志，保存到私有目录。暂时不会自动清理。
+框架会自动记录日志，保存到私有目录。暂时不会自动清理。设置-高级配置 中已提供清理按钮。
 
 
 
@@ -85,7 +85,7 @@
 * 欢迎提交 PR、Issues 帮助这个项目更好。
 * 代码规范: Alibaba Java Coding Guidelines / Google Java 编程规范
 * 尽量丰富注释和文档
-* Git commit message 规范：Angular
+* Git commit message 规范：[Angular](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines)
 
 ## 已知问题
 
