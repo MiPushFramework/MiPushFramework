@@ -103,24 +103,23 @@ public class XMPushService extends IntentService {
                 if (application != null && application.isNotificationOnRegister()) {
                     try {
                         CharSequence appName = getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(pkg, 0));
-                        CharSequence typeString;
+                        CharSequence usedString;
                         switch (result) {
                             case Event.ResultType.OK:
                             case Event.ResultType.DENY_DISABLED:
-                                typeString = getString(R.string.allow);
+                                usedString = getString(R.string.notification_registerAllowed, appName);
                                 break;
                             case Event.ResultType.DENY_USER:
-                                typeString = getString(R.string.deny);
+                                usedString = getString(R.string.notification_registerRejected, appName);
                                 break;
                             default:
-                                typeString = null;
+                                usedString = null;
                                 break;
                         }
-                        if (typeString != null) {
+                        if (usedString != null) {
                             new Handler(Looper.getMainLooper()).post(() -> {
                                 try {
-                                    Toast.makeText(this, getString(R.string.notification_register,
-                                            appName, typeString),
+                                    Toast.makeText(this, usedString,
                                             Toast.LENGTH_SHORT)
                                             .show();
                                 } catch (Throwable ignored) {

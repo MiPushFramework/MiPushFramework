@@ -84,7 +84,7 @@ public class SettingsFragment extends PreferenceFragment {
                     Log.d(TAG, "Exit: " + ShellUtils.execCmd(commands, true, true).toString());
                     return true;
                 },
-                "全局" + getString(R.string.fake_enable_title),
+                getString(R.string.fake_global_enable_title),
                 getString(R.string.fake_enable_detail),
                 getPreferenceScreen().findPreference("activity_keep_alive").getParent()
         );
