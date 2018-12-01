@@ -50,6 +50,7 @@
     <string name="settings_clear_log">清空日志</string>
     <string name="settings_clear_log_summary">清空日志文件</string>
 
+    <string name="accessibility_desc">前台应用检测模式-辅助模式，相比默认模式有更高的兼容性，但性能较差。如果使用未遇到问题，无需开启。</string>
 
 
     <string name="settings_summary_push_icon">开启图标可以解决部分应用和系统找不到Push应用问题 (例如小米手环推送，一加应用锁管理) </string>
