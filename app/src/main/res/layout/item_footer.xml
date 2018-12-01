@@ -6,6 +6,7 @@
     android:clickable="false"
     android:padding="16dp">
     <ImageView
+        android:layout_marginLeft="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_info_outline_black_24dp"
