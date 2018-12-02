@@ -73,6 +73,7 @@ public final class Constants {
     /**
      * Use in wizard, finish activity when user click NEXT,
      * not go next page.
+     * TODO: I18n for this button. Use "Finish" label is better.
      */
     public static final String EXTRA_FINISH_ON_NEXT = "top.trumeet.xmsf.EXTRA_FINISH_ON_NEXT";
 
