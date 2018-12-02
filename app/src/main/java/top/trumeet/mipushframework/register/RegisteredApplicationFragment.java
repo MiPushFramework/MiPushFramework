@@ -138,6 +138,7 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
 
         @Override
         protected Result doInBackground(Integer... integers) {
+            // TODO: Sharing/Modular actuallyRegisteredPkgs to doInBackground of ManagePermissionsActivity.java
             mSignal = new CancellationSignal();
 
             Map<String /* pkg */, RegisteredApplication> registeredPkgs = new HashMap<>();
