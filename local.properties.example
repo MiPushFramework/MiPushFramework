@@ -1,0 +1,16 @@
+## This file must *NOT* be checked into Version Control Systems,
+# as it contains information specific to your local configuration.
+#
+# Location of the SDK. This is only used by Gradle.
+# For customization when using a Version Control System, please read the
+# header note.
+#sdk.dir=[Your Android SDK path.]
+
+#FABRIC_KEY=[Get your key from https://fabric.io/kits/android/crashlytics/install after free sign-up.]
+
+# Get the keystore from "Build" - "Generate Signed Apk" menu in Android Studio.
+# If the menu is not appearing for this project, create and open a new project to get the menu and tool in Android Studio.
+#KEY_LOCATE=../.mykey
+#KEYSTORE_PASSWORD=[Password]
+#KEYSTORE_ALIAS=key0
+#KEY_PASSWORD=[Password]
