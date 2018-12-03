@@ -106,8 +106,10 @@ public class XMPushService extends IntentService {
                         CharSequence usedString;
                         switch (result) {
                             case Event.ResultType.OK:
-                            case Event.ResultType.DENY_DISABLED:
                                 usedString = getString(R.string.notification_registerAllowed, appName);
+                                break;
+                            case Event.ResultType.DENY_DISABLED:
+                                usedString = null; // Should not be notified?
                                 break;
                             case Event.ResultType.DENY_USER:
                                 usedString = getString(R.string.notification_registerRejected, appName);
