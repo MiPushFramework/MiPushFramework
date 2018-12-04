@@ -43,9 +43,12 @@ public class XMPushService extends IntentService {
                 Log4a.e(TAG, "Package name is NULL!");
                 return;
             }
+            if (pkg.equals("top.trumeet.mipush")) {
+                return; // Skipping strange registrations while manager is started
+            }
             int result;
             boolean register = true;
-            // Check multi request
+            // Check for fast requests via MIN_REQUEST_INTERVAL
             if (!RemoveTremblingUtils.getInstance().onCallRegister(pkg)) {
                 Log4a.d(TAG, "Don't register multi request " + pkg);
                 register = false;
