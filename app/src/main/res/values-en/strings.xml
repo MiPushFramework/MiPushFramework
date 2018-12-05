@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MiPush Framework (community edition)</string>
+    <string name="app_name">MiPush Framework</string>
 
     <string name="loading">Please wait…</string>
     <string name="enable">Enable</string>
@@ -91,7 +91,7 @@ Please grant the <b>Run in the background or wake up</b> permissions.
     <string name="permission_allow_register">Register push</string>
     <string name="permission_allow_receive">Receive notification message</string>
     <string name="permission_allow_receive_command">Receive command</string>
-    <string name="permission_allow_receive_register_result">Receive registration result</string>
+    <string name="permission_allow_receive_register_result">Receive registration result (not implemented)</string>
     <string name="permission_notification_on_register">Show notification when registering</string>
 
     <string name="permission_register_type">Register mode</string>
@@ -102,11 +102,6 @@ Please grant the <b>Run in the background or wake up</b> permissions.
         <item>@string/register_type_ask</item>
         <item>@string/register_type_allow</item>
         <item>@string/register_type_deny</item>
-    </string-array>
-    <string-array name="register_entries" translatable="false">
-        <item>0</item>
-        <item>2</item>
-        <item>3</item>
     </string-array>
 
     <!-- Settings -->
@@ -160,12 +155,6 @@ The manager is not compatible with the version of the Push service you are curre
     <string name="connect_fail_text_is_miui"><![CDATA[ Sorry, we do not officially support the MIUI ROMs.     ]]></string>
 
     <!-- Help -->
-    <string-array name="help_articles" translatable="false">
-        <item>help_article_can_not_receive_push|can_not_receive_push</item>
-        <item>help_article_register_error|register_error</item>
-        <item>help_article_no_register|no_register</item>
-    </string-array>
-
     <string name="help_article_can_not_receive_push">Cannot to receive push</string>
     <string name="help_article_register_error">Registration failed</string>
     <string name="help_article_no_register">Registration list is empty</string>
