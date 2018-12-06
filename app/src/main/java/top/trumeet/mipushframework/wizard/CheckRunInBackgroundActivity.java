@@ -53,7 +53,7 @@ public class CheckRunInBackgroundActivity extends PushControllerWizardActivity i
         if (controller != null && controller.isConnected() && !isConnecting()) {
             mText.setText(Html.fromHtml(getString(R.string.wizard_descr_run_in_background, Build.VERSION.SDK_INT >= 26 ?
                     "" : (Utils.isAppOpsInstalled() ? getString(R.string.run_in_background_rikka_appops) :
-                    getString(R.string.run_in_background_appops_root)))));
+                    getString(R.string.run_in_background_appops_root))))); // TODO: I18n more, no append.
 
             int result = controller.checkOp(AppOpsManagerOverride.OP_RUN_IN_BACKGROUND);
             allow = (result == AppOpsManager.MODE_ALLOWED);

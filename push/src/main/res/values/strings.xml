@@ -13,7 +13,7 @@
     <string name="allow_once">允许一次</string>
 
     <!-- Log -->
-    <string name="log_push_err">PUSH 服务异常, 请尝试取消对管理器应用的唤醒拦截、关闭 ROM 的高级优化功能。</string>
+    <string name="log_push_err">Push 服务异常, 请尝试取消对管理器应用的唤醒拦截、关闭 ROM 的高级优化功能。</string>
     <string name="log_none">尚无日志</string>
     <string name="log_share_error">无法分享日志：%1$s</string>
     <string name="log_clear_done">清空日志成功</string>
@@ -37,7 +37,8 @@
     <string name="activity_rom_keepalive">当您的 ROM 可能拦截推送服务的正常运行时，请在您的 ROM 的有关设置中将 Push 应用加入白名单（如电池优化、唤醒拦截等功能）。\n您也可尝试打开系统的“最近任务”界面，将本界面“锁定”以保持服务的后台运行。</string>
     <string name="see_pass_though_msg">穿透消息，请打开应用查看</string>
 
-    <string name="notification_register">已%2$s %1$s 注册小米推送</string>
+    <string name="notification_registerAllowed">已允许 %1$s 注册小米推送</string>
+    <string name="notification_registerRejected">已拒绝 %1$s 注册小米推送</string>
 
     <string name="settings_clear">清理</string>
 
