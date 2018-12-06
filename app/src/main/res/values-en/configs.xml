@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="fake_blacklist_equals">
+        <item>android</item>
+        <item>de.robv.android.xposed.installer</item>
+        <item>com.xiaomi.xmsf</item>
+        <item>com.tencent.mm</item>
+        <item>top.trumeet.mipush</item>
+    </string-array>
+
+    <string-array name="fake_blacklist_contains">
+        <item>com.google.android</item>
+    </string-array>
+</resources>

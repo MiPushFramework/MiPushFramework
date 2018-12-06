@@ -366,7 +366,7 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                     screen);
 
             if (new File(Constants.FAKE_CONFIGURATION_GLOBAL).exists()) {
-                fakeSwtich.setSummary(R.string.fake_enable_globe);
+                fakeSwtich.setSummary(R.string.fake_enable_global);
                 fakeSwtich.setEnabled(false);
                 fakeSwtich.setChecked(true);
             }

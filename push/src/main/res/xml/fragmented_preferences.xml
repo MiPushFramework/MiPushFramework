@@ -45,6 +45,7 @@
             android:title="@string/settings_auto_register" />
 
 
+        <!-- TODO: entryValues's height is insufficient for 'en' locale. -->
         <ListPreference
             android:defaultValue="0"
             android:entries="@array/pref_title_access_mode_list_titles"

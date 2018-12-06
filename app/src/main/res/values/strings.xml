@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">小米推送服务</string>
 
-    <string name="loading">请稍后</string>
+    <string name="loading">请稍候……</string>
     <string name="enable">启用</string>
     <string name="success">成功了</string>
     <string name="fail">失败</string>
@@ -151,7 +151,7 @@
     <!-- Update -->
     <string name="action_help">帮助</string>
     <string name="action_update">检查更新</string>
-    <string name="update_toast">请从 Release 页面下载最新的版本。（下载并安装 manager.apk 和 push.apk）</string>
+    <string name="update_toast">您可以从 Releases 页面下载最新版本的两份 APK 文件用以安装。</string>
 
     <!-- Manage applications, individual application info screen title. For example, if they click on "Browser" in "Manage applications", the title of the next screen will be this -->
     <string name="application_info_label">应用信息</string>
@@ -217,9 +217,11 @@
     <string name="status_app_registered_error_title">注册异常</string>
 
     <string name="fake_enable_title">伪装为小米设备</string>
+    <string name="fake_global_enable_title">全局伪装为小米设备</string>
     <string name="fake_enable_detail">通过 Xposed 伪装模块或 Magisk 单应用伪装模块，使其他应用误认本机为小米设备，从而增加注册的数量（需要 ROOT 权限）</string>
     <string name="fake_enable_detail_not_suggested">不建议对此应用开启，可能影响正常运行</string>
-    <string name="fake_enable_globe">全局伪装已开启</string>
+    <string name="fake_enable_global">全局伪装已开启</string>
+    <string name="settings_debug">调试</string>
 
 
 </resources>
