@@ -9,7 +9,7 @@
 #FABRIC_KEY=[Get your key from https://fabric.io/kits/android/crashlytics/install after free sign-up.]
 
 # Get the keystore from "Build" - "Generate Signed Apk" menu in Android Studio.
-# If the menu is not appearing for this project, create and open a new project to get the menu and tool in Android Studio.
+# If the above menu is not available, try the File - "Sync Projects with Gradle files" menu in Android Studio.
 #KEY_LOCATE=../.mykey
 #KEYSTORE_PASSWORD=[Password]
 #KEYSTORE_ALIAS=key0
