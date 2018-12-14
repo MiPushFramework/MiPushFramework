@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="settings_manage_app_notifications">Manage notifications</string>
-    <string name="settings_manage_app_notifications_summary">Control the sound, importance level, etc. of the app notifications.</string>
-</resources>

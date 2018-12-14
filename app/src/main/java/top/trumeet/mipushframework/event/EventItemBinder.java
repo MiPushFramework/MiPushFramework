@@ -30,10 +30,10 @@ import top.trumeet.mipushframework.utils.ParseUtils;
 
 public class EventItemBinder extends BaseAppsBinder<Event> {
 
-    private boolean clickEnabled = true;
-    EventItemBinder(boolean clickEnabled) {
+    private boolean isSpecificApp = true;
+    EventItemBinder(boolean isSpecificApp) {
         super();
-        this.clickEnabled = clickEnabled;
+        this.isSpecificApp = isSpecificApp;
     }
 
     @Override
@@ -66,19 +66,18 @@ public class EventItemBinder extends BaseAppsBinder<Event> {
                         Utils.getUTC(), holder.itemView.getContext()));
         holder.status.setText(status);
 
-        if (clickEnabled) {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Dialog dialog = createInfoDialog(type,
-                            holder.itemView.getContext());
-                    if (dialog == null)
-                        startManagePermissions(type, holder.itemView.getContext());
-                    else
-                        dialog.show();
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Dialog dialog = createInfoDialog(type,
+                        holder.itemView.getContext()); // "Developer info" dialog for event messages
+                if (dialog != null && isSpecificApp) {
+                    dialog.show();
+                } else {
+                    startManagePermissions(type, holder.itemView.getContext());
                 }
-            });
-        }
+            }
+        });
     }
 
     @Nullable
@@ -106,6 +105,7 @@ public class EventItemBinder extends BaseAppsBinder<Event> {
     }
 
     private static void startManagePermissions (EventType type, Context context) {
+        // Issue: This currently allows overlapping opens.
         context.startActivity(new Intent(context,
                 ManagePermissionsActivity.class)
                 .putExtra(ManagePermissionsActivity.EXTRA_PACKAGE_NAME,
