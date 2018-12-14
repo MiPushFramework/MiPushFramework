@@ -55,8 +55,9 @@ public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         super.onCreate(savedInstanceState);
         mTargetPackage = getArguments() == null ? null :
                 getArguments().getString(EXTRA_TARGET_PACKAGE);
+        boolean isSpecificApp = (mTargetPackage != null); // from "Recent Activity"
         mAdapter = new MultiTypeAdapter();
-        mAdapter.register(Event.class, new EventItemBinder(mTargetPackage != null));
+        mAdapter.register(Event.class, new EventItemBinder(isSpecificApp));
     }
 
     SwipeRefreshLayout swipeRefreshLayout;
