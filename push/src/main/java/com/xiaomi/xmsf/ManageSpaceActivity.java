@@ -1,19 +1,18 @@
 package com.xiaomi.xmsf;
 
-import android.app.Notification;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.TwoStatePreference;
 import android.widget.Toast;
 
-import com.xiaomi.push.service.MyClientEventDispatcher;
 import com.xiaomi.xmsf.push.notification.NotificationController;
 import com.xiaomi.xmsf.utils.LogUtils;
+
+import java.util.Date;
 
 import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.common.Constants;
@@ -67,8 +66,9 @@ public class ManageSpaceActivity extends PreferenceActivity {
 
             getPreferenceScreen().findPreference("mock_notification").setOnPreferenceClickListener(preference -> {
                 String packageName = Constants.MANAGER_APP_NAME;
+                Date date = new Date();
                 String title = context.getString(R.string.debug_test_title);
-                String description = context.getString(R.string.debug_test_content);
+                String description = context.getString(R.string.debug_test_content) + date.toString();
                 NotificationController.test(context, packageName, title, description);
                 return true;
             });

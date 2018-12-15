@@ -93,6 +93,7 @@ Please grant the <b>Run in the background or wake up</b> permissions.
     <string name="permission_allow_receive_command">Receive command</string>
     <string name="permission_allow_receive_register_result">Receive registration result (not implemented)</string>
     <string name="permission_notification_on_register">Show notification when registering</string>
+    <string name="permission_summary_notification_on_register">need to enable global register notification switch in Advance Setting</string>
 
     <string name="permission_register_type">Register mode</string>
     <string name="register_type_allow">Allow registration, automatic</string>

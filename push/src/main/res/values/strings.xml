@@ -10,7 +10,7 @@
     <string name="auth_message"><![CDATA[Do you want to allow  <b>%1$s</b> to push messages? If you are unsure, try <b>Allow one time</b>.]]></string>
     <string name="allow">Allow</string>
     <string name="deny">Reject</string>
-    <string name="allow_once">Allow one time</string>
+    <string name="allow_once">Allow once</string>
 
     <!-- Log -->
     <!-- TOOD: See the "wake-up intercep-tion" shown, why?-->
@@ -79,4 +79,5 @@
     <string name="debug_test_title">This is Title</string>
     <string name="debug_test_content">This is Content</string>
     <string name="accessibility_desc">Used for the alternate foreground application detection mode, higher compatibility, but poor performance.</string>
+    <string name="settings_notify_on_register">Notify On App Register</string>
 </resources>

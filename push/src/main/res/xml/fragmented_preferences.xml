@@ -44,6 +44,11 @@
             android:key="AutoRegister"
             android:title="@string/settings_auto_register" />
 
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="NotificationOnRegister"
+            android:title="@string/settings_notify_on_register" />
+
 
         <!-- TODO: entryValues's height is insufficient for 'en' locale. -->
         <ListPreference

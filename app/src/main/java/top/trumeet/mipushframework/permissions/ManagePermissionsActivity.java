@@ -378,6 +378,7 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                         return true;
                     },
                     getString(R.string.permission_notification_on_register),
+                    getString(R.string.permission_summary_notification_on_register),
                     screen);
 
             PreferenceCategory category = new PreferenceCategory(getActivity(), null, moe.shizuku.preference.R.attr.preferenceCategoryStyle,

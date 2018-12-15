@@ -20,6 +20,7 @@ import com.xiaomi.xmsf.utils.ConfigCenter;
 
 import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.common.Constants;
+import top.trumeet.common.cache.ApplicationNameCache;
 import top.trumeet.common.db.EventDb;
 import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.event.Event;
@@ -66,7 +67,7 @@ public class XMPushService extends IntentService {
                     Log4a.w(TAG, "Denied register request: " + pkg);
                     result = Event.ResultType.DENY_USER;
                 } else {
-                    if (ConfigCenter.isAutoRegister(this) && application.getType() == RegisteredApplication.Type.ASK) {
+                    if (ConfigCenter.getInstance().isAutoRegister(this) && application.getType() == RegisteredApplication.Type.ASK) {
                         application.setType(RegisteredApplication.Type.ALLOW);
                         RegisteredApplicationDb.update(application, this);
                     }
@@ -100,37 +101,37 @@ public class XMPushService extends IntentService {
                 }
             }
             if (register) {
-                if (application != null && application.isNotificationOnRegister()) {
-                    try {
-                        CharSequence appName = getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(pkg, 0));
-                        CharSequence usedString;
-                        switch (result) {
-                            case Event.ResultType.OK:
-                                usedString = getString(R.string.notification_registerAllowed, appName);
-                                break;
-                            case Event.ResultType.DENY_DISABLED:
-                                usedString = null; // Should not be notified?
-                                break;
-                            case Event.ResultType.DENY_USER:
-                                usedString = getString(R.string.notification_registerRejected, appName);
-                                break;
-                            default:
-                                usedString = null;
-                                break;
-                        }
-                        if (usedString != null) {
-                            new Handler(Looper.getMainLooper()).post(() -> {
-                                try {
-                                    Toast.makeText(this, usedString,
-                                            Toast.LENGTH_SHORT)
-                                            .show();
-                                } catch (Throwable ignored) {
-                                    // TODO: It's a bad way to switch to main thread.
-                                    // Ignored service death
-                                }
-                            });
-                        }
-                    } catch (PackageManager.NameNotFoundException ignored) {}
+                boolean notificationOnRegister = ConfigCenter.getInstance().isNotificationOnRegister(this);
+                notificationOnRegister = notificationOnRegister && (application != null && application.isNotificationOnRegister());
+                if (notificationOnRegister) {
+                    CharSequence appName = ApplicationNameCache.getInstance().getAppName(this, pkg);
+                    CharSequence usedString;
+                    switch (result) {
+                        case Event.ResultType.OK:
+                            usedString = getString(R.string.notification_registerAllowed, appName);
+                            break;
+                        case Event.ResultType.DENY_DISABLED:
+                            usedString = null; // Should not be notified?
+                            break;
+                        case Event.ResultType.DENY_USER:
+                            usedString = getString(R.string.notification_registerRejected, appName);
+                            break;
+                        default:
+                            usedString = null;
+                            break;
+                    }
+                    if (usedString != null) {
+                        new Handler(Looper.getMainLooper()).post(() -> {
+                            try {
+                                Toast.makeText(this, usedString,
+                                        Toast.LENGTH_SHORT)
+                                        .show();
+                            } catch (Throwable ignored) {
+                                // TODO: It's a bad way to switch to main thread.
+                                // Ignored service death
+                            }
+                        });
+                    }
                 } else {
                     Log.e("XMPushService Bridge", "Notification disabled");
                 }
