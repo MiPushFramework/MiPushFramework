@@ -4,7 +4,7 @@
 [![License GPL-3.0](https://img.shields.io/badge/license-GPLv3.0-blue.svg)](https://github.com/Trumeet/MiPushFramework/blob/master/LICENSE)
 ![Min Android Version](https://img.shields.io/badge/android-lollipop-%23860597.svg)
 
-在非MIUI系统上体验小米系统级推送。
+在非 MIUI 系统上体验小米系统级推送。
 
 ![](https://raw.githubusercontent.com/Trumeet/MiPushFramework/master/art/tab_events.jpg)
 ![](https://raw.githubusercontent.com/Trumeet/MiPushFramework/master/art/tab_permissions.jpg)
@@ -73,7 +73,7 @@
 
 ## 日志
 
-框架会自动记录日志，保存到私有目录。暂时不会自动清理。设置-高级配置 中已提供清理按钮。
+框架会自动记录日志，保存到私有目录。您可以前往 设置-高级配置 中清理。
 
 
 
@@ -88,9 +88,9 @@
 
 ## 已知问题
 
-* 不支持360OS
+* 对于部分小众的、恶意篡改系统的 ROM （如 360OS）导致无法正常工作的情况，我们只会竭尽全力保证推送的运行，其它不妨碍推送的「特殊适配」会被忽略。对于这些情况，建议您更换更好的 ROM 以获得最佳体验。
 * 努比亚ROM应用（第三方使用 MiPush 的应用）可能不会自动禁用其 XMPushService 并启动服务，请尝试将框架设为系统应用
-* 锤子ROM下，Push 可以正确收到通知，但是通知栏没有提示（#143）
+* 锤子 ROM 下，Push 可以正确收到通知，但是通知栏没有提示 #143
 * 开发者学生党，开学了更新可能不太及时，请谅解
 * 一些通知 Feature 可能无法使用（如通知都会显示为推送框架发出，而不是目标应用 `MIPushNotificationHelper#setTargetPackage`）
 
