@@ -4,7 +4,7 @@
 [![License GPL-3.0](https://img.shields.io/badge/license-GPLv3.0-blue.svg)](https://github.com/Trumeet/MiPushFramework/blob/master/LICENSE)
 ![Min Android Version](https://img.shields.io/badge/android-lollipop-%23860597.svg)
 
-在任何非 MIUI 设备上体验小米系统级推送。
+在非MIUI系统上体验小米系统级推送。
 
 ![](https://raw.githubusercontent.com/Trumeet/MiPushFramework/master/art/tab_events.jpg)
 ![](https://raw.githubusercontent.com/Trumeet/MiPushFramework/master/art/tab_permissions.jpg)
@@ -88,6 +88,7 @@
 
 ## 已知问题
 
+* 不支持360OS
 * 努比亚ROM应用（第三方使用 MiPush 的应用）可能不会自动禁用其 XMPushService 并启动服务，请尝试将框架设为系统应用
 * 锤子ROM下，Push 可以正确收到通知，但是通知栏没有提示（#143）
 * 开发者学生党，开学了更新可能不太及时，请谅解
