@@ -1,5 +1,7 @@
 package com.xiaomi.push.service;
 
+import com.elvishew.xlog.Logger;
+import com.elvishew.xlog.XLog;
 import com.xiaomi.channel.commonutils.reflect.JavaCalls;
 import com.xiaomi.smack.XMPPException;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
@@ -7,13 +9,11 @@ import com.xiaomi.xmpush.thrift.XmPushActionContainer;
 
 import java.util.Map;
 
-import me.pqpo.librarylog4a.Log4a;
-
 /**
  * @author zts
  */
 class MiPushMsgAck {
-    private static final String TAG = "MiPushMsgAck";
+    private static Logger logger = XLog.tag("MiPushMsgAck").build();
 
 
     static void sendAckMessage(final XMPushService var0, final XmPushActionContainer var1) {
@@ -29,7 +29,7 @@ class MiPushMsgAck {
                     XmPushActionContainer var2 = MIPushEventProcessor.constructAckMessage(var0, var1);
                     MIPushHelper.sendPacket(var0, var2);
                 } catch (XMPPException var3) {
-                    Log4a.e(TAG, var3);
+                    logger.e(var3);
                     var0.disconnect(10, var3);
                 }
 
@@ -44,7 +44,7 @@ class MiPushMsgAck {
         try {
             JavaCalls.callStaticMethodOrThrow(MIPushEventProcessor.class, "sendAppAbsentAck", var0, var1, var2);
         } catch (Exception e) {
-            Log4a.e(TAG, e.getMessage(), e);
+            logger.e(e.getMessage(), e);
         }
     }
 
@@ -55,7 +55,7 @@ class MiPushMsgAck {
         try {
             JavaCalls.callStaticMethodOrThrow(MIPushEventProcessor.class, "sendAppNotInstallNotification", var0, var1);
         } catch (Exception e) {
-            Log4a.e(TAG, e.getMessage(), e);
+            logger.e(e.getMessage(), e);
         }
     }
 
@@ -66,7 +66,7 @@ class MiPushMsgAck {
         try {
             JavaCalls.callStaticMethodOrThrow(MIPushEventProcessor.class, "sendErrorAck", var0, var1, var2, var3);
         } catch (Exception e) {
-            Log4a.e(TAG, e.getMessage(), e);
+            logger.e(e.getMessage(), e);
         }
     }
 
@@ -81,7 +81,7 @@ class MiPushMsgAck {
         try {
             return JavaCalls.callStaticMethodOrThrow(MIPushEventProcessor.class, "geoMessageIsValidated", var0, var1);
         } catch (Exception e) {
-            Log4a.e(TAG, e.getMessage(), e);
+            logger.e(e.getMessage(), e);
         }
         return false;
     }
@@ -94,7 +94,7 @@ class MiPushMsgAck {
         try {
             return JavaCalls.callStaticMethodOrThrow(MIPushEventProcessor.class, "processGeoMessage", var0, var1, var2);
         } catch (Exception e) {
-            Log4a.e(TAG, e.getMessage(), e);
+            logger.e(e.getMessage(), e);
         }
         return false;
     }
@@ -106,7 +106,7 @@ class MiPushMsgAck {
         try {
             return JavaCalls.callStaticMethodOrThrow(MIPushEventProcessor.class, "shouldSendBroadcast", paramXMPushService, paramString, paramXmPushActionContainer, paramPushMetaInfo);
         } catch (Exception e) {
-            Log4a.e(TAG, e.getMessage(), e);
+            logger.e(e.getMessage(), e);
         }
         return false;
     }

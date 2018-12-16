@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
+import com.elvishew.xlog.Logger;
+import com.elvishew.xlog.XLog;
 import com.taobao.android.dexposed.DexposedBridge;
 import com.taobao.android.dexposed.XC_MethodHook;
 import com.taobao.android.dexposed.XC_MethodReplacement;
@@ -15,14 +17,14 @@ import com.xiaomi.xmsf.push.hooks.IHook;
 import java.util.Collections;
 import java.util.List;
 
-import me.pqpo.librarylog4a.Log4a;
+
 
 /**
  * Created by zts1993 on 2018/4/16.
  */
 
 public class HookPkgUninstallReceiver implements IHook {
-    private static final String TAG = HookPkgUninstallReceiver.class.getSimpleName();
+    private final Logger logger = XLog.tag(HookPkgUninstallReceiver.class.getSimpleName()).build();
 
     @Override
     public List<XC_MethodHook.Unhook> fetchHook() throws Exception {
@@ -44,7 +46,7 @@ public class HookPkgUninstallReceiver implements IHook {
                                         context.startService(serviceIntent);
                                         GeoFenceUtils.appIsUninstalled(context.getApplicationContext(), data.getEncodedSchemeSpecificPart());
                                     } catch (Throwable e) {
-                                        Log4a.e(TAG, "Hook", e);
+                                        logger.e("Hook", e);
                                     }
                                 }
                             }

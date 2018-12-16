@@ -18,6 +18,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 
 import com.crashlytics.android.Crashlytics;
+import com.elvishew.xlog.XLog;
 import com.oasisfeng.condom.CondomOptions;
 import com.oasisfeng.condom.CondomProcess;
 import com.taobao.android.dexposed.XC_MethodHook;
@@ -40,7 +41,6 @@ import java.util.HashSet;
 import java.util.Random;
 
 import io.fabric.sdk.android.Fabric;
-import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.common.Constants;
 import top.trumeet.common.push.PushServiceAccessibility;
 import top.trumeet.mipush.provider.DatabaseUtils;
@@ -50,7 +50,7 @@ import static com.xiaomi.xmsf.push.notification.NotificationController.CHANNEL_W
 import static top.trumeet.common.Constants.TAG_CONDOM;
 
 public class XmsfApp extends Application {
-    private static final String TAG = XmsfApp.class.getSimpleName();
+    private com.elvishew.xlog.Logger logger;
 
     private static final String MIPUSH_EXTRA = "mipush_extra";
 
@@ -63,7 +63,6 @@ public class XmsfApp extends Application {
                 unhook.unhook();
             }
         }
-        Log4a.flush();
         super.onTerminate();
     }
 
@@ -77,14 +76,16 @@ public class XmsfApp extends Application {
     public void onCreate() {
         super.onCreate();
 
+        LogUtils.init(this);
+        logger = XLog.tag(XmsfApp.class.getSimpleName()).build();
+        logger.i("App starts at " + System.currentTimeMillis());
+
         if (!BuildConfig.DEBUG && !BuildConfig.FABRIC_KEY.equals("null")) {
             final Fabric fabric = new Fabric.Builder(this)
                     .kits(new Crashlytics())
                     .build();
             Fabric.with(fabric);
         }
-
-        LogUtils.configureLog(this);
 
         initMiSdkLogger();
 
@@ -143,64 +144,49 @@ public class XmsfApp extends Application {
                         .setShowWhen(true)
                         .setAutoCancel(true)
                         .build();
-                manager.notify(TAG.hashCode(), notification);
+                manager.notify(100, notification);
             }
         } catch (RuntimeException e) {
-            Log4a.e(TAG , e.getLocalizedMessage(), e);
+            logger.e(e.getMessage(), e);
         }
 
     }
 
-    private void initPushLogger() {
-        Logger.setLogger(PushControllerUtils.wrapContext(this), new LoggerInterface() {
+    /**
+     * The only purpose is to make sure Logger is created after the XLog is configured.
+     */
+    private LoggerInterface buildMiSDKLogger () {
+        return new LoggerInterface() {
             private static final String TAG = "PushCore";
+            private com.elvishew.xlog.Logger logger = XLog.tag(TAG).build();
 
             @Override
             public void setTag(String tag) {
-                // ignore
+                logger = XLog.tag(TAG + "-" + tag).build();
             }
 
             @Override
             public void log(String content, Throwable t) {
                 if (t == null) {
-                    Log4a.i(TAG, content);
+                    logger.d(content);
                 } else {
-                    Log4a.e(TAG, content, t);
+                    logger.d(content, t);
                 }
             }
 
             @Override
             public void log(String content) {
-                Log4a.d(TAG, content);
+                logger.d(content);
             }
-        });
+        };
+    }
+
+    private void initPushLogger() {
+        Logger.setLogger(PushControllerUtils.wrapContext(this), buildMiSDKLogger());
     }
 
     private void initMiSdkLogger() {
-        MyLog.setLogger(new LoggerInterface() {
-            private static final String M_TAG = "xiaomi-patched";
-
-            @Override
-            public void setTag(String tag) {
-            }
-
-            @Override
-            public void log(String content) {
-                Log4a.d(M_TAG, content);
-            }
-
-            @Override
-            public void log(String content, Throwable t) {
-                if (content.contains("isMIUI")) {
-                    return;
-                }
-                if (t == null) {
-                    Log4a.i(M_TAG, content);
-                } else {
-                    Log4a.e(M_TAG, content, t);
-                }
-            }
-        });
+        MyLog.setLogger(buildMiSDKLogger());
     }
 
     private HashSet<ComponentName> loadEnabledServices() {

@@ -16,6 +16,8 @@ import android.util.Log;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
+import com.elvishew.xlog.Logger;
+import com.elvishew.xlog.XLog;
 import com.oasisfeng.condom.CondomContext;
 import com.xiaomi.smack.packet.Message;
 import com.xiaomi.xmpush.thrift.ActionType;
@@ -28,8 +30,6 @@ import org.apache.thrift.TBase;
 
 import java.util.Timer;
 import java.util.TimerTask;
-
-import me.pqpo.librarylog4a.Log4a;
 
 import static com.xiaomi.xmsf.BuildConfig.DEBUG;
 import static top.trumeet.common.Constants.TAG_CONDOM;
@@ -84,6 +84,7 @@ import static top.trumeet.common.Constants.TAG_CONDOM;
 
 public class PushServiceMain extends XMPushService {
     private static final String TAG = "PushService";
+    private Logger logger = XLog.tag(TAG).build();
 
     public static final String CHANNEL_STATUS = "status";
     public static final int NOTIFICATION_ALIVE_ID = 0;
@@ -114,7 +115,7 @@ public class PushServiceMain extends XMPushService {
                 }
                 // Report and log stable users
                 long minute = (System.currentTimeMillis() - startTime) / (60 * 1000);
-                Log4a.d(TAG, "Recording stable running period:" + minute + ", next upload is " + nextUploadDuringMinutes +
+                logger.d("Recording stable running period:" + minute + ", next upload is " + nextUploadDuringMinutes +
                         " minutes later.");
                 if (!DEBUG && !BuildConfig.FABRIC_KEY.equals("null")) Answers.getInstance()
                         .logCustom(new CustomEvent("XMPush_stable_running")
@@ -128,7 +129,7 @@ public class PushServiceMain extends XMPushService {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log4a.d(TAG, "Service started");
+        logger.d("Service started");
         startTime = System.currentTimeMillis();
         scheduleNextUpload();
         mSettingsObserver = new SettingsObserver(new Handler(Looper.myLooper()));
@@ -136,7 +137,7 @@ public class PushServiceMain extends XMPushService {
 
     @Override
     public void attachBaseContext(Context base) {
-        Log4a.d(TAG, "attachBaseContext");
+        logger.d("attachBaseContext");
         super.attachBaseContext(CondomContext.wrap(base, TAG_CONDOM, XMOutbound.create(base,
                 TAG)));
     }
@@ -156,7 +157,7 @@ public class PushServiceMain extends XMPushService {
 
     @Override
     public void onDestroy() {
-        Log4a.d(TAG, "Service stopped");
+        logger.d("Service stopped");
         ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
                 .cancel(NOTIFICATION_ALIVE_ID);
         mStatTimer.cancel();

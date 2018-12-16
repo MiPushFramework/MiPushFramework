@@ -16,8 +16,10 @@
     <!-- TOOD: See the "wake-up intercep-tion" shown, why?-->
     <string name="log_push_err">Push service failed. Please try to disable the wake-up interception for the manager application, turn off some optimization feature of ROMs.</string>
     <string name="log_none">No logs yet.</string>
+    <string name="activity_intent_not_found">No application can handle this action.</string>
     <string name="log_share_error">Cannot share logs：%1$s</string>
     <string name="log_clear_done">Logs cleaned.</string>
+    <string name="log_share_title">Share log with</string>
 
 
     <!-- Notification -->

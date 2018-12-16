@@ -14,15 +14,15 @@ import android.os.Build;
 import android.os.Process;
 import android.preference.PreferenceManager;
 
+import com.elvishew.xlog.Logger;
+import com.elvishew.xlog.XLog;
 import com.oasisfeng.condom.CondomContext;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.xiaomi.push.service.PushServiceConstants;
 import com.xiaomi.push.service.PushServiceMain;
 import com.xiaomi.xmsf.push.service.receivers.BootReceiver;
 import com.xiaomi.xmsf.push.service.receivers.KeepAliveReceiver;
-import com.xiaomi.xmsf.utils.ConfigCenter;
 
-import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.common.Constants;
 import top.trumeet.common.utils.ServiceRunningChecker;
 
@@ -38,7 +38,7 @@ import static top.trumeet.common.Constants.TAG_CONDOM;
 
 @SuppressLint("WrongConstant")
 public class PushControllerUtils {
-    private static final String TAG = PushControllerUtils.class.getSimpleName();
+    private static Logger logger = XLog.tag(PushControllerUtils.class.getSimpleName()).build();
 
     private static BroadcastReceiver liveReceiver  = new KeepAliveReceiver();
 
@@ -97,7 +97,7 @@ public class PushControllerUtils {
      */
     public static void setServiceEnable(boolean enable, Context context) {
         if (enable) {
-            Log4a.d(TAG, "Starting...");
+            logger.d("Starting...");
 
 
             if (isAppMainProc(context)) {
@@ -110,7 +110,7 @@ public class PushControllerUtils {
                 serviceIntent.setAction(PushServiceConstants.ACTION_TIMER);
                 context.startService(serviceIntent);
             } catch (Throwable e) {
-                Log4a.e(TAG, e);
+                logger.e(e);
             }
 
             try {
@@ -118,16 +118,16 @@ public class PushControllerUtils {
                 filter.addAction(Intent.ACTION_SCREEN_ON);
                 context.registerReceiver(liveReceiver, filter);
             } catch (Throwable e) {
-                Log4a.e(TAG, e);
+                logger.e(e);
             }
 
         } else {
-            Log4a.d(TAG, "Stopping...");
+            logger.d("Stopping...");
 
             try {
                 context.unregisterReceiver(liveReceiver);
             } catch (Throwable e) {
-                Log4a.e(TAG, e);
+                logger.e(e);
             }
 
             MiPushClient.unregisterPush(wrapContext(context));

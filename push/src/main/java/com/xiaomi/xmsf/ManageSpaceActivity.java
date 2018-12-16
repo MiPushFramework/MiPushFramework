@@ -14,7 +14,6 @@ import com.xiaomi.xmsf.utils.LogUtils;
 
 import java.util.Date;
 
-import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.common.Constants;
 import top.trumeet.common.db.EventDb;
 
@@ -57,7 +56,6 @@ public class ManageSpaceActivity extends PreferenceActivity {
 
             getPreferenceScreen().findPreference("clear_log").setOnPreferenceClickListener(preference -> {
                 Toast.makeText(context, getString(R.string.settings_clear_log) + getString(R.string.start), Toast.LENGTH_SHORT).show();
-                Log4a.flush();
                 LogUtils.clearLog(context);
                 Toast.makeText(context, getString(R.string.settings_clear_log) + getString(R.string.end), Toast.LENGTH_SHORT).show();
                 return true;

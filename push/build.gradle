@@ -96,7 +96,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     // Log
-    implementation('com.github.pqpo:Log4a:v1.1.0', {
+    implementation('com.elvishew:xlog:1.6.1', {
         exclude group: 'com.android.support'
     })
     // Hook

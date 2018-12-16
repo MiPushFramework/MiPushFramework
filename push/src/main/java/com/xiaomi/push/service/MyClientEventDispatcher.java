@@ -2,8 +2,9 @@ package com.xiaomi.push.service;
 
 import android.content.Context;
 import android.content.Intent;
-import java.lang.reflect.Field;
 
+import com.elvishew.xlog.Logger;
+import com.elvishew.xlog.XLog;
 import com.xiaomi.slim.Blob;
 import com.xiaomi.smack.packet.CommonPacketExtension;
 import com.xiaomi.smack.packet.Message;
@@ -13,8 +14,7 @@ import com.xiaomi.xmpush.thrift.ActionType;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
 import com.xiaomi.xmsf.push.type.TypeFactory;
 
-
-import me.pqpo.librarylog4a.Log4a;
+import java.lang.reflect.Field;
 
 import top.trumeet.common.BuildConfig;
 import top.trumeet.common.db.EventDb;
@@ -51,7 +51,7 @@ import top.trumeet.common.register.RegisteredApplication;
  */
 
 public class MyClientEventDispatcher extends ClientEventDispatcher {
-    private static final String TAG = "MyClientEventDispatcher";
+    private Logger logger = XLog.tag("MyClientEventDispatcher").build();
 
     MyClientEventDispatcher() {
         try {
@@ -61,25 +61,25 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
             mPushEventProcessorField.setAccessible(true);
             Object original = mPushEventProcessorField.get(this);
             if (original == null) {
-                Log4a.e(TAG, "original is null, patch may not work.");
+                logger.e("original is null, patch may not work.");
             }
-            Log4a.d(TAG, "original: " + original);
+            logger.d("original: " + original);
             mPushEventProcessorField.set(this, new EventProcessor());
-            Log4a.d(TAG, "Patch success.");
+            logger.d("Patch success.");
         } catch (Exception e) {
-            Log4a.e(TAG, "*** Patch failed, core functions may not work.");
+            logger.e("*** Patch failed, core functions may not work.");
         }
     }
 
     @Override
     public void notifyPacketArrival(XMPushService xMPushService, String str, Packet packet) {
-        Log4a.d(TAG, "packet arrival: " + str + "; " + packet.toXML());
+        logger.d("packet arrival: " + str + "; " + packet.toXML());
         super.notifyPacketArrival(xMPushService, str, packet);
     }
 
     @Override
     public void notifyPacketArrival(XMPushService xMPushService, String str, Blob blob) {
-        Log4a.d(TAG, "blob arrival: " + str + "; " + blob.toString());
+        logger.d("blob arrival: " + str + "; " + blob.toString());
         super.notifyPacketArrival(xMPushService, str, blob);
     }
 
@@ -93,6 +93,7 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
      * 处理收到的消息
      */
     private static class MessageProcessor {
+        private static Logger logger = XLog.tag("EventProcessorI").build();
         private static boolean shouldAllow(EventType type, Context context) {
             RegisteredApplication application = RegisteredApplicationDb.registerApplication(type.getPkg(),
                     false, context, null);
@@ -108,11 +109,11 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
                     allow = application.getAllowReceivePush();
                     break;
                 default:
-                    Log4a.e(TAG, "Unknown type: " + type.getType());
+                    logger.e("Unknown type: " + type.getType());
                     allow = true;
                     break;
             }
-            Log4a.d(TAG, "insertEvent -> " + type);
+            logger.d("insertEvent -> " + type);
             EventDb.insertEvent(allow ? Event.ResultType.OK : Event.ResultType.DENY_USER
                     , type, context);
             return allow;
@@ -120,9 +121,10 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
     }
 
     private static class EventProcessor extends MIPushEventProcessor {
+        private static Logger logger = XLog.tag("MyClientEventDispatcherD").build();
         private static void runProcessMIPushMessage(XMPushService xmPushService, byte[] payload, long var2) {
             XmPushActionContainer buildContainer = buildContainer(payload);
-            Log4a.i(TAG, "buildContainer: " + buildContainer.toString());
+            logger.i("buildContainer: " + buildContainer.toString());
 
             EventType type = TypeFactory.create(buildContainer, buildContainer.packageName);
             if (MessageProcessor.shouldAllow(type, xmPushService) ||
@@ -133,7 +135,7 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
 
             } else {
                 if (BuildConfig.DEBUG) {
-                    Log4a.d(TAG, "denied.");
+                    logger.d("denied.");
                 }
             }
         }
@@ -143,7 +145,7 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
             try {
                 runProcessMIPushMessage(xMPushService, blob.getDecryptedPayload(clientLoginInfo.security), (long) blob.getSerializedSize());
             } catch (Throwable e) {
-                Log4a.e(TAG, "", e);
+                logger.e("", e);
             }
         }
 
@@ -157,13 +159,13 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
                         runProcessMIPushMessage(xMPushService, RC4Cryption.decrypt(RC4Cryption.generateKeyForRC4(clientLoginInfo.security, message.getPacketID()), extension.getText()), (long) TrafficUtils.getTrafficFlow(packet.toXML()));
                         return;
                     } catch (Throwable e) {
-                        Log4a.e(TAG, "", e);
+                        logger.e("", e);
                         return;
                     }
                 }
                 return;
             }
-            Log4a.e(TAG, "not a mipush message");
+            logger.e("not a mipush message");
         }
     }
 }
