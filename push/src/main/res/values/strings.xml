@@ -34,7 +34,7 @@
     <string name="notification_stats_permission_text">We need usage rights to process your request, tap to grant permissions.</string>
     <string name="title_activity_keepalive">Push background activity</string>
 
-    <string name="activity_rom_keepalive">If your ROM may intercept the operations of the Push service, please add the Push application to whitelists (such as battery optimization, wake-up interception, etc.) in relevant settings of your ROM. You can also try to open the system\'s \"Recent Tasks\" interface and Lock this interface to keep the Push service running in the background.</string>
+    <string name="activity_rom_keepalive">Your device may intercept the operations of the push service, please add the "Push" application to whitelists (such as battery optimization, wake-up interception, etc.) in relevant settings of your ROM. You can also try to open the system\'s \"Recent Tasks\" interface and Lock this interface to keep the Push service running in the background.</string>
     <string name="see_pass_though_msg">Forwarded message, check it by opening the app.</string>
 
     <string name="notification_registerAllowed">Allowed "%1$s" register to MiPush</string>

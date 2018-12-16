@@ -34,7 +34,7 @@
 
     <string name="title_activity_keepalive">Push 后台活动支持</string>
 
-    <string name="activity_rom_keepalive">当您的 ROM 可能拦截推送服务的正常运行时，请在您的 ROM 的有关设置中将 Push 应用加入白名单（如电池优化、唤醒拦截等功能）。\n您也可尝试打开系统的“最近任务”界面，将本界面“锁定”以保持服务的后台运行。</string>
+    <string name="activity_rom_keepalive">您的 ROM 可能拦截推送服务的正常运行，请在您的 ROM 的有关设置中将 Push 应用加入白名单（如电池优化、唤醒拦截等功能）。\n您也可尝试打开系统的“最近任务”界面，将本界面“锁定”以保持服务的后台运行。</string>
     <string name="see_pass_though_msg">穿透消息，请打开应用查看</string>
 
     <string name="notification_registerAllowed">已允许 %1$s 注册小米推送</string>

@@ -3,34 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:background="@android:color/darker_gray"
     tools:context=".EmptyActivity">
 
-    <LinearLayout
+    <TextView
+        android:id="@android:id/text1"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:layout_weight="1"
-        android:orientation="vertical">
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:layout_weight="1"
-            android:padding="30dp"
-            android:text="@string/activity_rom_keepalive"
-            android:textSize="20dp"
-            tools:textColor="@android:color/white" />
-
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/ic_notifications_black_24dp"
-            tools:scaleType="center" />
-
-    </LinearLayout>
+        android:padding="30dp"
+        android:gravity="center"
+        android:fontFamily="monospace"
+        android:text="@string/activity_rom_keepalive" />
 
 </LinearLayout>

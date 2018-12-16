@@ -99,7 +99,7 @@ Please grant the <b>Run in the background or wake up</b> permissions.
     <string name="settings_get_log">Get debugging logs</string>
     <string name="settings_get_log_summary">Tap to sharing logs file, submit it to your issue if you can.</string>
 
-    <string name="settings_activity_keep_alive">Push KeepAlive</string>
+    <string name="settings_activity_keep_alive">Push background whitelist</string>
     <string name="settings_summary_keep_alive">Many ROMs (such as OnePlus) have their own background cleanup, but you can adding whitelist through the Lock button of Recent tasks interface. After tapping, find the interface you just opened in the system\'s Recent Tasks and lock it, let the Push running in the background.</string>
 
     <!-- Recent Activity -->
