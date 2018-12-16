@@ -20,6 +20,9 @@ import androidx.work.Worker;
 import top.trumeet.common.Constants;
 import top.trumeet.common.push.PushController;
 import top.trumeet.common.utils.rom.RomUtils;
+import top.trumeet.mipush.BuildConfig;
+
+import static top.trumeet.mipush.BuildConfig.DEBUG;
 
 /**
  * 搜集一些必要的匿名信息，以便改善产品和服务。
@@ -27,6 +30,10 @@ import top.trumeet.common.utils.rom.RomUtils;
 public class IdJob extends Worker {
     private static final String TAG = "IdJob";
     private void collect () {
+        if (DEBUG || BuildConfig.FABRIC_KEY.equals("null")) {
+            Log.e(TAG, "Fabric is disabled, skipping");
+            return;
+        }
         Log.d(TAG, "collect...");
         long ms = System.currentTimeMillis();
         put("PUSH_API_PROTOCOL_LEGACY",

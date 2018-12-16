@@ -20,6 +20,7 @@ import com.oasisfeng.condom.CondomContext;
 import com.xiaomi.smack.packet.Message;
 import com.xiaomi.xmpush.thrift.ActionType;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
+import com.xiaomi.xmsf.BuildConfig;
 import com.xiaomi.xmsf.R;
 import com.xiaomi.xmsf.push.control.XMOutbound;
 
@@ -115,7 +116,7 @@ public class PushServiceMain extends XMPushService {
                 long minute = (System.currentTimeMillis() - startTime) / (60 * 1000);
                 Log4a.d(TAG, "Recording stable running period:" + minute + ", next upload is " + nextUploadDuringMinutes +
                         " minutes later.");
-                if (!DEBUG) Answers.getInstance()
+                if (!DEBUG && !BuildConfig.FABRIC_KEY.equals("null")) Answers.getInstance()
                         .logCustom(new CustomEvent("XMPush_stable_running")
                                 .putCustomAttribute("running_time_min", minute));
                 // Schedule next running and skip next "first" running

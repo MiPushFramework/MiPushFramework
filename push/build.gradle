@@ -1,5 +1,17 @@
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
+def fabricKey = null
+if (project.rootProject.file('local.properties').exists()) {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    fabricKey = properties.getProperty('FABRIC_KEY')
+}
+if (fabricKey == null) {
+    fabricKey = System.getenv("FABRIC_KEY")
+}
+
+if (fabricKey != null) {
+    apply from: '../fabric.gradle'
+}
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -17,14 +29,9 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        def fabricKey = null
-        if (project.rootProject.file('local.properties').exists()) {
-            Properties properties = new Properties()
-            properties.load(project.rootProject.file('local.properties').newDataInputStream())
-            fabricKey = properties.getProperty('FABRIC_KEY')
-        }
-        manifestPlaceholders = [fabricKey: fabricKey != null ?
-                fabricKey : System.getenv("FABRIC_KEY")]
+        manifestPlaceholders = [fabricKey: fabricKey == null ?
+        "" : fabricKey]
+        buildConfigField "String", "FABRIC_KEY", "\"" + fabricKey + "\""
 
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'x86'
