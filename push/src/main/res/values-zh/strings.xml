@@ -23,7 +23,7 @@
     <string name="notification_group_config">配置</string>
     <string name="notification_category_alive">Push 状态</string>
     <string name="notification_category_warning">警告</string>
-    <string name="notification_alive">Mi Push 运行中</string>
+    <string name="notification_alive">小米推送运行中</string>
 
     <string name="notification_group_applications">应用程序</string>
 
@@ -32,7 +32,7 @@
     <string name="notification_stats_permission_title">请授予“使用情况”权限</string>
     <string name="notification_stats_permission_text">我们需要“使用情况”权限才能正常运行，请授权。</string>
 
-    <string name="title_activity_keepalive">Push 保活支持</string>
+    <string name="title_activity_keepalive">Push 后台活动支持</string>
 
     <string name="activity_rom_keepalive">当您的 ROM 可能拦截推送服务的正常运行时，请在您的 ROM 的有关设置中将 Push 应用加入白名单（如电池优化、唤醒拦截等功能）。\n您也可尝试打开系统的“最近任务”界面，将本界面“锁定”以保持服务的后台运行。</string>
     <string name="see_pass_though_msg">穿透消息，请打开应用查看</string>

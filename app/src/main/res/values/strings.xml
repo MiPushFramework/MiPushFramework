@@ -1,9 +1,7 @@
 <resources>
     <string name="app_name">MiPush Framework</string>
 
-    <string name="loading">Please wait…</string>
     <string name="enable">Enable</string>
-    <string name="success">Success</string>
     <string name="fail">Fail</string>
     <string name="apply">Apply</string>
     <string name="retry">Retry</string>
@@ -23,20 +21,7 @@
     <string name="action_about">About</string>
 
     <!-- Wizard -->
-    <string name="wizard_descr"><![CDATA[This is an open source project that allows other Android devices to enjoy XiaoMi system-level Push. For more details, visit the GitHub project:<a href="https://github.com/Trumeet/MiPushFramework">MiPushFramework</a>]]></string>
-    <string name="wizard_title_check_running">Check the running status.</string>
-    <string name="wizard_descr_check_running">Automatically checking if the push service is working properly, which can take up to about twenty seconds.</string>
-    <string name="wizard_descr_check_running_ok">Success! Push service is running. You should not need to perform any special operations.</string>
-    <string name="wizard_descr_check_running_fail">The check found some issues: Push service was not running. It may be that some of the tools or systems on your device are preventing its startup, and we will try to lift these restrictions next.</string>
-
-    <string name="wizard_title_start_fail">Service start failed</string>
-    <string name="service_not_running_faq">
-        <![CDATA[
-            <b>Please avoid any applications, settings to optimize, prohibit the manager and push service.</b>
-            <br /><br /><b>Still have problems?</b>
-            <br /><a href="https://github.com/Trumeet/MiPushFramework/issues/">Submit an issue</a>.
-        ]]>
-    </string>
+    <string name="wizard_descr"><![CDATA[This project allows any devices to use XiaoMi system-level Push, it can control notifications from other apps to save more battery. For more details, visit the GitHub project:<a href="https://github.com/Trumeet/MiPushFramework">MiPushFramework</a>]]></string>
 
     <string name="wizard_connect">Connecting</string>
 
@@ -52,7 +37,7 @@ Please grant the <b>Run in the background or wake up</b> permissions.
     <string name="wizard_title_stats_permission">Usage stats</string>
     <string name="wizard_title_stats_permission_text">You need to grant "Usage" permission or you will not be able to receive notifications.</string>
 
-    <string name="wizard_descr_finish">Everything is ready.</string>
+    <string name="wizard_descr_finish">Everything is ready, please enjoy!</string>
 
     <string name="status_ok">OK</string>
     <string name="status_deny_disable">Push disabled</string>
@@ -88,7 +73,6 @@ Please grant the <b>Run in the background or wake up</b> permissions.
     <!-- Permission -->
     <string name="action_edit_permission">Edit Permissions</string>
     <string name="permissions">Permissions</string>
-    <string name="permission_allow_register">Register push</string>
     <string name="permission_allow_receive">Receive notification message</string>
     <string name="permission_allow_receive_command">Receive command</string>
     <string name="permission_allow_receive_register_result">Receive registration result (not implemented)</string>
@@ -110,15 +94,6 @@ Please grant the <b>Run in the background or wake up</b> permissions.
     <string name="settings_service_setting">Push configs</string>
     <string name="settings_service_advance_setting">Advanced</string>
     <string name="settings_summary_service_advance_setting">Advanced configurations interface</string>
-    <string name="settings_fake_build">Fake build.prop</string>
-    <string name="settings_fake_build_summary">Some apps only try to register to Xiaomi Push when they see the system is XiaoMi MIUI. We can add some keys ​​to build.prop to fake as MIUI and make these applications try to register.</string>
-    <string name="settings_check_service">Check the Push service</string>
-    <string name="settings_check_service_summary">Check Push service running</string>
-    <string name="settings_skip_doze">Remove from battery optimization</string>
-    <string name="settings_skip_doze_summary">Battery Optimizer breaks Push service in Android 6.0 or higher.</string>
-
-    <string name="settings_summary_wakeup_target">We will launch the target app when we receive its notification. Disabling this option will prevent some apps from sending notifications again, but some notifications may be missed.</string>
-    <string name="settings_debug_icon">Debug Icon</string>
 
     <string name="settings_debug">Debug</string>
     <string name="settings_get_log">Get debugging logs</string>
@@ -156,18 +131,12 @@ The manager is not compatible with the version of the Push service you are curre
     <string name="connect_fail_text_is_miui"><![CDATA[ Sorry, we do not officially support the MIUI ROMs.     ]]></string>
 
     <!-- Help -->
-    <string name="help_article_can_not_receive_push">Cannot to receive push</string>
-    <string name="help_article_register_error">Registration failed</string>
-    <string name="help_article_no_register">Registration list is empty</string>
 
     <string name="connect_fail_test_se"><![CDATA[
     <b>Insufficient permissions, probably because of an upgrade, please try to reinstall the Manager app without uninstall or clearing data.
     <a href="%1$s">Download it</a>.</b>
     ]]></string>
 
-
-    <string name="settings_group_notification">Enable notifications grouping</string>
-    <string name="settings_summary_group_notification">May consuming battery, turn off if Push service gulp power.</string>
 
     <string name="about_version">Version %1$s</string>
     <string name="app_registered">Registered</string>

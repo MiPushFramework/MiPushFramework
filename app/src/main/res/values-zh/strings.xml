@@ -1,9 +1,7 @@
 <resources>
     <string name="app_name">小米推送服务</string>
 
-    <string name="loading">请稍候……</string>
     <string name="enable">启用</string>
-    <string name="success">成功了</string>
     <string name="fail">失败</string>
     <string name="apply">应用</string>
     <string name="retry">重试</string>
@@ -16,32 +14,14 @@
     <string name="main_settings">设置</string>
 
     <!-- Message when change enable status -->
-    <string name="msg_enable">已启用，其他应用可以接收和注册推送服务</string>
-    <string name="msg_disable">已停用，其他应用无法接收和新注册推送</string>
+    <string name="msg_enable">已启用，其他应用可以接收和注册</string>
+    <string name="msg_disable">已停用，其他应用无法接收和新注册</string>
 
     <!-- About -->
     <string name="action_about">关于</string>
 
     <!-- Wizard -->
-    <string name="wizard_descr"><![CDATA[这是一个使其他 Android 设备也能享受小米系统级推送的开源项目。更多详情访问本项目项目于 GitHub 的页面：<a href="https://github.com/Trumeet/MiPushFramework">MiPushFramework</a>]]></string>
-    <string name="wizard_title_check_running">检查运行状态</string>
-    <string name="wizard_descr_check_running">我们正在自动检查推送服务是否正常运行，这至多需要二十秒的时间。</string>
-    <string name="wizard_descr_check_running_ok">成功！服务正在运行，您无需执行进一步操作。</string>
-    <string name="wizard_descr_check_running_fail">检查发现了问题：服务似乎并未运行。这可能是您的设备上有一些工具或系统本身阻止了服务的启动。我们接下来将协助您尝试解决该问题。</string>
-
-    <string name="wizard_title_start_fail">服务启动失败</string>
-    <string name="service_not_running_faq">
-        <![CDATA[
-            <b>如果你的设备安装了 绿色守护、黑域 等优化工具</b>
-            <br />请将本应用加入白名单。
-            <br /><b>如果你使用了绿色守护的“处方”功能</b>
-            <br />请禁用含有 <b>XMPushService</b> 等阻止启动小米推送服务与广播的处方
-            <br /><b>如果你的 ROM 为国产 ROM（如 Flyme、EMUI、魔趣等）</b>
-            <br />请在后台管理等功能设置中将本应用加入白名单
-            <br /><br /><b>仍有问题？</b>
-            <br />请提交 Issue：<a href="https://github.com/Trumeet/MiPushFramework">点按前往 GitHub 页面</a>
-        ]]>
-    </string>
+    <string name="wizard_descr"><![CDATA[这是一个让任何设备都能使用小米系统级推送的项目，它能接管其它应用的推送（通知），以达到省电的效果。更多详情访问本项目项目于 GitHub 的页面：<a href="https://github.com/Trumeet/MiPushFramework">MiPushFramework</a>]]></string>
 
     <string name="wizard_connect">正在连接</string>
 
@@ -95,15 +75,14 @@
     <!-- Permission -->
     <string name="action_edit_permission">修改权限</string>
     <string name="permissions">权限</string>
-    <string name="permission_allow_register">注册推送</string>
     <string name="permission_allow_receive">接收通知栏消息</string>
-    <string name="permission_allow_receive_command">接收命令</string>
+    <string name="permission_allow_receive_command">接收命令消息（无通知栏提醒）</string>
     <string name="permission_allow_receive_register_result">接收注册结果（暂时无效）</string>
     <string name="permission_notification_on_register">注册时显示通知</string>
     <string name="permission_summary_notification_on_register">需要在设置-高级配置中打开全局注册通知开关</string>
 
     <string name="permission_register_type">注册方式</string>
-    <string name="register_type_allow">允许，自动注册</string>
+    <string name="register_type_allow">允许并自动注册</string>
     <string name="register_type_deny">阻止注册</string>
     <string name="register_type_ask">询问（默认）</string>
     <string-array name="register_types">
@@ -117,15 +96,6 @@
     <string name="settings_service_setting">服务配置</string>
     <string name="settings_service_advance_setting">高级配置</string>
     <string name="settings_summary_service_advance_setting">进入高级配置界面</string>
-    <string name="settings_fake_build">伪装 build.prop</string>
-    <string name="settings_fake_build_summary">某些应用（如某东、某拜单车等）会使用自己的逻辑判断系统是否为 MIUI，如果是才启用并尝试注册小米推送，否则会使用其他推送方式并驻留后台。这种机型判断逻辑通常与 build.prop 息息相关。我们可以尝试向 build.prop 插入一些代表 MIUI 系统的键值来对系统进行伪装，使这些应用尝试注册并使用小米推送。</string>
-    <string name="settings_check_service">检查服务运行状态</string>
-    <string name="settings_check_service_summary">自动检查推送服务是否运行</string>
-    <string name="settings_skip_doze">移除电池优化</string>
-    <string name="settings_skip_doze_summary">在 Android 6.0 及更高版本中，电池优化会影响推送服务</string>
-
-    <string name="settings_summary_wakeup_target">在收到通知时，我们会启动目标应用。禁用此项可以防止部分应用重复发送通知，但这也可能遗漏部分通知。</string>
-    <string name="settings_debug_icon">调试透明图标</string>
 
     <string name="settings_get_log">获取日志</string>
     <string name="settings_get_log_summary">点按分享日志，必要时请随 Issue 一起提交。</string>
@@ -173,18 +143,11 @@
     ]]></string>
 
 
-    <string name="help_article_can_not_receive_push">无法收到推送</string>
-    <string name="help_article_register_error">注册异常</string>
-    <string name="help_article_no_register">注册列表为空</string>
-
     <string name="connect_fail_test_se"><![CDATA[
     <b>权限不足通常是由于升级所致，请尝试重新安装 小米推送服务 应用（不要清空数据）。
     寻找最新版本的安装包请<a href="%1$s">点按这里</a> </b>
     ]]></string>
 
-
-    <string name="settings_group_notification">启用通知合并</string>
-    <string name="settings_summary_group_notification">可能会增加耗电，如果 Push 应用耗电异常，可尝试关闭</string>
 
     <string name="about_version">版本 %1$s</string>
     <string name="app_registered">已注册</string>

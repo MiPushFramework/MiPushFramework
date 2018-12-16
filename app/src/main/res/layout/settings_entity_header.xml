@@ -18,7 +18,6 @@
 <!-- Entity header -->
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/entity_header"
     style="@style/EntityHeader"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -85,7 +84,6 @@
             android:paddingTop="8dp" />
 
         <TextView
-            android:id="@+id/install_type"
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
