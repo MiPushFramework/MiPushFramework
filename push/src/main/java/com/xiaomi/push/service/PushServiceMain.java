@@ -14,6 +14,8 @@ import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.oasisfeng.condom.CondomContext;
 import com.xiaomi.smack.packet.Message;
 import com.xiaomi.xmpush.thrift.ActionType;
@@ -23,8 +25,12 @@ import com.xiaomi.xmsf.push.control.XMOutbound;
 
 import org.apache.thrift.TBase;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import me.pqpo.librarylog4a.Log4a;
 
+import static com.xiaomi.xmsf.BuildConfig.DEBUG;
 import static top.trumeet.common.Constants.TAG_CONDOM;
 
 /**
@@ -84,11 +90,47 @@ public class PushServiceMain extends XMPushService {
     private SettingsObserver mSettingsObserver;
     private SharedPreferences.OnSharedPreferenceChangeListener mListener;
 
+    private Timer mStatTimer;
+    private long startTime;
+    private int nextUploadDuringMinutes = 20; // First 20, next 40, then 80... no longer than 6 hours (3600)
+    private boolean skipFirstStartTimerTask = true; // Skip first run
+
+    private void scheduleNextUpload () {
+        if (mStatTimer != null) mStatTimer.cancel();
+        skipFirstStartTimerTask = true;
+        mStatTimer = null;
+        mStatTimer = new Timer();
+        mStatTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (skipFirstStartTimerTask) {
+                    skipFirstStartTimerTask = false;
+                    return;
+                }
+                nextUploadDuringMinutes = nextUploadDuringMinutes * 2;
+                if (nextUploadDuringMinutes > 3600) {
+                    nextUploadDuringMinutes = 3600;
+                }
+                // Report and log stable users
+                long minute = (System.currentTimeMillis() - startTime) / (60 * 1000);
+                Log4a.d(TAG, "Recording stable running period:" + minute + ", next upload is " + nextUploadDuringMinutes +
+                        " minutes later.");
+                if (!DEBUG) Answers.getInstance()
+                        .logCustom(new CustomEvent("XMPush_stable_running")
+                                .putCustomAttribute("running_time_min", minute));
+                // Schedule next running and skip next "first" running
+                scheduleNextUpload();
+            }
+        }, 0, nextUploadDuringMinutes * 1000 * 60);
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        Log4a.d(TAG, "Service started");
+        startTime = System.currentTimeMillis();
+        scheduleNextUpload();
         mSettingsObserver = new SettingsObserver(new Handler(Looper.myLooper()));
-
     }
 
     @Override
@@ -113,8 +155,10 @@ public class PushServiceMain extends XMPushService {
 
     @Override
     public void onDestroy() {
+        Log4a.d(TAG, "Service stopped");
         ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
                 .cancel(NOTIFICATION_ALIVE_ID);
+        mStatTimer.cancel();
         super.onDestroy();
     }
 
