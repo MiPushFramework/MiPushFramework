@@ -14,8 +14,8 @@
     <string name="main_settings">设置</string>
 
     <!-- Message when change enable status -->
-    <string name="msg_enable">已启用，其他应用可以接收和注册</string>
-    <string name="msg_disable">已停用，其他应用无法接收和新注册</string>
+    <string name="msg_enable">已启用，其他应用可以接收和注册推送</string>
+    <string name="msg_disable">已停用，其他应用无法接收和注册推送</string>
 
     <!-- About -->
     <string name="action_about">关于</string>
