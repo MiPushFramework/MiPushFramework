@@ -37,7 +37,7 @@ Please grant the <b>Run in the background or wake up</b> permissions.
     <string name="wizard_title_stats_permission">Usage stats</string>
     <string name="wizard_title_stats_permission_text">You need to grant "Usage" permission or you will not be able to receive notifications.</string>
 
-    <string name="wizard_descr_finish">Everything is ready, please enjoy!</string>
+    <string name="wizard_descr_finish">Everything is ready. Enjoy!</string>
 
     <string name="status_ok">OK</string>
     <string name="status_deny_disable">Push disabled</string>
