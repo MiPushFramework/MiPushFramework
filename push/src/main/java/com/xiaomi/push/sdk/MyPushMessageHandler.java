@@ -3,7 +3,10 @@ package com.xiaomi.push.sdk;
 import android.app.IntentService;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.content.ContextCompat;
 
+import com.catchingnow.icebox.sdk_client.IceBox;
 import com.elvishew.xlog.Logger;
 import com.elvishew.xlog.XLog;
 import com.xiaomi.push.service.MIPushNotificationHelper;
@@ -18,6 +21,7 @@ import com.xiaomi.xmsf.utils.ConfigCenter;
 
 import top.trumeet.common.ita.ITopActivity;
 import top.trumeet.common.ita.TopActivityFactory;
+import top.trumeet.common.utils.Utils;
 
 /**
  * @author zts1993
@@ -65,6 +69,7 @@ public class MyPushMessageHandler extends IntentService {
         PushMetaInfo metaInfo = container.getMetaInfo();
         String targetPackage = container.getPackageName();
 
+        activeApp(targetPackage);
 
         pullUpApp(targetPackage, container);
 
@@ -87,6 +92,32 @@ public class MyPushMessageHandler extends IntentService {
 
     }
 
+    private void activeApp(String targetPackage) {
+        try {
+            if (!ConfigCenter.getInstance().isIceboxSupported(this)) {
+                return;
+            }
+
+            if (!Utils.isAppInstalled(IceBox.PACKAGE_NAME)) {
+                return;
+            }
+
+            if (ContextCompat.checkSelfPermission(this, IceBox.SDK_PERMISSION) == PackageManager.PERMISSION_GRANTED) {
+
+                int enabledSetting = IceBox.getAppEnabledSetting(this, targetPackage);
+                if (enabledSetting != 0) {
+                    logger.w("active app " + targetPackage + " by IceBox SDK");
+                    IceBox.setAppEnabledSettings(this, true, targetPackage);
+                }
+
+            } else {
+                logger.w("skip active app " + targetPackage + " by IceBox SDK due to lack of permissions");
+            }
+        } catch (Throwable e) {
+            logger.e("activeApp failed " + e.getLocalizedMessage(), e);
+        }
+    }
+
 
     private Intent getJumpIntent(String targetPackage, XmPushActionContainer container) {
         Intent intent = MyMIPushNotificationHelper.getSdkIntent(this, targetPackage, container);
@@ -95,7 +126,6 @@ public class MyPushMessageHandler extends IntentService {
                 intent = getPackageManager().getLaunchIntentForPackage(targetPackage);
             } catch (RuntimeException ignore) {
             }
-
         }
         return intent;
     }

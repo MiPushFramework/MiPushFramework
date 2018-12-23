@@ -18,7 +18,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/settings_debug">
+    <PreferenceCategory android:title="@string/settings_experimental">
 
         <Preference
             android:key="mock_notification"
@@ -26,6 +26,11 @@
             android:title="@string/settings_mock_notification" />
 
 
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="IceboxSupported"
+            android:title="@string/settings_icebox_permission"
+            android:summary="@string/settings_icebox_permission_summary" />
 
     </PreferenceCategory>
 

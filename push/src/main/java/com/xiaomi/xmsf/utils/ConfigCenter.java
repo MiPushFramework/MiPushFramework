@@ -41,4 +41,8 @@ public class ConfigCenter {
         String mode = getSharedPreferences(ctx).getString("AccessMode", "0");
         return Integer.valueOf(mode);
     }
+
+    public boolean isIceboxSupported(Context ctx) {
+        return getSharedPreferences(ctx).getBoolean("IceboxSupported", false);
+    }
 }

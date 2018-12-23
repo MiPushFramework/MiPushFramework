@@ -13,6 +13,11 @@ if (fabricKey != null) {
     apply from: '../fabric.gradle'
 }
 
+repositories {
+    maven { url 'https://dl.bintray.com/heruoxin/icebox' }
+}
+
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -111,6 +116,8 @@ dependencies {
     implementation project(':extenders')
     implementation "com.android.support:palette-v7:$supportLibraryVersion"
     compileOnly 'de.robv.android.xposed:api:82'
+
+    implementation 'com.catchingnow.icebox:SDK:1.0.5'
 
     // Fabric
     implementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {

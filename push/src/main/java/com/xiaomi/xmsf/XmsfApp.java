@@ -14,9 +14,11 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 
+import com.catchingnow.icebox.sdk_client.IceBox;
 import com.crashlytics.android.Crashlytics;
 import com.elvishew.xlog.XLog;
 import com.oasisfeng.condom.CondomOptions;
@@ -100,7 +102,9 @@ public class XmsfApp extends Application {
         if (PushControllerUtils.isPrefsEnable(this)) {
             PushControllerUtils.setAllEnable(true, this);
         }
-        scheduleUploadNotificationInfo();
+
+ //      scheduleUploadNotificationInfo();
+
         long currentTimeMillis = System.currentTimeMillis();
         long lastStartupTime = getLastStartupTime();
         if (isAppMainProc(this)) {
@@ -149,6 +153,7 @@ public class XmsfApp extends Application {
         } catch (RuntimeException e) {
             logger.e(e.getMessage(), e);
         }
+
 
     }
 

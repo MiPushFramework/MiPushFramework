@@ -30,7 +30,7 @@
     <string name="wizard_title_doze_whitelist">Remove battery optimization</string>
     <string name="wizard_descr_doze_whitelist">The Push service will not keep running if it is \'battery optimized\'. Please click the button below to request adding it to battery-optimized whitelist (some ROMs may not be supported, if you do not respond after clicking, please click \"Next\".)</string>
     <string name="wizard_button_remove_doze">Remove battery optimization</string>
-    <string name="settings_debug">Debug</string>
+    <string name="settings_experimental">Experimental</string>
 
 
 </resources>

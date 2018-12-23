@@ -76,10 +76,21 @@
         <item>0</item>
         <item>1</item>
     </string-array>
+
+
+    <string name="settings_icebox_not_installed">IceBox not installed</string>
+    <string name="settings_icebox_permission">Auto enable app by IceBox</string>
+    <string name="settings_icebox_permission_summary">Auto enable app by IceBox SDK.
+        require IceBox( version > 3.6.0) installed </string>
+    <string name="icebox_permission_granted">IceBox permission granted</string>
+
+
     <string name="settings_mock_notification">Simulate received a message</string>
     <string name="settings_mock_notification_summary">Tap to send a simulated test message.</string>
     <string name="debug_test_title">This is Title</string>
     <string name="debug_test_content">This is Content</string>
     <string name="accessibility_desc">Used for the alternate foreground application detection mode, higher compatibility, but poor performance.</string>
     <string name="settings_notify_on_register">Notify On App Register</string>
+
+
 </resources>

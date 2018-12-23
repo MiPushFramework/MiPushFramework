@@ -61,7 +61,6 @@
 
     <string name="settings_options">配置</string>
 
-
     <string name="pref_title_access_mode">前台应用检测模式</string>
     <string name="pref_summary_access_mode">在点击通知时，检测应用是否在前台的技术方式</string>
     <string name="settings_mock_notification">模拟通知消息</string>
@@ -69,7 +68,6 @@
     <string name="debug_test_title">这是一个测试标题</string>
     <string name="debug_test_content">这是一个测试内容</string>
     <string name="settings_notify_on_register">应用注册时显示通知</string>
-
 
     <string-array name="pref_title_access_mode_list_titles">
         <item>使用情况访问 API（性能好，推荐）</item>
@@ -80,4 +78,16 @@
         <item>0</item>
         <item>1</item>
     </string-array>
+
+
+
+    <string name="settings_icebox_permission">开启冰箱(IceBox)自动解冻支持</string>
+    <string name="settings_icebox_permission_summary">点击通知栏时自动解冻冻结的App。
+         需要安装的冰箱版本号 >= 3.6.0
+    </string>
+
+    <string name="icebox_permission_granted">已经赋权冰箱自动解冻</string>
+    <string name="settings_icebox_not_installed">冰箱尚未安装，暂不支持</string>
+
+
 </resources>

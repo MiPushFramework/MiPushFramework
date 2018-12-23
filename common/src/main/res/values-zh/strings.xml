@@ -25,7 +25,7 @@
 
     <string name="error_usage_stats">获取“使用统计”异常，如果您的系统不支持，尝试在管理器的设置中将“前台应用检测模式”切换为兼容模式 </string>
 
-    <string name="settings_debug">诊断</string>
+    <string name="settings_experimental">实验室</string>
 
 
     <string name="wizard_title_doze_whitelist">移除电池优化</string>
