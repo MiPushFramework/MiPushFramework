@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.elvishew.xlog.Logger;
+import com.elvishew.xlog.XLog;
 import com.taobao.android.dexposed.DexposedBridge;
 import com.taobao.android.dexposed.XC_MethodHook;
 import com.taobao.android.dexposed.XC_MethodReplacement;
@@ -16,14 +18,14 @@ import com.xiaomi.xmsf.push.hooks.IHook;
 import java.util.Collections;
 import java.util.List;
 
-import me.pqpo.librarylog4a.Log4a;
+
 
 /**
  * Created by zts1993 on 2018/4/16.
  */
 
 public class HookPingReceiver implements IHook {
-    private static final String TAG = HookPingReceiver.class.getSimpleName();
+    private final Logger logger = XLog.tag(HookPingReceiver.class.getSimpleName()).build();
 
     @Override
     public List<XC_MethodHook.Unhook> fetchHook() throws Exception {
@@ -34,19 +36,19 @@ public class HookPingReceiver implements IHook {
                         Context context = (Context) param.args[0];
                         Intent intent = (Intent) param.args[1];
                         Alarm.registerPing(false);
-                        Log4a.v(TAG, intent.getPackage() + " is the package name");
+                        logger.v(intent.getPackage() + " is the package name");
                         if (!PushConstants.ACTION_PING_TIMER.equals(intent.getAction())) {
-                            Log4a.w(TAG, "cancel the old ping timer");
+                            logger.w("cancel the old ping timer");
                             Alarm.stop();
                         } else if (TextUtils.equals(context.getPackageName(), intent.getPackage())) {
-                            Log4a.v(TAG, "Ping hooked XMChannelService on timer");
+                            logger.v("Ping hooked XMChannelService on timer");
                             try {
                                 Intent serviceIntent = new Intent(context, PushServiceMain.class);
                                 serviceIntent.putExtra(PushServiceConstants.EXTRA_TIME_STAMP, System.currentTimeMillis());
                                 serviceIntent.setAction(PushServiceConstants.ACTION_TIMER);
                                 context.startService(serviceIntent);
                             } catch (Throwable e) {
-                                Log4a.e(TAG, e);
+                                logger.e(e);
                             }
                         }
                         return null;

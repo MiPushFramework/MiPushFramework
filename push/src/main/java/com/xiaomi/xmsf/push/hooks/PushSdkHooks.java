@@ -2,6 +2,8 @@ package com.xiaomi.xmsf.push.hooks;
 
 import android.os.Build;
 
+import com.elvishew.xlog.Logger;
+import com.elvishew.xlog.XLog;
 import com.taobao.android.dexposed.XC_MethodHook;
 import com.xiaomi.xmsf.push.hooks.impl.HookMIUIPushSdk;
 import com.xiaomi.xmsf.push.hooks.impl.HookPingReceiver;
@@ -10,7 +12,6 @@ import com.xiaomi.xmsf.push.hooks.impl.HookPkgUninstallReceiver;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.pqpo.librarylog4a.Log4a;
 import me.weishu.epic.art.EpicNative;
 
 /**
@@ -19,7 +20,7 @@ import me.weishu.epic.art.EpicNative;
  * @date 2018/4/16
  */
 public class PushSdkHooks {
-    private static final String TAG = PushSdkHooks.class.getSimpleName();
+    private final Logger logger = XLog.tag(PushSdkHooks.class.getSimpleName()).build();
 
     private static List<IHook> registeredHooks = new ArrayList<>();
 
@@ -42,16 +43,16 @@ public class PushSdkHooks {
         try {
             EpicNative.getMethodAddress(PushSdkHooks.class.getDeclaredMethod("getHooks"));
         } catch (UnsatisfiedLinkError | NoSuchMethodException ignored) {
-            Log4a.e(TAG, "dexposed not supported");
+            logger.e("dexposed not supported");
             return unhooks.toArray(new XC_MethodHook.Unhook[unhooks.size()]);
         }
 
         for (IHook unhook : registeredHooks) {
             try {
-                Log4a.d(TAG, "init hook : " + unhook.getClass().getSimpleName());
+                logger.d("init hook : " + unhook.getClass().getSimpleName());
                 unhooks.addAll(unhook.fetchHook());
             } catch (Exception e) {
-                Log4a.e(TAG, "Hook failed", e);
+                logger.e("Hook failed", e);
             }
         }
         return unhooks.toArray(new XC_MethodHook.Unhook[]{});

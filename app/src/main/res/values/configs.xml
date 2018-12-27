@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- 以下包名的应用不建议伪装机型 -->
-    <string-array name="fake_blacklist_equals">
+    <string-array name="fake_blacklist_equals"  translatable="false">
         <item>android</item>
         <item>de.robv.android.xposed.installer</item>
         <item>com.xiaomi.xmsf</item>
@@ -10,7 +10,7 @@
     </string-array>
 
     <!-- 任意应用包名包含以下项则不建议伪装机型 -->
-    <string-array name="fake_blacklist_contains">
+    <string-array name="fake_blacklist_contains"  translatable="false">
         <item>com.google.android</item>
     </string-array>
 </resources>

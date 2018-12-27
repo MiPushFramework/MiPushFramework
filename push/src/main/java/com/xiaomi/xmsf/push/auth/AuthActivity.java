@@ -8,11 +8,12 @@ import android.os.Bundle;
 import android.text.Html;
 import android.view.WindowManager;
 
+import com.elvishew.xlog.Logger;
+import com.elvishew.xlog.XLog;
 import com.xiaomi.xmsf.R;
 
 import java.util.Objects;
 
-import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.common.cache.ApplicationNameCache;
 import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.register.RegisteredApplication;
@@ -27,6 +28,8 @@ import static top.trumeet.common.Constants.EXTRA_MI_PUSH_PACKAGE;
  */
 
 public class AuthActivity extends Activity {
+    private Logger logger = XLog.tag("Auth").build();
+
     /**
      * Application details
      */
@@ -40,7 +43,7 @@ public class AuthActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (!getIntent().hasExtra(EXTRA_REGISTERED_APPLICATION)) {
-            Log4a.e("Auth", "Args not found.");
+            logger.e("Args not found.");
             finish();
             return;
         }
@@ -78,7 +81,7 @@ public class AuthActivity extends Activity {
      * @param type Type
      */
     private void setResultAndFinish(@RegisteredApplication.Type int type) {
-        Log4a.d("Auth", application.dump());
+        logger.d(application.dump());
 
         application.setType(type);
         // DB operation in UI thread, too bad

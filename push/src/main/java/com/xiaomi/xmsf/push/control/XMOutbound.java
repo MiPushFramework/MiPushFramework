@@ -4,24 +4,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 
+import com.elvishew.xlog.Logger;
+import com.elvishew.xlog.XLog;
 import com.oasisfeng.condom.CondomOptions;
 import com.oasisfeng.condom.OutboundJudge;
 import com.oasisfeng.condom.OutboundType;
 import com.oasisfeng.condom.kit.NullDeviceIdKit;
 
-import me.pqpo.librarylog4a.Log4a;
+
 
 /**
  * Created by Trumeet on 2018/1/19.
  */
 
 public class XMOutbound implements OutboundJudge {
-    private final String TAG;
+    private final Logger logger;
     private final Context context;
 
     private XMOutbound (Context context, String tag) {
         this.context = context;
-        this.TAG = tag;
+        this.logger = XLog.tag(tag).build();
     }
 
     public static CondomOptions create (Context context, String tag,
@@ -45,7 +47,7 @@ public class XMOutbound implements OutboundJudge {
 
     @Override
     public boolean shouldAllow(OutboundType type, @Nullable Intent intent, String target_package) {
-        Log4a.d(TAG, "shouldAllow ->" + type.toString());
+        logger.d("shouldAllow ->" + type.toString());
         return true;
     }
 }

@@ -4,19 +4,22 @@
     <string name="common_err">%1$s</string>
 
     <!-- Xposed -->
-    <string name="xposed_description">小米推送机型伪装插件，如需使用请开启</string>
+    <string name="xposed_description">Fake XiaoMi Phone plugin, turn on if you need it.</string>
 
     <!-- Auth -->
-    <string name="auth_message"><![CDATA[要允许 <b>%1$s</b> 推送消息吗？如果您不确定，请使用 <b>允许一次</b>。]]></string>
-    <string name="allow">允许</string>
-    <string name="deny">拒绝</string>
-    <string name="allow_once">允许一次</string>
+    <string name="auth_message"><![CDATA[Do you want to allow  <b>%1$s</b> to push messages? If you are unsure, try <b>Allow one time</b>.]]></string>
+    <string name="allow">Allow</string>
+    <string name="deny">Reject</string>
+    <string name="allow_once">Allow once</string>
 
     <!-- Log -->
-    <string name="log_push_err">PUSH服务异常, 请取消对管理app的拦截优化，关闭ROM的高级优化功能</string>
-    <string name="log_none">无日志</string>
-    <string name="log_share_error">无法分享日志：%1$s</string>
-    <string name="log_clear_done">清空日志成功</string>
+    <!-- TOOD: See the "wake-up intercep-tion" shown, why?-->
+    <string name="log_push_err">Push service failed. Please try to disable the wake-up interception for the manager application, turn off some optimization feature of ROMs.</string>
+    <string name="log_none">No logs yet.</string>
+    <string name="activity_intent_not_found">No application can handle this action.</string>
+    <string name="log_share_error">Cannot share logs：%1$s</string>
+    <string name="log_clear_done">Logs cleaned.</string>
+    <string name="log_share_title">Share log with</string>
 
 
     <!-- Notification -->
@@ -28,51 +31,66 @@
     <string name="notification_group_applications">Applications</string>
 
     <!-- Stats permission guide -->
+    <!-- TOOD: Need a simple explanation to users -->
     <string name="notification_stats_permission_title">Please grant usage stats permission</string>
-    <string name="notification_stats_permission_text">We need usage rights to process your request, click grant permissions</string>
+    <string name="notification_stats_permission_text">We need usage rights to process your request, tap to grant permissions.</string>
+    <string name="title_activity_keepalive">Push background activity</string>
 
-    <string name="title_activity_keepalive">ROM 支持</string>
-    <string name="activity_rom_keepalive">
-        <![CDATA[
-您的 ROM（%1$s）可能会阻止推送正常运行。请遵照您的 ROM 的设置方式将 Push 加入白名单，如 MIUI 等 ROM 可以选择 <b>近期任务</b>，然后将本界面 <b>锁定</b>。
-        ]]>
-    </string>
-    <string name="see_pass_though_msg">穿透消息，请打开应用查看</string>
+    <string name="activity_rom_keepalive">Your device may intercept the operations of the push service, please add the "Push" application to whitelists (such as battery optimization, wake-up interception, etc.) in relevant settings of your ROM. You can also try to open the system\'s \"Recent Tasks\" interface and Lock this interface to keep the Push service running in the background.</string>
+    <string name="see_pass_though_msg">Forwarded message, check it by opening the app.</string>
 
-    <string name="notification_register">%1$s 已被%2$s注册小米推送</string>
+    <string name="notification_registerAllowed">Allowed "%1$s" register to MiPush</string>
+    <string name="notification_registerRejected">Rejected "%1$s" register to MiPush</string>
 
-    <string name="settings_clear">清理</string>
+    <string name="settings_clear">Clean up</string>
 
-    <string name="title_activity_advance_setting">高级配置</string>
-    <string name="settings_clear_history_summary">清理 7 天前消息记录</string>
-    <string name="settings_clear_history">清理记录</string>
+    <string name="title_activity_advance_setting">Advanced</string>
+    <string name="settings_clear_history_summary">Cleanup logs for more than 7 days.</string>
+    <string name="settings_clear_history">Cleanup logs</string>
 
-    <string name="settings_clear_log">清空日志</string>
-    <string name="settings_clear_log_summary">清空日志文件</string>
+    <string name="settings_clear_log">Clear logs</string>
+    <string name="settings_clear_log_summary">Delete logs file.</string>
 
 
 
-    <string name="settings_summary_push_icon">开启图标可以解决部分应用和系统找不到Push应用问题 (例如小米手环推送，一加应用锁管理) </string>
-    <string name="settings_push_icon">开启 Push 服务图标</string>
+    <string name="settings_summary_push_icon">Turning on the icon can solve some applications and systems can not find the Push application.</string>
+    <string name="settings_push_icon">Show Push app icon</string>
 
 
-    <string name="settings_auto_register">自动注册应用</string>
+    <string name="settings_auto_register">Automatic registers</string>
 
 
-    <string name="settings_options">配置</string>
+    <string name="settings_options">Config</string>
 
 
-    <string name="pref_title_access_mode">前台APP检测模式</string>
-    <string name="pref_summary_access_mode">点击通知时，检测应用是否在前台的实现模式</string>
+    <string name="pref_title_access_mode">Foreground app detection mode</string>
+    <string name="pref_summary_access_mode">It will be used when taps on Push notification.</string>
 
 
     <string-array name="pref_title_access_mode_list_titles">
-        <item>使用情况访问 API (性能好-推荐)</item>
-        <item>辅助模式 (兼容性好)</item>
+        <item>UsageStats API (good performance, recommended)</item>
+        <item>Accessibility mode (more compatibility)</item>
     </string-array>
 
     <string-array name="pref_title_access_mode_list_values">
         <item>0</item>
         <item>1</item>
     </string-array>
+
+
+    <string name="settings_icebox_not_installed">IceBox not installed</string>
+    <string name="settings_icebox_permission">Auto enable app by IceBox</string>
+    <string name="settings_icebox_permission_summary">Auto enable app by IceBox SDK.
+        require IceBox( version > 3.6.0) installed </string>
+    <string name="icebox_permission_granted">IceBox permission granted</string>
+
+
+    <string name="settings_mock_notification">Simulate received a message</string>
+    <string name="settings_mock_notification_summary">Tap to send a simulated test message.</string>
+    <string name="debug_test_title">This is Title</string>
+    <string name="debug_test_content">This is Content</string>
+    <string name="accessibility_desc">Used for the alternate foreground application detection mode, higher compatibility, but poor performance.</string>
+    <string name="settings_notify_on_register">Notify On App Register</string>
+
+
 </resources>

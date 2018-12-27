@@ -1,69 +1,47 @@
 <resources>
-    <string name="app_name">小米推送服务</string>
+    <string name="app_name">MiPush Framework</string>
 
-    <string name="loading">请稍后</string>
-    <string name="enable">启用</string>
-    <string name="success">成功了</string>
-    <string name="fail">失败</string>
-    <string name="apply">应用</string>
-    <string name="retry">重试</string>
-    <string name="exit">退出</string>
+    <string name="enable">Enable</string>
+    <string name="fail">Fail</string>
+    <string name="apply">Apply</string>
+    <string name="retry">Retry</string>
+    <string name="exit">Exit</string>
 
     <!-- Preference -->
-    <string name="preference_title">推送设定</string>
-    <string name="main_event">记录</string>
-    <string name="main_apps">应用</string>
-    <string name="main_settings">设定</string>
+    <string name="preference_title">Push Config</string>
+    <string name="main_event">Logs</string>
+    <string name="main_apps">Apps</string>
+    <string name="main_settings">Configs</string>
 
     <!-- Message when change enable status -->
-    <string name="msg_enable">已启用，应用程序可以接收和注册推送服务</string>
-    <string name="msg_disable">已停用，应用均无法接收和新注册推送</string>
+    <string name="msg_enable">Enabled, Push service is ready.</string>
+    <string name="msg_disable">Disabled, Apps can\'t receive and register to Push service.</string>
 
     <!-- About -->
-    <string name="action_about">关于</string>
+    <string name="action_about">About</string>
 
     <!-- Wizard -->
-    <string name="wizard_descr"><![CDATA[这是一个可以让任何设备都能享受小米系统级推送的开源项目。更多详情请点按访问项目主页：<a href="https://github.com/Trumeet/MiPushFramework">MiPushFramework</a>]]></string>
-    <string name="wizard_title_check_running">检查运行状态</string>
-    <string name="wizard_descr_check_running">我们正在自动检查推送服务是否正常运行，这至多需要二十秒的时间</string>
-    <string name="wizard_descr_check_running_ok">成功！服务正在运行中。您应该无需执行任何特殊操作了。</string>
-    <string name="wizard_descr_check_running_fail">检查过程中出现了一些问题：服务并没有运行。可能是您设备上的一些工具或系统阻止了它的启动，我们接下来将尝试解除这些限制。</string>
+    <string name="wizard_descr"><![CDATA[This project allows any devices to use XiaoMi system-level Push, it can control notifications from other apps to save more battery. For more details, visit the GitHub project:<a href="https://github.com/Trumeet/MiPushFramework">MiPushFramework</a>]]></string>
 
-    <string name="wizard_title_start_fail">服务启动失败</string>
-    <string name="service_not_running_faq">
-        <![CDATA[
-            <b>如果你的设备安装了 绿色守护、黑域 等优化工具</b>
-            <br />请将本应用加入白名单。
-            <br /><b>如果你使用了绿色守护的处方功能</b>
-            <br />请禁用带有 <b>XMPushService</b> 等带有阻止启动小米推送服务和广播的处方
-            <br /><b>如果你的 ROM 是国产 ROM（如 Flyme、EMUI、魔趣）</b>
-            <br />请到后台管理等功能设置处将本应用加入白名单
-            <br /><br /><b>更多问题？</b>
-            <br />请提交 Issue：<a href="https://github.com/Trumeet/MiPushFramework">点击前往 GitHub 页面</a>
-        ]]>
-    </string>
+    <string name="wizard_connect">Connecting</string>
 
-    <string name="wizard_connect">正在连接</string>
+    <string name="wizard_title_run_in_background">Allow running in background</string>
+    <string name="wizard_descr_run_in_background">You have disabled the Push service to run in the background, it will not be able to push in the background, you %1$s, then tap Next button.</string>
 
-    <string name="wizard_title_run_in_background">允许后台活动</string>
-    <string name="wizard_descr_run_in_background">您禁用了推送服务的后台运行权限，它将无法后台推送，您%1$s，然后点按下一步。</string>
-
-    <string name="run_in_background_appops_root">需要使用 Root 解除禁用（我们会自动处理它）</string>
-    <string name="run_in_background_rikka_appops"><![CDATA[
-需要打开 <b>App Ops</b> 工具，并授予 <b>在后台运行或被唤醒</b> 权限
-    ]]></string>
+    <string name="run_in_background_appops_root">Need to use Root access to solve. (we will handle it automatically)</string>
+    <string name="run_in_background_rikka_appops"><![CDATA[ need to open <b>App Ops</b> tool, and grant the <b>Run in the background or wake up</b> permissions ]]></string>
     <string name="rikka_appops_help_toast"><![CDATA[
-请授予 <b>在后台运行或被唤醒</b> 权限
+Please grant the <b>Run in the background or wake up</b> permissions.
     ]]></string>
 
     <string name="wizard_title_stats_permission">Usage stats</string>
     <string name="wizard_title_stats_permission_text">You need to grant "Usage" permission or you will not be able to receive notifications.</string>
 
-    <string name="wizard_descr_finish">大功告成！您可以开始使用了</string>
+    <string name="wizard_descr_finish">Everything is ready. Enjoy!</string>
 
-    <string name="status_ok">成功</string>
-    <string name="status_deny_disable">禁用推送，已拒绝</string>
-    <string name="status_deny_user">被您拒绝</string>
+    <string name="status_ok">OK</string>
+    <string name="status_deny_disable">Push disabled</string>
+    <string name="status_deny_user">Rejected by you</string>
 
     <!-- Date parse -->
     <eat-comment />
@@ -93,83 +71,111 @@
     <string name="date_format_long">%1$s</string>
 
     <!-- Permission -->
-    <string name="action_edit_permission">修改权限</string>
-    <string name="permissions">权限</string>
-    <string name="permission_allow_register">注册推送</string>
-    <string name="permission_allow_receive">接收通知栏消息</string>
-    <string name="permission_allow_receive_command">接收命令</string>
-    <string name="permission_allow_receive_register_result">回掉注册结果（暂时无效）</string>
-    <string name="permission_notification_on_register">注册时显示通知</string>
+    <string name="action_edit_permission">Edit Permissions</string>
+    <string name="permissions">Permissions</string>
+    <string name="permission_allow_receive">Receive notification message</string>
+    <string name="permission_allow_receive_command">Receive command</string>
+    <string name="permission_allow_receive_register_result">Receive registration result (not implemented)</string>
+    <string name="permission_notification_on_register">Show notification when registering</string>
+    <string name="permission_summary_notification_on_register">In order to use, you need to enable global register notification switch in Advance Setting as well</string>
 
-    <string name="permission_register_type">注册方式</string>
-    <string name="register_type_allow">允许，自动注册</string>
-    <string name="register_type_deny">阻止注册</string>
-    <string name="register_type_ask">询问（默认）</string>
+    <string name="permission_register_type">Register mode</string>
+    <string name="register_type_allow">Allow registration, automatic</string>
+    <string name="register_type_deny">Block registration</string>
+    <string name="register_type_ask">Ask me (Default)</string>
     <string-array name="register_types">
         <item>@string/register_type_ask</item>
         <item>@string/register_type_allow</item>
         <item>@string/register_type_deny</item>
     </string-array>
-    <string-array name="register_entries" translatable="false">
-        <item>0</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
 
     <!-- Settings -->
-    <string name="settings_enhance">增强</string>
-    <string name="settings_service_setting">服务配置</string>
-    <string name="settings_service_advance_setting">高级配置</string>
-    <string name="settings_summary_service_advance_setting">进入高级配置界面</string>
-    <string name="settings_fake_build">伪装 Build.prop</string>
-    <string name="settings_fake_build_summary">某些应用（如某东、某拜单车等）会使用自己的逻辑判断是否是 MIUI，如果是才启用小米推送，否则仍会使用其他推送方式驻留后台。这种判断逻辑通常是解析 build.prop。我们尝试通过向 build.prop 插入一些代表 MIUI 的键值对进行伪装，让这些应用使用小米推送。</string>
-    <string name="settings_check_service">检查服务运行状态</string>
-    <string name="settings_check_service_summary">自动检查推送服务是否运行</string>
-    <string name="settings_skip_doze">移除电池优化</string>
-    <string name="settings_skip_doze_summary">在 Android 6.0 及更高版本，电池优化会影响推送</string>
+    <string name="settings_enhance">Enhances</string>
+    <string name="settings_service_setting">Push configs</string>
+    <string name="settings_service_advance_setting">Advanced</string>
+    <string name="settings_summary_service_advance_setting">Advanced configurations interface</string>
 
-    <string name="settings_summary_wakeup_target">在收到通知时，我们会启动对方应用。禁用它可以防止部分应用再次发送通知，但也可能遗漏部分通知。</string>
-    <string name="settings_debug_icon">调试透明图标</string>
+    <string name="settings_debug">Debug</string>
+    <string name="settings_get_log">Get debugging logs</string>
+    <string name="settings_get_log_summary">Tap to sharing logs file, submit it to your issue if you can.</string>
 
-    <string name="settings_debug">诊断</string>
-    <string name="settings_get_log">获取日志</string>
-    <string name="settings_get_log_summary">点按分享日志，请在需要的时候随 Issues 一起提交。</string>
-    <string name="settings_activity_keep_alive">后台服务保活</string>
-    <string name="settings_summary_keep_alive">很多ROM(比如一加)有自己的后台清理逻辑，但是可以通过应用切换界面锁定功能设置白名单。\n
-        点击之后，请在应用切换界面找到刚刚打开的界面并锁定。
-    </string>
+    <string name="settings_activity_keep_alive">Push background whitelist</string>
+    <string name="settings_summary_keep_alive">Many ROMs (such as OnePlus) have their own background cleanup, but you can adding whitelist through the Lock button of Recent tasks interface. After tapping, find the interface you just opened in the system\'s Recent Tasks and lock it, let the Push running in the background.</string>
 
     <!-- Recent Activity -->
-    <string name="recent_activity_view">查看近期活动</string>
-    <string name="recent_activity_title">近期活动</string>
+    <string name="recent_activity_view">View recent events</string>
+    <string name="recent_activity_title">Recent events</string>
 
     <!-- Update -->
-    <string name="action_help">帮助</string>
-    <string name="action_update">检查更新</string>
-    <string name="update_toast">请从 Release 页面下载最新的版本。（请下载 manager.apk 和 push.apk）</string>
+    <string name="action_help">Help</string>
+    <string name="action_update">Check for update</string>
+    <string name="update_toast">You can downloads the latest APKs from the Releases page.</string>
 
     <!-- Manage applications, individual application info screen title. For example, if they click on "Browser" in "Manage applications", the title of the next screen will be this -->
     <string name="application_info_label">App info</string>
 
     <!-- Fail reasons -->
-    <string name="connect_fail_title_unknown">无法连接至服务</string>
-    <string name="connect_fail_title_low_version">请升级推送服务</string>
-    <string name="connect_fail_title_not_installed">需要安装推送服务</string>
-    <string name="connect_fail_title_rom">不支持您的 ROM</string>
-    <string name="connect_fail_doze">需要关闭优化</string>
+    <string name="connect_fail_title_unknown">Unable to connect to Push service</string>
+    <string name="connect_fail_title_low_version">Please upgrade Push service</string>
+    <string name="connect_fail_title_not_installed">Require Push service installed</string>
+    <string name="connect_fail_title_rom">Does not support your ROM</string>
+    <string name="connect_fail_doze">Require removed from battery optimization</string>
 
     <string name="connect_fail_text_unknown"><![CDATA[
-    <b>我们无法连接至推送服务</b>，请检查您是否在使用<b>唤醒拦截工具</b>、<b>国产 ROM （唤醒限制功能）</b>，请将 <b>%1$s</b> 加入白名单，然后重试。
+    <b>The Manager cannot connect to Push service.</b> Please try to remove the restrictions (such as adding <b>%1$s</b> to whitelist) and try again.
     ]]></string>
     <string name="connect_fail_text_low_version"><![CDATA[
-我们无法兼容您当前的推送服务版本：%1$s，请 <a href="%2$s">点按此处</a> 升级，然后重试。
+The manager is not compatible with the version of the Push service you are currently using: %1$s. Please <a href="%2$s">Upgrade</a> and try again.
     ]]></string>
-    <string name="connect_fail_text_not_installed"><![CDATA[
-您需要安装单独的推送服务，它会在后台运行以进行推送。请 <a href="%1$s">点按此处</a> 安装，然后重试。
+    <string name="connect_fail_text_not_installed"><![CDATA[ You also need to install a push.apk, which is a core service running in the background. <a href="%1$s">Install it</a>, then try again.     ]]></string>
+    <string name="connect_fail_text_is_miui"><![CDATA[ Sorry, we do not officially support the MIUI ROMs.     ]]></string>
+
+    <!-- Help -->
+
+    <string name="connect_fail_test_se"><![CDATA[
+    <b>Insufficient permissions, probably because of an upgrade, please try to reinstall the Manager app without uninstall or clearing data.
+    <a href="%1$s">Download it</a>.</b>
     ]]></string>
-    <string name="connect_fail_text_is_miui"><![CDATA[
-很抱歉，我们当前不支持您的 ROM：MIUI。
+
+
+    <string name="about_version">Version %1$s</string>
+    <string name="app_registered">Registered</string>
+    <string name="app_registered_error">Unregistered</string>
+
+    <string name="request_battery_whitelist">Push app needs to be added to the \"Battery Optimization\" whitelist to run properly.</string>
+
+    <string name="status_app_not_registered">Support but not registered</string>
+    <string name="footer_app_ignored_not_registered">%1$s apps without MiPush SDK</string>
+    <string name="status_app_not_registered_detail_without_fake_suggest"><![CDATA[
+Registration is determined and initiated by the application and generally begins automatically when the application is launched. Some apps are only registered when finding a XiaoMi devices. See also: <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BC%8F%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">应用程式注册问题解决方案</a></b> and <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E5%BA%94%E7%94%A8%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98">[帮助] 应用注册问题</a></b>.
     ]]></string>
+    <string name="status_app_not_registered_detail_with_fake_suggest"><![CDATA[
+Registration is determined and initiated by the application and generally begins automatically when the application is launched. Some apps are only registered when finding a XiaoMi devices, you can try <b><a href="https://github.com/Magisk-Modules-Repo/MiPushFake">Magisk global-level module</a></b> or <b><a href="https://github.com/TimothyZhang023/Riru-MiPushFake">Magisk apps-level module</a></b> to increase success. See also: <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BC%8F%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">应用程式注册问题解决方案</a></b> and <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E5%BA%94%E7%94%A8%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98">[帮助] 应用注册问题</a></b>.
+    ]]></string>
+    <string name="status_app_not_registered_title">Unregistered</string>
+
+    <string name="fake_enable_title">Fake as XiaoMi Phone</string>
+    <string name="fake_global_enable_title">Global fake as XiaoMi Phone</string>
+    <string name="fake_enable_detail">Fake the phone to Xiaomi via an Xposed module or Magisk module, enable other applications to registers. (Require Root)</string>
+    <string name="fake_enable_detail_not_suggested">Not recommended for this app, it may not work properly.</string>
+    <string name="fake_enable_global">Global faking enabled</string>
+    <string name="helplib_action_about">About</string>
+    <string name="helplib_action_issue">Feedback</string>
+    <string name="helplib_action_telegram_group">Join Telegram group</string>
+    <string name="helplib_title"><![CDATA[Help & Support]]></string>
+    <string name="helplib_title_contact">Contact us</string>
+    <string name="helplib_title_faq">Frequently asked questions</string>
+    <string name="status_app_registered_error_title">Unregistered</string>
+    <string name="status_app_registered_error_desc"><![CDATA[
+This could be the application doing a reverse registration, or the registration mismatch with the Push service. See also <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E6%B3%A8%E5%86%8C%E5%BC%82%E5%B8%B8">[帮助] 注册异常</a></b>.
+    ]]></string>
+
+
+    <string-array name="register_entries" translatable="false">
+        <item>0</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 
     <!-- Help -->
     <string-array name="help_articles" translatable="false">
@@ -177,42 +183,5 @@
         <item>help_article_register_error|register_error</item>
         <item>help_article_no_register|no_register</item>
     </string-array>
-
-    <string name="help_article_can_not_receive_push">无法收到推送</string>
-    <string name="help_article_register_error">注册异常</string>
-    <string name="help_article_no_register">注册列表为空</string>
-
-    <string name="connect_fail_test_se"><![CDATA[
-    <b>权限不足通常是由于升级所致，请重再一次安装 小米推送服务 APP（不要清空数据）。
-    寻找当前版本安装包 <a href="%1$s">点击这里</a> </b>
-    ]]></string>
-
-
-    <string name="settings_group_notification">启用通知合并</string>
-    <string name="settings_summary_group_notification">可能会增加耗电，如果 Push 应用耗电异常，可以关闭</string>
-
-    <string name="about_version">版本%1$s</string>
-    <string name="app_registered">已注册</string>
-    <string name="app_registered_error">注册异常</string>
-
-    <string name="request_battery_whitelist">Push 应用需要被加入 电池优化白名单 才能正常工作</string>
-
-    <string name="status_app_not_registered">使用小米推送，但尚未注册</string>
-    <string name="footer_app_ignored_not_registered">已忽略 %1$s 个尚未使用小米推送的应用</string>
-    <string name="status_app_not_registered_detail_without_fake_suggest"><![CDATA[
-是否注册由应用自行决定，一般启动时会自动注册。部分应用只会在小米设备上注册。欢迎参阅 <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BC%8F%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">应用程式注册问题解决方案</a></b> 和 <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E5%BA%94%E7%94%A8%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98">[帮助] 应用注册问题</a></b>。
-    ]]></string>
-    <string name="status_app_not_registered_detail_with_fake_suggest"><![CDATA[
-是否注册由应用自行决定，一般启动时会自动注册。部分应用只会在小米设备上注册，使用 <b><a href="https://github.com/Magisk-Modules-Repo/MiPushFake">Magisk 全局伪装模块</a></b> 和 <b><a href="https://github.com/TimothyZhang023/Riru-MiPushFake">Magisk 单应用伪装</a></b> 可以加大注册机率。同时，欢迎参阅 <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BC%8F%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">应用程式注册问题解决方案</a></b> 和 <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E5%BA%94%E7%94%A8%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98">[帮助] 应用注册问题</a></b>。
-    ]]></string>
-    <string name="status_app_not_registered_title"><![CDATA[
-<b>尚未注册</b>
-    ]]></string>
-
-    <string name="fake_enable_title">伪装为小米设备</string>
-    <string name="fake_enable_detail">通过 Xposed 伪装模块或 Magisk 单应用伪装模块，让该应用误认为是小米设备，以增强注册机率（修改需要 ROOT 权限）</string>
-    <string name="fake_enable_detail_not_suggested">不建议开启，可能会影响应用正常功能</string>
-    <string name="fake_enable_globe">全局伪装已开启</string>
-
 
 </resources>

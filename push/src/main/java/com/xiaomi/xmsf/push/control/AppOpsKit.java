@@ -4,9 +4,10 @@ import android.app.AppOpsManager;
 import android.app.AppOpsManagerExtender;
 import android.content.Context;
 
+import com.elvishew.xlog.Logger;
+import com.elvishew.xlog.XLog;
 import com.oasisfeng.condom.CondomKit;
 
-import me.pqpo.librarylog4a.Log4a;
 import top.trumeet.common.override.AppOpsManagerOverride;
 import top.trumeet.common.override.ManifestOverride;
 
@@ -15,7 +16,7 @@ import top.trumeet.common.override.ManifestOverride;
  */
 
 public class AppOpsKit implements CondomKit, CondomKit.SystemServiceSupplier {
-    private static final String TAG = "AppOpsKit";
+    private Logger logger = XLog.tag("AppOpsKit").build();
 
     @Override
     public void onRegister(CondomKitRegistry registry) {
@@ -38,7 +39,7 @@ public class AppOpsKit implements CondomKit, CondomKit.SystemServiceSupplier {
         @Override
         public int checkOpNoThrow(int op, int uid, String packageName) {
             if (op == AppOpsManagerOverride.OP_POST_NOTIFICATION) {
-                Log4a.d(TAG, "check post notification op: " + uid + ", " + packageName);
+                logger.d("check post notification op: " + uid + ", " + packageName);
                 // TODO: add a option is better.
                 return AppOpsManager.MODE_ALLOWED;
             }

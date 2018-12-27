@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="common_err">%1$s</string>
+
+    <!-- Xposed -->
+    <string name="xposed_description">小米推送机型伪装插件，如需使用请开启</string>
+
+    <!-- Auth -->
+    <string name="auth_message"><![CDATA[要允许 <b>%1$s</b> 推送消息吗？如果您不确定，可尝试 <b>允许一次</b>。]]></string>
+    <string name="allow">允许</string>
+    <string name="deny">拒绝</string>
+    <string name="allow_once">允许一次</string>
+
+    <!-- Log -->
+    <string name="log_push_err">Push 服务异常, 请尝试取消对管理器应用的唤醒拦截、关闭 ROM 的高级优化功能。</string>
+    <string name="log_none">尚无日志</string>
+    <string name="log_share_error">无法分享日志：%1$s</string>
+    <string name="log_clear_done">清空日志成功</string>
+
+
+    <!-- Notification -->
+    <string name="notification_group_config">配置</string>
+    <string name="notification_category_alive">Push 状态</string>
+    <string name="notification_category_warning">警告</string>
+    <string name="notification_alive">小米推送运行中</string>
+
+    <string name="notification_group_applications">应用程序</string>
+
+    <!-- Stats permission guide -->
+    <!-- TOOD: Need a simple explanation to users -->
+    <string name="notification_stats_permission_title">请授予“使用情况”权限</string>
+    <string name="notification_stats_permission_text">我们需要“使用情况”权限才能正常运行，请授权。</string>
+
+    <string name="title_activity_keepalive">Push 后台活动支持</string>
+
+    <string name="activity_rom_keepalive">您的 ROM 可能拦截推送服务的正常运行，请在您的 ROM 的有关设置中将 Push 应用加入白名单（如电池优化、唤醒拦截等功能）。\n您也可尝试打开系统的“最近任务”界面，将本界面“锁定”以保持服务的后台运行。</string>
+    <string name="see_pass_though_msg">穿透消息，请打开应用查看</string>
+
+    <string name="notification_registerAllowed">已允许 %1$s 注册小米推送</string>
+    <string name="notification_registerRejected">已拒绝 %1$s 注册小米推送</string>
+
+    <string name="settings_clear">清理</string>
+
+    <string name="title_activity_advance_setting">高级配置</string>
+    <string name="settings_clear_history_summary">清理超过 7 天的消息记录</string>
+    <string name="settings_clear_history">清理记录</string>
+
+    <string name="settings_clear_log">清空日志</string>
+    <string name="settings_clear_log_summary">清空日志文件</string>
+
+    <string name="accessibility_desc">前台应用检测模式-辅助模式，相比默认模式有更高的兼容性，但性能较差。如果使用未遇到问题，无需开启。</string>
+
+
+    <string name="settings_summary_push_icon">开启图标可以解决部分应用和系统找不到 Push 应用的问题（例如小米手环推送、一加应用锁管理等）</string>
+    <string name="settings_push_icon">不隐藏 Push 应用图标</string>
+
+
+    <string name="settings_auto_register">自动注册应用</string>
+
+
+    <string name="settings_options">配置</string>
+
+    <string name="pref_title_access_mode">前台应用检测模式</string>
+    <string name="pref_summary_access_mode">在点击通知时，检测应用是否在前台的技术方式</string>
+    <string name="settings_mock_notification">模拟通知消息</string>
+    <string name="settings_mock_notification_summary">点击模拟通知到达消息</string>
+    <string name="debug_test_title">这是一个测试标题</string>
+    <string name="debug_test_content">这是一个测试内容</string>
+    <string name="settings_notify_on_register">应用注册时显示通知</string>
+
+    <string-array name="pref_title_access_mode_list_titles">
+        <item>使用情况访问 API（性能好，推荐）</item>
+        <item>辅助模式（兼容性更好）</item>
+    </string-array>
+
+    <string-array name="pref_title_access_mode_list_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+
+
+    <string name="settings_icebox_permission">开启冰箱(IceBox)自动解冻支持</string>
+    <string name="settings_icebox_permission_summary">点击通知栏时自动解冻冻结的App。
+         需要安装的冰箱版本号 >= 3.6.0
+    </string>
+
+    <string name="icebox_permission_granted">已经赋权冰箱自动解冻</string>
+    <string name="settings_icebox_not_installed">冰箱尚未安装，暂不支持</string>
+
+
+</resources>

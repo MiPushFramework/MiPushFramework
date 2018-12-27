@@ -7,7 +7,7 @@ import android.net.Uri;
 import com.xiaomi.channel.commonutils.logger.MyLog;
 import com.xiaomi.push.service.GeoFenceUtils;
 import com.xiaomi.push.service.PushServiceConstants;
-import com.xiaomi.push.service.XMPushService;
+import com.xiaomi.push.service.PushServiceMain;
 
 public class PkgUninstallReceiver extends BroadcastReceiver {
     public PkgUninstallReceiver() {
@@ -19,9 +19,9 @@ public class PkgUninstallReceiver extends BroadcastReceiver {
             Uri var4 = var2.getData();
             if (var4 != null && !var3) {
                 try {
-                    Intent var5 = new Intent(var1, XMPushService.class);
+                    Intent var5 = new Intent(var1, PushServiceMain.class);
                     var5.setAction(PushServiceConstants.ACTION_UNINSTALL);
-                    var5.putExtra("uninstall_pkg_name", var4.getEncodedSchemeSpecificPart());
+                    var5.putExtra(PushServiceConstants.EXTRA_UNINSTALL_PKG_NAME, var4.getEncodedSchemeSpecificPart());
                     var1.startService(var5);
                     GeoFenceUtils.appIsUninstalled(var1.getApplicationContext(), var4.getEncodedSchemeSpecificPart());
                 } catch (Exception var7) {

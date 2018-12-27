@@ -3,9 +3,12 @@ package com.xiaomi.push.sdk;
 import android.app.IntentService;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.content.ContextCompat;
 
-import top.trumeet.common.ita.ITopActivity;
-import top.trumeet.common.ita.TopActivityFactory;
+import com.catchingnow.icebox.sdk_client.IceBox;
+import com.elvishew.xlog.Logger;
+import com.elvishew.xlog.XLog;
 import com.xiaomi.push.service.MIPushNotificationHelper;
 import com.xiaomi.push.service.MyClientEventDispatcher;
 import com.xiaomi.push.service.MyMIPushNotificationHelper;
@@ -16,7 +19,9 @@ import com.xiaomi.xmpush.thrift.XmPushThriftSerializeUtils;
 import com.xiaomi.xmsf.push.notification.NotificationController;
 import com.xiaomi.xmsf.utils.ConfigCenter;
 
-import me.pqpo.librarylog4a.Log4a;
+import top.trumeet.common.ita.ITopActivity;
+import top.trumeet.common.ita.TopActivityFactory;
+import top.trumeet.common.utils.Utils;
 
 /**
  * @author zts1993
@@ -24,7 +29,7 @@ import me.pqpo.librarylog4a.Log4a;
  */
 
 public class MyPushMessageHandler extends IntentService {
-    private static final String TAG = "MyPushMessageHandler";
+    private Logger logger = XLog.tag("MyPushMessageHandler").build();
 
     private static final int APP_CHECK_FRONT_MAX_RETRY = 6;
     private static final int APP_CHECK_SLEEP_DURATION_MS = 300;
@@ -39,7 +44,7 @@ public class MyPushMessageHandler extends IntentService {
     @Override
     protected void onHandleIntent(final Intent intent) {
         if (iTopActivity == null) {
-            iTopActivity = TopActivityFactory.newInstance(ConfigCenter.getAccessMode(this));
+            iTopActivity = TopActivityFactory.newInstance(ConfigCenter.getInstance().getAccessMode(this));
         }
 
         if (!iTopActivity.isEnabled(this)) {
@@ -49,7 +54,7 @@ public class MyPushMessageHandler extends IntentService {
 
         byte[] payload = intent.getByteArrayExtra(PushConstants.MIPUSH_EXTRA_PAYLOAD);
         if (payload == null) {
-            Log4a.e(TAG, "mipush_payload is null");
+            logger.e("mipush_payload is null");
             return;
         }
 
@@ -57,13 +62,14 @@ public class MyPushMessageHandler extends IntentService {
         try {
             XmPushThriftSerializeUtils.convertByteArrayToThriftObject(container, payload);
         } catch (Throwable var3) {
-            Log4a.e(TAG, var3);
+            logger.e(var3);
             return;
         }
 
         PushMetaInfo metaInfo = container.getMetaInfo();
         String targetPackage = container.getPackageName();
 
+        activeApp(targetPackage);
 
         pullUpApp(targetPackage, container);
 
@@ -73,7 +79,7 @@ public class MyPushMessageHandler extends IntentService {
         localIntent.putExtra(MIPushNotificationHelper.FROM_NOTIFICATION, true);
         localIntent.addCategory(String.valueOf(metaInfo.getNotifyId()));
         try {
-            Log4a.d(TAG, "send to service " + targetPackage);
+            logger.d("send to service " + targetPackage);
 
             startService(localIntent);
 
@@ -81,9 +87,35 @@ public class MyPushMessageHandler extends IntentService {
             NotificationController.cancel(this, id);
 
         } catch (Exception e) {
-            Log4a.e(TAG, e.getLocalizedMessage(), e);
+            logger.e(e.getLocalizedMessage(), e);
         }
 
+    }
+
+    private void activeApp(String targetPackage) {
+        try {
+            if (!ConfigCenter.getInstance().isIceboxSupported(this)) {
+                return;
+            }
+
+            if (!Utils.isAppInstalled(IceBox.PACKAGE_NAME)) {
+                return;
+            }
+
+            if (ContextCompat.checkSelfPermission(this, IceBox.SDK_PERMISSION) == PackageManager.PERMISSION_GRANTED) {
+
+                int enabledSetting = IceBox.getAppEnabledSetting(this, targetPackage);
+                if (enabledSetting != 0) {
+                    logger.w("active app " + targetPackage + " by IceBox SDK");
+                    IceBox.setAppEnabledSettings(this, true, targetPackage);
+                }
+
+            } else {
+                logger.w("skip active app " + targetPackage + " by IceBox SDK due to lack of permissions");
+            }
+        } catch (Throwable e) {
+            logger.e("activeApp failed " + e.getLocalizedMessage(), e);
+        }
     }
 
 
@@ -94,7 +126,6 @@ public class MyPushMessageHandler extends IntentService {
                 intent = getPackageManager().getLaunchIntentForPackage(targetPackage);
             } catch (RuntimeException ignore) {
             }
-
         }
         return intent;
     }
@@ -106,7 +137,7 @@ public class MyPushMessageHandler extends IntentService {
 
 
             if (!iTopActivity.isAppForeground(this, targetPackage)) {
-                Log4a.d(TAG, "app is not at front , let's pull up");
+                logger.d("app is not at front , let's pull up");
 
                 Intent intent = getJumpIntent(targetPackage, container);
 
@@ -117,7 +148,7 @@ public class MyPushMessageHandler extends IntentService {
                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
                     startActivity(intent);
-                    Log4a.d(TAG, "start activity " + targetPackage);
+                    logger.d("start activity " + targetPackage);
                 }
 
 
@@ -133,17 +164,17 @@ public class MyPushMessageHandler extends IntentService {
                 }
 
                 if ((System.currentTimeMillis() - start) >= APP_CHECK_SLEEP_MAX_TIMEOUT_MS) {
-                    Log4a.w(TAG, "pull up app timeout" + targetPackage);
+                    logger.w("pull up app timeout" + targetPackage);
                 }
 
             } else {
-                Log4a.d(TAG, "app is at foreground" + targetPackage);
+                logger.d("app is at foreground" + targetPackage);
             }
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (RuntimeException e) {
-            Log4a.e(TAG, "pullUpApp failed " + e.getLocalizedMessage(), e);
+            logger.e("pullUpApp failed " + e.getLocalizedMessage(), e);
         }
 
 

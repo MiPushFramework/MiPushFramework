@@ -1,5 +1,22 @@
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
+def fabricKey = null
+if (project.rootProject.file('local.properties').exists()) {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    fabricKey = properties.getProperty('FABRIC_KEY')
+}
+if (fabricKey == null) {
+    fabricKey = System.getenv("FABRIC_KEY")
+}
+
+if (fabricKey != null) {
+    apply from: '../fabric.gradle'
+}
+
+repositories {
+    maven { url 'https://dl.bintray.com/heruoxin/icebox' }
+}
+
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -17,14 +34,9 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        def fabricKey = null
-        if (project.rootProject.file('local.properties').exists()) {
-            Properties properties = new Properties()
-            properties.load(project.rootProject.file('local.properties').newDataInputStream())
-            fabricKey = properties.getProperty('FABRIC_KEY')
-        }
-        manifestPlaceholders = [fabricKey: fabricKey != null ?
-                fabricKey : System.getenv("FABRIC_KEY")]
+        manifestPlaceholders = [fabricKey: fabricKey == null ?
+        "" : fabricKey]
+        buildConfigField "String", "FABRIC_KEY", "\"" + fabricKey + "\""
 
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'x86'
@@ -78,12 +90,18 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     // Log
-    implementation('com.github.pqpo:Log4a:v1.1.0', {
+    implementation('com.elvishew:xlog:1.6.1', {
         exclude group: 'com.android.support'
     })
     // Hook
@@ -98,6 +116,8 @@ dependencies {
     implementation project(':extenders')
     implementation "com.android.support:palette-v7:$supportLibraryVersion"
     compileOnly 'de.robv.android.xposed:api:82'
+
+    implementation 'com.catchingnow.icebox:SDK:1.0.5'
 
     // Fabric
     implementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {

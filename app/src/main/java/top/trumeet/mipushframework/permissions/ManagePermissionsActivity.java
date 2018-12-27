@@ -26,6 +26,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import io.reactivex.disposables.CompositeDisposable;
 import moe.shizuku.preference.Preference;
@@ -36,6 +37,7 @@ import moe.shizuku.preference.PreferenceScreen;
 import moe.shizuku.preference.SimpleMenuPreference;
 import moe.shizuku.preference.SwitchPreferenceCompat;
 import top.trumeet.common.Constants;
+import top.trumeet.common.db.EventDb;
 import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.override.UserHandleOverride;
 import top.trumeet.common.register.RegisteredApplication;
@@ -156,16 +158,17 @@ public class ManagePermissionsActivity extends AppCompatActivity {
         protected RegisteredApplication doInBackground(Void... voids) {
             mSignal = new CancellationSignal();
             RegisteredApplication application = RegisteredApplicationDb.registerApplication(pkg /* Package */
-                    , false /* Auto Crate */,
+                    , false /* Auto Create */,
                     ManagePermissionsActivity.this /* Context */,
                     mSignal);
+            Set<String> actuallyRegisteredPkgs = EventDb.queryRegistered(ManagePermissionsActivity.this, mSignal);
+
             if (application == null && getIntent().getBooleanExtra(EXTRA_IGNORE_NOT_REGISTERED, false)) {
                 application = new RegisteredApplication();
                 application.setPackageName(pkg);
                 application.setRegisteredType(0);
             } else if (application != null) {
-                // TODO: Add unregistered application detection
-                application.setRegisteredType(1);
+                application.setRegisteredType(actuallyRegisteredPkgs.contains(pkg) ? 1 : 2);
             }
             return application;
         }
@@ -279,11 +282,21 @@ public class ManagePermissionsActivity extends AppCompatActivity {
             if (mApplicationItem.getRegisteredType() == 0) {
                 InfoPreference preferenceStatus = new InfoPreference(getActivity(), null, moe.shizuku.preference.R.attr.preferenceStyle,
                         R.style.Preference_Material);
-                preferenceStatus.setTitle(Html.fromHtml(getString(R.string.status_app_not_registered_title)));
+                preferenceStatus.setTitle(getString(R.string.status_app_not_registered_title));
                 preferenceStatus.setSummary(Html.fromHtml(getString(
                         suggestFake ? R.string.status_app_not_registered_detail_with_fake_suggest :
                                 R.string.status_app_not_registered_detail_without_fake_suggest
                 )));
+                Drawable iconError = ContextCompat.getDrawable(getActivity(), R.drawable.ic_error_outline_black_24dp);
+                DrawableCompat.setTint(iconError, Color.parseColor("#D50000"));
+                preferenceStatus.setIcon(iconError);
+                screen.addPreference(preferenceStatus);
+            }
+            if (mApplicationItem.getRegisteredType() == 2) {
+                InfoPreference preferenceStatus = new InfoPreference(getActivity(), null, moe.shizuku.preference.R.attr.preferenceStyle,
+                        R.style.Preference_Material);
+                preferenceStatus.setTitle(getString(R.string.status_app_registered_error_title));
+                preferenceStatus.setSummary(Html.fromHtml(getString(R.string.status_app_registered_error_desc)));
                 Drawable iconError = ContextCompat.getDrawable(getActivity(), R.drawable.ic_error_outline_black_24dp);
                 DrawableCompat.setTint(iconError, Color.parseColor("#D50000"));
                 preferenceStatus.setIcon(iconError);
@@ -353,7 +366,7 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                     screen);
 
             if (new File(Constants.FAKE_CONFIGURATION_GLOBAL).exists()) {
-                fakeSwtich.setSummary(R.string.fake_enable_globe);
+                fakeSwtich.setSummary(R.string.fake_enable_global);
                 fakeSwtich.setEnabled(false);
                 fakeSwtich.setChecked(true);
             }
@@ -365,6 +378,7 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                         return true;
                     },
                     getString(R.string.permission_notification_on_register),
+                    getString(R.string.permission_summary_notification_on_register),
                     screen);
 
             PreferenceCategory category = new PreferenceCategory(getActivity(), null, moe.shizuku.preference.R.attr.preferenceCategoryStyle,

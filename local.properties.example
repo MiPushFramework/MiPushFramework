@@ -1,0 +1,14 @@
+## This file must *NOT* be checked into Version Control Systems,
+# as it contains information specific to your local configuration.
+#
+# Location of the SDK. This is only used by Gradle.
+# For customization when using a Version Control System, please read the
+# header note.
+#sdk.dir=[Your Android SDK path.]
+
+# Get the keystore from "Build" - "Generate Signed Apk" menu in Android Studio.
+# If the above menu is not available, try the File - "Sync Projects with Gradle files" menu in Android Studio.
+#KEY_LOCATE=../.mykey
+#KEYSTORE_PASSWORD=[Password]
+#KEYSTORE_ALIAS=key0
+#KEY_PASSWORD=[Password]

@@ -1,18 +1,18 @@
 <resources>
     <string name="push_service_name">Push</string>
-    <string name="enable">启用</string>
-    <string name="disable">禁用</string>
+    <string name="enable">Enable</string>
+    <string name="disable">Disable</string>
 
-    <string name="start">开始</string>
-    <string name="end">结束</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
 
 
-    <string name="perm_change_settings">Manage push service</string>
-    <string name="perm_read_settings">Get push settings</string>
+    <string name="perm_change_settings">Manage Push service</string>
+    <string name="perm_read_settings">Get Push settings</string>
 
     <!-- Event -->
     <string name="event_register">Register push</string>
-    <string name="event_register_result">收到注册结果</string>
+    <string name="event_register_result">Receive register result</string>
 
     <!-- Notification but no title -->
     <string name="event_push">Receive notification</string>
@@ -23,14 +23,14 @@
     <string name="request_permission">We need permissions to work</string>
 
 
-    <string name="error_usage_stats"> 检测到获取 UsageStats 异常，可能是您的系统不支持，建议在设置中切换 前台检测模式为 兼容模式 </string>
+    <string name="error_usage_stats">Getting UsageStatis error. If your system does not support this feature, switch the \"Foreground app detection mode\" to Accessibility mode in the manager\'s settings.</string>
 
 
 
-    <string name="wizard_title_doze_whitelist">移除电池优化</string>
-    <string name="wizard_descr_doze_whitelist">当您对推送服务启用电池优化后，将无法保持推送。请点按下面的按钮请求去除优化（部分 ROM 并没有这个设定，如果您点按后没有反应，请直接点击 下一步）</string>
-    <string name="wizard_button_remove_doze">请求移除优化</string>
-
+    <string name="wizard_title_doze_whitelist">Remove battery optimization</string>
+    <string name="wizard_descr_doze_whitelist">The Push service will not keep running if it is \'battery optimized\'. Please click the button below to request adding it to battery-optimized whitelist (some ROMs may not be supported, if you do not respond after clicking, please click \"Next\".)</string>
+    <string name="wizard_button_remove_doze">Remove battery optimization</string>
+    <string name="settings_experimental">Experimental</string>
 
 
 </resources>

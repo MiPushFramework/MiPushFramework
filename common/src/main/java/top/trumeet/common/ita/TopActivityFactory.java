@@ -27,7 +27,5 @@ public class TopActivityFactory {
         }
 
         return new FakeImpl(); //should never be here
-
-
     }
 }

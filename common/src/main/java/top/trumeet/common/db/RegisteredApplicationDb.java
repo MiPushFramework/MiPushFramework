@@ -76,6 +76,7 @@ public class RegisteredApplicationDb {
             Constants.permissions.READ_SETTINGS})
     private static RegisteredApplication create (String pkg,
                                                  Context context) {
+        // TODO: Configurable defaults; use null for optional and global options?
         RegisteredApplication registeredApplication =
                 new RegisteredApplication(null, pkg
                         , RegisteredApplication.Type.ASK,

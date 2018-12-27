@@ -6,15 +6,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.graphics.ColorUtils;
 import android.text.TextUtils;
 
+import com.elvishew.xlog.Logger;
+import com.elvishew.xlog.XLog;
 import com.xiaomi.channel.commonutils.logger.MyLog;
 import com.xiaomi.channel.commonutils.reflect.JavaCalls;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
@@ -22,16 +20,11 @@ import com.xiaomi.xmpush.thrift.XmPushActionContainer;
 import com.xiaomi.xmsf.BuildConfig;
 import com.xiaomi.xmsf.R;
 import com.xiaomi.xmsf.push.notification.NotificationController;
-import com.xiaomi.xmsf.utils.ColorUtil;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
-
-import me.pqpo.librarylog4a.Log4a;
-import top.trumeet.common.cache.ApplicationNameCache;
-import top.trumeet.common.cache.IconCache;
 
 import static com.xiaomi.push.service.MIPushNotificationHelper.isBusinessMessage;
 
@@ -41,11 +34,9 @@ import static com.xiaomi.push.service.MIPushNotificationHelper.isBusinessMessage
  */
 
 public class MyMIPushNotificationHelper {
-
+    private static Logger logger = XLog.tag("MyNotificationHelper").build();
 
     private static final int NOTIFICATION_BIG_STYLE_MIN_LEN = 25;
-
-    private static final String TAG = "MyNotificationHelper";
 
     /**
      * @see MIPushNotificationHelper#notifyPushMessage
@@ -61,7 +52,7 @@ public class MyMIPushNotificationHelper {
 
         Notification.Builder localBuilder = new Notification.Builder(var0);
 
-        Log4a.i(TAG, "title:" + title + "  description:" + description);
+        logger.i("title:" + title + "  description:" + description);
 
         if (description.length() > NOTIFICATION_BIG_STYLE_MIN_LEN) {
             Notification.BigTextStyle style = new Notification.BigTextStyle();
@@ -88,7 +79,7 @@ public class MyMIPushNotificationHelper {
 //                    localBuilder.setCustomContentView(localRemoteViews);
 //                }
 //            } catch (Exception e) {
-//                Log4a.e(TAG, e.getLocalizedMessage(), e);
+//                logger.e(e.getLocalizedMessage(), e);
 //            }
 
             if (BuildConfig.DEBUG) {
@@ -121,34 +112,16 @@ public class MyMIPushNotificationHelper {
         localBuilder.setContentText(titleAndDesp[1]);
 
 
-        //for VERSION < Oero
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            localBuilder.setDefaults(Notification.DEFAULT_ALL);
-            localBuilder.setPriority(Notification.PRIORITY_HIGH);
-        }
-
         // Fill app name
         Bundle extras = new Bundle();
 
-        CharSequence appName = ApplicationNameCache.getInstance().getAppName(var0, packageName);
-        int color = NotificationController.getIconColor(var0, packageName);
-        if (color != Notification.COLOR_DEFAULT) {
-            CharSequence subText = ColorUtil.createColorSubtext(appName, color);
-            if (subText != null) {
-                extras.putCharSequence(NotificationCompat.EXTRA_SUB_TEXT, subText);
-            }
-            localBuilder.setColor(color);
-        } else {
-            extras.putCharSequence(NotificationCompat.EXTRA_SUB_TEXT, appName);
-        }
+        NotificationController.buildExtraSubText(var0, packageName, localBuilder, extras);
 
         localBuilder.setExtras(extras);
 
         NotificationController.publish(var0, id, packageName, localBuilder);
 
     }
-
-
 
     private static PendingIntent openActivityPendingIntent(Context paramContext, XmPushActionContainer paramXmPushActionContainer, PushMetaInfo paramPushMetaInfo, byte[] paramArrayOfByte) {
         String packageName = paramXmPushActionContainer.getPackageName();
@@ -350,7 +323,7 @@ public class MyMIPushNotificationHelper {
         try {
             return JavaCalls.callStaticMethodOrThrow(MIPushNotificationHelper.class, "determineTitleAndDespByDIP", paramContext, paramPushMetaInfo);
         } catch (Exception e) {
-            Log4a.e(TAG, e.getMessage(), e);
+            logger.e(e.getMessage(), e);
             return new String[]{paramPushMetaInfo.getTitle(), paramPushMetaInfo.getDescription()};
         }
     }

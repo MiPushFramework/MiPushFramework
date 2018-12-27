@@ -138,6 +138,7 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
 
         @Override
         protected Result doInBackground(Integer... integers) {
+            // TODO: Sharing/Modular actuallyRegisteredPkgs to doInBackground of ManagePermissionsActivity.java
             mSignal = new CancellationSignal();
 
             Map<String /* pkg */, RegisteredApplication> registeredPkgs = new HashMap<>();
@@ -208,6 +209,28 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
                 Thread.currentThread().interrupt();
             }
 
+            Collections.sort(res, (o1, o2) -> {
+                if (o1.getId() == null && o2.getId() == null) {
+                    return o1.getPackageName().compareTo(o2.getPackageName());
+
+                }
+
+                if (o1.getId() == null) {
+                    return 1;
+                }
+
+                if (o2.getId() == null) {
+                    return -1;
+                }
+
+                if (o1.getRegisteredType() == o2.getRegisteredType()) {
+                    return o2.getId().compareTo(o1.getId());
+                } else {
+                    return o1.getRegisteredType() - o2.getRegisteredType();
+
+                }
+
+            });
             int notUseMiPushCount = packageInfos.size() - registeredPkgs.size();
             return new Result(notUseMiPushCount, res);
         }

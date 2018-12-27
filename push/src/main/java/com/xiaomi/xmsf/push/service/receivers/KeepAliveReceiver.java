@@ -4,17 +4,19 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.elvishew.xlog.Logger;
+import com.elvishew.xlog.XLog;
 import com.xiaomi.channel.commonutils.logger.MyLog;
 import com.xiaomi.push.service.PushServiceConstants;
 import com.xiaomi.push.service.PushServiceMain;
 
-import me.pqpo.librarylog4a.Log4a;
+
 
 /**
  * @author zts
  */
 public class KeepAliveReceiver extends BroadcastReceiver {
-    private static final String TAG = KeepAliveReceiver.class.getSimpleName();
+    private final Logger logger = XLog.tag(KeepAliveReceiver.class.getSimpleName()).build();
 
     private long lastActive = System.currentTimeMillis();
 
@@ -32,7 +34,7 @@ public class KeepAliveReceiver extends BroadcastReceiver {
 
             lastActive = now;
 
-            Log4a.d(TAG, "start service when " + intent.getAction());
+            logger.d("start service when " + intent.getAction());
             Intent localIntent = new Intent(context, PushServiceMain.class);
             localIntent.putExtra(PushServiceConstants.EXTRA_TIME_STAMP, now);
             localIntent.setAction(PushServiceConstants.ACTION_CHECK_ALIVE);
