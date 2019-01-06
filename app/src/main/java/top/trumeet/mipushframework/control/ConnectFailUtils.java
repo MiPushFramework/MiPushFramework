@@ -20,11 +20,11 @@ import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener
 
 public class ConnectFailUtils {
     private static final String MANAGER_APK_URL =
-            "https://github.com/Trumeet/MiPushFramework/releases/download/" + BuildConfig.GIT_TAG +
+            "https://github.com/MiPushFramework/MiPushFramework/releases/download/" + BuildConfig.GIT_TAG +
                     "/manager.apk";
 
     private static final String SERVICE_APK_URL =
-            "https://github.com/Trumeet/MiPushFramework/releases/download/" + BuildConfig.GIT_TAG +
+            "https://github.com/MiPushFramework/MiPushFramework/releases/download/" + BuildConfig.GIT_TAG +
                     "/xmsf_service.apk";
 
     public static CharSequence getTitle(Context context,

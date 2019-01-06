@@ -1,16 +1,16 @@
 # MiPushFramework
 
 [![Build Status](https://travis-ci.org/Trumeet/MiPushFramework.svg?branch=master)](https://travis-ci.org/Trumeet/MiPushFramework)
-[![License GPL-3.0](https://img.shields.io/badge/license-GPLv3.0-blue.svg)](https://github.com/Trumeet/MiPushFramework/blob/master/LICENSE)
+[![License GPL-3.0](https://img.shields.io/badge/license-GPLv3.0-blue.svg)](https://github.com/MiPushFramework/MiPushFramework/blob/master/LICENSE)
 ![Min Android Version](https://img.shields.io/badge/android-lollipop-%23860597.svg)
 
 在非 MIUI 系统上体验小米系统级推送。
 
-![](https://raw.githubusercontent.com/Trumeet/MiPushFramework/master/art/tab_events.jpg)
-![](https://raw.githubusercontent.com/Trumeet/MiPushFramework/master/art/tab_permissions.jpg)
-![](https://raw.githubusercontent.com/Trumeet/MiPushFramework/master/art/ask.jpg)
-![](https://raw.githubusercontent.com/Trumeet/MiPushFramework/master/art/tab_settings.jpg)
-![](https://raw.githubusercontent.com/Trumeet/MiPushFramework/master/art/tab_apps.jpg)
+![](https://raw.githubusercontent.com/MiPushFramework/MiPushFramework/master/art/tab_events.jpg)
+![](https://raw.githubusercontent.com/MiPushFramework/MiPushFramework/master/art/tab_permissions.jpg)
+![](https://raw.githubusercontent.com/MiPushFramework/MiPushFramework/master/art/ask.jpg)
+![](https://raw.githubusercontent.com/MiPushFramework/MiPushFramework/master/art/tab_settings.jpg)
+![](https://raw.githubusercontent.com/MiPushFramework/MiPushFramework/master/art/tab_apps.jpg)
 
 ## 什么是小米系统级推送，为什么会有这个项目
 
@@ -57,7 +57,7 @@
 
 安装步骤非常简单 ：
 
-* 前往 [Releases 标签](https://github.com/Trumeet/MiPushFramework/releases)，下载最新的 Release APK（共两个），并全部安装。
+* 前往 [Releases 标签](https://github.com/MiPushFramework/MiPushFramework/releases)，下载最新的 Release APK（共两个），并全部安装。
 * 跟着向导进行设置。
 
 
