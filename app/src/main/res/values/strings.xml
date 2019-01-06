@@ -184,4 +184,8 @@ This could be the application doing a reverse registration, or the registration 
         <item>help_article_no_register|no_register</item>
     </string-array>
 
+    <string name="help_article_can_not_receive_push">Can not receive push message</string>
+    <string name="help_article_register_error">register error</string>
+    <string name="help_article_no_register">no register app</string>
+
 </resources>

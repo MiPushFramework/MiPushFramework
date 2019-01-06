@@ -176,5 +176,9 @@
     <string name="fake_enable_global">全局伪装已开启</string>
     <string name="settings_debug">调试</string>
 
+    <string name="help_article_can_not_receive_push">无法收到推送</string>
+    <string name="help_article_register_error">注册异常</string>
+    <string name="help_article_no_register">注册列表为空</string>
+
 
 </resources>
