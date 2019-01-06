@@ -1,6 +1,7 @@
 package top.trumeet.mipushframework.register;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
@@ -20,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +30,6 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
@@ -150,7 +149,7 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
             MiPushManifestChecker checker = null;
             try {
                 checker = MiPushManifestChecker.create(context);
-            } catch (PackageManager.NameNotFoundException | ClassNotFoundException e) {
+            } catch (PackageManager.NameNotFoundException | ClassNotFoundException | NoSuchMethodException e) {
                 Log.e(RegisteredApplicationFragment.class.getSimpleName(), "Create mi push checker", e);
             }
 
@@ -166,7 +165,17 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
 
             final List<PackageInfo> packageInfos = context.getPackageManager().getInstalledPackages(PackageManager.GET_DISABLED_COMPONENTS | PackageManager.GET_SERVICES | PackageManager.GET_RECEIVERS);
 
+            int totalPkg = packageInfos.size();
+
             for (PackageInfo packageInfo : packageInfos) {
+
+                if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) > 0) {
+                    if (!packageInfo.packageName.contains("miui") && !packageInfo.packageName.contains("xiaomi")) {
+                        totalPkg--;
+                        continue;
+                    }
+                }
+
 
                 final PackageInfo info = packageInfo;
                 MiPushManifestChecker finalChecker = checker;
@@ -231,7 +240,8 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
                 }
 
             });
-            int notUseMiPushCount = packageInfos.size() - registeredPkgs.size();
+            int notUseMiPushCount = totalPkg - registeredPkgs.size();
+
             return new Result(notUseMiPushCount, res);
         }
 
