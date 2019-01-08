@@ -169,14 +169,6 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
 
             for (PackageInfo packageInfo : packageInfos) {
 
-                if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) > 0) {
-                    if (!packageInfo.packageName.contains("miui") && !packageInfo.packageName.contains("xiaomi")) {
-                        totalPkg--;
-                        continue;
-                    }
-                }
-
-
                 final PackageInfo info = packageInfo;
                 MiPushManifestChecker finalChecker = checker;
 
