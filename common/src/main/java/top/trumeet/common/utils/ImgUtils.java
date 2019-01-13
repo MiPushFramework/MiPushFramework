@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,9 +23,38 @@ public class ImgUtils {
 
 
     private static int NUM_256 = 256;
-    private static int NUM_255 = 255;
+
+    private static Bitmap trimImgToCircle(Bitmap bitmap, int color) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        int[] pixels = new int[width * height];
+        bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
+
+        trimImgToCircle(color, width, height, pixels, 0);
+
+        Bitmap newBmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        newBmp.setPixels(pixels, 0, width, 0, 0, width, height);
+
+        return newBmp;
+    }
+
+    private static void trimImgToCircle(int color, int width, int height, int[] pixels, int rExpand) {
+
+        int r = (width < height ? width : height) / 2 + rExpand;
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+
+                if ((i - width / 2) * (i - width / 2) + (j - height / 2) * (j - height / 2) > r * r) {
+                    pixels[width * i + j] = color;
+                }
+
+            }
+        }
+    }
 
     public static Bitmap convertToTransparentAndWhite(Bitmap bitmap) {
+
         int calculateThreshold = calculateThreshold(bitmap);
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
@@ -52,6 +82,8 @@ public class ImgUtils {
             }
         }
 
+        trimImgToCircle(Color.TRANSPARENT, width, height, pixels, 5);
+
         if (whiteCnt > tsCnt) {
             //revert WHITE and TRANSPARENT
             for (int i = 0; i < height; i++) {
@@ -66,31 +98,10 @@ public class ImgUtils {
             }
         }
 
+        trimImgToCircle(Color.TRANSPARENT, width, height, pixels, 5);
+
         //todo use bwareaopen
-        filterWhitePoint(width, height, pixels, 3);
-
-        //corner
-        int cornerWidth = width / 8;
-
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                //shift
-                if ((i > cornerWidth) && (i < (height - cornerWidth))) {
-                    continue;
-                }
-                if ((j > cornerWidth) && (j < (width - cornerWidth))) {
-                    continue;
-                }
-
-                int x = (i > (height / 2) && ((height - i) < cornerWidth)) ? (i - (height - 2 * cornerWidth)) : i;
-                int y = (j > (width / 2) && ((width - j) < cornerWidth)) ? (j - (width - 2 * cornerWidth)) : j;
-
-                if (((x - cornerWidth) * (x - cornerWidth) + (y - cornerWidth) * (y - cornerWidth)) > cornerWidth * cornerWidth) {
-                    pixels[width * i + j] = Color.TRANSPARENT;
-                }
-            }
-        }
-
+        denoiseWhitePoint(width, height, pixels, 3);
 
         int top = 0;
         int left = 0;
@@ -186,10 +197,11 @@ public class ImgUtils {
 
         Bitmap newBmp = Bitmap.createBitmap(cropWidth + padding * 2, cropHeight + padding * 2, Bitmap.Config.ARGB_8888);
         newBmp.setPixels(newPix, 0, cropWidth, padding, padding, cropWidth, cropHeight);
+
         return newBmp;
     }
 
-    private static void filterWhitePoint(int width, int height, int[] pixels, int exThre) {
+    private static void denoiseWhitePoint(int width, int height, int[] pixels, int exThre) {
         for (int i = 1; i < height - 1; i++) {
             for (int j = 1; j < width - 1; j++) {
                 int[] dots = new int[]{
@@ -256,6 +268,9 @@ public class ImgUtils {
 
 
     private static int calculateThreshold(Bitmap bitmap) {
+
+        bitmap = trimImgToCircle(bitmap, Color.WHITE);
+
         int[] histogram = new int[NUM_256];
         getGreyHistogram(bitmap, histogram);
 
@@ -263,8 +278,10 @@ public class ImgUtils {
         thresholds.add(calculateThresholdByOSTU(bitmap, histogram));
         thresholds.add(calculateThresholdByMinimum(histogram));
         thresholds.add(calculateThresholdByMean(histogram));
+
         Collections.sort(thresholds);
-        return thresholds.get(thresholds.size() - 1);
+
+        return (thresholds.get(thresholds.size() - 1) * 3 + thresholds.get(thresholds.size() - 2)) / 4;
     }
 
 
@@ -385,7 +402,6 @@ public class ImgUtils {
         }
         return newbm;
     }
-
 
 
 }
