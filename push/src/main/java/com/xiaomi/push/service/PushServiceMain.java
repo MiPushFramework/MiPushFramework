@@ -117,9 +117,9 @@ public class PushServiceMain extends XMPushService {
                 long minute = (System.currentTimeMillis() - startTime) / (60 * 1000);
                 logger.d("Recording stable running period:" + minute + ", next upload is " + nextUploadDuringMinutes +
                         " minutes later.");
-                if (!DEBUG && !BuildConfig.FABRIC_KEY.equals("null")) Answers.getInstance()
-                        .logCustom(new CustomEvent("XMPush_stable_running")
-                                .putCustomAttribute("running_time_min", minute));
+               Answers.getInstance()
+                       .logCustom(new CustomEvent("XMPush_stable_running")
+                       .putCustomAttribute("running_time_min", minute));
                 // Schedule next running and skip next "first" running
                 scheduleNextUpload();
             }
@@ -131,7 +131,8 @@ public class PushServiceMain extends XMPushService {
         super.onCreate();
         logger.d("Service started");
         startTime = System.currentTimeMillis();
-        scheduleNextUpload();
+        if (!DEBUG && !BuildConfig.FABRIC_KEY.equals("null"))
+            scheduleNextUpload();
         mSettingsObserver = new SettingsObserver(new Handler(Looper.myLooper()));
     }
 
