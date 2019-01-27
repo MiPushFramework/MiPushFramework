@@ -31,8 +31,8 @@ import top.trumeet.common.utils.Utils;
 public class MyPushMessageHandler extends IntentService {
     private Logger logger = XLog.tag("MyPushMessageHandler").build();
 
-    private static final int APP_CHECK_FRONT_MAX_RETRY = 6;
-    private static final int APP_CHECK_SLEEP_DURATION_MS = 300;
+    private static final int APP_CHECK_FRONT_MAX_RETRY = 8;
+    private static final int APP_CHECK_SLEEP_DURATION_MS = 500;
     private static final int APP_CHECK_SLEEP_MAX_TIMEOUT_MS = APP_CHECK_FRONT_MAX_RETRY * APP_CHECK_SLEEP_DURATION_MS;
 
     static ITopActivity iTopActivity = null;

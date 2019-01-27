@@ -21,7 +21,7 @@
     <string name="action_about">About</string>
 
     <!-- Wizard -->
-    <string name="wizard_descr"><![CDATA[This project allows any devices to use XiaoMi system-level Push, it can control notifications from other apps to save more battery. For more details, visit the GitHub project:<a href="https://github.com/Trumeet/MiPushFramework">MiPushFramework</a>]]></string>
+    <string name="wizard_descr"><![CDATA[This project allows any devices to use XiaoMi system-level Push, it can control notifications from other apps to save more battery. For more details, visit the GitHub project:<a href="https://github.com/MiPushFramework/MiPushFramework">MiPushFramework</a>]]></string>
 
     <string name="wizard_connect">Connecting</string>
 
@@ -147,10 +147,10 @@ The manager is not compatible with the version of the Push service you are curre
     <string name="status_app_not_registered">Support but not registered</string>
     <string name="footer_app_ignored_not_registered">%1$s apps without MiPush SDK</string>
     <string name="status_app_not_registered_detail_without_fake_suggest"><![CDATA[
-Registration is determined and initiated by the application and generally begins automatically when the application is launched. Some apps are only registered when finding a XiaoMi devices. See also: <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BC%8F%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">应用程式注册问题解决方案</a></b> and <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E5%BA%94%E7%94%A8%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98">[帮助] 应用注册问题</a></b>.
+Registration is determined and initiated by the application and generally begins automatically when the application is launched. Some apps are only registered when finding a XiaoMi devices. See also: <b><a href="https://github.com/MiPushFramework/MiPushFramework/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BC%8F%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">应用程式注册问题解决方案</a></b> and <b><a href="https://github.com/MiPushFramework/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E5%BA%94%E7%94%A8%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98">[帮助] 应用注册问题</a></b>.
     ]]></string>
     <string name="status_app_not_registered_detail_with_fake_suggest"><![CDATA[
-Registration is determined and initiated by the application and generally begins automatically when the application is launched. Some apps are only registered when finding a XiaoMi devices, you can try <b><a href="https://github.com/Magisk-Modules-Repo/MiPushFake">Magisk global-level module</a></b> or <b><a href="https://github.com/TimothyZhang023/Riru-MiPushFake">Magisk apps-level module</a></b> to increase success. See also: <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BC%8F%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">应用程式注册问题解决方案</a></b> and <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E5%BA%94%E7%94%A8%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98">[帮助] 应用注册问题</a></b>.
+Registration is determined and initiated by the application and generally begins automatically when the application is launched. Some apps are only registered when finding a XiaoMi devices, you can try <b><a href="https://github.com/Magisk-Modules-Repo/MiPushFake">Magisk global-level module</a></b> or <b><a href="https://github.com/TimothyZhang023/Riru-MiPushFake">Magisk apps-level module</a></b> to increase success. See also: <b><a href="https://github.com/MiPushFramework/MiPushFramework/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BC%8F%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">应用程式注册问题解决方案</a></b> and <b><a href="https://github.com/MiPushFramework/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E5%BA%94%E7%94%A8%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98">[帮助] 应用注册问题</a></b>.
     ]]></string>
     <string name="status_app_not_registered_title">Unregistered</string>
 
@@ -167,7 +167,7 @@ Registration is determined and initiated by the application and generally begins
     <string name="helplib_title_faq">Frequently asked questions</string>
     <string name="status_app_registered_error_title">Unregistered</string>
     <string name="status_app_registered_error_desc"><![CDATA[
-This could be the application doing a reverse registration, or the registration mismatch with the Push service. See also <b><a href="https://github.com/Trumeet/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E6%B3%A8%E5%86%8C%E5%BC%82%E5%B8%B8">[帮助] 注册异常</a></b>.
+This could be the application doing a reverse registration, or the registration mismatch with the Push service. See also <b><a href="https://github.com/MiPushFramework/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E6%B3%A8%E5%86%8C%E5%BC%82%E5%B8%B8">[帮助] 注册异常</a></b>.
     ]]></string>
 
 
@@ -183,5 +183,9 @@ This could be the application doing a reverse registration, or the registration 
         <item>help_article_register_error|register_error</item>
         <item>help_article_no_register|no_register</item>
     </string-array>
+
+    <string name="help_article_can_not_receive_push">Can not receive push message</string>
+    <string name="help_article_register_error">register error</string>
+    <string name="help_article_no_register">no register app</string>
 
 </resources>

@@ -52,6 +52,13 @@ public abstract class BaseAppsBinder<T> extends ItemViewBinder<T, BaseAppsBinder
             holder.title.setText(appName);
         }
 
+        if (DEBUG_ICON) {
+            Bitmap icon = IconCache.getInstance().getWhiteIconBitmap(context, pkgName);
+            holder.icon.setImageBitmap(icon);
+            holder.icon.setBackgroundColor(Color.BLACK);
+            return;
+        }
+
         Bitmap icon = IconCache.getInstance().getRawIconBitmapWithoutLoader(context, pkgName);
         if (icon != null) {
             holder.icon.setImageBitmap(icon);
@@ -88,11 +95,7 @@ public abstract class BaseAppsBinder<T> extends ItemViewBinder<T, BaseAppsBinder
             String pkg = params[0];
             Bitmap icon = null;
             if (!TextUtils.isEmpty(pkg)) {
-                if (DEBUG_ICON) {
-                    icon = IconCache.getInstance().getWhiteIconBitmap(context, pkg);
-                } else {
-                    icon = IconCache.getInstance().getRawIconBitmap(context, pkg);
-                }
+                icon = IconCache.getInstance().getRawIconBitmap(context, pkg);
             }
             if (icon == null) {
                 Drawable drawable = ContextCompat.getDrawable(context, android.R.mipmap.sym_def_app_icon);
@@ -105,9 +108,6 @@ public abstract class BaseAppsBinder<T> extends ItemViewBinder<T, BaseAppsBinder
         protected void onPostExecute(Bitmap bitmap) {
             if (imageView != null) {
                 imageView.setImageBitmap(bitmap);
-                if (DEBUG_ICON) {
-                    imageView.setBackgroundColor(Color.BLACK);
-                }
             }
         }
     }

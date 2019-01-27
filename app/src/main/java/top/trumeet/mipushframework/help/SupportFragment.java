@@ -29,7 +29,7 @@ public class SupportFragment extends HelpFragment {
         getPreferenceScreen()
                 .findPreference(KEY_ISSUE)
                 .setIntent(new Intent(Intent.ACTION_VIEW)
-                .setData(Uri.parse("https://github.com/Trumeet/MiPushFramework/issues")));
+                .setData(Uri.parse("https://github.com/MiPushFramework/MiPushFramework/issues")));
         getPreferenceScreen()
                 .findPreference(KEY_MAIL)
                 .setVisible(false);

@@ -74,7 +74,7 @@ public class MainFragment extends Fragment implements OnConnectStatusChangedList
             return true;
         } else if (item.getItemId() == R.id.action_update) {
             startActivity(new Intent(Intent.ACTION_VIEW)
-                    .setData(Uri.parse("https://github.com/Trumeet/MiPushFramework/releases")));
+                    .setData(Uri.parse("https://github.com/MiPushFramework/MiPushFramework/releases")));
             Toast.makeText(getActivity(), R.string.update_toast, Toast.LENGTH_LONG)
                     .show();
         } else if (item.getItemId() == R.id.action_help) {

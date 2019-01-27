@@ -7,7 +7,7 @@
 如果您确认以上内容，请看一下您属于以下哪种情况：
 
 ## 有通知记录（标题为应用名，副标题为“收到通知”）
-请点按这个记录，在显示的对话框中（如果直接打开了修改权限，说明不支持，请等待新的推送）复制其中的内容，提交到 [这个 Issues](https://github.com/Trumeet/MiPushFramework/issues/34)。
+请点按这个记录，在显示的对话框中（如果直接打开了修改权限，说明不支持，请等待新的推送）复制其中的内容，提交到 [这个 Issues](https://github.com/MiPushFramework/MiPushFramework/issues/34)。
 
 ## 有通知记录和内容（标题为通知标题，副标题为通知内容）
-请将这个记录点开的信息和 **日志** 都提交到 [这个 Issues](https://github.com/Trumeet/MiPushFramework/issues/34)。
+请将这个记录点开的信息和 **日志** 都提交到 [这个 Issues](https://github.com/MiPushFramework/MiPushFramework/issues/34)。

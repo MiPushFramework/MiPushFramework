@@ -17,16 +17,19 @@ public class MiPushManifestChecker {
 
     private final Context context;
     private final Class manifestChecker;
+    private final Method checkServicesMethod;
 
-    private MiPushManifestChecker(Class manifestChecker, Context context) {
+    private MiPushManifestChecker(Class manifestChecker, Context context) throws NoSuchMethodException {
         this.manifestChecker = manifestChecker;
         this.context = context;
+        this.checkServicesMethod = manifestChecker.getDeclaredMethod("checkServices", Context.class, PackageInfo.class);
+        this.checkServicesMethod.setAccessible(true);
     }
 
     /**
      * Make sure com.xiaomi.xmsf was installed.
      */
-    public static MiPushManifestChecker create (@NonNull Context context) throws PackageManager.NameNotFoundException, ClassNotFoundException {
+    public static MiPushManifestChecker create(@NonNull Context context) throws PackageManager.NameNotFoundException, ClassNotFoundException, NoSuchMethodException {
         Class manifestChecker = context.createPackageContext(Constants.SERVICE_APP_NAME, Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY)
                 .getClassLoader().loadClass("com.xiaomi.mipush.sdk.ManifestChecker");
         return new MiPushManifestChecker(manifestChecker, context);
@@ -48,14 +51,14 @@ public class MiPushManifestChecker {
         }
     }
 
-    public boolean checkReceivers (String packageName) {
+    public boolean checkReceivers(String packageName) {
         boolean result;
         try {
-             Context appCtx = context.createPackageContext(packageName, Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
-             Method method = manifestChecker.getDeclaredMethod("checkReceivers", Context.class);
-             method.setAccessible(true);
-             method.invoke(null, appCtx);
-             result = true;
+            Context appCtx = context.createPackageContext(packageName, Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
+            Method method = manifestChecker.getDeclaredMethod("checkReceivers", Context.class);
+            method.setAccessible(true);
+            method.invoke(null, appCtx);
+            result = true;
         } catch (Throwable e) {
             if (!isIllegalManifestException(e)) {
                 Log.e(TAG, "checkReceivers", e);
@@ -65,11 +68,9 @@ public class MiPushManifestChecker {
         return result;
     }
 
-    public boolean checkServices (PackageInfo packageInfo) {
+    public boolean checkServices(PackageInfo packageInfo) {
         try {
-            Method method = manifestChecker.getDeclaredMethod("checkServices", Context.class, PackageInfo.class);
-            method.setAccessible(true);
-            method.invoke(null, context, packageInfo);
+            checkServicesMethod.invoke(null, context, packageInfo);
             return true;
         } catch (Throwable e) {
             if (!isIllegalManifestException(e)) {
@@ -80,8 +81,8 @@ public class MiPushManifestChecker {
             return false;
         }
     }
-    
-    private static boolean isIllegalManifestException (Throwable e) {
+
+    private static boolean isIllegalManifestException(Throwable e) {
         if (e instanceof InvocationTargetException) {
             e = ((InvocationTargetException) e).getTargetException();
         }
