@@ -5,6 +5,7 @@
 ![Min Android Version](https://img.shields.io/badge/android-lollipop-%23860597.svg)
 
 Let supported push service run system-ly on every Android device
+
 Simplified Chinese document (简体中文文档): [README](https://github.com/MiPushFramework/MiPushFramework/blob/master/README_zh-rCN.md)
 
 ![](https://raw.githubusercontent.com/MiPushFramework/MiPushFramework/master/art/tab_events.jpg)
