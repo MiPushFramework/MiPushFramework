@@ -4,7 +4,8 @@
 [![License GPL-3.0](https://img.shields.io/badge/license-GPLv3.0-blue.svg)](https://github.com/MiPushFramework/MiPushFramework/blob/master/LICENSE)
 ![Min Android Version](https://img.shields.io/badge/android-lollipop-%23860597.svg)
 
-在非 MIUI 系统上体验小米系统级推送。
+Let supported push service run system-ly on every Android device
+Simplified Chinese document (简体中文文档): [README](https://github.com/MiPushFramework/MiPushFramework/blob/master/README_zh-rCN.md)
 
 ![](https://raw.githubusercontent.com/MiPushFramework/MiPushFramework/master/art/tab_events.jpg)
 ![](https://raw.githubusercontent.com/MiPushFramework/MiPushFramework/master/art/tab_permissions.jpg)
@@ -12,89 +13,78 @@
 ![](https://raw.githubusercontent.com/MiPushFramework/MiPushFramework/master/art/tab_settings.jpg)
 ![](https://raw.githubusercontent.com/MiPushFramework/MiPushFramework/master/art/tab_apps.jpg)
 
-## 什么是小米系统级推送，为什么会有这个项目
+## What is the Xiaomi system push service and the purpose of this project
 
-小米推送是小米公司提供的推送服务，许多 App 都在使用（如酷安）。
+Xiaomi push service is a Push service (like GCM) provided by Xiaomi, and there are lots of Chinese apps using it.
 
-它非常轻量，会在 MIUI 设备上自动启用系统推送，而非 MIUI 设备则在后台保持长连接。
+It is really lightweight, and it will start the system push service on MIUI ROMs, but apps will start a background service on non-MIUI ROMs.
 
+### System Push
 
+Like GCM, Xiaomi System push service runs on MIUI ROMs. When third-party apps start, they will detect whatever the ROM is MIUI. If you are using MIUI, app push messages will be received by the system push service, and the third party app won't keep running in background for saving battery.
 
-### 系统级推送
+However, if you are using non-MIUI ROM, every app which is using Xiaomi Push service will start a service called  `XMPushService` in background, which is wasting battery, memory and data.
 
-类似 GCM，小米推送的系统级推送是在 MIUI 完成的。应用在启动时，会判断如果是 MIUI ROM 则向系统注册推送，推送工作都由系统完成，应用无需后台，更省电。
+### The purpose of this project
 
-然而在非 MIUI，每个使用小米推送的应用都会在后台启动一个 `XMPushService`， 10个应用就有10个，20个就有20个服务.. 非常耗电耗内存费流量。
+The purpose of this project is to let non-MIUI users use Xiaomi System push service, which can keep push messages receiving without keeping running in background.
 
+## Disadvantages
 
+* Doesn't support MIUI.
+* We don't recommend using background purifying tools (such as Brevent, Greenify and some Xposed modules) to admire `Push` app, because it may affect the stability of receiving push messages.
+* It only supports the feature of Push, other features, for instance, device finding, is not available.
 
-### 本项目的意义
+## Advantages
 
-本项目就是想让任何不用MIUI的用户都能用上小米的系统推送，这样既能保证推送，又保证了无需后台。
+* Easy to use, the installation process is simple and it doesn't need Root, Xposed or ROM supports.
+* After using, the `XMPushService` service of third-party apps will be disabled automatically, just like using MIUI.
+* After disabling `XMPushService`, the push messages will be received properly.
+* More adjustment items, you can adjust push permissions for every app.
+* Full event logs, you can monitor push messages for each app.
+* You can decide push permissions when a third party app is registering push.
+* It will prevent useless broadcasts from Xiaomi Push SDK, and it will also prevent the SDK from reading your privacy.
 
+## Usages
 
-## 缺陷
+The installation process is simple:
 
-* 不支持 MIUI。
-* 不建议使用 黑域、绿色守护、Xposed一些模块 对 `Push` 做操作，可能导致推送不稳定
-* 只有推送功能。其他完整功能（如查找手机）请使用 MIUI
-
-
-
-## 优点
-
-* 简单，安装非常简单，无需 Root、Xposed、ROM 支持
-* 使用后，其他应用的 `XMPushService` 会自动禁用，就像在 MIUI
-* `XMPushService` 禁用后，还能保证推送
-* 更多设置项，可以针对每一款应用设置不同的推送权限
-* 完整事件记录，可以监控每个应用的 注册和推送
-* 可以在应用程序注册推送时选择是否允许
-* 拦截小米推送产生的不必要唤醒，也能阻止它读取您的隐私
-
-
-
-## 开始使用
-
-安装步骤非常简单 ：
-
-* 前往 [Releases 标签](https://github.com/MiPushFramework/MiPushFramework/releases)，下载最新的 Release APK（共两个），并全部安装。
-* 跟着向导进行设置。
+* Goto [Releases](https://github.com/MiPushFramework/MiPushFramework/releases), and download the latest release APKs (2 in total) and install them.
+* Setup by following the wizard.
 
 
-## 反馈问题
+## Giving feedback
 
-遇到任何问题，请先看看 Issues 里面有没有人提过。（常见问题：无法收到推送）
-如果没有找到答案，请为每个问题提交一份 Issue，并务必带上如下内容，以便开发者解决：
+If you have any questions, please take a look in issues and check that if it is duplicate. (e.g. Push messages are not received.) If you cannot find any solutions, you should submit issues for each question and attach the following information:
 
-* 你的 ROM 是什么，Android 版本是什么
-* 有没有使用框架等工具
+* What is your ROM and the version of Android
+* Are you using tools like Xposed?
 
-同时，请使用 设置-获取日志 获取你的日志文件，写进 Issue。
+Meanwhile, please attach your logs by using Settings - Share logs.
 
-## 日志
+## Logs
 
-框架会自动记录日志，保存到私有目录。您可以前往 设置-高级配置 中清理。
-
+The framework will save logs to private folders automatically. You can delete them by entering Settings - Advanced configurations.
 
 
-## 参与项目
+## Contributing
 
-请参考 [Contribution Guideline](CONTRIBUTION.md)
+Take a look at [Contribution Guideline](CONTRIBUTION.md)
 
-## 已知问题
+## Known issues
 
-* 对于部分小众的、恶意篡改系统的 ROM （如 360OS）导致无法正常工作的情况，我们只会竭尽全力保证推送的运行，其它不妨碍推送的「特殊适配」会被忽略。对于这些情况，建议您更换更好的 ROM 以获得最佳体验。
-* 努比亚ROM应用（第三方使用 MiPush 的应用）可能不会自动禁用其 XMPushService 并启动服务，请尝试将框架设为系统应用
-* 锤子 ROM 下，Push 可以正确收到通知，但是通知栏没有提示 #143
-* 开发者学生党，开学了更新可能不太及时，请谅解
-* 一些通知 Feature 可能无法使用（如通知都会显示为推送框架发出，而不是目标应用 `MIPushNotificationHelper#setTargetPackage`）
+* For some ROM which abusing the  framework (like 360OS) that affect the normal running of push, we can only ensure the messages are received correctly, other features which do not affect the push receiving will be ignored. For this situation, we suggest you use better ROM to have better experience.
+* Third party apps on Nubia ROM would not disable their `XMPushService` and start the system push service, please try converting the system push service to a system app.
+* Push can receive messages but cannot display notifications on Smartisan ROM (#143)
+* The developer is a full-time student, updating will be delayed when I'm having courses.
+* Some features would not available, for instance, notifications will be notified from the Push service, not target app (`MIPushNotificationHelper#setTargetPackage`).
 
-## 感谢
+## Acknowledgements
 
-* @Rachel030219 提供文件
-* Android Open Source Project, MultiType, greenDao, SetupWizardLibCompat, Condom, MaterialPreference，GreenDaoUpgradeHelper, epic, Log4a，helplib，RxJava RxAndroid，RxActivityResult，RxPermissions
-* 酷安 @PzHown @lmnm011223 @苏沐晨风丶（未采纳） 提供图标
+* Files were offered by @Rachel030219
+* Android Open Source Project, MultiType, GreenDao, SetupWizardLibCompat, Condom, MaterialPreference，GreenDaoUpgradeHelper, epic, Log4a，helplib，RxJava RxAndroid，RxActivityResult，RxPermissions
+* Icons were made from Coolapk @PzHown @lmnm011223 @苏沐晨风丶(Not accepted)
 
 # License
 
-GPL v3，有些狗不遵守开源协议（非本项目），请**务必**遵守开源协议
+GPL v3, you **must** obey the license.
