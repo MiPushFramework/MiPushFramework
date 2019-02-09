@@ -1,7 +1,6 @@
 package top.trumeet.mipushframework.register;
 
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
@@ -38,7 +37,6 @@ import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.register.RegisteredApplication;
 import top.trumeet.mipush.BuildConfig;
 import top.trumeet.mipush.R;
-import top.trumeet.mipushframework.utils.MiPushManifestChecker;
 import top.trumeet.mipushframework.widgets.Footer;
 import top.trumeet.mipushframework.widgets.FooterItemBinder;
 
@@ -146,13 +144,6 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
             }
             Set<String> actuallyRegisteredPkgs = EventDb.queryRegistered(context, mSignal);
 
-            MiPushManifestChecker checker = null;
-            try {
-                checker = MiPushManifestChecker.create(context);
-            } catch (PackageManager.NameNotFoundException | ClassNotFoundException | NoSuchMethodException e) {
-                Log.e(RegisteredApplicationFragment.class.getSimpleName(), "Create mi push checker", e);
-            }
-
             List<RegisteredApplication> res = new Vector<>();
 
             int threadCount = Runtime.getRuntime().availableProcessors();
@@ -170,7 +161,6 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
             for (PackageInfo packageInfo : packageInfos) {
 
                 final PackageInfo info = packageInfo;
-                MiPushManifestChecker finalChecker = checker;
 
                 pool.submit(() -> {
                     String currentAppPkgName = info.packageName;
@@ -185,13 +175,19 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
                         application.setRegisteredType(actuallyRegisteredPkgs.contains(currentAppPkgName) ? 1 : 2);
                         res.add(application);
                     } else {
-                        if (finalChecker != null && finalChecker.checkServices(info)) {
-                            // checkReceivers will use Class#forName, but we can't change our classloader to target app's.
+                        // Check whatever MiPush SDK is included in the target app.
+                        // Should we also ensure that it declared components correctly?
+                        // fixme: it is pretty slow to run a full-scan.
+                        try {
+                            Context targetContext = context.createPackageContext(currentAppPkgName,
+                                    Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
+                            if (targetContext.getClassLoader().loadClass("com.xiaomi.mipush.sdk.MiPushClient") == null)
+                                throw new NullPointerException("");
                             RegisteredApplication application = new RegisteredApplication();
                             application.setPackageName(currentAppPkgName);
                             application.setRegisteredType(0);
                             res.add(application);
-                        } else {
+                        } catch (PackageManager.NameNotFoundException | NullPointerException | ClassNotFoundException e) {
                             Log.d(TAG, "not use mipush : " + currentAppPkgName);
                         }
                     }
@@ -266,6 +262,11 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
 
             swipeRefreshLayout.setRefreshing(false);
             mLoadTask = null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            swipeRefreshLayout.setRefreshing(true);
         }
     }
 }
