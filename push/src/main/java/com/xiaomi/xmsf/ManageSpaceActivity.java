@@ -10,6 +10,7 @@ import android.preference.PreferenceFragment;
 import android.preference.TwoStatePreference;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.catchingnow.icebox.sdk_client.IceBox;
@@ -31,13 +32,21 @@ public class ManageSpaceActivity extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         top.trumeet.mipush.provider.DatabaseUtils.init(this);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public static class MyPreferenceFragment extends PreferenceFragment {
-
 
         public MyPreferenceFragment() {
         }
@@ -49,9 +58,9 @@ public class ManageSpaceActivity extends PreferenceActivity {
 
             Context context = getActivity();
 
-            //Too bad in ui thread
+            // Too bad in ui thread
 
-            //TODO: Three messages seem to be too much, and need separate strings for toast.
+            // TODO: Three messages seem to be too much, and need separate strings for toast.
             getPreferenceScreen().findPreference("clear_history").setOnPreferenceClickListener(preference -> {
                 Toast.makeText(context, getString(R.string.settings_clear_history) + getString(R.string.start), Toast.LENGTH_SHORT).show();
                 EventDb.deleteHistory(context, null);
@@ -110,10 +119,6 @@ public class ManageSpaceActivity extends PreferenceActivity {
                 });
 
             }
-
-
         }
     }
-
-
 }
