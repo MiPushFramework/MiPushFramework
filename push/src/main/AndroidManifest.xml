@@ -189,6 +189,7 @@
 
         <activity
             android:name=".RemoveDozeActivity"
+            android:theme="@style/AppTheme.NoAnim"
             android:exported="true" />
 
         <service

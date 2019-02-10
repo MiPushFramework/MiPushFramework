@@ -14,5 +14,7 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-
+    <style name="AppTheme.NoAnim" parent="AppTheme">
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
 </resources>
