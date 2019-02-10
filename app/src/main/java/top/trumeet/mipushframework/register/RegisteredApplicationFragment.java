@@ -1,6 +1,8 @@
 package top.trumeet.mipushframework.register;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
@@ -179,6 +181,10 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
                         // Should we also ensure that it declared components correctly?
                         // fixme: it is pretty slow to run a full-scan.
                         try {
+                            if (context.getPackageManager().resolveService(new Intent()
+                                    .setComponent(new ComponentName(currentAppPkgName, "com.xiaomi.mipush.sdk.PushMessageHandler")),
+                                    PackageManager.GET_DISABLED_COMPONENTS) == null)
+                                throw new NullPointerException("PushMessageHandler is not declared, skipping class check");
                             Context targetContext = context.createPackageContext(currentAppPkgName,
                                     Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
                             if (targetContext.getClassLoader().loadClass("com.xiaomi.mipush.sdk.MiPushClient") == null)
@@ -188,7 +194,7 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
                             application.setRegisteredType(0);
                             res.add(application);
                         } catch (PackageManager.NameNotFoundException | NullPointerException | ClassNotFoundException e) {
-                            Log.d(TAG, "not use mipush : " + currentAppPkgName);
+                            Log.d(TAG, currentAppPkgName + " is not using MiPush, " + e.getMessage());
                         }
                     }
                 });
