@@ -6,13 +6,8 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.ContentObserver;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
@@ -89,9 +84,6 @@ public class PushServiceMain extends XMPushService {
     public static final String CHANNEL_STATUS = "status";
     public static final int NOTIFICATION_ALIVE_ID = 0;
 
-    private SettingsObserver mSettingsObserver;
-    private SharedPreferences.OnSharedPreferenceChangeListener mListener;
-
     private Timer mStatTimer;
     private long startTime;
     private int nextUploadDuringMinutes = 20; // First 20, next 40, then 80... no longer than 6 hours (3600)
@@ -133,7 +125,8 @@ public class PushServiceMain extends XMPushService {
         startTime = System.currentTimeMillis();
         if (!DEBUG && !BuildConfig.FABRIC_KEY.equals("null"))
             scheduleNextUpload();
-        mSettingsObserver = new SettingsObserver(new Handler(Looper.myLooper()));
+
+
     }
 
     @Override
@@ -161,21 +154,10 @@ public class PushServiceMain extends XMPushService {
         logger.d("Service stopped");
         ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
                 .cancel(NOTIFICATION_ALIVE_ID);
-        mStatTimer.cancel();
+        if (mStatTimer != null) mStatTimer.cancel();
         super.onDestroy();
     }
 
-    private final class SettingsObserver extends ContentObserver {
-        public SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            Log.i("SettingsObserver", "-> settings changed");
-            onConfigChanged();
-        }
-    }
 
     private void onConfigChanged () {
         NotificationManager manager = (NotificationManager)

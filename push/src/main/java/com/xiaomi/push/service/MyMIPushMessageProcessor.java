@@ -4,7 +4,6 @@ import android.accounts.Account;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
-import android.support.v4.util.LruCache;
 import android.text.TextUtils;
 
 import com.elvishew.xlog.Logger;
@@ -45,13 +44,16 @@ public class MyMIPushMessageProcessor {
 
     public static void process(XMPushService paramXMPushService, XmPushActionContainer buildContainer, byte[] paramArrayOfByte, long var2, Intent localIntent) {
         try {
-            String targetPackage = MIPushNotificationHelper.getTargetPackage(buildContainer);
-            Long current = System.currentTimeMillis();
+            long current = System.currentTimeMillis();
             PushMetaInfo localPushMetaInfo = buildContainer.getMetaInfo();
             if (localPushMetaInfo != null) {
                 localPushMetaInfo.putToExtra("mrt", Long.toString(current));
             }
-            if (ActionType.SendMessage == buildContainer.getAction() && MIPushAppInfo.getInstance(paramXMPushService).isUnRegistered(buildContainer.packageName) && !MIPushNotificationHelper.isBusinessMessage(buildContainer)) {
+
+            boolean isSendMessage = ActionType.SendMessage == buildContainer.getAction();
+            boolean isBusinessMessage = MIPushNotificationHelper.isBusinessMessage(buildContainer);
+
+            if (isSendMessage && MIPushAppInfo.getInstance(paramXMPushService).isUnRegistered(buildContainer.packageName) && !isBusinessMessage) {
                 String var20 = "";
                 if (localPushMetaInfo != null) {
                     var20 = localPushMetaInfo.getId();
@@ -59,7 +61,7 @@ public class MyMIPushMessageProcessor {
 
                 logger.w("Drop a message for unregistered, msgid=" + var20);
                 sendAppAbsentAck(paramXMPushService, buildContainer, buildContainer.packageName);
-            } else if (ActionType.SendMessage == buildContainer.getAction() && MIPushAppInfo.getInstance(paramXMPushService).isPushDisabled4User(buildContainer.packageName) && !MIPushNotificationHelper.isBusinessMessage(buildContainer)) {
+            } else if (isSendMessage && MIPushAppInfo.getInstance(paramXMPushService).isPushDisabled4User(buildContainer.packageName) && !isBusinessMessage) {
                 String var19 = "";
                 if (localPushMetaInfo != null) {
                     var19 = localPushMetaInfo.getId();
@@ -67,7 +69,7 @@ public class MyMIPushMessageProcessor {
 
                 logger.w("Drop a message for push closed, msgid=" + var19);
                 sendAppAbsentAck(paramXMPushService, buildContainer, buildContainer.packageName);
-            } else if (ActionType.SendMessage == buildContainer.getAction() && !TextUtils.equals(paramXMPushService.getPackageName(), PushConstants.PUSH_SERVICE_PACKAGE_NAME) && !TextUtils.equals(paramXMPushService.getPackageName(), buildContainer.packageName)) {
+            } else if (isSendMessage && !TextUtils.equals(paramXMPushService.getPackageName(), PushConstants.PUSH_SERVICE_PACKAGE_NAME) && !TextUtils.equals(paramXMPushService.getPackageName(), buildContainer.packageName)) {
                 logger.w("Receive a message with wrong package name, expect " + paramXMPushService.getPackageName() + ", received " + buildContainer.packageName);
                 sendErrorAck(paramXMPushService, buildContainer, "unmatched_package", "package should be " + paramXMPushService.getPackageName() + ", but got " + buildContainer.packageName);
             } else {
@@ -145,7 +147,8 @@ public class MyMIPushMessageProcessor {
 
         String targetPackage = MIPushNotificationHelper.getTargetPackage(buildContainer);
 
-        if (MIPushNotificationHelper.isBusinessMessage(buildContainer)) {
+        boolean isBusinessMessage = MIPushNotificationHelper.isBusinessMessage(buildContainer);
+        if (isBusinessMessage) {
             if (ActionType.Registration == buildContainer.getAction()) {
                 String str2 = buildContainer.getPackageName();
                 SharedPreferences.Editor localEditor = paramXMPushService.getSharedPreferences(PREF_KEY_REGISTERED_PKGS, 0).edit();
@@ -157,54 +160,57 @@ public class MyMIPushMessageProcessor {
 
         PushMetaInfo metaInfo = buildContainer.getMetaInfo();
 
+        if (metaInfo == null) {
+            return;
+        }
+
         //abtest
-        if (BuildConfig.APPLICATION_ID.contains(buildContainer.packageName) && !buildContainer.isEncryptAction() &&
-                metaInfo != null && metaInfo.getExtra() != null && metaInfo.getExtra().containsKey("ab")) {
+        if (BuildConfig.APPLICATION_ID.contains(targetPackage) && !buildContainer.isEncryptAction() &&
+                metaInfo.getExtra() != null && metaInfo.getExtra().containsKey("ab")) {
             sendAckMessage(paramXMPushService, buildContainer);
             MyLog.i("receive abtest message. ack it." + metaInfo.getId());
             return;
         }
 
-        if (metaInfo != null) {
-            String title = metaInfo.getTitle();
-            String description = metaInfo.getDescription();
+        String title = metaInfo.getTitle();
+        String description = metaInfo.getDescription();
 
-            if (TextUtils.isEmpty(title) && TextUtils.isEmpty(description)) {
-            } else {
+        if (TextUtils.isEmpty(title) && TextUtils.isEmpty(description)) {
+        } else {
 
-                if (TextUtils.isEmpty(title)) {
-                    CharSequence appName = ApplicationNameCache.getInstance().getAppName(paramXMPushService, buildContainer.packageName);
-                    if (appName == null) {
-                        appName = buildContainer.packageName;
-                    }
-                    metaInfo.setTitle(appName.toString());
-                }
+            if (TextUtils.isEmpty(title)) {
+                CharSequence appName = ApplicationNameCache.getInstance().getAppName(paramXMPushService, targetPackage);
+                metaInfo.setTitle(appName.toString());
+            }
 
-                if (TextUtils.isEmpty(description)) {
-                    metaInfo.setDescription(paramXMPushService.getString(R.string.see_pass_though_msg));
-                }
-
-                if (isDupTextMsg(targetPackage, title, description)) {
-                    logger.w("drop a duplicate message, judge by text from : " + buildContainer.packageName);
-                    shouldNotify = false;
-                }
+            if (TextUtils.isEmpty(description)) {
+                metaInfo.setDescription(paramXMPushService.getString(R.string.see_pass_though_msg));
             }
 
         }
 
-        if (metaInfo != null && !TextUtils.isEmpty(metaInfo.getTitle()) && !TextUtils.isEmpty(metaInfo.getDescription())) {
+        int uniqueHashCode = targetPackage.hashCode();
+        if (!TextUtils.isEmpty(title)) {
+            uniqueHashCode += title.hashCode();
+        }
+        if (!TextUtils.isEmpty(description)) {
+            uniqueHashCode += description.hashCode();
+        }
+        shouldNotify = !MiPushMessageDuplicate.isDuplicateMessage(paramXMPushService, targetPackage, uniqueHashCode + "");
 
-            String var8 = null;
-            if (metaInfo.extra != null) {
-                var8 = metaInfo.extra.get("jobkey");
-            }
-            if (TextUtils.isEmpty(var8)) {
-                var8 = metaInfo.getId();
-            }
+        String idKey = null;
+        if (metaInfo.extra != null) {
+            idKey = metaInfo.extra.get("jobkey");
+        }
+        if (TextUtils.isEmpty(idKey)) {
+            idKey = metaInfo.getId();
+        }
+        boolean isDuplicateMessage = MiPushMessageDuplicate.isDuplicateMessage(paramXMPushService, targetPackage, idKey);
 
-            boolean var7 = MiPushMessageDuplicate.isDuplicateMessage(paramXMPushService, buildContainer.packageName, var8);
-            if (var7) {
-                logger.w("drop a duplicate message, key=" + var8);
+        if (!TextUtils.isEmpty(metaInfo.getTitle()) && !TextUtils.isEmpty(metaInfo.getDescription())) {
+
+            if (isDuplicateMessage) {
+                logger.w("drop a duplicate message, key=" + idKey);
             } else {
 
                 if (shouldNotify) {
@@ -212,18 +218,17 @@ public class MyMIPushMessageProcessor {
                 }
 
                 //send broadcast
-                if (!MIPushNotificationHelper.isBusinessMessage(buildContainer)) {
-
+                if (!isBusinessMessage) {
 
                     Intent localIntent = new Intent(PushConstants.MIPUSH_ACTION_MESSAGE_ARRIVED);
                     localIntent.putExtra(PushConstants.MIPUSH_EXTRA_PAYLOAD, paramArrayOfByte);
                     localIntent.putExtra(MIPushNotificationHelper.FROM_NOTIFICATION, true);
-                    localIntent.setPackage(buildContainer.packageName);
+                    localIntent.setPackage(targetPackage);
 
                     try {
                         List<ResolveInfo> localList = paramXMPushService.getPackageManager().queryBroadcastReceivers(localIntent, 0);
                         if ((localList != null) && (!localList.isEmpty())) {
-                            paramXMPushService.sendBroadcast(localIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.getPackageName()));
+                            paramXMPushService.sendBroadcast(localIntent, ClientEventDispatcher.getReceiverPermission(targetPackage));
                         }
                     } catch (Exception ignore) {
                     }
@@ -240,44 +245,11 @@ public class MyMIPushMessageProcessor {
             }
         } else if (shouldSendBroadcast(paramXMPushService, targetPackage, buildContainer, metaInfo)) {
 
-            paramXMPushService.sendBroadcast(paramIntent, ClientEventDispatcher.getReceiverPermission(buildContainer.packageName));
+            paramXMPushService.sendBroadcast(paramIntent, ClientEventDispatcher.getReceiverPermission(targetPackage));
 
         }
 
     }
 
-
-    private static LruCache<String, CacheItem> cacheInstance = new LruCache<>(15);
-
-    private static class CacheItem {
-        String title; String content; long time;
-
-        CacheItem(String title, String content, long time) {
-            this.title = title;
-            this.content = content;
-            this.time = time;
-        }
-    }
-    private static boolean isDupTextMsg(String packageName, String title, String content) {
-        if (TextUtils.isEmpty(title) || TextUtils.isEmpty(content)) {
-            return false;
-        }
-        long currentTimeMillis = System.currentTimeMillis();
-        CacheItem cached = cacheInstance.get(packageName);
-        boolean isDup = false;
-
-        if (cached != null) {
-            if (TextUtils.equals(title + content, cached.title + cached.content)) {
-                if ((currentTimeMillis - cached.time) < (60 * 1000)) {
-                    isDup = true;
-                }
-            }
-        }
-        if (!isDup) {
-            cacheInstance.put(packageName, new CacheItem(title, content, currentTimeMillis));
-        }
-
-        return isDup;
-    }
 
 }

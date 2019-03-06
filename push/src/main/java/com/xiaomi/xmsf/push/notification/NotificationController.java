@@ -241,9 +241,9 @@ public class NotificationController {
             int iconSmallId = getIconId(context, packageName, NOTIFICATION_SMALL_ICON);
             if (iconSmallId <= 0) {
 
-                Bitmap whiteIconBitmap = IconCache.getInstance().getWhiteIconBitmap(context, packageName);
-                if (whiteIconBitmap != null) {
-                    notificationBuilder.setSmallIcon(Icon.createWithBitmap(whiteIconBitmap));
+                Icon iconCache = IconCache.getInstance().getIconCache(context, packageName, (ctx, b) -> Icon.createWithBitmap(b));
+                if (iconCache != null) {
+                    notificationBuilder.setSmallIcon(iconCache);
                 } else {
                     notificationBuilder.setSmallIcon(R.drawable.ic_notifications_black_24dp);
                 }
