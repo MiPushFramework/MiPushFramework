@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import top.trumeet.common.BuildConfig;
 import top.trumeet.common.Constants;
 
 import static android.content.Intent.EXTRA_STREAM;
@@ -39,9 +40,14 @@ import static android.content.Intent.EXTRA_STREAM;
 
 public class LogUtils {
     public static void init (@NonNull Context context) {
+
+        int logLevel = LogLevel.INFO;
+        if (BuildConfig.DEBUG) {
+            logLevel = LogLevel.ALL;
+        }
         LogConfiguration configuration = new LogConfiguration.Builder()
                 .tag("Xmsf")
-                .logLevel(LogLevel.ALL)
+                .logLevel(logLevel)
                 .jsonFormatter(new DefaultJsonFormatter())
                 .xmlFormatter(new DefaultXmlFormatter())
                 .stackTraceFormatter(new DefaultStackTraceFormatter())

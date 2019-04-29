@@ -73,13 +73,17 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
 
     @Override
     public void notifyPacketArrival(XMPushService xMPushService, String str, Packet packet) {
-        logger.d("packet arrival: " + str + "; " + packet.toXML());
+        if (BuildConfig.DEBUG) {
+            logger.d("packet arrival: " + str + "; " + packet.toXML());
+        }
         super.notifyPacketArrival(xMPushService, str, packet);
     }
 
     @Override
     public void notifyPacketArrival(XMPushService xMPushService, String str, Blob blob) {
-        logger.d("blob arrival: " + str + "; " + blob.toString());
+        if (BuildConfig.DEBUG) {
+            logger.d("blob arrival: " + str + "; " + blob.toString());
+        }
         super.notifyPacketArrival(xMPushService, str, blob);
     }
 
@@ -124,8 +128,9 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
         private static Logger logger = XLog.tag("MyClientEventDispatcherD").build();
         private static void runProcessMIPushMessage(XMPushService xmPushService, byte[] payload, long var2) {
             XmPushActionContainer buildContainer = buildContainer(payload);
-            logger.i("buildContainer: " + buildContainer.toString());
-
+            if (BuildConfig.DEBUG) {
+                logger.i("buildContainer: " + buildContainer.toString());
+            }
             EventType type = TypeFactory.create(buildContainer, buildContainer.packageName);
             if (MessageProcessor.shouldAllow(type, xmPushService) ||
                     PushConstants.PUSH_SERVICE_PACKAGE_NAME.equals(buildContainer.packageName)) {

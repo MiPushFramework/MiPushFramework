@@ -52,14 +52,17 @@ public abstract class BaseAppsBinder<T> extends ItemViewBinder<T, BaseAppsBinder
             holder.title.setText(appName);
         }
 
+        IconCache cache = IconCache.getInstance();
+
         if (DEBUG_ICON) {
-            Bitmap icon = IconCache.getInstance().getWhiteIconBitmap(context, pkgName);
+            Bitmap rawIconBitmap = cache.getRawIconBitmap(context, pkgName);
+            Bitmap icon = new IconCache.WhiteIconProcess().convert(context, rawIconBitmap);
             holder.icon.setImageBitmap(icon);
             holder.icon.setBackgroundColor(Color.BLACK);
             return;
         }
 
-        Bitmap icon = IconCache.getInstance().getRawIconBitmapWithoutLoader(context, pkgName);
+        Bitmap icon = cache.getRawIconBitmapWithoutLoader(context, pkgName);
         if (icon != null) {
             holder.icon.setImageBitmap(icon);
         } else {
