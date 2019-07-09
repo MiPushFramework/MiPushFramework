@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -163,7 +164,10 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
                     TimeUnit.SECONDS,
                     new ArrayBlockingQueue<>(10), new ThreadPoolExecutor.CallerRunsPolicy());
 
-            final List<PackageInfo> packageInfos = context.getPackageManager().getInstalledPackages(PackageManager.GET_DISABLED_COMPONENTS | PackageManager.GET_SERVICES | PackageManager.GET_RECEIVERS);
+            final List<PackageInfo> packageInfos = context.getPackageManager().getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES
+                    | PackageManager.GET_DISABLED_COMPONENTS | PackageManager.GET_SERVICES | PackageManager.GET_RECEIVERS);
+            for (final Iterator<PackageInfo> iterator = packageInfos.iterator(); iterator.hasNext(); )
+                if ((iterator.next().applicationInfo.flags & ApplicationInfo.FLAG_INSTALLED) == 0) iterator.remove();   // Exclude apps not installed in current user.
 
             int totalPkg = packageInfos.size();
 

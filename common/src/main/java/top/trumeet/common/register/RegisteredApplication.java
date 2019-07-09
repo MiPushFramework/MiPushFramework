@@ -3,6 +3,7 @@ package top.trumeet.common.register;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
@@ -200,19 +201,20 @@ public class RegisteredApplication implements Parcelable {
 
     @android.support.annotation.NonNull
     public CharSequence getLabel (Context context) {
+        PackageManager pm = context.getPackageManager();
         try {
-            return context.getPackageManager().getApplicationLabel(context.getPackageManager()
-                    .getApplicationInfo(packageName, PackageManager.GET_DISABLED_COMPONENTS));
-        } catch (PackageManager.NameNotFoundException e) {
+            return pm.getApplicationInfo(packageName, PackageManager.GET_UNINSTALLED_PACKAGES).loadLabel(pm);
+        } catch (PackageManager.NameNotFoundException | Resources.NotFoundException e) {
             return packageName;
         }
     }
 
     @android.support.annotation.NonNull
     public Drawable getIcon (Context context) {
+        PackageManager pm = context.getPackageManager();
         try {
-            return context.getPackageManager().getApplicationIcon(packageName);
-        } catch (PackageManager.NameNotFoundException e) {
+            return pm.getApplicationInfo(packageName, PackageManager.GET_UNINSTALLED_PACKAGES).loadIcon(pm);
+        } catch (PackageManager.NameNotFoundException | Resources.NotFoundException e) {
             return ContextCompat.getDrawable(context, android.R.mipmap.sym_def_app_icon);
         }
     }
@@ -220,7 +222,7 @@ public class RegisteredApplication implements Parcelable {
     public int getUid (Context context) {
         try {
             return context.getPackageManager().getApplicationInfo(packageName,
-                    0)
+                    PackageManager.GET_UNINSTALLED_PACKAGES)
                     .uid;
         } catch (PackageManager.NameNotFoundException e) {
             return -1;
