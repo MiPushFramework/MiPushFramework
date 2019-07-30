@@ -1,6 +1,7 @@
 package top.trumeet.common.cache;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
@@ -49,8 +50,9 @@ public class IconCache {
         return new AbstractCacheAspect<Bitmap>(bitmapLruCache) {
             @Override
             Bitmap gen() {
+                PackageManager pm = ctx.getPackageManager();
                 try {
-                    Drawable icon = ctx.getPackageManager().getApplicationIcon(pkg);
+                    Drawable icon = pm.getApplicationInfo(pkg, PackageManager.GET_UNINSTALLED_PACKAGES).loadIcon(pm);
                     return drawableToBitmap(icon);
                 } catch (Exception ignored) {
                     return null;

@@ -2,6 +2,7 @@ package top.trumeet.common.cache;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.support.v4.util.LruCache;
 
 /**
@@ -33,9 +34,10 @@ public class ApplicationNameCache {
             @Override
             CharSequence gen() {
                 CharSequence name = pkg;
+                PackageManager pm = ctx.getPackageManager();
                 try {
-                    name = ctx.getPackageManager().getApplicationInfo(pkg, 0).loadLabel(ctx.getPackageManager());
-                } catch (PackageManager.NameNotFoundException ignored) { }
+                    name = pm.getApplicationInfo(pkg, PackageManager.GET_UNINSTALLED_PACKAGES).loadLabel(pm);
+                } catch (PackageManager.NameNotFoundException | Resources.NotFoundException ignored) { }
 
                 return name;
             }

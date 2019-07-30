@@ -83,7 +83,7 @@ public final class Utils {
 
     public static boolean isUserApplication (String pkg) {
         try {
-            return isUserApplication(getApplication().getPackageManager().getApplicationInfo(pkg, 0));
+            return isUserApplication(getApplication().getPackageManager().getApplicationInfo(pkg, PackageManager.GET_UNINSTALLED_PACKAGES));
         } catch (PackageManager.NameNotFoundException ignored) {
             return false;
         }
