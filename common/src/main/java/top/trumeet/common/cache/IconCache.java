@@ -51,12 +51,20 @@ public class IconCache {
             @Override
             Bitmap gen() {
                 PackageManager pm = ctx.getPackageManager();
+                Bitmap res = null;
                 try {
                     Drawable icon = pm.getApplicationInfo(pkg, PackageManager.GET_UNINSTALLED_PACKAGES).loadIcon(pm);
-                    return drawableToBitmap(icon);
-                } catch (Exception ignored) {
-                    return null;
+                    res = drawableToBitmap(icon);
+                } catch (Throwable ignored) {
                 }
+
+                try {
+                    Drawable icon = ctx.getPackageManager().getApplicationIcon(pkg);
+                    res = drawableToBitmap(icon);
+                } catch (Throwable ignored) {
+                }
+
+                return res;
             }
         }.get("raw_" + pkg);
     }
