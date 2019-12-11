@@ -105,7 +105,7 @@ dependencies {
         exclude group: 'com.android.support'
     })
     // Hook
-    implementation 'me.weishu:epic:0.3.6'
+    implementation 'me.weishu:epic:0.6.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
