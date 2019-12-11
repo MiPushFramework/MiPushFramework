@@ -246,7 +246,7 @@ public class CondomProcess {
 				if (component != null) mCondom.logIfOutboundPass(FULL_TAG, intent, component.getPackageName(), CondomCore.CondomEvent.START_PASS);
 				return component;
 			case "getContentProvider":
-				final String name = (String) args[1];
+				final String name = (String) args[SDK_INT >= 28 ? 2 : 1];
 				if (! mCondom.shouldAllowProvider(mCondom.mBase, name, PackageManager.GET_UNINSTALLED_PACKAGES))
 					return null;	// Actually blocked by IPackageManager.resolveContentProvider() which is called in shouldAllowProvider() above.
 				break;
