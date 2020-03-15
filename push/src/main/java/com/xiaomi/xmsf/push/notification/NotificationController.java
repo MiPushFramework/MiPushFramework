@@ -159,6 +159,11 @@ public class NotificationController {
     public static void publish(Context context, int id, String packageName, Notification.Builder localBuilder) {
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
+        // Make the behavior consistent with official MIUI
+        Bundle extras = new Bundle();
+        extras.putString("target_package", packageName);
+        localBuilder.addExtras(extras);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //Forward Compatibility
             registerChannelIfNeeded(context, packageName);
