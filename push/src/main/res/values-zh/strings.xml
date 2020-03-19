@@ -88,6 +88,8 @@
 
     <string name="icebox_permission_granted">已经赋权冰箱自动解冻</string>
     <string name="settings_icebox_not_installed">冰箱尚未安装，暂不支持</string>
+    <string name="activity_intent_not_found">没有应用程序可以处理此操作</string>
+    <string name="log_share_title">分享日志</string>
 
 
 </resources>
