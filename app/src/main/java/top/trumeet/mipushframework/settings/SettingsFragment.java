@@ -1,14 +1,16 @@
 package top.trumeet.mipushframework.settings;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.util.Log;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 
 import moe.shizuku.preference.Preference;
 import moe.shizuku.preference.PreferenceFragment;
@@ -18,7 +20,6 @@ import top.trumeet.common.Constants;
 import top.trumeet.common.utils.rom.RomUtils;
 import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.MainActivity;
-import top.trumeet.mipushframework.utils.ShellUtils;
 
 import static top.trumeet.common.Constants.FAKE_CONFIGURATION_PATH;
 import static top.trumeet.common.utils.rom.RomUtils.ROM_H2OS;
@@ -63,25 +64,34 @@ public class SettingsFragment extends PreferenceFragment {
         addItem(new File(globalFake).exists(), (preference, newValue) -> {
                     boolean enabled = (boolean) newValue;
 
-                    List<String> commands = new ArrayList<>(3);
-                    if (!new File(FAKE_CONFIGURATION_PATH).exists()) {
-                        commands.add("mkdir -p " + FAKE_CONFIGURATION_PATH);
-                    }
+                    //List<String> commands = new ArrayList<>(3);
 
                     if (new File(FAKE_CONFIGURATION_PATH).isFile()) {
-                        commands.add("rm -rf " + FAKE_CONFIGURATION_PATH);
+                        new File(FAKE_CONFIGURATION_PATH).delete();
+                    }
+
+                    if (!new File(FAKE_CONFIGURATION_PATH).exists()) {
+                        new File(FAKE_CONFIGURATION_PATH).mkdir();
                     }
 
 
                     if (enabled) {
-                        if (!new File(globalFake).exists()) commands.add("touch " + globalFake);
+                        File globalFlag = new File(globalFake);
+                        if (!globalFlag.exists()) {
+                            try {
+                                globalFlag.createNewFile();
+                                setFilePermissionsFromMode(globalFlag.getPath(), Context.MODE_WORLD_READABLE);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     } else {
-                        commands.add("rm " + globalFake);
+                        new File(globalFake).delete();
                     }
 
-                    Log.i(TAG, "Final Commands: " + commands.toString());
-                    // About permissions and groups: these commands below with root WILL make the file accessible (not editable) for all apps.
-                    Log.d(TAG, "Exit: " + ShellUtils.execCmd(commands, true, true).toString());
+//                    Log.i(TAG, "Final Commands: " + commands.toString());
+//                    // About permissions and groups: these commands below with root WILL make the file accessible (not editable) for all apps.
+//                    Log.d(TAG, "Exit: " + ShellUtils.execCmd(commands, true, true).toString());
                     return true;
                 },
                 getString(R.string.fake_global_enable_title),
@@ -91,6 +101,21 @@ public class SettingsFragment extends PreferenceFragment {
 
 
         checkROM();
+    }
+
+
+    @SuppressWarnings("SameParameterValue")
+    @SuppressLint({"WorldReadableFiles", "WorldWriteableFiles"})
+    public static void setFilePermissionsFromMode(String name, int mode) {
+        int perms = FileUtils.S_IRUSR | FileUtils.S_IWUSR
+                | FileUtils.S_IRGRP | FileUtils.S_IWGRP;
+        if ((mode & Context.MODE_WORLD_READABLE) != 0) {
+            perms |= FileUtils.S_IROTH;
+        }
+        if ((mode & Context.MODE_WORLD_WRITEABLE) != 0) {
+            perms |= FileUtils.S_IWOTH;
+        }
+        FileUtils.setPermissions(name, perms, -1, -1);
     }
 
     private void addItem(boolean value, Preference.OnPreferenceChangeListener listener,

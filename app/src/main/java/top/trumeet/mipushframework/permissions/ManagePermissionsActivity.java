@@ -1,5 +1,6 @@
 package top.trumeet.mipushframework.permissions;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 import com.android.settings.widget.EntityHeaderController;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -53,6 +55,7 @@ import static android.provider.Settings.EXTRA_APP_PACKAGE;
 import static android.provider.Settings.EXTRA_CHANNEL_ID;
 import static top.trumeet.common.Constants.FAKE_CONFIGURATION_PATH;
 import static top.trumeet.common.utils.NotificationUtils.getChannelIdByPkg;
+import static top.trumeet.mipushframework.settings.SettingsFragment.setFilePermissionsFromMode;
 
 /**
  * Created by Trumeet on 2017/8/27.
@@ -471,24 +474,34 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                             UserHandleOverride.getUserHandleForUid(mApplicationItem.getUid(getActivity())).hashCode(),
                             mApplicationItem.getPackageName());
                     Log.d(TAG, "path: " + path);
-                    List<String> commands = new ArrayList<>(3);
+//                    List<String> commands = new ArrayList<>(3);
                     if (changeFakeSettings) {
+
                         if (new File(FAKE_CONFIGURATION_PATH).isFile()) {
-                            commands.add("rm -rf " + FAKE_CONFIGURATION_PATH);
+                            new File(FAKE_CONFIGURATION_PATH).delete();
                         }
+
                         if (!new File(FAKE_CONFIGURATION_PATH).exists()) {
-                            commands.add("mkdir -p " + FAKE_CONFIGURATION_PATH);
+                            new File(FAKE_CONFIGURATION_PATH).mkdir();
                         }
                     }
 
                     if (changeFakeSettings) {
-                        if (!new File(path).exists()) commands.add("touch " + path);
+                        File file = new File(path);
+                        if (!file.exists()) {
+                            try {
+                                file.createNewFile();
+                                setFilePermissionsFromMode(file.getPath(), Context.MODE_WORLD_READABLE);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     } else {
-                        commands.add("rm " + path);
+                        new File(path).delete();
                     }
-                    Log.i(TAG, "Final Commands: " + commands.toString());
-                    // About permissions and groups: these commands below with root WILL make the file accessible (not editable) for all apps.
-                    Log.d(TAG, "Exit: " + ShellUtils.execCmd(commands, true, true).toString());
+//                    Log.i(TAG, "Final Commands: " + commands.toString());
+//                    // About permissions and groups: these commands below with root WILL make the file accessible (not editable) for all apps.
+//                    Log.d(TAG, "Exit: " + ShellUtils.execCmd(commands, true, true).toString());
                 }
                 return null;
             }
