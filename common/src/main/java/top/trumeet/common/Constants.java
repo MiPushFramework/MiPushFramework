@@ -116,7 +116,7 @@ public final class Constants {
         public static final String GET_VERSION = "top.trumeet.mipush.permissions.GET_VERSION";
     }
 
-    public static final String FAKE_CONFIGURATION_PATH = "/data/misc/riru/modules/mipush_fake/packages/";
+    public static final String FAKE_CONFIGURATION_PATH = "/data/user_de/0/top.trumeet.mipush/packages/";
     public static final String FAKE_CONFIGURATION_NAME_TEMPLATE = FAKE_CONFIGURATION_PATH + "%1$s.%2$s";
     public static final String FAKE_CONFIGURATION_GLOBAL = Constants.FAKE_CONFIGURATION_PATH + "ALL";
 }
