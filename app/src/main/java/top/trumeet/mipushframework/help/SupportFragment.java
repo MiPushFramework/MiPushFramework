@@ -13,6 +13,7 @@ import java.util.List;
 
 import moe.shizuku.support.helplib.HelpFragment;
 import top.trumeet.mipush.R;
+import top.trumeet.mipushframework.MainActivity;
 
 /**
  * Created by Trumeet on 2018/2/8.
@@ -62,7 +63,7 @@ public class SupportFragment extends HelpFragment {
                 List<Article> articles = new ArrayList<>(articlesArray.length);
                 for (String str : articlesArray) {
                     String[] info = str.split("\\|");
-                    Log.d(TAG, "info: "+ Arrays.toString(info));
+                    Log.d(MainActivity.TAG, TAG + ": info: "+ Arrays.toString(info));
                     if (info.length != 2)
                         continue;
 
@@ -73,12 +74,12 @@ public class SupportFragment extends HelpFragment {
                                 .getInt(null);
                         articles.add(new Article(titleRes, markdownRes));
                     } catch (Exception e) {
-                        Log.e(TAG, "Cannot read article", e);
+                        Log.e(MainActivity.TAG, TAG + ": Cannot read article", e);
                     }
                 }
                 return articles;
             } catch (Exception e) {
-                Log.e(TAG, "Unable to load articles", e);
+                Log.e(MainActivity.TAG, TAG + ": Unable to load articles", e);
                 return null;
             }
         }

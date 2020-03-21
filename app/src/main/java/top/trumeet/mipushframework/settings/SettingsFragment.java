@@ -89,9 +89,9 @@ public class SettingsFragment extends PreferenceFragment {
                         new File(globalFake).delete();
                     }
 
-//                    Log.i(TAG, "Final Commands: " + commands.toString());
+//                    Log.i(MainActivity.TAG, TAG + ": Final Commands: " + commands.toString());
 //                    // About permissions and groups: these commands below with root WILL make the file accessible (not editable) for all apps.
-//                    Log.d(TAG, "Exit: " + ShellUtils.execCmd(commands, true, true).toString());
+//                    Log.d(MainActivity.TAG, TAG + ": Exit: " + ShellUtils.execCmd(commands, true, true).toString());
                     return true;
                 },
                 getString(R.string.fake_global_enable_title),
@@ -159,7 +159,7 @@ public class SettingsFragment extends PreferenceFragment {
     public void onStart() {
         super.onStart();
         long time = System.currentTimeMillis();
-        Log.d(TAG, "rebuild UI took: " + String.valueOf(System.currentTimeMillis() -
+        Log.d(MainActivity.TAG, TAG + ": rebuild UI took: " + String.valueOf(System.currentTimeMillis() -
                 time));
     }
 

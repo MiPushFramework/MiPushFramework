@@ -39,6 +39,7 @@ import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.register.RegisteredApplication;
 import top.trumeet.mipush.BuildConfig;
 import top.trumeet.mipush.R;
+import top.trumeet.mipushframework.MainActivity;
 import top.trumeet.mipushframework.utils.MiPushManifestChecker;
 import top.trumeet.mipushframework.widgets.Footer;
 import top.trumeet.mipushframework.widgets.FooterItemBinder;
@@ -94,7 +95,7 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
     }
 
     private void loadPage() {
-        Log.d(TAG, "loadPage");
+        Log.d(MainActivity.TAG, TAG + ": loadPage");
         if (mLoadTask != null && !mLoadTask.isCancelled()) {
             return;
         }
@@ -151,7 +152,7 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
             try {
                 checker = MiPushManifestChecker.create(context);
             } catch (PackageManager.NameNotFoundException | ClassNotFoundException | NoSuchMethodException e) {
-                Log.e(RegisteredApplicationFragment.class.getSimpleName(), "Create mi push checker", e);
+                Log.e(MainActivity.TAG, TAG + ": Create mi push checker", e);
             }
 
             List<RegisteredApplication> res = new Vector<>();
@@ -196,7 +197,7 @@ public class RegisteredApplicationFragment extends Fragment implements SwipeRefr
                             application.setRegisteredType(0);
                             res.add(application);
                         } else {
-                            Log.d(TAG, "not use mipush : " + currentAppPkgName);
+                            Log.d(MainActivity.TAG, TAG + ": not use mipush : " + currentAppPkgName);
                         }
                     }
                 });

@@ -52,6 +52,8 @@ import static com.xiaomi.xmsf.push.notification.NotificationController.CHANNEL_W
 import static top.trumeet.common.Constants.TAG_CONDOM;
 
 public class XmsfApp extends Application {
+    final static public String TAG = Constants.TAG_PUSH;
+
     private com.elvishew.xlog.Logger logger;
 
     private static final String MIPUSH_EXTRA = "mipush_extra";

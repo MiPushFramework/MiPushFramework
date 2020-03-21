@@ -47,6 +47,7 @@ import java.lang.annotation.RetentionPolicy;
 import top.trumeet.common.register.RegisteredApplication;
 import top.trumeet.common.utils.Utils;
 import top.trumeet.mipush.R;
+import top.trumeet.mipushframework.MainActivity;
 
 public class EntityHeaderController {
 
@@ -218,12 +219,12 @@ public class EntityHeaderController {
 
     public EntityHeaderController styleActionBar(AppCompatActivity activity) {
         if (activity == null) {
-            Log.w(TAG, "No activity, cannot style actionbar.");
+            Log.w(MainActivity.TAG, TAG + ": No activity, cannot style actionbar.");
             return this;
         }
         final ActionBar actionBar = activity.getSupportActionBar();
         if (actionBar == null) {
-            Log.w(TAG, "No actionbar, cannot style actionbar.");
+            Log.w(MainActivity.TAG, TAG + ": No actionbar, cannot style actionbar.");
             return this;
         }
         actionBar.setBackgroundDrawable(

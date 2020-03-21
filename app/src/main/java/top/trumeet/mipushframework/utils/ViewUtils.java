@@ -26,6 +26,8 @@ import android.view.View;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import top.trumeet.mipushframework.MainActivity;
+
 import static android.support.annotation.RestrictTo.Scope.GROUP_ID;
 
 /**
@@ -38,16 +40,14 @@ public class ViewUtils {
     private static Method sComputeFitSystemWindowsMethod;
 
     static {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            try {
-                sComputeFitSystemWindowsMethod = View.class.getDeclaredMethod(
-                        "computeFitSystemWindows", Rect.class, Rect.class);
-                if (!sComputeFitSystemWindowsMethod.isAccessible()) {
-                    sComputeFitSystemWindowsMethod.setAccessible(true);
-                }
-            } catch (NoSuchMethodException e) {
-                Log.d(TAG, "Could not find method computeFitSystemWindows. Oh well.");
+        try {
+            sComputeFitSystemWindowsMethod = View.class.getDeclaredMethod(
+                    "computeFitSystemWindows", Rect.class, Rect.class);
+            if (!sComputeFitSystemWindowsMethod.isAccessible()) {
+                sComputeFitSystemWindowsMethod.setAccessible(true);
             }
+        } catch (NoSuchMethodException e) {
+            Log.d(MainActivity.TAG, TAG + ": Could not find method computeFitSystemWindows. Oh well.");
         }
     }
 
@@ -98,11 +98,9 @@ public class ViewUtils {
                 }
                 method.invoke(view);
             } catch (NoSuchMethodException e) {
-                Log.d(TAG, "Could not find method makeOptionalFitsSystemWindows. Oh well...");
-            } catch (InvocationTargetException e) {
-                Log.d(TAG, "Could not invoke makeOptionalFitsSystemWindows", e);
-            } catch (IllegalAccessException e) {
-                Log.d(TAG, "Could not invoke makeOptionalFitsSystemWindows", e);
+                Log.d(MainActivity.TAG, TAG + ": Could not find method makeOptionalFitsSystemWindows. Oh well...");
+            } catch (InvocationTargetException | IllegalAccessException e) {
+                Log.d(MainActivity.TAG, TAG + ": Could not invoke makeOptionalFitsSystemWindows", e);
             }
         }
     }

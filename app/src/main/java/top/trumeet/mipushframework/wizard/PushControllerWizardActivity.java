@@ -28,6 +28,7 @@ import top.trumeet.common.push.PushController;
 import top.trumeet.common.utils.Utils;
 import top.trumeet.common.utils.rom.RomUtils;
 import top.trumeet.mipush.R;
+import top.trumeet.mipushframework.MainActivity;
 import top.trumeet.mipushframework.control.CheckPermissionsUtils;
 import top.trumeet.mipushframework.control.ConnectFailUtils;
 import top.trumeet.mipushframework.control.OnConnectStatusChangedListener;
@@ -94,18 +95,18 @@ public abstract class PushControllerWizardActivity extends FragmentActivity {
         composite.add(CheckPermissionsUtils.checkAndRun(result -> {
             switch (result) {
                 case OK:
-                    Log.d(TAG, "Check: OK");
+                    Log.d(MainActivity.TAG, TAG + ": Check: OK");
                     action.run();
                     break;
                 case PERMISSION_NEEDED:
                     Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission), Toast.LENGTH_LONG)
                             .show();
-                    Log.d(TAG, "Check: PERMISSION_NEEDED");
+                    Log.d(MainActivity.TAG, TAG + ": Check: PERMISSION_NEEDED");
                     // Restart to request permissions again.
                     checkPermissionAndRun(action);
                     break;
                 case PERMISSION_NEEDED_SHOW_SETTINGS:
-                    Log.d(TAG, "Check: PERMISSION_NEEDED_SHOW_SETTINGS");
+                    Log.d(MainActivity.TAG, TAG + ": Check: PERMISSION_NEEDED_SHOW_SETTINGS");
                     Toast.makeText(this, getString(top.trumeet.common.R.string.request_permission), Toast.LENGTH_LONG)
                             .show();
                     Uri uri = Uri.fromParts("package", getPackageName(), null);
@@ -114,12 +115,12 @@ public abstract class PushControllerWizardActivity extends FragmentActivity {
                             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     break;
                 case REMOVE_DOZE_NEEDED:
-                    Log.d(TAG, "Check: REMOVE_DOZE_NEEDED");
+                    Log.d(MainActivity.TAG, TAG + ": Check: REMOVE_DOZE_NEEDED");
                     showConnectFail(getString(R.string.connect_fail_doze), getString(R.string.request_battery_whitelist));
                     break;
             }
         }, throwable -> {
-            Log.e(TAG, "check permissions", throwable);
+            Log.e(MainActivity.TAG, TAG + ": check permissions", throwable);
         }, this));
     }
 
@@ -292,6 +293,6 @@ public abstract class PushControllerWizardActivity extends FragmentActivity {
     }
 
     private void log (String message) {
-        Log.d(TAG + "/" + getClass().getSimpleName(), message);
+        Log.d(MainActivity.TAG, TAG + ": /" + getClass().getSimpleName() + "/" + message);
     }
 }

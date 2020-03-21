@@ -45,6 +45,7 @@ import top.trumeet.common.override.UserHandleOverride;
 import top.trumeet.common.register.RegisteredApplication;
 import top.trumeet.common.utils.Utils;
 import top.trumeet.mipush.R;
+import top.trumeet.mipushframework.MainActivity;
 import top.trumeet.mipushframework.control.CheckPermissionsUtils;
 import top.trumeet.mipushframework.event.RecentActivityActivity;
 import top.trumeet.mipushframework.utils.ShellUtils;
@@ -118,7 +119,7 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                     break;
             }
         }, throwable -> {
-            Log.e(TAG, "check permissions", throwable);
+            Log.e(MainActivity.TAG, TAG + ": check permissions", throwable);
         }, this));
     }
 
@@ -473,7 +474,7 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                     String path = String.format(Constants.FAKE_CONFIGURATION_NAME_TEMPLATE,
                             UserHandleOverride.getUserHandleForUid(mApplicationItem.getUid(getActivity())).hashCode(),
                             mApplicationItem.getPackageName());
-                    Log.d(TAG, "path: " + path);
+                    Log.d(MainActivity.TAG, TAG + ": path: " + path);
 //                    List<String> commands = new ArrayList<>(3);
                     if (changeFakeSettings) {
 
@@ -499,9 +500,9 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                     } else {
                         new File(path).delete();
                     }
-//                    Log.i(TAG, "Final Commands: " + commands.toString());
+//                    Log.i(MainActivity.TAG, TAG + ": Final Commands: " + commands.toString());
 //                    // About permissions and groups: these commands below with root WILL make the file accessible (not editable) for all apps.
-//                    Log.d(TAG, "Exit: " + ShellUtils.execCmd(commands, true, true).toString());
+//                    Log.d(MainActivity.TAG, TAG + ": Exit: " + ShellUtils.execCmd(commands, true, true).toString());
                 }
                 return null;
             }

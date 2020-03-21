@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import top.trumeet.common.Constants;
+import top.trumeet.mipushframework.MainActivity;
 
 @SuppressWarnings("unchecked")
 public class MiPushManifestChecker {
@@ -43,9 +44,9 @@ public class MiPushManifestChecker {
             return true;
         } catch (Throwable e) {
             if (!isIllegalManifestException(e)) {
-                Log.e(TAG, "checkPermissions", e);
+                Log.e(MainActivity.TAG, TAG + ": checkPermissions", e);
             } else {
-                Log.e(TAG, "checkPermissions: " + packageInfo.packageName + "," + ((InvocationTargetException) e).getCause().getMessage());
+                Log.e(MainActivity.TAG, TAG + ": checkPermissions: " + packageInfo.packageName + "," + ((InvocationTargetException) e).getCause().getMessage());
             }
             return false;
         }
@@ -61,7 +62,7 @@ public class MiPushManifestChecker {
             result = true;
         } catch (Throwable e) {
             if (!isIllegalManifestException(e)) {
-                Log.e(TAG, "checkReceivers", e);
+                Log.e(MainActivity.TAG, TAG + ": checkReceivers", e);
             }
             result = false;
         }
@@ -74,9 +75,9 @@ public class MiPushManifestChecker {
             return true;
         } catch (Throwable e) {
             if (!isIllegalManifestException(e)) {
-                Log.e(TAG, "checkServices", e);
+                Log.e(MainActivity.TAG, TAG + ": checkServices", e);
             } else {
-                Log.w(TAG, "checkServices: " + packageInfo.packageName + "," + ((InvocationTargetException) e).getCause().getMessage());
+                Log.w(MainActivity.TAG, TAG + ": checkServices: " + packageInfo.packageName + "," + ((InvocationTargetException) e).getCause().getMessage());
             }
             return false;
         }

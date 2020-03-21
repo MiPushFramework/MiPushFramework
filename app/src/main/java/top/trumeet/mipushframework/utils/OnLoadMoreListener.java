@@ -4,6 +4,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import top.trumeet.mipushframework.MainActivity;
+
 public abstract class OnLoadMoreListener extends RecyclerView.OnScrollListener {
 
     private LinearLayoutManager layoutManager;
@@ -19,7 +21,7 @@ public abstract class OnLoadMoreListener extends RecyclerView.OnScrollListener {
             itemCount = layoutManager.getItemCount();
             lastPosition = layoutManager.findLastCompletelyVisibleItemPosition();
         } else {
-            Log.e("OnLoadMoreListener", "The OnLoadMoreListener only support LinearLayoutManager");
+            Log.e(MainActivity.TAG,"OnLoadMoreListener: The OnLoadMoreListener only support LinearLayoutManager");
             return;
         }
 

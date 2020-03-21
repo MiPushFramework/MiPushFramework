@@ -21,6 +21,7 @@ import top.trumeet.common.Constants;
 import top.trumeet.common.push.PushController;
 import top.trumeet.common.utils.rom.RomUtils;
 import top.trumeet.mipush.BuildConfig;
+import top.trumeet.mipushframework.MainActivity;
 
 import static top.trumeet.mipush.BuildConfig.DEBUG;
 
@@ -31,10 +32,10 @@ public class IdJob extends Worker {
     private static final String TAG = "IdJob";
     private void collect () {
         if (DEBUG || BuildConfig.FABRIC_KEY.equals("null")) {
-            Log.e(TAG, "Fabric is disabled, skipping");
+            Log.e(MainActivity.TAG, TAG + ": Fabric is disabled, skipping");
             return;
         }
-        Log.d(TAG, "collect...");
+        Log.d(MainActivity.TAG, TAG + ": collect...");
         long ms = System.currentTimeMillis();
         put("PUSH_API_PROTOCOL_LEGACY",
                 PushController.isLegacySupported(getApplicationContext()));
@@ -91,7 +92,7 @@ public class IdJob extends Worker {
         .getVersionCode());
         put("ROM", RomUtils.getOs());
         ms = System.currentTimeMillis() - ms;
-        Log.d(TAG, "collect() took " + ms);
+        Log.d(MainActivity.TAG, TAG + ": collect() took " + ms);
     }
 
     @NonNull
@@ -132,17 +133,17 @@ public class IdJob extends Worker {
     }
 
     private void put (String key, boolean value) {
-        Log.d(TAG, key + "=" + value);
+        Log.d(MainActivity.TAG, TAG + ": " + key + "=" + value);
         Crashlytics.getInstance().core.setBool(key, value);
     }
 
     private void put (String key, String value) {
-        Log.d(TAG, key + "=" + value);
+        Log.d(MainActivity.TAG, TAG + ": " + key + "=" + value);
         Crashlytics.getInstance().core.setString(key, value);
     }
 
     private void put (String key, int value) {
-        Log.d(TAG, key + "=" + value);
+        Log.d(MainActivity.TAG, TAG + ": " + key + "=" + value);
         Crashlytics.getInstance().core.setInt(key, value);
     }
 }

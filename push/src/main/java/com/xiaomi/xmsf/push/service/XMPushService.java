@@ -13,6 +13,7 @@ import com.elvishew.xlog.Logger;
 import com.elvishew.xlog.XLog;
 import com.xiaomi.push.service.PushServiceMain;
 import com.xiaomi.xmsf.R;
+import com.xiaomi.xmsf.XmsfApp;
 import com.xiaomi.xmsf.push.auth.AuthActivity;
 import com.xiaomi.xmsf.push.control.PushControllerUtils;
 import com.xiaomi.xmsf.push.notification.NotificationController;
@@ -60,7 +61,7 @@ public class XMPushService extends IntentService {
                 result = Event.ResultType.DENY_DISABLED;
             } else {
                 if (application == null) {
-                    if (!DEBUG) Crashlytics.log(Log.WARN, TAG, "registerApplication failed " + pkg);
+                    if (!DEBUG) Crashlytics.log(Log.WARN, XmsfApp.TAG, TAG + ": registerApplication failed " + pkg);
                     logger.w("registerApplication failed " + pkg);
                     return;
                 }
@@ -134,7 +135,7 @@ public class XMPushService extends IntentService {
                         });
                     }
                 } else {
-                    Log.e("XMPushService Bridge", "Notification disabled");
+                    Log.e(XmsfApp.TAG, "XMPushService Bridge: Notification disabled");
                 }
                 EventDb.insertEvent(result, new top.trumeet.common.event.type.RegistrationType(null, pkg), this);
             }

@@ -33,7 +33,7 @@ public class MiPushFramework extends Application {
             WorkManager.getInstance().beginUniqueWork("Collect",
                     ExistingWorkPolicy.KEEP, request).enqueue();
         } else {
-            Log.w(MiPushFramework.class.getSimpleName(), "Fabric is disabled");
+            Log.w(MainActivity.TAG, "Fabric is disabled");
         }
 
         init();

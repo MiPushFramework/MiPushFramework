@@ -20,6 +20,7 @@ import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
 import top.trumeet.common.db.EventDb;
 import top.trumeet.common.event.Event;
+import top.trumeet.mipushframework.MainActivity;
 import top.trumeet.mipushframework.utils.OnLoadMoreListener;
 
 /**
@@ -92,7 +93,7 @@ public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     private void loadPage () {
-        Log.d(TAG, "loadPage");
+        Log.d(MainActivity.TAG, TAG + ": loadPage");
         if (mLoadTask != null && !mLoadTask.isCancelled()) {
             if (mLoadTask.getStatus() != AsyncTask.Status.FINISHED) {
                 return;
@@ -113,7 +114,7 @@ public class EventFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     @Override
     public void onRefresh() {
-        Log.d(TAG, "refreshPage");
+        Log.d(MainActivity.TAG, TAG + ": refreshPage");
         if (mLoadTask != null && !mLoadTask.isCancelled()) {
             if (mLoadTask.getStatus() != AsyncTask.Status.FINISHED) {
                 return;
