@@ -1,14 +1,13 @@
 package com.xiaomi.xposed.hook;
 
-import android.support.annotation.NonNull;
+import android.os.Environment;
 import android.util.Log;
 
+import com.xiaomi.xmsf.XmsfApp;
+
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -32,7 +31,7 @@ import static top.trumeet.common.Constants.FAKE_CONFIGURATION_NAME_TEMPLATE;
 public class MiPushEnhanceHook implements IXposedHookLoadPackage {
 
     private static final String TAG = "MiPushEnhanceHook";
-    private static final String STORAGE_PATH = "/sdcard/";
+    private static final String STORAGE_PATH = Environment.getExternalStorageDirectory().getPath();
 
     private Set<String> blackList = new CopyOnWriteArraySet<>();
 
@@ -139,7 +138,6 @@ public class MiPushEnhanceHook implements IXposedHookLoadPackage {
             XposedHelpers.setStaticObjectField(android.os.Build.class, "PRODUCT", BRAND);
 
         } catch (Throwable throwable) {
-            Log.e(TAG, "hook meet exception : " + throwable.getLocalizedMessage(), throwable);
             XposedBridge.log(TAG + ": hook: " + throwable);
         }
     }
