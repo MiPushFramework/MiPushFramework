@@ -1,5 +1,6 @@
 package top.trumeet.mipushframework.permissions;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -462,8 +463,11 @@ public class ManagePermissionsActivity extends AppCompatActivity {
             addItem(value, listener, title, null, parent);
         }
 
+        @SuppressLint("StaticFieldLeak")
         private class SaveTask extends AsyncTask<Void, Void, Void> {
 
+            @SuppressLint("WorldReadableFiles")
+            @SuppressWarnings("ResultOfMethodCallIgnored")
             @Override
             protected Void doInBackground(Void... voids) {
                 if (mApplicationItem != null && mApplicationItem.getRegisteredType() != 0) {
@@ -475,7 +479,6 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                             UserHandleOverride.getUserHandleForUid(mApplicationItem.getUid(getActivity())).hashCode(),
                             mApplicationItem.getPackageName());
                     Log.d(MainActivity.TAG, TAG + ": path: " + path);
-//                    List<String> commands = new ArrayList<>(3);
                     if (changeFakeSettings) {
 
                         if (new File(FAKE_CONFIGURATION_PATH).isFile()) {
@@ -485,9 +488,7 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                         if (!new File(FAKE_CONFIGURATION_PATH).exists()) {
                             new File(FAKE_CONFIGURATION_PATH).mkdir();
                         }
-                    }
 
-                    if (changeFakeSettings) {
                         File file = new File(path);
                         if (!file.exists()) {
                             try {
@@ -500,9 +501,6 @@ public class ManagePermissionsActivity extends AppCompatActivity {
                     } else {
                         new File(path).delete();
                     }
-//                    Log.i(MainActivity.TAG, TAG + ": Final Commands: " + commands.toString());
-//                    // About permissions and groups: these commands below with root WILL make the file accessible (not editable) for all apps.
-//                    Log.d(MainActivity.TAG, TAG + ": Exit: " + ShellUtils.execCmd(commands, true, true).toString());
                 }
                 return null;
             }

@@ -40,6 +40,8 @@ public class SettingsFragment extends PreferenceFragment {
 
     private CheckROMTask mTask;
 
+    @SuppressLint("WorldReadableFiles")
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.settings);
@@ -64,8 +66,6 @@ public class SettingsFragment extends PreferenceFragment {
         addItem(new File(globalFake).exists(), (preference, newValue) -> {
                     boolean enabled = (boolean) newValue;
 
-                    //List<String> commands = new ArrayList<>(3);
-
                     if (new File(FAKE_CONFIGURATION_PATH).isFile()) {
                         new File(FAKE_CONFIGURATION_PATH).delete();
                     }
@@ -89,9 +89,6 @@ public class SettingsFragment extends PreferenceFragment {
                         new File(globalFake).delete();
                     }
 
-//                    Log.i(MainActivity.TAG, TAG + ": Final Commands: " + commands.toString());
-//                    // About permissions and groups: these commands below with root WILL make the file accessible (not editable) for all apps.
-//                    Log.d(MainActivity.TAG, TAG + ": Exit: " + ShellUtils.execCmd(commands, true, true).toString());
                     return true;
                 },
                 getString(R.string.fake_global_enable_title),
