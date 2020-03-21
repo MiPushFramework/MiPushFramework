@@ -120,7 +120,7 @@ public final class Constants {
     }
 
     @SuppressLint("SdCardPath")
-    public static final String FAKE_CONFIGURATION_PATH = Build.VERSION.SDK_INT >= 24 ? "/data/user_de/0/top.trumeet.mipush/" : "/data/data/top.trumeet.mipush/packages/";
+    public static final String FAKE_CONFIGURATION_PATH = Build.VERSION.SDK_INT >= 24 ? "/data/user_de/0/top.trumeet.mipush/packages/" : "/data/data/top.trumeet.mipush/packages/";
     public static final String FAKE_CONFIGURATION_NAME_TEMPLATE = FAKE_CONFIGURATION_PATH + "%1$s.%2$s";
     public static final String FAKE_CONFIGURATION_GLOBAL = Constants.FAKE_CONFIGURATION_PATH + "ALL";
 }
