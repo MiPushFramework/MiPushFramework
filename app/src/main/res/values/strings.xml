@@ -187,5 +187,7 @@ This could be the application doing a reverse registration, or the registration 
     <string name="help_article_can_not_receive_push">Can not receive push message</string>
     <string name="help_article_register_error">register error</string>
     <string name="help_article_no_register">no register app</string>
+    <string name="missing_base_directory">Missing base directory.\\nManufacturer fake will not work.</string>
+    <string name="wrong_base_directory">Wrong base directory, is the application installed in internal storage?\\nManufacturer fake will not work.</string>
 
 </resources>

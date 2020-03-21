@@ -179,6 +179,8 @@
     <string name="help_article_can_not_receive_push">无法收到推送</string>
     <string name="help_article_register_error">注册异常</string>
     <string name="help_article_no_register">注册列表为空</string>
+    <string name="missing_base_directory">未知的配置文件夹\\n制造商伪装功能将无法正常使用</string>
+    <string name="wrong_base_directory">错误的配置文件夹，应用是否安装在内部存储中？\\n制造商伪装功能将无法正常使用</string>
 
 
 </resources>

@@ -27,6 +27,7 @@ import top.trumeet.mipushframework.control.CheckPermissionsUtils;
 import top.trumeet.mipushframework.control.ConnectFailUtils;
 import top.trumeet.mipushframework.control.OnConnectStatusChangedListener;
 
+import static top.trumeet.common.Constants.TAG_PUSH;
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_LOW_VERSION;
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_MIUI;
 import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_NOT_INSTALLED;
@@ -39,7 +40,7 @@ import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener
  * @author Trumeet
  */
 public abstract class MainActivity extends AppCompatActivity {
-    private static final String TAG = MainActivity.class.getSimpleName();
+    public static final String TAG = TAG_PUSH;
 
     private PushController mController;
     private View mConnectProgress;
@@ -61,7 +62,7 @@ public abstract class MainActivity extends AppCompatActivity {
 
     @UiThread
     private void checkAndConnect() {
-        Log.d("MainActivity", "checkAndConnect");
+        Log.d(MainActivity.TAG, "MainActivity: checkAndConnect");
         if (!Utils.isServiceInstalled()) {
             showConnectFail(FAIL_REASON_NOT_INSTALLED);
             return;
@@ -90,9 +91,17 @@ public abstract class MainActivity extends AppCompatActivity {
                             .show();
                     checkAndConnect();
                     break;
+                case BASE_PATH_WRONG:
+                    Toast.makeText(this, getString(R.string.wrong_base_directory), Toast.LENGTH_LONG)
+                            .show();
+                    break;
+                case BASE_PATH_MISSING:
+                    Toast.makeText(this, getString(R.string.missing_base_directory), Toast.LENGTH_LONG)
+                            .show();
+                    break;
             }
         }, throwable -> {
-            Log.e(TAG, "check permissions", throwable);
+            Log.e(MainActivity.TAG, "check permissions", throwable);
         }, this));
     }
 
