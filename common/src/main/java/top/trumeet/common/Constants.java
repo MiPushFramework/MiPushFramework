@@ -1,6 +1,8 @@
 package top.trumeet.common;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 
 /**
  * Created by Trumeet on 2017/8/24.
@@ -15,8 +17,9 @@ public final class Constants {
     /**
      * Default app log tag
      */
-    public static final String TAG = "Xiaomi";
-
+    public static final String TAG = "MiPushFramework";
+    public static final String TAG_PUSH = Constants.TAG + "-Push";
+    public static final String TAG_MANAGER = Constants.TAG + "-Manager";
     public static final String TAG_CONDOM = Constants.TAG + "-Condom";
 
     public static final String WIZARD_SP_NAME = "wizard";
@@ -116,7 +119,8 @@ public final class Constants {
         public static final String GET_VERSION = "top.trumeet.mipush.permissions.GET_VERSION";
     }
 
-    public static final String FAKE_CONFIGURATION_PATH = "/data/user_de/0/top.trumeet.mipush/packages/";
+    @SuppressLint("SdCardPath")
+    public static final String FAKE_CONFIGURATION_PATH = Build.VERSION.SDK_INT >= 24 ? "/data/user_de/0/top.trumeet.mipush/" : "/data/data/top.trumeet.mipush/packages/";
     public static final String FAKE_CONFIGURATION_NAME_TEMPLATE = FAKE_CONFIGURATION_PATH + "%1$s.%2$s";
     public static final String FAKE_CONFIGURATION_GLOBAL = Constants.FAKE_CONFIGURATION_PATH + "ALL";
 }
