@@ -26,13 +26,12 @@ android {
         applicationId "com.xiaomi.xmsf"
         minSdkVersion rootProject.ext.minSdkVersion
         // Keep alive
+        //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 23
         // XMPush sdk requires XMPushService not exported, but sdk will start exported XMPushService after
         // XMSF version code 106. SDK will also check version code must >= 105.
         versionCode 105
         versionName rootProject.ext.versionName + "_framework"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         manifestPlaceholders = [fabricKey: fabricKey == null ?
         "" : fabricKey]
@@ -106,9 +105,6 @@ dependencies {
     })
     // Hook
     implementation 'me.weishu:epic:0.6.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation project(':common')
     implementation project(':condom')
     implementation "com.android.support:support-v4:$supportLibraryVersion"
@@ -120,7 +116,7 @@ dependencies {
     implementation 'com.catchingnow.icebox:SDK:1.0.5'
 
     // Fabric
-    implementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
         transitive = true
     }
 }
