@@ -10,9 +10,6 @@ android {
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
         buildConfigField "boolean", "DEBUG_CONDOM", "true"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
 
     lintOptions {
@@ -31,12 +28,8 @@ android {
 }
 
 dependencies {
-    compile 'com.google.code.findbugs:jsr305:3.0.1'
-    compile "com.android.support:support-annotations:$supportLibraryVersion"
-
-    androidTestCompile 'com.android.support.test:runner:0.5'
-
-    testCompile 'junit:junit:4.12'
+    api 'com.google.code.findbugs:jsr305:3.0.2'
+    api "com.android.support:support-annotations:$supportLibraryVersion"
 }
 
 android.libraryVariants.all { variant ->
