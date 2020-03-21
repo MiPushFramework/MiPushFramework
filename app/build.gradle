@@ -22,7 +22,6 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resConfigs "zh", "en"
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'x86'
@@ -92,7 +91,7 @@ android.applicationVariants.all { variant ->
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation('com.github.AndroidSnippet:SetupWizardLibCompat:0.3', {
+    implementation('com.github.Trumeet:SetupWizardLibCompat:0.3', {
         exclude group: 'com.android.support'
     })
     // Recycler
@@ -110,7 +109,7 @@ dependencies {
     // Common
     implementation project(':common')
     // Fabric
-    implementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
         transitive = true
     }
     // Help
