@@ -6,13 +6,11 @@ import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -21,11 +19,9 @@ import io.reactivex.internal.functions.Functions;
 import rx_activity_result2.RxActivityResult;
 import top.trumeet.common.Constants;
 import top.trumeet.common.push.PushServiceAccessibility;
-import top.trumeet.mipushframework.MainActivity;
-import top.trumeet.mipushframework.MiPushFramework;
 import top.trumeet.mipushframework.models.ActivityResultAndPermissionResult;
 
-import static top.trumeet.common.Constants.FAKE_CONFIGURATION_PATH;
+import static top.trumeet.common.Constants.BASE_PATH;
 
 public class CheckPermissionsUtils {
     public static Disposable checkPermissionsAndStartAsync (@NonNull FragmentActivity context) {
@@ -84,7 +80,7 @@ public class CheckPermissionsUtils {
         return CheckPermissionsUtils.checkPermissionsAndStartAsync(context,
                 (result) -> {
                     final ApplicationInfo appInfo = context.getApplicationInfo();
-                    final File baseDir = new File(FAKE_CONFIGURATION_PATH);
+                    final File baseDir = new File(BASE_PATH);
                     final File baseDirCanonical = getCanonicalFile(baseDir);
                     final File baseDirActual = new File(Build.VERSION.SDK_INT >= 24 ? appInfo.deviceProtectedDataDir : appInfo.dataDir);
                     final File baseDirActualCanonical = getCanonicalFile(baseDirActual);
