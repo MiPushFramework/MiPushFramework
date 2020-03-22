@@ -1,6 +1,7 @@
 package top.trumeet.mipushframework;
 
 import android.animation.Animator;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -100,9 +101,7 @@ public abstract class MainActivity extends AppCompatActivity {
                             .show();
                     break;
             }
-        }, throwable -> {
-            Log.e(MainActivity.TAG, "check permissions", throwable);
-        }, this));
+        }, throwable -> Log.e(MainActivity.TAG, "check permissions", throwable), this));
     }
 
     private void connect() {
@@ -152,7 +151,9 @@ public abstract class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class ConnectTask extends AsyncTask<Void, Void, Pair<Boolean /* success */, Integer /* reason */>> {
+        @SuppressLint("InflateParams")
         @Override
         protected void onPreExecute() {
             mConnectProgress = LayoutInflater.from(MainActivity.this)

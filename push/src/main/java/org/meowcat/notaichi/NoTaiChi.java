@@ -2,6 +2,8 @@ package org.meowcat.notaichi;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.system.ErrnoException;
 import android.system.Os;
 import android.system.OsConstants;
@@ -16,8 +18,10 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class NoTaiChi {
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public static void checkTC(final XC_MethodHook.MethodHookParam param) {
         final String message = new String(Base64.decode("RG8gTk9UIHVzZSBUYWlDaGkgYW55d2F5XG7or7fkuI3opoHkvb/nlKjlpKrmnoHmiJbml6DmnoE=".getBytes(StandardCharsets.UTF_8), Base64.DEFAULT));
         new Thread(() -> {
