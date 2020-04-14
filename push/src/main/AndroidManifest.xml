@@ -166,7 +166,7 @@
         <service
             android:name=".push.service.MiuiPushActivateService"
             android:exported="true" />
-        <service android:name="com.xiaomi.push.sdk.MyPushMessageHandler" />
+        <service android:name="com.xiaomi.push.sdk.MyPushMessageHandler" android:process=":pushservice" />
 
         <activity
             android:name=".push.auth.AuthActivity"

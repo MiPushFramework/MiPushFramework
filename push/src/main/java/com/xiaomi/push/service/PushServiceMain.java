@@ -126,7 +126,7 @@ public class PushServiceMain extends XMPushService {
         if (!DEBUG && !BuildConfig.FABRIC_KEY.equals("null"))
             scheduleNextUpload();
         startForeground();
-
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) BackgroundActivityStartEnabler.initialize(this);
     }
 
     @Override
