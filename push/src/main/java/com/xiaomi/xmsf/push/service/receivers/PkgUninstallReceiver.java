@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
+
 import com.xiaomi.channel.commonutils.logger.MyLog;
 import com.xiaomi.push.service.GeoFenceUtils;
 import com.xiaomi.push.service.PushServiceConstants;
@@ -22,7 +24,7 @@ public class PkgUninstallReceiver extends BroadcastReceiver {
                     Intent var5 = new Intent(var1, PushServiceMain.class);
                     var5.setAction(PushServiceConstants.ACTION_UNINSTALL);
                     var5.putExtra(PushServiceConstants.EXTRA_UNINSTALL_PKG_NAME, var4.getEncodedSchemeSpecificPart());
-                    var1.startService(var5);
+                    ContextCompat.startForegroundService(var1, var5);
                     GeoFenceUtils.appIsUninstalled(var1.getApplicationContext(), var4.getEncodedSchemeSpecificPart());
                 } catch (Exception var7) {
                     MyLog.e(var7);

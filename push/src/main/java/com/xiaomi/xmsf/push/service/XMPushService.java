@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -91,7 +92,7 @@ public class XMPushService extends IntentService {
                         intent2.setComponent(new ComponentName(this, PushServiceMain.class));
                         intent2.setAction(intent.getAction());
                         intent2.putExtras(intent);
-                        startService(intent2);
+	                    ContextCompat.startForegroundService(this, intent2);
                         if (application.getType() == RegisteredApplication.Type.ALLOW_ONCE) {
                             logger.w("Return once to ask");
                             application.setType(RegisteredApplication.Type.ASK);

@@ -3,6 +3,7 @@ package com.xiaomi.xmsf.push.hooks.impl;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 
 import com.elvishew.xlog.Logger;
 import com.elvishew.xlog.XLog;
@@ -43,7 +44,7 @@ public class HookPkgUninstallReceiver implements IHook {
                                         Intent serviceIntent = new Intent(context, PushServiceMain.class);
                                         serviceIntent.setAction(PushServiceConstants.ACTION_UNINSTALL);
                                         serviceIntent.putExtra(PushServiceConstants.EXTRA_UNINSTALL_PKG_NAME, data.getEncodedSchemeSpecificPart());
-                                        context.startService(serviceIntent);
+                                        ContextCompat.startForegroundService(context, serviceIntent);
                                         GeoFenceUtils.appIsUninstalled(context.getApplicationContext(), data.getEncodedSchemeSpecificPart());
                                     } catch (Throwable e) {
                                         logger.e("Hook", e);

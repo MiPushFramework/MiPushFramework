@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Process;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 
 import com.elvishew.xlog.Logger;
 import com.elvishew.xlog.XLog;
@@ -108,7 +109,7 @@ public class PushControllerUtils {
                 Intent serviceIntent = new Intent(context, PushServiceMain.class);
                 serviceIntent.putExtra(PushServiceConstants.EXTRA_TIME_STAMP, System.currentTimeMillis());
                 serviceIntent.setAction(PushServiceConstants.ACTION_TIMER);
-                context.startService(serviceIntent);
+                ContextCompat.startForegroundService(context, serviceIntent);
             } catch (Throwable e) {
                 logger.e(e);
             }
