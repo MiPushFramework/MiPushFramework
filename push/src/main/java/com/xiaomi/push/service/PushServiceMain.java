@@ -82,7 +82,7 @@ public class PushServiceMain extends XMPushService {
     private Logger logger = XLog.tag(TAG).build();
 
     public static final String CHANNEL_STATUS = "status";
-    public static final int NOTIFICATION_ALIVE_ID = 0;
+    public static final int NOTIFICATION_ALIVE_ID = 1;
 
     private Timer mStatTimer;
     private long startTime;
