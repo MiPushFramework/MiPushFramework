@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- PushServiceMain -->
 
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
@@ -165,7 +166,7 @@
         <service
             android:name=".push.service.MiuiPushActivateService"
             android:exported="true" />
-        <service android:name="com.xiaomi.push.sdk.MyPushMessageHandler" />
+        <service android:name="com.xiaomi.push.sdk.MyPushMessageHandler" android:process=":pushservice" />
 
         <activity
             android:name=".push.auth.AuthActivity"

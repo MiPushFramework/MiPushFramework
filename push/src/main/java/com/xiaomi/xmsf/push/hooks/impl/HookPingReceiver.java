@@ -2,6 +2,7 @@ package com.xiaomi.xmsf.push.hooks.impl;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
 import com.elvishew.xlog.Logger;
@@ -46,7 +47,7 @@ public class HookPingReceiver implements IHook {
                                 Intent serviceIntent = new Intent(context, PushServiceMain.class);
                                 serviceIntent.putExtra(PushServiceConstants.EXTRA_TIME_STAMP, System.currentTimeMillis());
                                 serviceIntent.setAction(PushServiceConstants.ACTION_TIMER);
-                                context.startService(serviceIntent);
+                                ContextCompat.startForegroundService(context, serviceIntent);
                             } catch (Throwable e) {
                                 logger.e(e);
                             }

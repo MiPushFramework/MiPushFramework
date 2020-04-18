@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
@@ -30,7 +31,6 @@ import static com.xiaomi.xmsf.BuildConfig.DEBUG;
 import static top.trumeet.common.Constants.TAG_CONDOM;
 
 /**
- *
  * @author Trumeet
  * @date 2018/1/19
  * <p>
@@ -82,7 +82,7 @@ public class PushServiceMain extends XMPushService {
     private Logger logger = XLog.tag(TAG).build();
 
     public static final String CHANNEL_STATUS = "status";
-    public static final int NOTIFICATION_ALIVE_ID = 0;
+    public static final int NOTIFICATION_ALIVE_ID = 1;
 
     private Timer mStatTimer;
     private long startTime;
@@ -125,8 +125,8 @@ public class PushServiceMain extends XMPushService {
         startTime = System.currentTimeMillis();
         if (!DEBUG && !BuildConfig.FABRIC_KEY.equals("null"))
             scheduleNextUpload();
-
-
+        startForeground();
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) BackgroundActivityStartEnabler.initialize(this);
     }
 
     @Override
@@ -136,30 +136,30 @@ public class PushServiceMain extends XMPushService {
                 TAG)));
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    @Override public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-        // 首次启动先刷新设置
-        onConfigChanged();
         return Service.START_STICKY;
     }
 
-    @Override
-    public ClientEventDispatcher createClientEventDispatcher() {
+    @Override public void onConfigurationChanged(final Configuration newConfig) {
+        startForeground();      // Apply locale change to foreground notification
+    }
+
+    @Override public ClientEventDispatcher createClientEventDispatcher() {
         return new MyClientEventDispatcher();
     }
 
     @Override
     public void onDestroy() {
         logger.d("Service stopped");
-        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
-                .cancel(NOTIFICATION_ALIVE_ID);
+        stopForeground(true);
+
         if (mStatTimer != null) mStatTimer.cancel();
         super.onDestroy();
     }
 
 
-    private void onConfigChanged () {
+    private void startForeground() {
         NotificationManager manager = (NotificationManager)
                 getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -178,7 +178,7 @@ public class PushServiceMain extends XMPushService {
                     .setOngoing(true)
                     .setShowWhen(true)
                     .build();
-            manager.notify(NOTIFICATION_ALIVE_ID, notification);
+
             startForeground(NOTIFICATION_ALIVE_ID, notification);
         }
     }

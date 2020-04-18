@@ -3,6 +3,7 @@ package com.xiaomi.xmsf.push.service.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
 import com.xiaomi.channel.commonutils.logger.MyLog;
@@ -27,7 +28,7 @@ public class MiPushPingReceiver extends BroadcastReceiver {
                     Intent localIntent = new Intent(paramContext, PushServiceMain.class);
                     localIntent.putExtra(PushServiceConstants.EXTRA_TIME_STAMP, System.currentTimeMillis());
                     localIntent.setAction(PushServiceConstants.ACTION_TIMER);
-                    paramContext.startService(localIntent);
+                    ContextCompat.startForegroundService(paramContext, localIntent);
                 } catch (Exception localException) {
                     MyLog.e(localException);
                 }

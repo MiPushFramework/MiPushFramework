@@ -34,6 +34,7 @@ import static com.xiaomi.push.service.MIPushNotificationHelper.isBusinessMessage
  */
 
 public class MyMIPushNotificationHelper {
+    public static final String CLASS_NAME_PUSH_MESSAGE_HANDLER = "com.xiaomi.mipush.sdk.PushMessageHandler";
     private static Logger logger = XLog.tag("MyNotificationHelper").build();
 
     private static final int NOTIFICATION_BIG_STYLE_MIN_LEN = 25;
@@ -69,6 +70,10 @@ public class MyMIPushNotificationHelper {
         PendingIntent localPendingIntent = getClickedPendingIntent(var0, buildContainer, metaInfo, var1);
         if (localPendingIntent != null) {
             localBuilder.setContentIntent(localPendingIntent);
+            // Also carry along the target PendingIntent, whose target will get temporarily whitelisted for background-activity-start upon sent.
+            final Intent targetIntent = buildTargetIntentWithoutExtras(buildContainer.getPackageName(), metaInfo);
+            final PendingIntent pi = PendingIntent.getService(var0, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            localBuilder.getExtras().putParcelable("mipush.target", pi);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -121,6 +126,11 @@ public class MyMIPushNotificationHelper {
 
         NotificationController.publish(var0, id, packageName, localBuilder);
 
+    }
+
+    public static Intent buildTargetIntentWithoutExtras(final String pkg, final PushMetaInfo metaInfo) {
+        return new Intent(PushConstants.MIPUSH_ACTION_NEW_MESSAGE).addCategory(String.valueOf(metaInfo.getNotifyId()))
+                .setClassName(pkg, CLASS_NAME_PUSH_MESSAGE_HANDLER);
     }
 
     private static PendingIntent openActivityPendingIntent(Context paramContext, XmPushActionContainer paramXmPushActionContainer, PushMetaInfo paramPushMetaInfo, byte[] paramArrayOfByte) {
