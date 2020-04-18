@@ -1,4 +1,4 @@
-package org.meowcat.notaichi;
+package org.meowcat.xposed.notaichi;
 
 import android.app.Application;
 import android.content.Context;

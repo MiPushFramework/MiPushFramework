@@ -41,33 +41,30 @@ public class MiPushEnhanceHook implements IXposedHookLoadPackage {
 
 
     {
-        String[] blackApps = {"com.xiaomi.xmsf",
-                "top.trumeet.mipush",
-                // Android
-                "com.google.android",
-                "android",
-                "com.android",
-                // Samsung
-                "com.bst",
-                "com.sec",
-                "com.sem",
-                "com.sgmc",
-                "com.dsi.ant",
-                "com.wsomacp",
-                "com.samsung",
-                "com.diotek.sec",
-                "com.enhance.gameservice",
-                // XDA
-                "com.xda",
-                // Wechat
-                "com.tencent.mm",
-                // Quickpay
-                "com.example",
-                // Magisk
-                "com.topjohnwu.magisk",
-                // Xposed
-                "org.meowcat.edxposed.manager",
-                "de.robv.android.xposed.installer"};
+        String[] blackApps = {
+			"com.xiaomi.xmsf", // Myself
+            "top.trumeet.mipush",
+            "com.google.android", // Android
+			"android",
+			"com.android",
+			"com.bst", // Samsung
+			"com.sec",
+			"com.sem",
+			"com.sgmc",
+			"com.dsi.ant",
+			"com.wsomacp",
+			"com.samsung",
+			"com.diotek.sec",
+			"com.enhance.gameservice",
+			"com.xda",// XDA
+			"com.tencent.mm", // Wechat
+			"com.example", // Quickpay
+			"com.topjohnwu.magisk", // Magisk
+			"org.meowcat.edxposed.manager", // Xposed
+			"de.robv.android.xposed.installer",
+			"rikka.appops", // Rikka apps
+			"moe.shizuku.redirectstorage"
+			};
         blackList.addAll(Arrays.asList(blackApps));
     }
 
