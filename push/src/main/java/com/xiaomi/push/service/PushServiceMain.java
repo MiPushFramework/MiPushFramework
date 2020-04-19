@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 
 import com.crashlytics.android.answers.Answers;
@@ -15,6 +16,7 @@ import com.crashlytics.android.answers.CustomEvent;
 import com.elvishew.xlog.Logger;
 import com.elvishew.xlog.XLog;
 import com.oasisfeng.condom.CondomContext;
+import com.xiaomi.push.revival.NotificationRevival;
 import com.xiaomi.smack.packet.Message;
 import com.xiaomi.xmpush.thrift.ActionType;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
@@ -27,6 +29,10 @@ import org.apache.thrift.TBase;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.N;
+import static android.os.Build.VERSION_CODES.O;
+import static android.os.Build.VERSION_CODES.P;
 import static com.xiaomi.xmsf.BuildConfig.DEBUG;
 import static top.trumeet.common.Constants.TAG_CONDOM;
 
@@ -88,6 +94,7 @@ public class PushServiceMain extends XMPushService {
     private long startTime;
     private int nextUploadDuringMinutes = 20; // First 20, next 40, then 80... no longer than 6 hours (3600)
     private boolean skipFirstStartTimerTask = true; // Skip first run
+    @RequiresApi(N) private NotificationRevival mNotificationRevival;
 
     private void scheduleNextUpload () {
         if (mStatTimer != null) mStatTimer.cancel();
@@ -126,7 +133,11 @@ public class PushServiceMain extends XMPushService {
         if (!DEBUG && !BuildConfig.FABRIC_KEY.equals("null"))
             scheduleNextUpload();
         startForeground();
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) BackgroundActivityStartEnabler.initialize(this);
+        if (SDK_INT > P) BackgroundActivityStartEnabler.initialize(this);
+        if (SDK_INT >= N) {
+            mNotificationRevival = new NotificationRevival(this, sbn -> sbn.getTag() == null);  // Only push notifications (tag == null)
+            mNotificationRevival.initialize();
+        }
     }
 
     @Override
@@ -155,6 +166,7 @@ public class PushServiceMain extends XMPushService {
         stopForeground(true);
 
         if (mStatTimer != null) mStatTimer.cancel();
+        if (SDK_INT >= N) mNotificationRevival.close();
         super.onDestroy();
     }
 
@@ -162,7 +174,7 @@ public class PushServiceMain extends XMPushService {
     private void startForeground() {
         NotificationManager manager = (NotificationManager)
                 getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (SDK_INT >= O) {
             NotificationChannel channel = new NotificationChannel(CHANNEL_STATUS,
                     getString(R.string.notification_category_alive),
                     NotificationManager.IMPORTANCE_MIN);

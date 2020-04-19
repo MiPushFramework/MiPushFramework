@@ -170,7 +170,7 @@ public class NotificationController {
 
             localBuilder.setChannelId(getChannelIdByPkg(packageName));
             localBuilder.setGroup(getGroupIdByPkg(packageName));
-            localBuilder.setGroupAlertBehavior(Notification.GROUP_ALERT_ALL);
+            localBuilder.setGroupAlertBehavior(Notification.GROUP_ALERT_CHILDREN);
         } else {
 
 

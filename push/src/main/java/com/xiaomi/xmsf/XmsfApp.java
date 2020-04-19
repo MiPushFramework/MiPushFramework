@@ -148,7 +148,7 @@ public class XmsfApp extends Application {
                         .setShowWhen(true)
                         .setAutoCancel(true)
                         .build();
-                manager.notify(100, notification);
+                manager.notify(getClass().getSimpleName(), 100, notification);  // Use tag to avoid conflict with push notifications.
             }
         } catch (RuntimeException e) {
             logger.e(e.getMessage(), e);

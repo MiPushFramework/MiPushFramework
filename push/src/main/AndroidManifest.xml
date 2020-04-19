@@ -234,6 +234,13 @@
             android:exported="true"
             android:label="@string/title_activity_advance_setting" />
 
+        <receiver android:name="com.xiaomi.push.service.SelfUpdateReceiver" android:process=":pushservice">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.xiaomi.push.revival.NotificationRevival"  android:process=":pushservice" />
+
     </application>
 
 </manifest>
