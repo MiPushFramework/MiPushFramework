@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 def fabricKey = null
 if (project.rootProject.file('local.properties').exists()) {
     Properties properties = new Properties()
@@ -100,6 +101,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // Log
     implementation('com.elvishew:xlog:1.6.1', {
         exclude group: 'com.android.support'
