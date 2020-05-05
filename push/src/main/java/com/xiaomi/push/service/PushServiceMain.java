@@ -7,12 +7,9 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
 import com.elvishew.xlog.Logger;
 import com.elvishew.xlog.XLog;
 import com.oasisfeng.condom.CondomContext;
@@ -20,20 +17,16 @@ import com.xiaomi.push.revival.NotificationRevival;
 import com.xiaomi.smack.packet.Message;
 import com.xiaomi.xmpush.thrift.ActionType;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
-import com.xiaomi.xmsf.BuildConfig;
 import com.xiaomi.xmsf.R;
 import com.xiaomi.xmsf.push.control.XMOutbound;
 
 import org.apache.thrift.TBase;
 
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.N;
 import static android.os.Build.VERSION_CODES.O;
 import static android.os.Build.VERSION_CODES.P;
-import static com.xiaomi.xmsf.BuildConfig.DEBUG;
 import static top.trumeet.common.Constants.TAG_CONDOM;
 
 /**
@@ -90,48 +83,13 @@ public class PushServiceMain extends XMPushService {
     public static final String CHANNEL_STATUS = "status";
     public static final int NOTIFICATION_ALIVE_ID = 1;
 
-    private Timer mStatTimer;
-    private long startTime;
-    private int nextUploadDuringMinutes = 20; // First 20, next 40, then 80... no longer than 6 hours (3600)
-    private boolean skipFirstStartTimerTask = true; // Skip first run
     @RequiresApi(N) private NotificationRevival mNotificationRevival;
-
-    private void scheduleNextUpload () {
-        if (mStatTimer != null) mStatTimer.cancel();
-        skipFirstStartTimerTask = true;
-        mStatTimer = null;
-        mStatTimer = new Timer();
-        mStatTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (skipFirstStartTimerTask) {
-                    skipFirstStartTimerTask = false;
-                    return;
-                }
-                nextUploadDuringMinutes = nextUploadDuringMinutes * 2;
-                if (nextUploadDuringMinutes > 3600) {
-                    nextUploadDuringMinutes = 3600;
-                }
-                // Report and log stable users
-                long minute = (System.currentTimeMillis() - startTime) / (60 * 1000);
-                logger.d("Recording stable running period:" + minute + ", next upload is " + nextUploadDuringMinutes +
-                        " minutes later.");
-               Answers.getInstance()
-                       .logCustom(new CustomEvent("XMPush_stable_running")
-                       .putCustomAttribute("running_time_min", minute));
-                // Schedule next running and skip next "first" running
-                scheduleNextUpload();
-            }
-        }, 0, nextUploadDuringMinutes * 1000 * 60);
-    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         logger.d("Service started");
-        startTime = System.currentTimeMillis();
-        if (!DEBUG && !BuildConfig.FABRIC_KEY.equals("null"))
-            scheduleNextUpload();
+
         startForeground();
         if (SDK_INT > P) BackgroundActivityStartEnabler.initialize(this);
         if (SDK_INT >= N) {
@@ -165,7 +123,6 @@ public class PushServiceMain extends XMPushService {
         logger.d("Service stopped");
         stopForeground(true);
 
-        if (mStatTimer != null) mStatTimer.cancel();
         if (SDK_INT >= N) mNotificationRevival.close();
         super.onDestroy();
     }

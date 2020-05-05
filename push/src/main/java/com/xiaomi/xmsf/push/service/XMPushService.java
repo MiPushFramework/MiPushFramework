@@ -9,7 +9,6 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
 import com.elvishew.xlog.Logger;
 import com.elvishew.xlog.XLog;
 import com.xiaomi.push.service.PushServiceMain;
@@ -61,7 +60,6 @@ public class XMPushService extends IntentService {
                 result = Event.ResultType.DENY_DISABLED;
             } else {
                 if (application == null) {
-                    if (!DEBUG) Crashlytics.log(Log.WARN, TAG, "registerApplication failed " + pkg);
                     logger.w("registerApplication failed " + pkg);
                     return;
                 }

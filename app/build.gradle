@@ -1,17 +1,4 @@
 apply plugin: 'com.android.application'
-def fabricKey = null
-if (project.rootProject.file('local.properties').exists()) {
-    Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    fabricKey = properties.getProperty('FABRIC_KEY')
-}
-if (fabricKey == null) {
-    fabricKey = System.getenv("FABRIC_KEY")
-}
-
-if (fabricKey != null) {
-    apply from: '../fabric.gradle'
-}
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -28,9 +15,6 @@ android {
             abiFilters 'armeabi', 'armeabi-v7a', 'x86'
         }
 
-        manifestPlaceholders = [fabricKey: fabricKey == null ?
-                "" : fabricKey]
-        buildConfigField "String", "FABRIC_KEY", "\"" + fabricKey + "\""
         buildConfigField "String", "GIT_TAG", "\"" + rootProject.ext.gitTag + "\""
         // buildConfigField "boolean", "SNAPSHOT", "\"" + rootProject.ext.snapshot + "\""
     }
@@ -109,10 +93,7 @@ dependencies {
     implementation 'moe.shizuku.preference:preference-simplemenu:2.2.3'
     // Common
     implementation project(':common')
-    // Fabric
-    implementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
-        transitive = true
-    }
+
     // Help
     implementation('moe.shizuku.support:helplib:1.1.0', {
         exclude group: 'moe.shizuku.preference'

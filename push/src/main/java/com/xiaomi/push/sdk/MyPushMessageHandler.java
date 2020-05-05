@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.os.IBinder;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.Consumer;
 
 import com.catchingnow.icebox.sdk_client.IceBox;
 import com.elvishew.xlog.Logger;
@@ -25,6 +24,8 @@ import com.xiaomi.xmpush.thrift.XmPushActionContainer;
 import com.xiaomi.xmpush.thrift.XmPushThriftSerializeUtils;
 import com.xiaomi.xmsf.push.notification.NotificationController;
 import com.xiaomi.xmsf.utils.ConfigCenter;
+
+import java.util.function.Consumer;
 
 import top.trumeet.common.ita.ITopActivity;
 import top.trumeet.common.ita.TopActivityFactory;

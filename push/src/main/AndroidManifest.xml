@@ -219,10 +219,6 @@
             </intent-filter>
         </activity>
 
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="${fabricKey}" />
-
         <provider
             android:name=".push.control.APIProvider"
             android:authorities="com.xiaomi.xmsf.push.control.APIProvider"
