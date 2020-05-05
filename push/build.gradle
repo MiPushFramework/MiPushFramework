@@ -1,18 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-def fabricKey = null
-if (project.rootProject.file('local.properties').exists()) {
-    Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    fabricKey = properties.getProperty('FABRIC_KEY')
-}
-if (fabricKey == null) {
-    fabricKey = System.getenv("FABRIC_KEY")
-}
-
-if (fabricKey != null) {
-    apply from: '../fabric.gradle'
-}
 
 repositories {
     maven { url 'https://dl.bintray.com/heruoxin/icebox' }
@@ -34,10 +21,6 @@ android {
         versionName rootProject.ext.versionName + "_framework"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-        manifestPlaceholders = [fabricKey: fabricKey == null ?
-        "" : fabricKey]
-        buildConfigField "String", "FABRIC_KEY", "\"" + fabricKey + "\""
 
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'x86'
@@ -121,8 +104,4 @@ dependencies {
 
     implementation 'com.catchingnow.icebox:SDK:1.0.5'
 
-    // Fabric
-    implementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
-        transitive = true
-    }
 }

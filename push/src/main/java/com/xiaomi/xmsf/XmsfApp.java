@@ -19,7 +19,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 
 import com.catchingnow.icebox.sdk_client.IceBox;
-import com.crashlytics.android.Crashlytics;
 import com.elvishew.xlog.XLog;
 import com.oasisfeng.condom.CondomOptions;
 import com.oasisfeng.condom.CondomProcess;
@@ -42,7 +41,6 @@ import com.xiaomi.xmsf.utils.LogUtils;
 import java.util.HashSet;
 import java.util.Random;
 
-import io.fabric.sdk.android.Fabric;
 import top.trumeet.common.Constants;
 import top.trumeet.common.push.PushServiceAccessibility;
 import top.trumeet.mipush.provider.DatabaseUtils;
@@ -81,13 +79,6 @@ public class XmsfApp extends Application {
         LogUtils.init(this);
         logger = XLog.tag(XmsfApp.class.getSimpleName()).build();
         logger.i("App starts at " + System.currentTimeMillis());
-
-        if (!BuildConfig.DEBUG && !BuildConfig.FABRIC_KEY.equals("null")) {
-            final Fabric fabric = new Fabric.Builder(this)
-                    .kits(new Crashlytics())
-                    .build();
-            Fabric.with(fabric);
-        }
 
         initMiSdkLogger();
 
