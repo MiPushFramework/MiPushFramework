@@ -21,20 +21,19 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.os.Build;
-import android.support.annotation.Nullable;
-import android.support.annotation.RestrictTo;
-import android.support.v4.util.Pools;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.view.menu.MenuBuilder;
-import android.support.v7.view.menu.MenuItemImpl;
-import android.support.v7.view.menu.MenuView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-
+import androidx.annotation.Nullable;
+import androidx.annotation.RestrictTo;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuItemImpl;
+import androidx.appcompat.view.menu.MenuView;
+import androidx.core.util.Pools;
+import androidx.core.view.ViewCompat;
 import top.trumeet.mipush.R;
 
-import static android.support.annotation.RestrictTo.Scope.GROUP_ID;
+import static androidx.annotation.RestrictTo.Scope.GROUP_ID;
 
 /**
  * @hide For internal use only.

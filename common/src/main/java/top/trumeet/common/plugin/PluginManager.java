@@ -1,7 +1,7 @@
 package top.trumeet.common.plugin;
 
 import android.content.ComponentName;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 /**
  * 提供对于推送提供程序的检索功能

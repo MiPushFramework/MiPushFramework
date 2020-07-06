@@ -41,6 +41,6 @@ dependencies {
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.0.0'
 
-    implementation "com.android.support:support-v4:$supportLibraryVersion"
+    implementation "androidx.legacy:legacy-support-v4:1.0.0"
     implementation project(':common')
 }

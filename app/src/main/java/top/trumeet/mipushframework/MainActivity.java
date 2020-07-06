@@ -7,15 +7,14 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.UiThread;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.widget.Toast;
-
+import androidx.annotation.UiThread;
+import androidx.appcompat.app.AppCompatActivity;
 import io.reactivex.disposables.CompositeDisposable;
 import top.trumeet.common.Constants;
 import top.trumeet.common.push.PushController;
@@ -27,11 +26,7 @@ import top.trumeet.mipushframework.control.CheckPermissionsUtils;
 import top.trumeet.mipushframework.control.ConnectFailUtils;
 import top.trumeet.mipushframework.control.OnConnectStatusChangedListener;
 
-import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_LOW_VERSION;
-import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_MIUI;
-import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_NOT_INSTALLED;
-import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_SECURITY_EXCEPTION;
-import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_UNKNOWN;
+import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.*;
 
 /**
  * Main activity

@@ -3,18 +3,12 @@ package com.xiaomi.xmsf.push.control;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.job.JobScheduler;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Process;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
-
+import androidx.core.content.ContextCompat;
 import com.elvishew.xlog.Logger;
 import com.elvishew.xlog.XLog;
 import com.oasisfeng.condom.CondomContext;
@@ -23,13 +17,10 @@ import com.xiaomi.push.service.PushServiceConstants;
 import com.xiaomi.push.service.PushServiceMain;
 import com.xiaomi.xmsf.push.service.receivers.BootReceiver;
 import com.xiaomi.xmsf.push.service.receivers.KeepAliveReceiver;
-
 import top.trumeet.common.Constants;
 import top.trumeet.common.utils.ServiceRunningChecker;
 
-import static top.trumeet.common.Constants.APP_ID;
-import static top.trumeet.common.Constants.APP_KEY;
-import static top.trumeet.common.Constants.TAG_CONDOM;
+import static top.trumeet.common.Constants.*;
 
 /**
  * Created by Trumeet on 2017/8/25.

@@ -21,13 +21,6 @@ android {
         versionCode 105
         versionName rootProject.ext.versionName + "_framework"
 
-        manifestPlaceholders = [fabricKey: fabricKey == null ?
-        "" : fabricKey]
-        buildConfigField "String", "FABRIC_KEY", "\"" + fabricKey + "\""
-
-        ndk {
-            abiFilters 'armeabi', 'armeabi-v7a', 'x86'
-        }
     }
 
     buildTypes {
@@ -96,19 +89,11 @@ dependencies {
     implementation 'me.weishu:epic:0.6.0'
     implementation project(':common')
     implementation project(':condom')
-    implementation "com.android.support:support-v4:$supportLibraryVersion"
+    implementation "androidx.legacy:legacy-support-v4:1.0.0"
     implementation project(':provider')
     implementation project(':extenders')
-    implementation "com.android.support:palette-v7:$supportLibraryVersion"
+    implementation "androidx.palette:palette:1.0.0"
     compileOnly 'de.robv.android.xposed:api:82'
 
     implementation 'com.catchingnow.icebox:SDK:1.0.5'
-
-<<<<<<< HEAD
-=======
-    // Fabric
-    implementation('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
-        transitive = true
-    }
->>>>>>> Update implementation
 }

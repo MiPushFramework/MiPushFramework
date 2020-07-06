@@ -3,24 +3,23 @@ package top.trumeet.mipushframework.event;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CancellationSignal;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.List;
-
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
 import top.trumeet.common.db.EventDb;
 import top.trumeet.common.event.Event;
 import top.trumeet.mipushframework.utils.OnLoadMoreListener;
+
+import java.util.List;
 
 /**
  * Created by Trumeet on 2017/8/26.

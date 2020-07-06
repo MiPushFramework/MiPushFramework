@@ -5,8 +5,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
-import android.support.v4.util.LruCache;
-
+import androidx.collection.LruCache;
 import top.trumeet.common.utils.ImgUtils;
 
 import static top.trumeet.common.utils.ImgUtils.drawableToBitmap;

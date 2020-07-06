@@ -1,6 +1,6 @@
 package top.trumeet.common.utils;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * @author Trumeet

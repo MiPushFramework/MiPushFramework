@@ -8,19 +8,17 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.TwoStatePreference;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
-
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import com.catchingnow.icebox.sdk_client.IceBox;
 import com.xiaomi.xmsf.push.notification.NotificationController;
 import com.xiaomi.xmsf.utils.LogUtils;
-
-import java.util.Date;
-
 import top.trumeet.common.Constants;
 import top.trumeet.common.db.EventDb;
 import top.trumeet.common.utils.Utils;
+
+import java.util.Date;
 
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
 

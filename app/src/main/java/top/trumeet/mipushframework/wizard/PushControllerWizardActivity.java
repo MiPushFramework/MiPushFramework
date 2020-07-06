@@ -6,22 +6,18 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
-import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
-import android.support.v4.app.FragmentActivity;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
+import androidx.fragment.app.FragmentActivity;
 import com.android.setupwizardlib.SetupWizardLayout;
-
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import io.reactivex.disposables.CompositeDisposable;
 import top.trumeet.common.Constants;
 import top.trumeet.common.push.PushController;
@@ -32,11 +28,9 @@ import top.trumeet.mipushframework.control.CheckPermissionsUtils;
 import top.trumeet.mipushframework.control.ConnectFailUtils;
 import top.trumeet.mipushframework.control.OnConnectStatusChangedListener;
 
-import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_LOW_VERSION;
-import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_MIUI;
-import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_NOT_INSTALLED;
-import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_SECURITY_EXCEPTION;
-import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.FAIL_REASON_UNKNOWN;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static top.trumeet.mipushframework.control.OnConnectStatusChangedListener.*;
 
 /**
  * Created by Trumeet on 2017/12/30.

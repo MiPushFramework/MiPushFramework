@@ -5,10 +5,9 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
-
+import androidx.core.content.ContextCompat;
 import com.elvishew.xlog.Logger;
 import com.elvishew.xlog.XLog;
 import com.xiaomi.push.service.PushServiceMain;
@@ -18,15 +17,12 @@ import com.xiaomi.xmsf.push.control.PushControllerUtils;
 import com.xiaomi.xmsf.push.notification.NotificationController;
 import com.xiaomi.xmsf.push.utils.RemoveTremblingUtils;
 import com.xiaomi.xmsf.utils.ConfigCenter;
-
 import top.trumeet.common.Constants;
 import top.trumeet.common.cache.ApplicationNameCache;
 import top.trumeet.common.db.EventDb;
 import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.event.Event;
 import top.trumeet.common.register.RegisteredApplication;
-
-import static com.xiaomi.xmsf.BuildConfig.DEBUG;
 
 public class XMPushService extends IntentService {
     private static final String TAG = "XMPushService Bridge";

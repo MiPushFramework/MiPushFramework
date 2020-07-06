@@ -1,7 +1,7 @@
 package top.trumeet.common.override;
 
 import android.app.ActivityManager;
-import android.support.annotation.RequiresPermission;
+import androidx.annotation.RequiresPermission;
 
 /**
  * Created by Trumeet on 2018/2/18.

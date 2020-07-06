@@ -10,32 +10,18 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.provider.Settings;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
-
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import com.android.settings.widget.EntityHeaderController;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-
 import io.reactivex.disposables.CompositeDisposable;
-import moe.shizuku.preference.Preference;
-import moe.shizuku.preference.PreferenceCategory;
-import moe.shizuku.preference.PreferenceFragment;
-import moe.shizuku.preference.PreferenceGroup;
-import moe.shizuku.preference.PreferenceScreen;
-import moe.shizuku.preference.SimpleMenuPreference;
-import moe.shizuku.preference.SwitchPreferenceCompat;
+import moe.shizuku.preference.*;
 import top.trumeet.common.Constants;
 import top.trumeet.common.db.EventDb;
 import top.trumeet.common.db.RegisteredApplicationDb;
@@ -47,6 +33,12 @@ import top.trumeet.mipushframework.control.CheckPermissionsUtils;
 import top.trumeet.mipushframework.event.RecentActivityActivity;
 import top.trumeet.mipushframework.utils.ShellUtils;
 import top.trumeet.mipushframework.widgets.InfoPreference;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 import static android.os.Build.VERSION_CODES.O;
 import static android.provider.Settings.EXTRA_APP_PACKAGE;

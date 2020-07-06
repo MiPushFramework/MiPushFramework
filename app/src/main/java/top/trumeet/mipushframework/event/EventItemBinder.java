@@ -5,13 +5,10 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
-
-import java.util.Date;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import top.trumeet.common.event.Event;
 import top.trumeet.common.event.type.EventType;
 import top.trumeet.common.event.type.TypeFactory;
@@ -20,6 +17,8 @@ import top.trumeet.mipush.R;
 import top.trumeet.mipushframework.permissions.ManagePermissionsActivity;
 import top.trumeet.mipushframework.utils.BaseAppsBinder;
 import top.trumeet.mipushframework.utils.ParseUtils;
+
+import java.util.Date;
 
 /**
  * Created by Trumeet on 2017/8/26.

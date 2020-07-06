@@ -2,10 +2,10 @@ package com.xiaomi.xmsf.utils;
 
 import android.app.Notification;
 import android.graphics.Bitmap;
-import android.support.v7.graphics.Palette;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import androidx.palette.graphics.Palette;
 
 
 /**

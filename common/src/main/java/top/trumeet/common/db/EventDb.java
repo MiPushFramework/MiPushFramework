@@ -4,21 +4,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.CancellationSignal;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresPermission;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresPermission;
 import top.trumeet.common.Constants;
 import top.trumeet.common.event.Event;
 import top.trumeet.common.event.type.EventType;
 import top.trumeet.common.utils.DatabaseUtils;
 import top.trumeet.common.utils.Utils;
+
+import java.util.*;
 
 /**
  * @author Trumeet

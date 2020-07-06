@@ -1,8 +1,7 @@
 package top.trumeet.common.utils.rom;
 
-import android.support.annotation.IntDef;
-import android.support.annotation.RestrictTo;
-
+import androidx.annotation.IntDef;
+import androidx.annotation.RestrictTo;
 import top.trumeet.common.utils.rom.h2os.H2OSChecker;
 import top.trumeet.common.utils.rom.miui.MiuiChecker;
 

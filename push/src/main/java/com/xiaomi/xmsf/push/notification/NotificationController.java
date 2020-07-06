@@ -6,20 +6,16 @@ import android.app.NotificationChannel;
 import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
-import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.graphics.ColorUtils;
 import android.text.TextUtils;
-
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.graphics.ColorUtils;
 import com.xiaomi.xmsf.R;
 import com.xiaomi.xmsf.utils.ColorUtil;
-
-
 import top.trumeet.common.cache.ApplicationNameCache;
 import top.trumeet.common.cache.IconCache;
 import top.trumeet.common.utils.NotificationUtils;

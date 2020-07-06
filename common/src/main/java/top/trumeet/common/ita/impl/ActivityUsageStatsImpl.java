@@ -7,15 +7,13 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.provider.Settings;
-import android.support.annotation.RequiresPermission;
 import android.util.Log;
 import android.widget.Toast;
-
+import androidx.annotation.RequiresPermission;
 import top.trumeet.common.ita.ITopActivity;
+import top.trumeet.common.override.ActivityManagerOverride;
 
 import java.util.Objects;
-
-import top.trumeet.common.override.ActivityManagerOverride;
 
 import static android.content.Context.ACTIVITY_SERVICE;
 

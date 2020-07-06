@@ -19,25 +19,20 @@ package android.support.design.widget;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.internal.BottomNavigationMenu;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.internal.BottomNavigationPresenter;
-import android.support.v7.content.res.AppCompatResources;
-import android.support.v7.view.SupportMenuInflater;
-import android.support.v7.view.menu.MenuBuilder;
-import android.support.v7.widget.TintTypedArray;
 import android.util.AttributeSet;
 import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.FrameLayout;
-
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.appcompat.view.SupportMenuInflater;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.widget.TintTypedArray;
 import top.trumeet.mipush.R;
 
 /**
@@ -304,7 +299,7 @@ public class BottomNavigationView extends FrameLayout {
         ColorStateList baseColor = AppCompatResources.getColorStateList(
                 getContext(), value.resourceId);
         if (!getContext().getTheme().resolveAttribute(
-                android.support.v7.appcompat.R.attr.colorPrimary, value, true)) {
+                androidx.appcompat.R.attr.colorPrimary, value, true)) {
             return null;
         }
         int colorPrimary = value.data;

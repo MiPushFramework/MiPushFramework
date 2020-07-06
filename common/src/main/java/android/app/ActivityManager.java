@@ -14,8 +14,8 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.RequiresPermission;
 import android.util.Size;
+import androidx.annotation.RequiresPermission;
 
 import java.io.FileDescriptor;
 import java.util.List;

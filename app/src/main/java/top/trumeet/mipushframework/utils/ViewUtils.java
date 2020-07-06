@@ -18,15 +18,15 @@ package top.trumeet.mipushframework.utils;
 
 import android.graphics.Rect;
 import android.os.Build;
-import android.support.annotation.RestrictTo;
-import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import android.view.View;
+import androidx.annotation.RestrictTo;
+import androidx.core.view.ViewCompat;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import static android.support.annotation.RestrictTo.Scope.GROUP_ID;
+import static androidx.annotation.RestrictTo.Scope.GROUP_ID;
 
 /**
  * @hide

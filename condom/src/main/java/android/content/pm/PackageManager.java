@@ -28,8 +28,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.UserHandle;
-import android.support.annotation.RequiresPermission;
 import android.util.AndroidException;
+import androidx.annotation.RequiresPermission;
 
 import java.util.List;
 

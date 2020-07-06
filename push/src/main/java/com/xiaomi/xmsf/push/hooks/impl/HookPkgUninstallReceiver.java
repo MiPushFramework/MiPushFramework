@@ -3,8 +3,7 @@ package com.xiaomi.xmsf.push.hooks.impl;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
-
+import androidx.core.content.ContextCompat;
 import com.elvishew.xlog.Logger;
 import com.elvishew.xlog.XLog;
 import com.taobao.android.dexposed.DexposedBridge;

@@ -26,13 +26,9 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
 import android.os.Process;
-import android.support.annotation.CheckResult;
-import android.support.annotation.Keep;
-import android.support.annotation.Nullable;
-import android.support.annotation.RestrictTo;
-import android.support.annotation.VisibleForTesting;
 import android.util.EventLog;
 import android.util.Log;
+import androidx.annotation.*;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -43,10 +39,7 @@ import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKG
 import static android.content.Context.ACTIVITY_SERVICE;
 import static android.content.pm.ApplicationInfo.FLAG_SYSTEM;
 import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.HONEYCOMB_MR1;
-import static android.os.Build.VERSION_CODES.LOLLIPOP_MR1;
-import static android.os.Build.VERSION_CODES.N;
-import static android.os.Build.VERSION_CODES.O;
+import static android.os.Build.VERSION_CODES.*;
 
 /**
  * The shared functionality for condom wrappers.

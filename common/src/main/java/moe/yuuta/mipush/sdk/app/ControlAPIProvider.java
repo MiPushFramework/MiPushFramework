@@ -9,22 +9,14 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.Process;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import top.trumeet.common.Constants;
 import top.trumeet.common.override.AppOpsManagerOverride;
 import top.trumeet.common.utils.Utils;
 
 import static android.content.Context.APP_OPS_SERVICE;
-import static top.trumeet.common.push.PushController.ARG_IS_ENABLE;
-import static top.trumeet.common.push.PushController.ARG_OP;
-import static top.trumeet.common.push.PushController.ARG_OP_STATUS;
-import static top.trumeet.common.push.PushController.ARG_VERSION;
-import static top.trumeet.common.push.PushController.METHOD_CHECK_OP;
-import static top.trumeet.common.push.PushController.METHOD_GET_VERSION;
-import static top.trumeet.common.push.PushController.METHOD_IS_ENABLE;
-import static top.trumeet.common.push.PushController.METHOD_SET_ENABLE;
+import static top.trumeet.common.push.PushController.*;
 
 public abstract class ControlAPIProvider extends ContentProvider {
     @Override

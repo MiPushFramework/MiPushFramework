@@ -16,7 +16,7 @@
 
 package android.os;
 
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 
 import java.io.PrintWriter;
 

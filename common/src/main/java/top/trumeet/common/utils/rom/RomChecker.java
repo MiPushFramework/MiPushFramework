@@ -1,6 +1,6 @@
 package top.trumeet.common.utils.rom;
 
-import android.support.annotation.RestrictTo;
+import androidx.annotation.RestrictTo;
 
 /**
  * Created by Trumeet on 2018/4/22.

@@ -2,8 +2,7 @@ package com.xiaomi.xmsf.push.control;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.Nullable;
-
+import androidx.annotation.Nullable;
 import com.elvishew.xlog.Logger;
 import com.elvishew.xlog.XLog;
 import com.oasisfeng.condom.CondomOptions;

@@ -1,12 +1,7 @@
 package top.trumeet.mipush.provider.event;
 
-import android.support.annotation.NonNull;
-
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.NotNull;
-import org.greenrobot.greendao.annotation.Property;
+import androidx.annotation.NonNull;
+import org.greenrobot.greendao.annotation.*;
 
 /**
  * Created by Trumeet on 2017/8/26.

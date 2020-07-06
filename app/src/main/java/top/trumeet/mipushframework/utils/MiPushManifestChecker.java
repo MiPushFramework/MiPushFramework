@@ -3,13 +3,12 @@ package top.trumeet.mipushframework.utils;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
 import android.util.Log;
+import androidx.annotation.NonNull;
+import top.trumeet.common.Constants;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
-import top.trumeet.common.Constants;
 
 @SuppressWarnings("unchecked")
 public class MiPushManifestChecker {

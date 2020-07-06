@@ -18,12 +18,12 @@ package android.support.design.internal;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.RestrictTo;
-import android.support.v7.view.menu.MenuBuilder;
 import android.view.MenuItem;
 import android.view.SubMenu;
+import androidx.annotation.RestrictTo;
+import androidx.appcompat.view.menu.MenuBuilder;
 
-import static android.support.annotation.RestrictTo.Scope.GROUP_ID;
+import static androidx.annotation.RestrictTo.Scope.GROUP_ID;
 
 /**
  * @hide

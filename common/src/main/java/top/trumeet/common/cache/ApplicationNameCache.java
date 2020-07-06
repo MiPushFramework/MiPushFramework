@@ -3,7 +3,7 @@ package top.trumeet.common.cache;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.support.v4.util.LruCache;
+import androidx.collection.LruCache;
 
 /**
  * @author zts

@@ -7,9 +7,8 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.NotificationCompat;
-
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
 import com.elvishew.xlog.Logger;
 import com.elvishew.xlog.XLog;
 import com.oasisfeng.condom.CondomContext;
@@ -19,14 +18,10 @@ import com.xiaomi.xmpush.thrift.ActionType;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmsf.R;
 import com.xiaomi.xmsf.push.control.XMOutbound;
-
 import org.apache.thrift.TBase;
 
-
 import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.N;
-import static android.os.Build.VERSION_CODES.O;
-import static android.os.Build.VERSION_CODES.P;
+import static android.os.Build.VERSION_CODES.*;
 import static top.trumeet.common.Constants.TAG_CONDOM;
 
 /**

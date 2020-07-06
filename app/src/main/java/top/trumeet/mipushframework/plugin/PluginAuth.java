@@ -1,8 +1,7 @@
 package top.trumeet.mipushframework.plugin;
 
 import android.content.ComponentName;
-import android.support.annotation.Nullable;
-
+import androidx.annotation.Nullable;
 import top.trumeet.common.plugin.PluginManager;
 
 /**

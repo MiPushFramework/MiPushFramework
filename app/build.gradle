@@ -1,5 +1,11 @@
 apply plugin: 'com.android.application'
 
+repositories {
+    maven {
+        url "https://dl.bintray.com/rikkaw/MaterialPreference"
+    }
+}
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -83,19 +89,14 @@ dependencies {
         exclude group: 'com.android.support'
     })
     // Support
-    implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
-    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.appcompat:appcompat:1.1.0"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     // Preference
-    implementation 'moe.shizuku.preference:preference:2.2.3'
-    implementation 'moe.shizuku.preference:preference-switchcompat:2.2.3'
-    implementation 'moe.shizuku.preference:preference-dialog-android:2.2.3'
-    implementation 'moe.shizuku.preference:preference-simplemenu:2.2.3'
+    implementation 'moe.shizuku.preference:preference-appcompat:4.0.0'
+    implementation 'moe.shizuku.preference:preference-simplemenu-appcompat:4.0.0'
     // Common
     implementation project(':common')
-    // Fabric
-    implementation('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
-        transitive = true
-    }
     // Help
     implementation('moe.shizuku.support:helplib:1.1.0', {
         exclude group: 'moe.shizuku.preference'
@@ -117,5 +118,5 @@ dependencies {
         exclude group: 'com.android.support'
     })
     // Work
-    implementation "android.arch.work:work-runtime:$work_version"
+    implementation 'androidx.work:work-runtime:2.0.1'
 }

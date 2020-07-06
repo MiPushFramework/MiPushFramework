@@ -3,9 +3,8 @@ package com.xiaomi.xmsf.push.service.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-
+import androidx.core.content.ContextCompat;
 import com.xiaomi.channel.commonutils.logger.MyLog;
 import com.xiaomi.push.service.PushConstants;
 import com.xiaomi.push.service.PushServiceConstants;

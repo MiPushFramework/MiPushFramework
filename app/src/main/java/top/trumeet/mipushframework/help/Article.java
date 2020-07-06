@@ -1,6 +1,6 @@
 package top.trumeet.mipushframework.help;
 
-import android.support.annotation.RawRes;
+import androidx.annotation.RawRes;
 
 /**
  * Created by Trumeet on 2018/2/8.

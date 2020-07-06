@@ -3,9 +3,9 @@
     <declare-styleable name="BottomNavigationView">
         <!-- The menu resource to inflate and populate items from. -->
         <attr name="menu"/>
-        <attr name="itemIconTint"/>
-        <attr name="itemTextColor"/>
-        <attr name="itemBackground"/>
+        <attr name="itemIconTint" format="color|reference"/>
+        <attr name="itemTextColor" format="color|reference"/>
+        <attr name="itemBackground" format="reference"/>
     </declare-styleable>
 
     <declare-styleable name="ActionView">

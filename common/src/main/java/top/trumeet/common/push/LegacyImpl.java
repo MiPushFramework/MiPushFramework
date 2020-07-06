@@ -5,21 +5,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresPermission;
-import android.support.annotation.RestrictTo;
 import android.util.Log;
-
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresPermission;
+import androidx.annotation.RestrictTo;
 import top.trumeet.common.Constants;
 import top.trumeet.common.IPushController;
 import top.trumeet.common.ipc.Disconnectable;
 import top.trumeet.common.ipc.IPCUtils;
 import top.trumeet.common.ipc.ServiceConnectionListener;
 import top.trumeet.common.utils.Utils;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 使用 Binder 作为 IPC 方式（旧版兼容）

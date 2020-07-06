@@ -17,29 +17,17 @@
 
 package com.oasisfeng.condom;
 
-import android.content.ContentProviderOperation;
-import android.content.ContentProviderResult;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.IContentProvider;
-import android.content.OperationApplicationException;
-import android.content.UriPermission;
+import android.content.*;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.RemoteException;
-import android.support.annotation.Keep;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.annotation.RestrictTo;
+import androidx.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.os.Build.VERSION_CODES.HONEYCOMB;
-import static android.os.Build.VERSION_CODES.KITKAT;
-import static android.os.Build.VERSION_CODES.N;
+import static android.os.Build.VERSION_CODES.*;
 
 /**
  * Delegation wrapper of {@link ContentResolver}

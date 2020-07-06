@@ -2,14 +2,12 @@ package android.app;
 
 import android.content.Context;
 import android.service.notification.StatusBarNotification;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import java.util.List;
 
-import static android.os.Build.VERSION_CODES.M;
-import static android.os.Build.VERSION_CODES.N;
-import static android.os.Build.VERSION_CODES.O;
+import static android.os.Build.VERSION_CODES.*;
 
 /**
  * Created by Trumeet on 2018/1/23.

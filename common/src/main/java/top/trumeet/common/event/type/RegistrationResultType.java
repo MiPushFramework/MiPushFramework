@@ -1,8 +1,7 @@
 package top.trumeet.common.event.type;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
-
+import androidx.annotation.Nullable;
 import top.trumeet.common.R;
 import top.trumeet.common.event.Event;
 

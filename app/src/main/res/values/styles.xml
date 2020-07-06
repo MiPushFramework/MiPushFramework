@@ -13,7 +13,6 @@
 
     <style name="AppTheme.PreferenceTheme" parent="PreferenceThemeOverlay">
         <!-- Only need this on pre-Lollipop -->
-        <item name="accentColorCompat">?colorAccent</item>
         <item name="switchPreferenceCompatStyle">@style/Preference.SwitchPreferenceCompat</item>
         <item name="simpleMenuPreferenceStyle">@style/SimpleMenuPreference</item>
     </style>

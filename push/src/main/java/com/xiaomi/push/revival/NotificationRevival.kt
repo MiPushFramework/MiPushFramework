@@ -21,8 +21,8 @@ import android.os.Build.VERSION_CODES.M
 import android.os.Build.VERSION_CODES.O
 import android.os.SystemClock
 import android.service.notification.StatusBarNotification
-import android.support.annotation.RequiresApi
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.xiaomi.xmsf.BuildConfig
 
 /** Increase the version if breaking changes have been made to notification data, to avoid restoring from incompatible version. */

@@ -8,10 +8,9 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Parcel;
 import android.service.notification.StatusBarNotification;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
-
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import com.xiaomi.xmsf.R;
 
 import java.util.Objects;

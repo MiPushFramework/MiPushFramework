@@ -4,8 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v4.app.ActivityCompat;
-
+import androidx.core.app.ActivityCompat;
 import top.trumeet.common.Constants;
 import top.trumeet.mipushframework.settings.MainActivity;
 

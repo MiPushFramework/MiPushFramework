@@ -19,48 +19,22 @@ package com.oasisfeng.condom;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.content.BroadcastReceiver;
-import android.content.ComponentCallbacks;
-import android.content.ComponentName;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.ContextWrapper;
-import android.content.IContentProvider;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ProviderInfo;
-import android.content.pm.ResolveInfo;
+import android.content.*;
+import android.content.pm.*;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Process;
 import android.os.UserHandle;
-import android.support.annotation.CheckResult;
-import android.support.annotation.Keep;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.annotation.Size;
 import android.util.Log;
-
+import androidx.annotation.*;
 import com.oasisfeng.condom.util.Lazy;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import top.trumeet.hook.FakeManifestUtils;
+
+import java.util.*;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH;
-import static android.os.Build.VERSION_CODES.JELLY_BEAN_MR1;
-import static android.os.Build.VERSION_CODES.JELLY_BEAN_MR2;
-import static android.os.Build.VERSION_CODES.M;
-import static android.os.Build.VERSION_CODES.O;
+import static android.os.Build.VERSION_CODES.*;
 
 /**
  * The condom-style {@link ContextWrapper} to prevent unwanted behaviors going through.

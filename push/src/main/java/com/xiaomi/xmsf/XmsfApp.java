@@ -1,12 +1,7 @@
 package com.xiaomi.xmsf;
 
 import android.Manifest;
-import android.app.Application;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationChannelGroup;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
+import android.app.*;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -14,11 +9,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
-
-import com.catchingnow.icebox.sdk_client.IceBox;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import com.elvishew.xlog.XLog;
 import com.oasisfeng.condom.CondomOptions;
 import com.oasisfeng.condom.CondomProcess;
@@ -44,6 +36,9 @@ import java.util.Random;
 import top.trumeet.common.Constants;
 import top.trumeet.common.push.PushServiceAccessibility;
 import top.trumeet.mipush.provider.DatabaseUtils;
+
+import java.util.HashSet;
+import java.util.Random;
 
 import static com.xiaomi.xmsf.push.control.PushControllerUtils.isAppMainProc;
 import static com.xiaomi.xmsf.push.notification.NotificationController.CHANNEL_WARN;

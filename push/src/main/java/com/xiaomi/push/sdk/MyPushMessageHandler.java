@@ -8,28 +8,22 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.IBinder;
-import android.support.annotation.RequiresApi;
-import android.support.v4.content.ContextCompat;
-
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import com.catchingnow.icebox.sdk_client.IceBox;
 import com.elvishew.xlog.Logger;
 import com.elvishew.xlog.XLog;
-import com.xiaomi.push.service.BackgroundActivityStartEnabler;
-import com.xiaomi.push.service.MIPushNotificationHelper;
-import com.xiaomi.push.service.MyClientEventDispatcher;
-import com.xiaomi.push.service.MyMIPushNotificationHelper;
-import com.xiaomi.push.service.PushConstants;
+import com.xiaomi.push.service.*;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
 import com.xiaomi.xmpush.thrift.XmPushActionContainer;
 import com.xiaomi.xmpush.thrift.XmPushThriftSerializeUtils;
 import com.xiaomi.xmsf.push.notification.NotificationController;
 import com.xiaomi.xmsf.utils.ConfigCenter;
-
-import java.util.function.Consumer;
-
 import top.trumeet.common.ita.ITopActivity;
 import top.trumeet.common.ita.TopActivityFactory;
 import top.trumeet.common.utils.Utils;
+
+import java.util.function.Consumer;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.P;

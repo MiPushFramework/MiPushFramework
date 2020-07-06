@@ -29,7 +29,7 @@ android {
 
 dependencies {
     api 'com.google.code.findbugs:jsr305:3.0.2'
-    api "com.android.support:support-annotations:$supportLibraryVersion"
+    api 'androidx.annotation:annotation:1.0.0'
 }
 
 android.libraryVariants.all { variant ->

@@ -5,16 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.CancellationSignal;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresPermission;
 import android.util.Log;
-
-import java.util.List;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresPermission;
 import top.trumeet.common.Constants;
 import top.trumeet.common.register.RegisteredApplication;
 import top.trumeet.common.utils.DatabaseUtils;
+
+import java.util.List;
 
 import static top.trumeet.common.BuildConfig.DEBUG;
 import static top.trumeet.common.register.RegisteredApplication.KEY_PACKAGE_NAME;
@@ -55,10 +54,10 @@ public class RegisteredApplicationDb {
                         null,
                         pkg != null ? new String[]{pkg} : null, null, new DatabaseUtils.Converter<RegisteredApplication>() {
                             @SuppressLint("MissingPermission")
-                            @android.support.annotation.NonNull
+                            @androidx.annotation.NonNull
                             @Override
                             public RegisteredApplication convert
-                                    (@android.support.annotation.NonNull Cursor cursor) {
+                                    (@androidx.annotation.NonNull Cursor cursor) {
                                 return RegisteredApplication.create(cursor);
                             }
                         });

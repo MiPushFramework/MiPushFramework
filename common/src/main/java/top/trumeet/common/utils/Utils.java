@@ -7,15 +7,14 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.os.Process;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
 import android.text.Html;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import top.trumeet.common.Constants;
 
 import java.util.Calendar;
 import java.util.Date;
-
-import top.trumeet.common.Constants;
 
 public final class Utils {
     public static int myUid() {

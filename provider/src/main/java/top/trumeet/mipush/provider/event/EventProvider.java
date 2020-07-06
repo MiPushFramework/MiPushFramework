@@ -1,23 +1,16 @@
 package top.trumeet.mipush.provider.event;
 
-import android.content.ContentProvider;
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.content.UriMatcher;
+import android.content.*;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-
+import androidx.annotation.NonNull;
 import top.trumeet.mipush.provider.DatabaseUtils;
 import top.trumeet.mipush.provider.gen.db.RegisteredApplicationDao;
 
-import static top.trumeet.common.db.EventDb.AUTHORITY;
-import static top.trumeet.common.db.EventDb.BASE_PATH;
-import static top.trumeet.common.db.EventDb.CONTENT_URI;
+import static top.trumeet.common.db.EventDb.*;
 import static top.trumeet.mipush.provider.DatabaseUtils.daoSession;
 
 /**

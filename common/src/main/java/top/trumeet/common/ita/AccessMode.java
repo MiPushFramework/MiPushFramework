@@ -1,7 +1,7 @@
 package top.trumeet.common.ita;
 
-import android.support.annotation.IntDef;
-import android.support.annotation.RestrictTo;
+import androidx.annotation.IntDef;
+import androidx.annotation.RestrictTo;
 
 public class AccessMode {
     public static final int USAGE_STATS = 0;

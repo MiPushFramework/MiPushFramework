@@ -19,13 +19,12 @@ package com.android.settings.applications;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.annotation.VisibleForTesting;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-
+import androidx.annotation.VisibleForTesting;
 import moe.shizuku.preference.Preference;
 import moe.shizuku.preference.PreferenceViewHolder;
 import top.trumeet.mipush.R;
