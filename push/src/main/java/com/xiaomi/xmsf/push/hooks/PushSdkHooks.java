@@ -1,18 +1,16 @@
 package com.xiaomi.xmsf.push.hooks;
 
 import android.os.Build;
-
 import com.elvishew.xlog.Logger;
 import com.elvishew.xlog.XLog;
-import com.taobao.android.dexposed.XC_MethodHook;
 import com.xiaomi.xmsf.push.hooks.impl.HookMIUIPushSdk;
 import com.xiaomi.xmsf.push.hooks.impl.HookPingReceiver;
 import com.xiaomi.xmsf.push.hooks.impl.HookPkgUninstallReceiver;
+import de.robv.android.xposed.XC_MethodHook;
+import me.weishu.epic.art.EpicNative;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import me.weishu.epic.art.EpicNative;
 
 /**
  *

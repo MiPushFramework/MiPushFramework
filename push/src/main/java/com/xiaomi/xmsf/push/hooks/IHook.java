@@ -1,6 +1,6 @@
 package com.xiaomi.xmsf.push.hooks;
 
-import com.taobao.android.dexposed.XC_MethodHook;
+import de.robv.android.xposed.XC_MethodHook;
 
 import java.util.List;
 

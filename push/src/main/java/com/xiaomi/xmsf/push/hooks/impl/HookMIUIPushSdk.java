@@ -1,12 +1,11 @@
 package com.xiaomi.xmsf.push.hooks.impl;
 
 import android.content.Context;
-
-import com.taobao.android.dexposed.DexposedBridge;
-import com.taobao.android.dexposed.XC_MethodHook;
-import com.taobao.android.dexposed.XC_MethodReplacement;
 import com.xiaomi.channel.commonutils.android.MIUIUtils;
 import com.xiaomi.xmsf.push.hooks.IHook;
+import de.robv.android.xposed.DexposedBridge;
+import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XC_MethodReplacement;
 
 import java.util.ArrayList;
 import java.util.List;

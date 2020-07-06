@@ -14,7 +14,6 @@ import androidx.core.content.ContextCompat;
 import com.elvishew.xlog.XLog;
 import com.oasisfeng.condom.CondomOptions;
 import com.oasisfeng.condom.CondomProcess;
-import com.taobao.android.dexposed.XC_MethodHook;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.channel.commonutils.logger.MyLog;
 import com.xiaomi.channel.commonutils.misc.ScheduledJobManager;
@@ -29,10 +28,7 @@ import com.xiaomi.xmsf.push.service.MiuiPushActivateService;
 import com.xiaomi.xmsf.push.service.notificationcollection.NotificationListener;
 import com.xiaomi.xmsf.push.service.notificationcollection.UploadNotificationJob;
 import com.xiaomi.xmsf.utils.LogUtils;
-
-import java.util.HashSet;
-import java.util.Random;
-
+import de.robv.android.xposed.XC_MethodHook;
 import top.trumeet.common.Constants;
 import top.trumeet.common.push.PushServiceAccessibility;
 import top.trumeet.mipush.provider.DatabaseUtils;

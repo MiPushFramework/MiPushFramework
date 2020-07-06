@@ -86,7 +86,7 @@ dependencies {
         exclude group: 'com.android.support'
     })
     // Hook
-    implementation 'me.weishu:epic:0.6.0'
+    implementation 'me.weishu:epic:0.8.1-c'
     implementation project(':common')
     implementation project(':condom')
     implementation "androidx.legacy:legacy-support-v4:1.0.0"
