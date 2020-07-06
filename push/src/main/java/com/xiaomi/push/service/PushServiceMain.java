@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import com.elvishew.xlog.Logger;
 import com.elvishew.xlog.XLog;
 import com.oasisfeng.condom.CondomContext;
@@ -102,6 +103,11 @@ public class PushServiceMain extends XMPushService {
 
     @Override public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
+        // Delegate the control of notifications to Nevo.
+        // This enables users to have more control over MiPush notifications through Nevolution,
+        // a powerful notification customizer app.
+        if (SDK_INT >= Q) ContextCompat.getSystemService(this, NotificationManager.class)
+                .setNotificationDelegate("com.oasisfeng.nevo");
         return Service.START_STICKY;
     }
 
