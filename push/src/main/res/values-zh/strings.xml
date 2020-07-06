@@ -3,9 +3,6 @@
 
     <string name="common_err">%1$s</string>
 
-    <!-- Xposed -->
-    <string name="xposed_description">小米推送机型伪装插件，如需使用请开启</string>
-
     <!-- Auth -->
     <string name="auth_message"><![CDATA[要允许 <b>%1$s</b> 推送消息吗？如果您不确定，可尝试 <b>允许一次</b>。]]></string>
     <string name="allow">允许</string>

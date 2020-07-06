@@ -93,7 +93,6 @@ dependencies {
     implementation project(':provider')
     implementation project(':extenders')
     implementation "androidx.palette:palette:1.0.0"
-    compileOnly 'de.robv.android.xposed:api:82'
 
     implementation 'com.catchingnow.icebox:SDK:1.0.5'
 }

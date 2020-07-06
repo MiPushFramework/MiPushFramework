@@ -156,7 +156,7 @@ Registration is determined and initiated by the application and generally begins
 
     <string name="fake_enable_title">Fake as XiaoMi Phone</string>
     <string name="fake_global_enable_title">Global fake as XiaoMi Phone</string>
-    <string name="fake_enable_detail">Fake the phone to Xiaomi via an Xposed module or Magisk module, enable other applications to registers. (Require Root)</string>
+    <string name="fake_enable_detail">Fake the phone to Xiaomi via Magisk modules, enable other applications to registers. (Require Root)</string>
     <string name="fake_enable_detail_not_suggested">Not recommended for this app, it may not work properly.</string>
     <string name="fake_enable_global">Global faking enabled</string>
     <string name="helplib_action_about">About</string>

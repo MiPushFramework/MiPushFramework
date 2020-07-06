@@ -51,17 +51,6 @@
         tools:replace="android:label,android:allowBackup"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <!-- Xposed -->
-        <meta-data
-            android:name="xposedmodule"
-            android:value="true" />
-        <meta-data
-            android:name="xposeddescription"
-            android:value="@string/xposed_description" />
-        <meta-data
-            android:name="xposedminversion"
-            android:value="53" />
-
         <service
             android:name=".push.service.HttpService"
             android:exported="true" />

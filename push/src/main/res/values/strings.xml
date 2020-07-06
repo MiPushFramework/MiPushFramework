@@ -3,9 +3,6 @@
 
     <string name="common_err">%1$s</string>
 
-    <!-- Xposed -->
-    <string name="xposed_description">Fake XiaoMi Phone plugin, turn on if you need it.</string>
-
     <!-- Auth -->
     <string name="auth_message"><![CDATA[Do you want to allow  <b>%1$s</b> to push messages? If you are unsure, try <b>Allow one time</b>.]]></string>
     <string name="allow">Allow</string>
