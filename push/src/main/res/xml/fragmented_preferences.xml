@@ -36,19 +36,6 @@
 
     <PreferenceCategory android:title="@string/settings_options">
 
-
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="activity_push_icon"
-            android:summary="@string/settings_summary_push_icon"
-            android:title="@string/settings_push_icon" />
-
-
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="AutoRegister"
-            android:title="@string/settings_auto_register" />
-
         <SwitchPreference
             android:defaultValue="false"
             android:key="NotificationOnRegister"

@@ -1,6 +1,7 @@
 package top.trumeet.common.utils;
 
 import android.app.AppGlobals;
+import android.app.AppOpsManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -15,15 +16,13 @@ import android.text.Html;
 import java.util.Calendar;
 import java.util.Date;
 
-import top.trumeet.common.Constants;
+import top.trumeet.common.override.AppOpsManagerOverride;
+
+import static android.content.Context.APP_OPS_SERVICE;
 
 public final class Utils {
     public static int myUid() {
         return Process.myUserHandle().hashCode();
-    }
-
-    public static boolean isServiceInstalled() {
-        return isAppInstalled(Constants.SERVICE_APP_NAME);
     }
 
     public static Application getApplication() {
@@ -81,7 +80,12 @@ public final class Utils {
         return (applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0;
     }
 
-    public static boolean isUserApplication (String pkg) {
+    public static int checkOp(Context context, int op) {
+        return AppOpsManagerOverride.checkOpNoThrow(op, Process.myUid(),
+                context.getPackageName(), (AppOpsManager) context.getSystemService(APP_OPS_SERVICE));
+    }
+
+    public static boolean isUserApplication(String pkg) {
         try {
             return isUserApplication(getApplication().getPackageManager().getApplicationInfo(pkg, PackageManager.GET_UNINSTALLED_PACKAGES));
         } catch (PackageManager.NameNotFoundException ignored) {

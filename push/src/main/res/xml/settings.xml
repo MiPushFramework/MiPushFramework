@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/settings_service_setting">
+
+        <Preference
+            android:key="activity_push_advance_setting"
+            android:summary="@string/settings_summary_service_advance_setting"
+            android:title="@string/settings_service_advance_setting">
+            <intent
+                android:targetClass="com.xiaomi.xmsf.ManageSpaceActivity"
+                android:targetPackage="com.xiaomi.xmsf" />
+        </Preference>
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_debug">
+
+        <Preference
+            android:key="key_get_log"
+            android:summary="@string/settings_get_log_summary"
+            android:title="@string/settings_get_log" />
+
+        <Preference android:title="@string/helplib_title">
+            <intent
+                android:targetClass="top.trumeet.mipushframework.help.HelpActivity"
+                android:targetPackage="com.xiaomi.xmsf" />
+        </Preference>
+    </PreferenceCategory>
+</PreferenceScreen>

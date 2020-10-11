@@ -34,14 +34,14 @@ public class EventDb {
         return new DatabaseUtils(CONTENT_URI, context.getContentResolver());
     }
 
-    @RequiresPermission(value = Constants.permissions.WRITE_SETTINGS)
+
     public static Uri insertEvent(Event event,
                                   Context context) {
         return getInstance(context)
                 .insert(event.toValues());
     }
 
-    @RequiresPermission(value = Constants.permissions.WRITE_SETTINGS)
+
     public static Uri insertEvent(@Event.ResultType int result,
                                   EventType type,
                                   Context context) {
@@ -49,7 +49,7 @@ public class EventDb {
                 , result, null, null, type.getInfo())), context);
     }
 
-    @RequiresPermission(value = Constants.permissions.READ_SETTINGS)
+
     public static List<Event> query(@Nullable Integer skip,
                                     @Nullable Integer limit,
                                     @Nullable String pkg,
@@ -69,13 +69,13 @@ public class EventDb {
                         });
     }
 
-    @RequiresPermission(value = Constants.permissions.WRITE_SETTINGS)
+
     public static void deleteHistory(Context context, CancellationSignal signal) {
         String data =  (Utils.getUTC().getTime() - 1000L * 3600L * 24 * 7) + "";
         getInstance(context).delete("type in (0, 2, 10) and date < ?", new String[]{data});
     }
 
-    @RequiresPermission(value = Constants.permissions.READ_SETTINGS)
+
     public static Set<String> queryRegistered(Context context, CancellationSignal signal) {
 
         List<Event> registered = getInstance(context).queryAndConvert(signal, Event.KEY_TYPE + "=" + Event.Type.RegistrationResult, null,
@@ -128,7 +128,7 @@ public class EventDb {
         return pkgs;
     }
 
-    @RequiresPermission(value = Constants.permissions.READ_SETTINGS)
+
     public static List<Event> query(String pkg, int page, Context context,
                                     CancellationSignal cancellationSignal) {
         int skip;

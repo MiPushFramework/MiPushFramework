@@ -6,8 +6,6 @@ import com.elvishew.xlog.Logger;
 import com.elvishew.xlog.XLog;
 import com.taobao.android.dexposed.XC_MethodHook;
 import com.xiaomi.xmsf.push.hooks.impl.HookMIUIPushSdk;
-import com.xiaomi.xmsf.push.hooks.impl.HookPingReceiver;
-import com.xiaomi.xmsf.push.hooks.impl.HookPkgUninstallReceiver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +25,6 @@ public class PushSdkHooks {
     static {
         //register
         registeredHooks.add(new HookMIUIPushSdk());
-        registeredHooks.add(new HookPkgUninstallReceiver());
-        registeredHooks.add(new HookPingReceiver());
     }
 
 
