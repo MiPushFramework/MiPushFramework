@@ -6,10 +6,6 @@
     <string name="start">Start</string>
     <string name="end">End</string>
 
-
-    <string name="perm_change_settings">Manage Push service</string>
-    <string name="perm_read_settings">Get Push settings</string>
-
     <!-- Event -->
     <string name="event_register">Register push</string>
     <string name="event_register_result">Receive register result</string>

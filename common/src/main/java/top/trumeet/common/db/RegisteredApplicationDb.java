@@ -32,8 +32,6 @@ public class RegisteredApplicationDb {
         return new DatabaseUtils(CONTENT_URI, context.getContentResolver());
     }
 
-    @RequiresPermission(allOf = {Constants.permissions.WRITE_SETTINGS,
-        Constants.permissions.READ_SETTINGS})
     public static RegisteredApplication
     registerApplication (String pkg, boolean autoCreate, Context context,
                          CancellationSignal signal) {
@@ -45,7 +43,7 @@ public class RegisteredApplicationDb {
                 (autoCreate ? create(pkg, context) : null) : list.get(0);
     }
 
-    @RequiresPermission(value = Constants.permissions.READ_SETTINGS)
+
     public static List<RegisteredApplication>
     getList (Context context,
              @Nullable String pkg,
@@ -64,7 +62,7 @@ public class RegisteredApplicationDb {
                         });
     }
 
-    @RequiresPermission(value = Constants.permissions.WRITE_SETTINGS)
+
     public static int update (RegisteredApplication application,
                                Context context) {
         return getInstance(context)
@@ -72,8 +70,7 @@ public class RegisteredApplicationDb {
                         new String[]{application.getId().toString()});
     }
 
-    @RequiresPermission(allOf = {Constants.permissions.WRITE_SETTINGS,
-            Constants.permissions.READ_SETTINGS})
+
     private static RegisteredApplication create (String pkg,
                                                  Context context) {
         // TODO: Configurable defaults; use null for optional and global options?
@@ -92,7 +89,7 @@ public class RegisteredApplicationDb {
                 null);
     }
 
-    @RequiresPermission(value = Constants.permissions.WRITE_SETTINGS)
+
     private static Uri insert (RegisteredApplication application,
                                 Context context) {
         return getInstance(context).insert(application.toValues());

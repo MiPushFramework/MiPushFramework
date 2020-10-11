@@ -76,22 +76,6 @@ public class ManageSpaceActivity extends PreferenceActivity {
                 return true;
             });
 
-
-            PackageManager pm = context.getPackageManager();
-            ComponentName componentName = new ComponentName(Constants.SERVICE_APP_NAME, EmptyActivity.OnePlus.class.getName());
-            boolean disabled = pm.getComponentEnabledSetting(componentName) == COMPONENT_ENABLED_STATE_DISABLED;
-
-            TwoStatePreference preferencePushIcon = (TwoStatePreference) getPreferenceScreen().findPreference("activity_push_icon");
-            preferencePushIcon.setChecked(!disabled);
-            preferencePushIcon.setOnPreferenceClickListener(preference -> {
-                TwoStatePreference switchPreference = (TwoStatePreference) preference;
-                boolean enableLauncher = switchPreference.isChecked();
-                pm.setComponentEnabledSetting(componentName,
-                        enableLauncher ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED,
-                        PackageManager.DONT_KILL_APP);
-                return true;
-            });
-
             Preference iceboxSupported = getPreferenceScreen().findPreference("IceboxSupported");
             if (!Utils.isAppInstalled(IceBox.PACKAGE_NAME)) {
                 iceboxSupported.setEnabled(false);

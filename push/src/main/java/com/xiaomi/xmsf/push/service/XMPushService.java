@@ -13,8 +13,6 @@ import com.elvishew.xlog.Logger;
 import com.elvishew.xlog.XLog;
 import com.xiaomi.push.service.PushServiceMain;
 import com.xiaomi.xmsf.R;
-import com.xiaomi.xmsf.push.auth.AuthActivity;
-import com.xiaomi.xmsf.push.control.PushControllerUtils;
 import com.xiaomi.xmsf.push.notification.NotificationController;
 import com.xiaomi.xmsf.push.utils.RemoveTremblingUtils;
 import com.xiaomi.xmsf.utils.ConfigCenter;
@@ -25,8 +23,6 @@ import top.trumeet.common.db.EventDb;
 import top.trumeet.common.db.RegisteredApplicationDb;
 import top.trumeet.common.event.Event;
 import top.trumeet.common.register.RegisteredApplication;
-
-import static com.xiaomi.xmsf.BuildConfig.DEBUG;
 
 public class XMPushService extends IntentService {
     private static final String TAG = "XMPushService Bridge";
@@ -55,87 +51,37 @@ public class XMPushService extends IntentService {
             NotificationController.registerChannelIfNeeded(this, pkg);
             RegisteredApplication application = RegisteredApplicationDb
                     .registerApplication(pkg, true, this, null);
-            if (!PushControllerUtils.isPrefsEnable(this)) {
-                logger.e("Not allowed in SP! Just return!");
-                result = Event.ResultType.DENY_DISABLED;
-            } else {
-                if (application == null) {
-                    logger.w("registerApplication failed " + pkg);
-                    return;
-                }
-                if (application.getType() == RegisteredApplication.Type.DENY) {
-                    logger.w("Denied register request: " + pkg);
-                    result = Event.ResultType.DENY_USER;
-                } else {
-                    if (ConfigCenter.getInstance().isAutoRegister(this) && application.getType() == RegisteredApplication.Type.ASK) {
-                        application.setType(RegisteredApplication.Type.ALLOW);
-                        RegisteredApplicationDb.update(application, this);
-                    }
 
-                    if (application.getType() == RegisteredApplication.Type.ASK) {
-                        if (!register) {
-                            return;
-                        }
-                        logger.d("Starting auth");
-                        Intent authIntent = new Intent(this, AuthActivity.class);
-                        authIntent.putExtra(AuthActivity.EXTRA_REGISTERED_APPLICATION,
-                                application);
-                        authIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(authIntent);
-                        // Don't save event there, auth activity will call back.
-                        return;
-                    } else {
-                        logger.d("Allowed register request: " + pkg);
-                        Intent intent2 = new Intent();
-                        intent2.setComponent(new ComponentName(this, PushServiceMain.class));
-                        intent2.setAction(intent.getAction());
-                        intent2.putExtras(intent);
-	                    ContextCompat.startForegroundService(this, intent2);
-                        if (application.getType() == RegisteredApplication.Type.ALLOW_ONCE) {
-                            logger.w("Return once to ask");
-                            application.setType(RegisteredApplication.Type.ASK);
-                            RegisteredApplicationDb.update(application, this);
-                        }
-                        result = Event.ResultType.OK;
-                    }
-                }
+            if (application == null) {
+                return;
             }
+
+            Intent intent2 = new Intent();
+            intent2.setComponent(new ComponentName(this, PushServiceMain.class));
+            intent2.setAction(intent.getAction());
+            intent2.putExtras(intent);
+            ContextCompat.startForegroundService(this, intent2);
+
             if (register) {
                 boolean notificationOnRegister = ConfigCenter.getInstance().isNotificationOnRegister(this);
-                notificationOnRegister = notificationOnRegister && (application != null && application.isNotificationOnRegister());
+                notificationOnRegister = notificationOnRegister && application.isNotificationOnRegister();
                 if (notificationOnRegister) {
                     CharSequence appName = ApplicationNameCache.getInstance().getAppName(this, pkg);
-                    CharSequence usedString;
-                    switch (result) {
-                        case Event.ResultType.OK:
-                            usedString = getString(R.string.notification_registerAllowed, appName);
-                            break;
-                        case Event.ResultType.DENY_DISABLED:
-                            usedString = null; // Should not be notified?
-                            break;
-                        case Event.ResultType.DENY_USER:
-                            usedString = getString(R.string.notification_registerRejected, appName);
-                            break;
-                        default:
-                            usedString = null;
-                            break;
-                    }
-                    if (usedString != null) {
-                        new Handler(Looper.getMainLooper()).post(() -> {
-                            try {
-                                Toast.makeText(this, usedString,
-                                        Toast.LENGTH_SHORT)
-                                        .show();
-                            } catch (Throwable ignored) {
-                                // TODO: It's a bad way to switch to main thread.
-                                // Ignored service death
-                            }
-                        });
-                    }
+                    CharSequence usedString = getString(R.string.notification_registerAllowed, appName);
+                    new Handler(Looper.getMainLooper()).post(() -> {
+                        try {
+                            Toast.makeText(this, usedString,
+                                    Toast.LENGTH_SHORT)
+                                    .show();
+                        } catch (Throwable ignored) {
+                            // TODO: It's a bad way to switch to main thread.
+                            // Ignored service death
+                        }
+                    });
                 } else {
                     Log.e("XMPushService Bridge", "Notification disabled");
                 }
-                EventDb.insertEvent(result, new top.trumeet.common.event.type.RegistrationType(null, pkg), this);
+                EventDb.insertEvent(Event.ResultType.OK, new top.trumeet.common.event.type.RegistrationType(null, pkg), this);
             }
         } catch (RuntimeException e) {
             logger.e("XMPushService::onHandleIntent: ", e);

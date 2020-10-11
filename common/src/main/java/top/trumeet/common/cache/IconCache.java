@@ -74,6 +74,9 @@ public class IconCache {
             @Override
             Icon gen() {
                 Bitmap rawIconBitmap = getRawIconBitmap(ctx, pkg);
+                if (rawIconBitmap == null) {
+                    return null;
+                }
                 Bitmap whiteIconBitmap = new WhiteIconProcess().convert(ctx, rawIconBitmap);
                 return callback.convert(ctx, whiteIconBitmap);
             }

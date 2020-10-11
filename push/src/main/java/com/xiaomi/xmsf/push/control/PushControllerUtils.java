@@ -41,7 +41,7 @@ import static top.trumeet.common.Constants.TAG_CONDOM;
 public class PushControllerUtils {
     private static Logger logger = XLog.tag(PushControllerUtils.class.getSimpleName()).build();
 
-    private static BroadcastReceiver liveReceiver  = new KeepAliveReceiver();
+    private static BroadcastReceiver liveReceiver = new KeepAliveReceiver();
 
     private static SharedPreferences getPrefs(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
@@ -153,34 +153,6 @@ public class PushControllerUtils {
         setBootReceiverEnable(enable, context);
     }
 
-    /**
-     * Check SP and service is enable
-     *
-     * @param context Context param
-     * @return is all enable
-     */
-    public static boolean isAllEnable(Context context) {
-        return isPrefsEnable(context) && isServiceRunning(context)
-                && isBootReceiverEnable(context);
-    }
-
-    public static boolean isBootReceiverEnable(Context context) {
-        return context.getPackageManager()
-                .getComponentEnabledSetting(new ComponentName(context,
-                        BootReceiver.class)) ==
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
-    }
-
-    /**
-     * Check push service is running
-     *
-     * @param context context param
-     * @return is running
-     * @see com.xiaomi.push.service.XMPushService
-     */
-    public static boolean isServiceRunning(Context context) {
-        return ServiceRunningChecker.isServiceRunning(context, PushServiceMain.class);
-    }
 
     @SuppressLint("WrongConstant")
     private static void setBootReceiverEnable(boolean enable, Context context) {

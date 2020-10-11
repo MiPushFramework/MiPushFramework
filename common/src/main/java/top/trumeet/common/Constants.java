@@ -28,19 +28,19 @@ public final class Constants {
 
     /**
      * Enable push.
-     * @see top.trumeet.common.push.PushController
+     * 
      */
     public static final String KEY_ENABLE_PUSH = "enable_push";
 
     /**
      * XMPush APP id
-     * @see top.trumeet.common.push.PushController
+     * 
      */
     public static String APP_ID = "1000271";
 
     /**
      * XMPush APP key
-     * @see top.trumeet.common.push.PushController
+     * 
      */
     public static String APP_KEY = "420100086271";
 
@@ -91,30 +91,12 @@ public final class Constants {
 
     public static final int PUSH_SERVICE_VERSION_CODE = Integer.parseInt(BuildConfig.PUSH_VERSION_CODE);
 
-    /**
-     * 用于 Manager 控制 Service 的控制服务的名字
-     * @see top.trumeet.common.push.PushController
-     */
-    public static final String CONTROLLER_SERVICE_NAME = "com.xiaomi.xmsf.push.control.ControlService";
-
     public static final String SHARE_LOG_COMPONENT_NAME =
             SERVICE_APP_NAME + ".ShareLogActivity";
-
-    public static final String KEEPLIVE_COMPONENT_NAME =
-            SERVICE_APP_NAME + ".EmptyActivity";
 
     public static final String REMOVE_DOZE_COMPONENT_NAME =
             SERVICE_APP_NAME + ".RemoveDozeActivity";
 
-    public static class permissions {
-        public static final String BIND = "top.trumeet.mipush.permissions.BIND";
-        public static final String READ_SETTINGS = "top.trumeet.mipush.permissions.READ_SETTINGS";
-        public static final String WRITE_SETTINGS = "top.trumeet.mipush.permissions.WRITE_SETTINGS";
-        public static final String USE_PUSH_MANAGER_API = "moe.yutua.mipush.permissions.USE_PUSH_MANAGER_API";
-    }
-    public static class permissions_old {
-        public static final String GET_VERSION = "top.trumeet.mipush.permissions.GET_VERSION";
-    }
 
     public static final String FAKE_CONFIGURATION_PATH = "/data/misc/riru/modules/mipush_fake/packages/";
     public static final String FAKE_CONFIGURATION_NAME_TEMPLATE = FAKE_CONFIGURATION_PATH + "%1$s.%2$s";

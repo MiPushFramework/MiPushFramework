@@ -17,7 +17,6 @@ cache:
     - $HOME/.gradle/wrapper/
 script:
 - "./gradlew exportVersion --daemon"
-- "./gradlew :app:assembleRelease --daemon --parallel"
 - "./gradlew :push:assembleRelease --daemon --parallel"
 before_install:
 - yes | sdkmanager --update
@@ -30,7 +29,6 @@ before_deploy:
   - export VERSION=$(cat gitTag.txt)
   - git tag $VERSION
   # Rename
-  - mv "app/build/outputs/apk/release/app-release.apk" "app/build/outputs/apk/release/manager.apk"
   - mv "push/build/outputs/apk/release/push-release.apk" "push/build/outputs/apk/release/xmsf_service.apk"
 deploy:
   name: ${MIPUSH_VERSION}
@@ -41,7 +39,6 @@ deploy:
   api_key:
     secure: PDXnJ6QrAr8OMG88ShNLySwetqNeXhCn2jP+IgB3Hp0epNEbTL2mOf+dMvWoZ3mKDjm/KkkZP3SNkdkHcO1IfDlzkBNf8wUctBk9V8SEzMLooz7yPcAcHN3UaiIUDZMmZ4axZGXr9WW8gSGvv7teFtLCZFF0qXa8GaXk0brexg1S+lpU5yO+wGvVgSJGBmDW8FZOCIMGA5voamJ1MSFWD+AVD8YpiA4xxGYQHmyvKeMb1MtlnP6rAb6DKZrCISckI06AFuH1qDYCoCM6M6htNGs7gSbm/M0WoQjAWvfVKFfz6vrojzvYHYt1iEf1yOlvkkg9WrC+UDhu91yHouPo5Ocb8Kz3mHwMF8RlCJxm8mXcRj71qAJ6URLy8q3SqrKC2rBfxQ7X0V1DzqAQj61StOyf17VtfGORJ/hwR9vtjyuqR/e33zqtMghAh8QQT3CL9TAUMcvLHMumZLT8SXr7U4SxWg5vylhJH0RHox/F0zlwhLEP9/Yvu7yc5bG2KWiEyFLiW7hB9XJhmn1CrYCOMxqQWA+CvdjlkzedugWZuFRm5ToTlZ6b9WBY68M4hLcPM+ndAKPq/kCPv2+QDyS69khk30CLLKPbxkcKBPjzLsiRkLKWLdV9tmK/yymHJaaHCe9TsgXdqLnN4KNTWcbtwutV8vVb1RK3dBx642enLE0=
   file:
-    - "app/build/outputs/apk/release/manager.apk"
     - "push/build/outputs/apk/release/xmsf_service.apk"
   on:
     repo: MiPushFramework/MiPushFramework
