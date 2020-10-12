@@ -152,4 +152,86 @@ dependencies {
     })
     // Work
     implementation "android.arch.work:work-runtime:$work_version"
+
+}
+
+buildscript {
+    repositories {
+        jcenter()
+
+    }
+    dependencies {
+        classpath 'com.bryansharp:hibeaver:1.2.7'
+    }
+}
+
+apply plugin: 'hiBeaver'
+import com.bryansharp.gradle.hibeaver.utils.MethodLogAdapter
+import org.objectweb.asm.ClassVisitor
+import org.objectweb.asm.MethodVisitor
+import org.objectweb.asm.Opcodes
+
+//or you can import like bellow:
+//import org.objectweb.asm.*
+hiBeaver {
+    //this will determine the name of this hibeaver transform, no practical use.
+    hiBeaverModifyName = 'mipushHook'
+    //turn this on to make it print help content, default value is true
+    showHelp = true
+    //this flag will decide whether the log of the modifying process be printed or not, default value is false
+    keepQuiet = false
+    //this is a kit feature of the plugin, set it true to see the time consume of this build
+    watchTimeConsume = false
+
+    //this is the most important part
+    modifyMatchMaps = [
+            'com.xiaomi.channel.commonutils.android.MIUIUtils'    : [
+                    ['methodName': 'getIsMIUI', 'methodDesc': '()I', 'adapter': {
+                        ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
+
+                            MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions);
+                            MethodVisitor adapter = new MethodLogAdapter(methodVisitor) {
+
+                                @Override
+                                void visitCode() {
+                                    //super.visitCode()
+                                    methodVisitor.visitLdcInsn(name);
+                                    methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, MethodLogAdapter.className2Path("top.trumeet.mipushframework.Hook"), "hookXM", "(Ljava/lang/Object;)V");
+
+                                    methodVisitor.visitInsn(Opcodes.ICONST_1);
+                                    methodVisitor.visitVarInsn(Opcodes.ISTORE, 0);
+                                    methodVisitor.visitVarInsn(Opcodes.ILOAD, 0);
+                                    methodVisitor.visitInsn(Opcodes.IRETURN);
+                                    methodVisitor.visitEnd();
+                                }
+                            }
+                            return adapter;
+                    }]
+            ],
+            'com.xiaomi.channel.commonutils.android.DeviceInfo': [
+             ['methodName': 'quicklyGetIMEI', 'methodDesc': '(Landroid/content/Context;)Ljava/lang/String;', 'adapter': {
+                ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
+
+                    MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions);
+                    MethodVisitor adapter = new MethodLogAdapter(methodVisitor) {
+
+                        @Override
+                        void visitCode() {
+                            //super.visitCode()
+                            methodVisitor.visitLdcInsn(name);
+                            methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, MethodLogAdapter.className2Path("top.trumeet.mipushframework.Hook"), "hookXM", "(Ljava/lang/Object;)V");
+
+                            methodVisitor.visitLdcInsn("");
+                            methodVisitor.visitVarInsn(Opcodes.ASTORE, 1);
+                            methodVisitor.visitVarInsn(Opcodes.ALOAD, 1);
+                            methodVisitor.visitInsn(Opcodes.ARETURN);
+                            methodVisitor.visitMaxs(1, 2);
+                            methodVisitor.visitEnd();
+                        }
+                    }
+                    return adapter;
+            }]
+    ]
+    ]
+    modifyTasks = ["${rootDir.absolutePath}/libs/miuipushsdkshared.jar": modifyMatchMaps]
 }
