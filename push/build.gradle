@@ -135,18 +135,18 @@ dependencies {
         exclude group: 'com.android.support'
     })
     // RxJava & RxAndroid
-    implementation ("io.reactivex.rxjava2:rxandroid:$rxAndroidVersion", {
+    implementation("io.reactivex.rxjava2:rxandroid:$rxAndroidVersion", {
         exclude group: 'com.android.support'
     })
-    implementation ("io.reactivex.rxjava2:rxjava:$rxVersion", {
+    implementation("io.reactivex.rxjava2:rxjava:$rxVersion", {
         exclude group: 'com.android.support'
     })
     // RxActivityResult
-    implementation ('com.github.VictorAlbertos:RxActivityResult:0.4.5-2.x', {
+    implementation('com.github.VictorAlbertos:RxActivityResult:0.4.5-2.x', {
         exclude group: 'com.android.support'
     })
     // RxPermissions
-    implementation ('com.github.tbruyelle:rxpermissions:0.10.2', {
+    implementation('com.github.tbruyelle:rxpermissions:0.10.2', {
         exclude group: 'com.android.support'
     })
     // Work
@@ -184,7 +184,7 @@ hiBeaver {
 
     //this is the most important part
     modifyMatchMaps = [
-            'com.xiaomi.channel.commonutils.android.MIUIUtils'    : [
+            'com.xiaomi.channel.commonutils.android.MIUIUtils'             : [
                     ['methodName': 'getIsMIUI', 'methodDesc': '()I', 'adapter': {
                         ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
 
@@ -207,30 +207,58 @@ hiBeaver {
                             return adapter;
                     }]
             ],
-            'com.xiaomi.channel.commonutils.android.DeviceInfo': [
-             ['methodName': 'quicklyGetIMEI', 'methodDesc': '(Landroid/content/Context;)Ljava/lang/String;', 'adapter': {
-                ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
+            'com.xiaomi.channel.commonutils.android.DeviceInfo'            : [
+                    ['methodName': 'quicklyGetIMEI', 'methodDesc': '(Landroid/content/Context;)Ljava/lang/String;', 'adapter': {
+                        ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
 
-                    MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions);
-                    MethodVisitor adapter = new MethodLogAdapter(methodVisitor) {
+                            MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions);
+                            MethodVisitor adapter = new MethodLogAdapter(methodVisitor) {
 
-                        @Override
-                        void visitCode() {
-                            //super.visitCode()
-                            methodVisitor.visitLdcInsn(name);
-                            methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, MethodLogAdapter.className2Path("top.trumeet.mipushframework.Hook"), "hookXM", "(Ljava/lang/Object;)V");
+                                @Override
+                                void visitCode() {
+                                    //super.visitCode()
+                                    methodVisitor.visitLdcInsn(name);
+                                    methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, MethodLogAdapter.className2Path("top.trumeet.mipushframework.Hook"), "hookXM", "(Ljava/lang/Object;)V");
 
-                            methodVisitor.visitLdcInsn("");
-                            methodVisitor.visitVarInsn(Opcodes.ASTORE, 1);
-                            methodVisitor.visitVarInsn(Opcodes.ALOAD, 1);
-                            methodVisitor.visitInsn(Opcodes.ARETURN);
-                            methodVisitor.visitMaxs(1, 2);
-                            methodVisitor.visitEnd();
-                        }
-                    }
-                    return adapter;
-            }]
-    ]
+                                    methodVisitor.visitLdcInsn("");
+                                    methodVisitor.visitVarInsn(Opcodes.ASTORE, 1);
+                                    methodVisitor.visitVarInsn(Opcodes.ALOAD, 1);
+                                    methodVisitor.visitInsn(Opcodes.ARETURN);
+                                    methodVisitor.visitMaxs(1, 2);
+                                    methodVisitor.visitEnd();
+                                }
+                            }
+                            return adapter;
+                    }]
+            ]
+            /*,
+            'com.xiaomi.*|top.trumeet.*|!top.trumeet.mipushframework.Hook*': [
+                    ['methodName': '*|!toString|!hookX*|!compareTo', 'methodDesc': '*', 'adapter': {
+                        ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
+
+                            MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions);
+                            MethodVisitor adapter = new MethodLogAdapter(methodVisitor) {
+
+                                @Override
+                                void visitCode() {
+                                    super.visitCode()
+                                    if (name.equals("<init>")) {
+                                        return
+                                    }
+
+                                    if ((access & Opcodes.ACC_STATIC) != 0) {
+                                        methodVisitor.visitLdcInsn("===");
+                                    } else {
+                                        methodVisitor.visitVarInsn(Opcodes.ALOAD, 0);
+                                    }
+
+                                    methodVisitor.visitLdcInsn(name + desc);
+                                    methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, MethodLogAdapter.className2Path("top.trumeet.mipushframework.Hook"), "hookXM2", "(Ljava/lang/Object;Ljava/lang/Object;)V");
+                                }
+                            }
+                            return adapter;
+                    }]
+            ]*/
     ]
     modifyTasks = ["${rootDir.absolutePath}/libs/miuipushsdkshared.jar": modifyMatchMaps]
 }
