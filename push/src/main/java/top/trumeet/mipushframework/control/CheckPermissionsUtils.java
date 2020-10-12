@@ -5,16 +5,12 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 
-import com.tbruyelle.rxpermissions2.RxPermissions;
-
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.internal.functions.Functions;
 import rx_activity_result2.RxActivityResult;
 import top.trumeet.common.Constants;
 import top.trumeet.common.push.PushServiceAccessibility;
-import top.trumeet.mipushframework.models.ActivityResultAndPermissionResult;
 
 public class CheckPermissionsUtils {
 
