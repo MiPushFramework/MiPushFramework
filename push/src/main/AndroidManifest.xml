@@ -83,10 +83,6 @@
                 android:resource="@xml/filepaths" />
         </provider>
 
-        <provider
-            android:name="top.trumeet.mipushframework.plugin.PushServiceAPIProvider"
-            android:authorities="moe.yuuta.mipush.push.api.PushServiceAPI" />
-
         <receiver
             android:name=".push.service.receivers.BootReceiver"
             android:process=":pushservice">

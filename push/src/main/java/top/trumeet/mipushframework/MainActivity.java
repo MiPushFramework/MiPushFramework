@@ -1,14 +1,11 @@
 package top.trumeet.mipushframework;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.UiThread;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -37,37 +34,6 @@ public abstract class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkAndConnect();
-        //checkPermission();
-    }
-
-    private void checkPermission() {
-
-        requirePermission("android.permission.READ_PHONE_STATE");
-
-    }
-
-    private void requirePermission(String permission) {
-        if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{permission}, 1);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "权限申请成功，请重启应用，...", Toast.LENGTH_SHORT).show();
-                    System.exit(0);
-                } else {
-                    //申请拒绝
-                    Toast.makeText(this, "您已拒绝必要权限，...", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-                return;
-            }
-        }
     }
 
     @UiThread
