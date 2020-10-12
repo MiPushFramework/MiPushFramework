@@ -3,9 +3,6 @@
 
     <string name="common_err">%1$s</string>
 
-    <!-- Xposed -->
-    <string name="xposed_description">Fake XiaoMi Phone plugin, turn on if you need it.</string>
-
     <!-- Auth -->
     <string name="allow">Allow</string>
     <string name="deny">Reject</string>

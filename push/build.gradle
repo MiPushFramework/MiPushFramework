@@ -111,7 +111,6 @@ dependencies {
     implementation project(':provider')
     implementation project(':extenders')
     implementation "com.android.support:palette-v7:$supportLibraryVersion"
-    compileOnly 'de.robv.android.xposed:api:82'
 
     implementation 'com.catchingnow.icebox:SDK:1.0.5'
 
