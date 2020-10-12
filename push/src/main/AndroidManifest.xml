@@ -73,16 +73,6 @@
             android:label="@string/helplib_title"
             android:theme="@style/HelpTheme.DayNight" />
 
-        <meta-data
-            android:name="xposedmodule"
-            android:value="true" />
-        <meta-data
-            android:name="xposeddescription"
-            android:value="@string/xposed_description" />
-        <meta-data
-            android:name="xposedminversion"
-            android:value="53" />
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="top.trumeet.mipushframework.fileprovider"
