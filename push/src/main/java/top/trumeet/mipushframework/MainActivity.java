@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.widget.Toast;
 
+import com.xiaomi.channel.commonutils.android.DeviceInfo;
+import com.xiaomi.channel.commonutils.android.MIUIUtils;
 import com.xiaomi.xmsf.R;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -33,7 +35,21 @@ public abstract class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        hookTest();
         checkAndConnect();
+    }
+
+
+    void hookTest() {
+        Log.i(TAG, "[hook_res]MIUIUtils.getIsMIUI()" + MIUIUtils.getIsMIUI());
+        Log.i(TAG, "[hook_res]DeviceInfo.quicklyGetIMEI()" + DeviceInfo.quicklyGetIMEI(this));
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @UiThread
