@@ -20,7 +20,6 @@ import android.support.v4.content.ContextCompat;
 import com.elvishew.xlog.XLog;
 import com.oasisfeng.condom.CondomOptions;
 import com.oasisfeng.condom.CondomProcess;
-import com.taobao.android.dexposed.XC_MethodHook;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.channel.commonutils.logger.MyLog;
 import com.xiaomi.channel.commonutils.misc.ScheduledJobManager;
@@ -29,7 +28,6 @@ import com.xiaomi.push.service.OnlineConfig;
 import com.xiaomi.xmpush.thrift.ConfigKey;
 import com.xiaomi.xmsf.push.control.PushControllerUtils;
 import com.xiaomi.xmsf.push.control.XMOutbound;
-import com.xiaomi.xmsf.push.hooks.PushSdkHooks;
 import com.xiaomi.xmsf.push.notification.NotificationController;
 import com.xiaomi.xmsf.push.service.MiuiPushActivateService;
 import com.xiaomi.xmsf.push.service.notificationcollection.NotificationListener;
@@ -53,18 +51,6 @@ public class MiPushFrameworkApp extends Application {
 
     private static final String MIPUSH_EXTRA = "mipush_extra";
 
-    private XC_MethodHook.Unhook[] mUnHooks;
-
-    @Override
-    public void onTerminate() {
-        if (mUnHooks != null) {
-            for (XC_MethodHook.Unhook unhook : mUnHooks) {
-                unhook.unhook();
-            }
-        }
-        super.onTerminate();
-    }
-
     @Override
     public void attachBaseContext(Context context) {
         super.attachBaseContext(context);
@@ -81,8 +67,6 @@ public class MiPushFrameworkApp extends Application {
         logger.i("App starts at " + System.currentTimeMillis());
 
         initMiSdkLogger();
-
-        mUnHooks = new PushSdkHooks().getHooks();
 
         CondomOptions options = XMOutbound.create(this, TAG_CONDOM + "_PROCESS",
                 false);
