@@ -93,7 +93,9 @@ public class MyPushMessageHandler extends IntentService {
             if (elevated && SDK_INT > P
                     && (clone = BackgroundActivityStartEnabler.clonePendingIntentForBackgroundActivityStart(pi)) != null) {
                 pi = clone;
-            } else pullUpApp(targetPackage, container);
+            } else {
+                pullUpApp(targetPackage, container);
+            }
 
             try {
                 logger.d("send to service " + targetPackage);
@@ -139,10 +141,16 @@ public class MyPushMessageHandler extends IntentService {
     private Intent getJumpIntent(String targetPackage, XmPushActionContainer container) {
         Intent intent = MyMIPushNotificationHelper.getSdkIntent(this, targetPackage, container);
         if (intent == null) {
-            try {
-                intent = getPackageManager().getLaunchIntentForPackage(targetPackage);
-            } catch (RuntimeException ignore) {
-            }
+            intent = getJumpIntentFromPkg(targetPackage, container);
+        }
+        return intent;
+    }
+
+    private Intent getJumpIntentFromPkg(String targetPackage, XmPushActionContainer container) {
+        Intent intent = null;
+        try {
+            intent = getPackageManager().getLaunchIntentForPackage(targetPackage);
+        } catch (RuntimeException ignore) {
         }
         return intent;
     }
@@ -206,6 +214,12 @@ public class MyPushMessageHandler extends IntentService {
                         break;
                     }
 
+                    if (i == (APP_CHECK_FRONT_MAX_RETRY / 2)) {
+                        intent = getJumpIntentFromPkg(targetPackage, container);
+                        intent.addCategory(Intent.CATEGORY_DEFAULT);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                    }
                 }
 
                 if ((System.currentTimeMillis() - start) >= APP_CHECK_SLEEP_MAX_TIMEOUT_MS) {
