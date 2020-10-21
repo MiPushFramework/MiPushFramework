@@ -41,17 +41,10 @@ public class XMPushService extends IntentService {
                 logger.e("Package name is NULL!");
                 return;
             }
-            int result;
-            boolean register = true;
-            // Check multi request
-            if (!RemoveTremblingUtils.getInstance().onCallRegister(pkg)) {
-                logger.d("Don't register multi request " + pkg);
-                register = false;
-            }
+
             NotificationController.registerChannelIfNeeded(this, pkg);
             RegisteredApplication application = RegisteredApplicationDb
                     .registerApplication(pkg, true, this, null);
-
             if (application == null) {
                 return;
             }
@@ -62,7 +55,7 @@ public class XMPushService extends IntentService {
             intent2.putExtras(intent);
             ContextCompat.startForegroundService(this, intent2);
 
-            if (register) {
+            if (RemoveTremblingUtils.getInstance().onCallRegister(pkg)) {
                 boolean notificationOnRegister = ConfigCenter.getInstance().isNotificationOnRegister(this);
                 notificationOnRegister = notificationOnRegister && application.isNotificationOnRegister();
                 if (notificationOnRegister) {
@@ -82,7 +75,10 @@ public class XMPushService extends IntentService {
                     Log.e("XMPushService Bridge", "Notification disabled");
                 }
                 EventDb.insertEvent(Event.ResultType.OK, new top.trumeet.common.event.type.RegistrationType(null, pkg), this);
+            } else {
+                logger.d("Don't register multi request " + pkg);
             }
+
         } catch (RuntimeException e) {
             logger.e("XMPushService::onHandleIntent: ", e);
             Toast.makeText(this, getString(R.string.common_err, e.getMessage()), Toast.LENGTH_SHORT).show();

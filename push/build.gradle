@@ -231,7 +231,7 @@ hiBeaver {
                             return adapter;
                     }]
             ]
-            /*,
+            /**/,
             'com.xiaomi.*|top.trumeet.*|!top.trumeet.mipushframework.Hook*': [
                     ['methodName': '*|!toString|!hookX*|!compareTo', 'methodDesc': '*', 'adapter': {
                         ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
@@ -258,7 +258,7 @@ hiBeaver {
                             }
                             return adapter;
                     }]
-            ]*/
+            ]
     ]
     modifyTasks = ["${rootDir.absolutePath}/libs/miuipushsdkshared.jar": modifyMatchMaps]
 }

@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import com.elvishew.xlog.Logger;
 import com.elvishew.xlog.XLog;
 import com.xiaomi.channel.commonutils.android.AppInfoUtils;
-import com.xiaomi.channel.commonutils.android.MIIDUtils;
 import com.xiaomi.channel.commonutils.logger.MyLog;
 import com.xiaomi.xmpush.thrift.ActionType;
 import com.xiaomi.xmpush.thrift.PushMetaInfo;
@@ -42,7 +41,7 @@ import static com.xiaomi.push.service.PushServiceConstants.PREF_KEY_REGISTERED_P
 public class MyMIPushMessageProcessor {
     private static Logger logger = XLog.tag("MyMIPushMessageProcessor").build();
 
-    public static void process(XMPushService paramXMPushService, XmPushActionContainer buildContainer, byte[] paramArrayOfByte, long var2, Intent localIntent) {
+    public static void process(XMPushService paramXMPushService, XmPushActionContainer buildContainer, byte[] paramArrayOfByte, long var2, Intent localIntent, PushClientsManager.ClientLoginInfo clientLoginInfo) {
         try {
             long current = System.currentTimeMillis();
             PushMetaInfo localPushMetaInfo = buildContainer.getMetaInfo();
@@ -86,42 +85,7 @@ public class MyMIPushMessageProcessor {
                     }
                 }
 
-                if ((localPushMetaInfo != null) && (localPushMetaInfo.getExtra() != null) && (localPushMetaInfo.getExtra().containsKey("__miid"))) {
-                    String str2 = localPushMetaInfo.getExtra().get("__miid");
-                    Account localAccount = MIIDUtils.getXiaomiAccount(paramXMPushService);
-                    String oldAccount = "";
-                    if (localAccount == null) {
-                        // xiaomi account login ?
-                        oldAccount = "nothing";
-                    } else {
-                        if (TextUtils.equals(str2, localAccount.name)) {
-
-                        } else {
-                            oldAccount = localAccount.name;
-                            logger.w(str2 + " should be login, but got " + localAccount);
-                        }
-                    }
-
-                    if (!oldAccount.isEmpty()) {
-                        logger.w("miid already logout or anther already login :" + oldAccount);
-                        sendErrorAck(paramXMPushService, buildContainer, "miid already logout or anther already login", oldAccount);
-                    }
-                }
-
-                boolean isGeoMessage = (localPushMetaInfo != null && verifyGeoMessage(localPushMetaInfo.getExtra()));
-                if (isGeoMessage) {
-                    if (!geoMessageIsValidated(paramXMPushService, buildContainer)) {
-                        return;
-                    }
-
-                    boolean var10 = processGeoMessage(paramXMPushService, localPushMetaInfo, paramArrayOfByte);
-                    MIPushEventProcessor.sendGeoAck(paramXMPushService, buildContainer, true, false, false);
-                    if (!var10) {
-                        return;
-                    }
-                }
-
-                userProcessMIPushMessage(paramXMPushService, buildContainer, paramArrayOfByte, var2, localIntent, isGeoMessage);
+                userProcessMIPushMessage(paramXMPushService, buildContainer, paramArrayOfByte, var2, localIntent, clientLoginInfo);
             }
 
 
@@ -134,7 +98,7 @@ public class MyMIPushMessageProcessor {
     /**
      * @see MIPushEventProcessor#postProcessMIPushMessage
      */
-    private static void userProcessMIPushMessage(XMPushService paramXMPushService, XmPushActionContainer buildContainer, byte[] paramArrayOfByte, long var2, Intent paramIntent, boolean isGeoMessage) {
+    private static void userProcessMIPushMessage(XMPushService paramXMPushService, XmPushActionContainer buildContainer, byte[] paramArrayOfByte, long var2, Intent paramIntent, PushClientsManager.ClientLoginInfo clientLoginInfo) {
         //var5 buildContainer
         //var6 metaInfo
         boolean shouldNotify = true;
@@ -154,7 +118,7 @@ public class MyMIPushMessageProcessor {
                 SharedPreferences.Editor localEditor = paramXMPushService.getSharedPreferences(PREF_KEY_REGISTERED_PKGS, 0).edit();
                 localEditor.putString(str2, buildContainer.appid);
                 localEditor.apply();
-                com.xiaomi.tinyData.TinyDataManager.getInstance(paramXMPushService).processPendingData("Register Success, package name is " + str2);
+//                com.xiaomi.tinyData.TinyDataManager.getInstance(paramXMPushService).processPendingData("Register Success, package name is " + str2);
             }
         }
 
@@ -228,7 +192,7 @@ public class MyMIPushMessageProcessor {
                     try {
                         List<ResolveInfo> localList = paramXMPushService.getPackageManager().queryBroadcastReceivers(localIntent, 0);
                         if ((localList != null) && (!localList.isEmpty())) {
-                            paramXMPushService.sendBroadcast(localIntent, ClientEventDispatcher.getReceiverPermission(targetPackage));
+                            paramXMPushService.sendBroadcast(localIntent, ClientEventDispatcher.getReceiverPermission(clientLoginInfo));
                         }
                     } catch (Exception ignore) {
                     }
@@ -237,15 +201,11 @@ public class MyMIPushMessageProcessor {
 
             }
 
-            if (isGeoMessage) {
-                MIPushEventProcessor.sendGeoAck(paramXMPushService, buildContainer, false, true, false);
-            } else {
-                sendAckMessage(paramXMPushService, buildContainer);
+            sendAckMessage(paramXMPushService, buildContainer);
 
-            }
         } else if (shouldSendBroadcast(paramXMPushService, targetPackage, buildContainer, metaInfo)) {
 
-            paramXMPushService.sendBroadcast(paramIntent, ClientEventDispatcher.getReceiverPermission(targetPackage));
+            paramXMPushService.sendBroadcast(paramIntent, ClientEventDispatcher.getReceiverPermission(clientLoginInfo));
 
         }
 

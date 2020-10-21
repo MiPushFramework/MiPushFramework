@@ -1,10 +1,12 @@
 package com.xiaomi.push.service;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 
 import com.elvishew.xlog.Logger;
 import com.elvishew.xlog.XLog;
+import com.xiaomi.channel.commonutils.android.MIUIUtils;
 import com.xiaomi.slim.Blob;
 import com.xiaomi.smack.packet.CommonPacketExtension;
 import com.xiaomi.smack.packet.Message;
@@ -71,6 +73,18 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
         }
     }
 
+
+    @Override
+    public void notifyServiceStarted(Context var1) {
+        Intent var2 = new Intent();
+        var2.setAction("com.xiaomi.push.service_started");
+            var2.addFlags(16777216);
+       // if (MIUIUtils.isXMS()) {
+       // }
+
+        var1.sendBroadcast(var2);
+    }
+
     @Override
     public void notifyPacketArrival(XMPushService xMPushService, String str, Packet packet) {
         if (BuildConfig.DEBUG) {
@@ -126,29 +140,23 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
 
     private static class EventProcessor extends MIPushEventProcessor {
         private static Logger logger = XLog.tag("MyClientEventDispatcherD").build();
-        private static void runProcessMIPushMessage(XMPushService xmPushService, byte[] payload, long var2) {
+
+        private static void runProcessMIPushMessage(XMPushService xmPushService, byte[] payload, long var2, PushClientsManager.ClientLoginInfo clientLoginInfo) {
             XmPushActionContainer buildContainer = buildContainer(payload);
             if (BuildConfig.DEBUG) {
                 logger.i("buildContainer: " + buildContainer.toString());
             }
             EventType type = TypeFactory.create(buildContainer, buildContainer.packageName);
-            if (MessageProcessor.shouldAllow(type, xmPushService) ||
-                    PushConstants.PUSH_SERVICE_PACKAGE_NAME.equals(buildContainer.packageName)) {
 
-                Intent localIntent = buildIntent(payload, System.currentTimeMillis());
-                MyMIPushMessageProcessor.process(xmPushService, buildContainer, payload, var2, localIntent);
+            Intent localIntent = buildIntent(payload, System.currentTimeMillis());
+            MyMIPushMessageProcessor.process(xmPushService, buildContainer, payload, var2, localIntent, clientLoginInfo);
 
-            } else {
-                if (BuildConfig.DEBUG) {
-                    logger.d("denied.");
-                }
-            }
         }
 
         @Override
         public void processNewPacket(XMPushService xMPushService, Blob blob, PushClientsManager.ClientLoginInfo clientLoginInfo) {
             try {
-                runProcessMIPushMessage(xMPushService, blob.getDecryptedPayload(clientLoginInfo.security), (long) blob.getSerializedSize());
+                runProcessMIPushMessage(xMPushService, blob.getDecryptedPayload(clientLoginInfo.security), (long) blob.getSerializedSize(), clientLoginInfo);
             } catch (Throwable e) {
                 logger.e("", e);
             }
@@ -161,7 +169,7 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
                 CommonPacketExtension extension = message.getExtension("s");
                 if (extension != null) {
                     try {
-                        runProcessMIPushMessage(xMPushService, RC4Cryption.decrypt(RC4Cryption.generateKeyForRC4(clientLoginInfo.security, message.getPacketID()), extension.getText()), (long) TrafficUtils.getTrafficFlow(packet.toXML()));
+                        runProcessMIPushMessage(xMPushService, RC4Cryption.decrypt(RC4Cryption.generateKeyForRC4(clientLoginInfo.security, message.getPacketID()), extension.getText()), (long) TrafficUtils.getTrafficFlow(packet.toXML()), clientLoginInfo);
                         return;
                     } catch (Throwable e) {
                         logger.e("", e);
