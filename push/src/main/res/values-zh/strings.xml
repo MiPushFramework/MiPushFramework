@@ -38,7 +38,7 @@
     <string name="notification_category_alive">Push 状态</string>
     <string name="notification_category_warning">警告</string>
 
-    <string name="notification_alive">小米推送运行中</string>
+    <string name="notification_alive">推送服务运行中</string>
 
     <string name="notification_group_applications">应用程序</string>
     <string name="notification_stats_permission_title">请授予“使用情况”权限</string>
@@ -49,8 +49,8 @@
     <string name="activity_rom_keepalive">您的 ROM 可能拦截推送服务的正常运行，请在您的 ROM 的有关设置中将 Push 应用加入白名单（如电池优化、唤醒拦截等功能）。\n您也可尝试打开系统的“最近任务”界面，将本界面“锁定”以保持服务的后台运行。</string>
 
     <string name="see_pass_though_msg">穿透消息，请打开应用查看</string>
-    <string name="notification_registerAllowed">已允许 %1$s 注册小米推送</string>
-    <string name="notification_registerRejected">已拒绝 %1$s 注册小米推送</string>
+    <string name="notification_registerAllowed">已允许 %1$s 注册推送</string>
+    <string name="notification_registerRejected">已拒绝 %1$s 注册推送</string>
 
     <string name="settings_clear">清理</string>
     <string name="title_activity_advance_setting">高级配置</string>
@@ -87,7 +87,7 @@
     <string name="icebox_permission_granted">已经赋权冰箱自动解冻</string>
 
     <string name="settings_icebox_not_installed">冰箱尚未安装，暂不支持</string>
-    <string name="app_name">小米推送服务</string>
+    <string name="app_name">推送服务</string>
     <string name="enable">启用</string>
     <string name="fail">失败</string>
     <string name="apply">应用</string>
@@ -193,24 +193,24 @@
 
 
     <string name="request_battery_whitelist">Push 应用需要被加入“电池优化”白名单才能正常运行</string>
-    <string name="status_app_not_registered">使用小米推送，但尚未注册</string>
-    <string name="footer_app_ignored_not_registered">已忽略 %1$s 个未使用小米推送的应用</string>
+    <string name="status_app_not_registered">使用系统推送，但尚未注册</string>
+    <string name="footer_app_ignored_not_registered">已忽略 %1$s 个未使用系统推送的应用</string>
 
     <string name="status_app_not_registered_detail_without_fake_suggest"><![CDATA[
-应用是否注册由其自行决定，应用一般在其启动时自动注册。部分应用只在小米设备上发起注册。\n如有疑问，欢迎参阅 <b><a href="https://github.com/MiPushFramework/MiPushFramework/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BC%8F%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">应用程序注册问题解决方案</a></b> 和 <b><a href="https://github.com/MiPushFramework/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E5%BA%94%E7%94%A8%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98">[帮助] 应用注册问题</a></b>。
+应用是否注册由其自行决定，应用一般在其启动时自动注册。部分应用只在MIUI设备上发起注册。\n如有疑问，欢迎参阅 <b><a href="https://github.com/MiPushFramework/MiPushFramework/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BC%8F%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">应用程序注册问题解决方案</a></b> 和 <b><a href="https://github.com/MiPushFramework/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E5%BA%94%E7%94%A8%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98">[帮助] 应用注册问题</a></b>。
     ]]></string>
 
     <string name="status_app_not_registered_detail_with_fake_suggest"><![CDATA[
-应用是否注册由其自行决定，应用一般在其启动时自动注册。部分应用只在小米设备上发起注册，使用 <b><a href="https://github.com/Magisk-Modules-Repo/MiPushFake">Magisk 全局伪装模块</a></b> 和 <b><a href="https://github.com/TimothyZhang023/Riru-MiPushFake">Magisk 单应用伪装</a></b> 可以增加注册几率。如有疑问，欢迎参阅 <b><a href="https://github.com/MiPushFramework/MiPushFramework/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BC%8F%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">应用程序注册问题解决方案</a></b> 和 <b><a href="https://github.com/MiPushFramework/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E5%BA%94%E7%94%A8%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98">[帮助] 应用注册问题</a></b>。
+应用是否注册由其自行决定，应用一般在其启动时自动注册。部分应用只在MIUI设备上发起注册，使用 <b><a href="https://github.com/Magisk-Modules-Repo/MiPushFake">Magisk 全局伪装模块</a></b> 和 <b><a href="https://github.com/TimothyZhang023/Riru-MiPushFake">Magisk 单应用伪装</a></b> 可以增加注册几率。如有疑问，欢迎参阅 <b><a href="https://github.com/MiPushFramework/MiPushFramework/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BC%8F%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">应用程序注册问题解决方案</a></b> 和 <b><a href="https://github.com/MiPushFramework/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E5%BA%94%E7%94%A8%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98">[帮助] 应用注册问题</a></b>。
     ]]></string>
     <string name="status_app_registered_error_desc"><![CDATA[
 注册异常一般是应用注册后又进行了反注册（可能是应用中的推送设置已停用从而主动取消注册），或者应用已存储的推送注册信息与推送服务的注册信息不匹配。如果您不需要该应用的推送，或者该应用仍然正常推送消息，可以忽略此问题。另请参阅 <b><a href="https://github.com/MiPushFramework/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E6%B3%A8%E5%86%8C%E5%BC%82%E5%B8%B8">[帮助] 注册异常</a></b>。
     ]]></string>
     <string name="status_app_not_registered_title">未注册</string>
     <string name="status_app_registered_error_title">注册异常</string>
-    <string name="fake_enable_title">伪装为小米设备</string>
-    <string name="fake_global_enable_title">全局伪装为小米设备</string>
-    <string name="fake_enable_detail">通过 Xposed 伪装模块或 Magisk 单应用伪装模块，使其他应用误认本机为小米设备，从而增加注册的数量（需要 ROOT 权限）</string>
+    <string name="fake_enable_title">伪装为MIUI设备</string>
+    <string name="fake_global_enable_title">全局伪装为MIUI设备</string>
+    <string name="fake_enable_detail">通过 Xposed 伪装模块或 Magisk 单应用伪装模块，使其他应用误认本机为MIUI设备，从而增加注册的数量（需要 ROOT 权限）</string>
 
     <string name="fake_enable_detail_not_suggested">不建议对此应用开启，可能影响正常运行</string>
     <string name="fake_enable_global">全局伪装已开启</string>
