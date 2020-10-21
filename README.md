@@ -33,23 +33,21 @@
 本项目就是想让任何不用MIUI的用户都能用上小米的系统推送，这样既能保证推送，又保证了无需后台。
 
 
-## 缺陷
+## 注意
 
-* 不支持 MIUI。
-* 不建议使用 黑域、绿色守护、Xposed一些模块 对 `Push` 做操作，可能导致推送不稳定
+* 请勿使用 黑域、绿色守护、Xposed一些模块 对 `Push` 做操作，可能导致推送不稳定
 * 只有推送功能。其他完整功能（如查找手机）请使用 MIUI
+* 服务本身不需要 Root、Xposed 支持，但是为了伪装为MIUI设备，建议使用伪装增强模块
 
 
 
 ## 优点
 
-* 简单，安装非常简单，无需 Root、Xposed、ROM 支持
-* 使用后，其他应用的 `XMPushService` 会自动禁用，就像在 MIUI
-* `XMPushService` 禁用后，还能保证推送
-* 更多设置项，可以针对每一款应用设置不同的推送权限
+* 简单，安装非常简单
+* 使用后，其他应用的 `XMPushService` 会自动禁用，就像在 MIUI，同时还能保证推送
 * 完整事件记录，可以监控每个应用的 注册和推送
-* 可以在应用程序注册推送时选择是否允许
 * 拦截小米推送产生的不必要唤醒，也能阻止它读取您的隐私
+
 
 
 
@@ -57,7 +55,7 @@
 
 安装步骤非常简单 ：
 
-* 前往 [Releases 标签](https://github.com/MiPushFramework/MiPushFramework/releases)，下载最新的 Release APK（共两个），并全部安装。
+* 前往 [Releases 标签](https://github.com/MiPushFramework/MiPushFramework/releases)，下载最新的 Release APK ，并安装。
 * 跟着向导进行设置。
 
 
@@ -83,17 +81,18 @@
 
 ## 已知问题
 
-* 对于部分小众的、恶意篡改系统的 ROM （如 360OS）导致无法正常工作的情况，我们只会竭尽全力保证推送的运行，其它不妨碍推送的「特殊适配」会被忽略。对于这些情况，建议您更换更好的 ROM 以获得最佳体验。
+* 对于部分小众的ROM （如 360OS）导致无法正常工作的情况，我们只会竭尽全力保证推送的运行，其它不妨碍推送的「特殊适配」会被忽略。对于这些情况，建议您更换更好的 ROM 以获得最佳体验。
 * 努比亚ROM应用（第三方使用 MiPush 的应用）可能不会自动禁用其 XMPushService 并启动服务，请尝试将框架设为系统应用
 * 锤子 ROM 下，Push 可以正确收到通知，但是通知栏没有提示 #143
 * 开发者学生党，开学了更新可能不太及时，请谅解
-* 一些通知 Feature 可能无法使用（如通知都会显示为推送框架发出，而不是目标应用 `MIPushNotificationHelper#setTargetPackage`）
+* 一些通知 Feature 可能无法使用（如通知都会显示为推送框架发出，而不是目标应用）
 
 ## 感谢
 
 * @Rachel030219 提供文件
-* Android Open Source Project, MultiType, greenDao, SetupWizardLibCompat, Condom, MaterialPreference，GreenDaoUpgradeHelper, epic, Log4a，helplib，RxJava RxAndroid，RxActivityResult，RxPermissions
+* Android Open Source Project, MultiType, greenDao, SetupWizardLibCompat, Condom, MaterialPreference，GreenDaoUpgradeHelper, epic, Log4a，helplib，RxJava RxAndroid，RxActivityResult，RxPermissions, hiBeaver
 * 酷安 @PzHown @lmnm011223 @苏沐晨风丶（未采纳） 提供图标
+
 
 # License
 
