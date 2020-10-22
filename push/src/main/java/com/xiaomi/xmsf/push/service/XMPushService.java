@@ -72,7 +72,7 @@ public class XMPushService extends IntentService {
                         }
                     });
                 } else {
-                    Log.e("XMPushService Bridge", "Notification disabled");
+                    Log.i("XMPushService Bridge", "register notification skipped");
                 }
                 EventDb.insertEvent(Event.ResultType.OK, new top.trumeet.common.event.type.RegistrationType(null, pkg), this);
             } else {

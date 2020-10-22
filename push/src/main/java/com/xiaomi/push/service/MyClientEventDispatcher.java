@@ -73,18 +73,6 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
         }
     }
 
-
-    @Override
-    public void notifyServiceStarted(Context var1) {
-        Intent var2 = new Intent();
-        var2.setAction("com.xiaomi.push.service_started");
-            var2.addFlags(16777216);
-       // if (MIUIUtils.isXMS()) {
-       // }
-
-        var1.sendBroadcast(var2);
-    }
-
     @Override
     public void notifyPacketArrival(XMPushService xMPushService, String str, Packet packet) {
         if (BuildConfig.DEBUG) {
@@ -107,37 +95,6 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
                 ((MIPushNotificationHelper.getTargetPackage(paramXmPushActionContainer).hashCode() / 10) * 10);
     }
 
-    /**
-     * 处理收到的消息
-     */
-    private static class MessageProcessor {
-        private static Logger logger = XLog.tag("EventProcessorI").build();
-        private static boolean shouldAllow(EventType type, Context context) {
-            RegisteredApplication application = RegisteredApplicationDb.registerApplication(type.getPkg(),
-                    false, context, null);
-            if (application == null) {
-                return false;
-            }
-            boolean allow;
-            switch (type.getType()) {
-                case Event.Type.Command:
-                    allow = application.isAllowReceiveCommand();
-                    break;
-                case Event.Type.Notification:
-                    allow = application.getAllowReceivePush();
-                    break;
-                default:
-                    logger.e("Unknown type: " + type.getType());
-                    allow = true;
-                    break;
-            }
-            logger.d("insertEvent -> " + type);
-            EventDb.insertEvent(allow ? Event.ResultType.OK : Event.ResultType.DENY_USER
-                    , type, context);
-            return allow;
-        }
-    }
-
     private static class EventProcessor extends MIPushEventProcessor {
         private static Logger logger = XLog.tag("MyClientEventDispatcherD").build();
 
@@ -146,11 +103,14 @@ public class MyClientEventDispatcher extends ClientEventDispatcher {
             if (BuildConfig.DEBUG) {
                 logger.i("buildContainer: " + buildContainer.toString());
             }
-            EventType type = TypeFactory.create(buildContainer, buildContainer.packageName);
 
+            //register
+            EventType type = TypeFactory.create(buildContainer, buildContainer.packageName);
+            EventDb.insertEvent(Event.ResultType.OK, type, xmPushService);
+
+            //hook MIPushMessageProcessor
             Intent localIntent = buildIntent(payload, System.currentTimeMillis());
             MyMIPushMessageProcessor.process(xmPushService, buildContainer, payload, var2, localIntent, clientLoginInfo);
-
         }
 
         @Override

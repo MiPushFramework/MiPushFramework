@@ -9,7 +9,6 @@ public class Hook {
     }
 
     public static void hookXM2(Object o1, Object o2) {
-
-        Log.i("hookXM", "hooking: " + o1.getClass().getName() + "," + o2.toString());
+        Log.v("hookXM", "hooking: " + o1.getClass().getName() + "," + o2.toString());
     }
 }

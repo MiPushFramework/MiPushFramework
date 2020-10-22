@@ -48,32 +48,6 @@ public class PushControllerUtils {
     }
 
     /**
-     * Get is user enable push in settings.
-     *
-     * @param context Context param
-     * @return is enable
-     * @see Constants#KEY_ENABLE_PUSH
-     */
-    public static boolean isPrefsEnable(Context context) {
-        return getPrefs(context)
-                .getBoolean(Constants.KEY_ENABLE_PUSH, true);
-    }
-
-    /**
-     * Set push enable
-     *
-     * @param value   is enable
-     * @param context Context param
-     * @see Constants#KEY_ENABLE_PUSH
-     */
-    public static void setPrefsEnable(boolean value, Context context) {
-        getPrefs(context)
-                .edit()
-                .putBoolean(Constants.KEY_ENABLE_PUSH, value)
-                .apply();
-    }
-
-    /**
      * Check is in main app process
      *
      * @param context Context param
@@ -148,7 +122,6 @@ public class PushControllerUtils {
      * @param context Context param
      */
     public static void setAllEnable(boolean enable, Context context) {
-        setPrefsEnable(enable, context);
         setServiceEnable(enable, context);
         setBootReceiverEnable(enable, context);
     }

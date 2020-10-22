@@ -26,11 +26,6 @@ public final class Constants {
     public static final String ACTION_MESSAGE_ARRIVED = "com.xiaomi.mipush.MESSAGE_ARRIVED";
     public static final String ACTION_ERROR = "com.xiaomi.mipush.ERROR";
 
-    /**
-     * Enable push.
-     * 
-     */
-    public static final String KEY_ENABLE_PUSH = "enable_push";
 
     /**
      * XMPush APP id

@@ -208,6 +208,52 @@ hiBeaver {
                     }]
             ],
             'com.xiaomi.channel.commonutils.android.DeviceInfo'            : [
+                    ['methodName': 'getSerialNum', 'methodDesc': '()Ljava/lang/String', 'adapter': {
+                        ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
+
+                            MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions);
+                            MethodVisitor adapter = new MethodLogAdapter(methodVisitor) {
+
+                                @Override
+                                void visitCode() {
+                                    methodVisitor.visitLdcInsn(name);
+                                    methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, MethodLogAdapter.className2Path("top.trumeet.mipushframework.Hook"), "hookXM", "(Ljava/lang/Object;)V");
+
+
+
+                                    //super.visitCode()
+                                    methodVisitor.visitLdcInsn("");
+                                    methodVisitor.visitVarInsn(Opcodes.ASTORE, 1);
+                                    methodVisitor.visitVarInsn(Opcodes.ALOAD, 1);
+                                    methodVisitor.visitInsn(Opcodes.ARETURN);
+                                    methodVisitor.visitMaxs(1, 2);
+                                    methodVisitor.visitEnd();
+                                }
+                            }
+                            return adapter;
+                    }]
+            ],
+            'com.xiaomi.push.service.XMPushService'            : [
+                    ['methodName': 'ensureRegionAvaible', 'methodDesc': '()Ljava/lang/String;', 'adapter': {
+                        ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
+
+                            MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions);
+                            MethodVisitor adapter = new MethodLogAdapter(methodVisitor) {
+
+                                @Override
+                                void visitCode() {
+                                    methodVisitor.visitLdcInsn("China");
+                                    methodVisitor.visitVarInsn(Opcodes.ASTORE, 1);
+                                    methodVisitor.visitVarInsn(Opcodes.ALOAD, 1);
+                                    methodVisitor.visitInsn(Opcodes.ARETURN);
+                                    methodVisitor.visitMaxs(1, 2);
+                                    methodVisitor.visitEnd();
+                                }
+                            }
+                            return adapter;
+                    }]
+            ],
+            'com.xiaomi.channel.commonutils.android.DeviceInfo'            : [
                     ['methodName': 'quicklyGetIMEI', 'methodDesc': '(Landroid/content/Context;)Ljava/lang/String;', 'adapter': {
                         ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
 
@@ -232,7 +278,7 @@ hiBeaver {
                     }]
             ]
             /**/,
-            'com.xiaomi.*|top.trumeet.*|!top.trumeet.mipushframework.Hook*': [
+            'com.xiaomi.*': [
                     ['methodName': '*|!toString|!hookX*|!compareTo', 'methodDesc': '*', 'adapter': {
                         ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
 

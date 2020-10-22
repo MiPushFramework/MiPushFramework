@@ -20,10 +20,12 @@ import android.support.v4.content.ContextCompat;
 import com.elvishew.xlog.XLog;
 import com.oasisfeng.condom.CondomOptions;
 import com.oasisfeng.condom.CondomProcess;
+import com.xiaomi.channel.commonutils.android.Region;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.channel.commonutils.logger.MyLog;
 import com.xiaomi.channel.commonutils.misc.ScheduledJobManager;
 import com.xiaomi.mipush.sdk.Logger;
+import com.xiaomi.push.service.AppRegionStorage;
 import com.xiaomi.push.service.OnlineConfig;
 import com.xiaomi.xmpush.thrift.ConfigKey;
 import com.xiaomi.xmsf.push.control.PushControllerUtils;
@@ -60,38 +62,27 @@ public class MiPushFrameworkApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        initAppLogger();
+
+        initMiPushSdk();
+
+        initCondom();
+
         RxActivityResult.register(this);
-
-        LogUtils.init(this);
-        logger = XLog.tag(MiPushFrameworkApp.class.getSimpleName()).build();
-        logger.i("App starts at " + System.currentTimeMillis());
-
-        initMiSdkLogger();
-
-        CondomOptions options = XMOutbound.create(this, TAG_CONDOM + "_PROCESS",
-                false);
-        CondomProcess.installExceptDefaultProcess(this, options);
-
-        initPushLogger();
 
         PushControllerUtils.setAllEnable(true, this);
 
+        //scheduleUploadNotificationInfo();
 
-        //      scheduleUploadNotificationInfo();
+        wakeUpScan();
 
-        long currentTimeMillis = System.currentTimeMillis();
-        long lastStartupTime = getLastStartupTime();
-        if (isAppMainProc(this)) {
-            if ((currentTimeMillis - lastStartupTime > 300000 || currentTimeMillis - lastStartupTime < 0)) {
-                setStartupTime(currentTimeMillis);
-                MiuiPushActivateService.awakePushActivateService(PushControllerUtils.wrapContext(this)
-                        , "com.xiaomi.xmsf.push.SCAN");
-            }
-        }
+        cleanUpLegacyNotificationChannelGroup();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationController.deleteOldNotificationChannelGroup(this);
-        }
+        promptRemoveDoze();
+
+    }
+
+    private void promptRemoveDoze() {
 
         try {
             if (!PushServiceAccessibility.isInDozeWhiteList(this)) {
@@ -127,8 +118,32 @@ public class MiPushFrameworkApp extends Application {
         } catch (RuntimeException e) {
             logger.e(e.getMessage(), e);
         }
+    }
 
+    private void initCondom() {
 
+        CondomOptions options = XMOutbound.create(this, TAG_CONDOM + "_PROCESS",
+                false);
+        CondomProcess.installExceptDefaultProcess(this, options);
+    }
+
+    private void wakeUpScan() {
+
+        long currentTimeMillis = System.currentTimeMillis();
+        long lastStartupTime = getLastStartupTime();
+        if (isAppMainProc(this)) {
+            if ((currentTimeMillis - lastStartupTime > 300000 || currentTimeMillis - lastStartupTime < 0)) {
+                setStartupTime(currentTimeMillis);
+                MiuiPushActivateService.awakePushActivateService(PushControllerUtils.wrapContext(this)
+                        , "com.xiaomi.xmsf.push.SCAN");
+            }
+        }
+    }
+
+    private void cleanUpLegacyNotificationChannelGroup() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationController.deleteOldNotificationChannelGroup(this);
+        }
     }
 
     /**
@@ -147,25 +162,38 @@ public class MiPushFrameworkApp extends Application {
             @Override
             public void log(String content, Throwable t) {
                 if (t == null) {
-                    logger.d(content);
+                    logger.i(content);
                 } else {
-                    logger.d(content, t);
+                    logger.i(content, t);
                 }
             }
 
             @Override
             public void log(String content) {
-                logger.d(content);
+                logger.i(content);
             }
         };
     }
 
-    private void initPushLogger() {
-        Logger.setLogger(PushControllerUtils.wrapContext(this), buildMiSDKLogger());
+    private void initAppLogger() {
+        LogUtils.init(this);
+        logger = XLog.tag(MiPushFrameworkApp.class.getSimpleName()).build();
+        logger.i("App starts at " + System.currentTimeMillis());
     }
 
-    private void initMiSdkLogger() {
-        MyLog.setLogger(buildMiSDKLogger());
+    private void initMiPushSdk() {
+
+        //logger
+        LoggerInterface miSDKLogger = buildMiSDKLogger();
+        MyLog.setLogger(miSDKLogger);
+        Logger.setLogger(PushControllerUtils.wrapContext(this), miSDKLogger);
+
+        //setRegion
+        //prevent loop and dead lock
+        AppRegionStorage instance = AppRegionStorage.getInstance(this);
+        instance.setRegion(Region.China.name());
+        instance.setCountryCode("CN");
+
     }
 
     private HashSet<ComponentName> loadEnabledServices() {
