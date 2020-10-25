@@ -1,6 +1,0 @@
-[submodule "ext_RiruMiPushFake"]
-	path = ext_RiruMiPushFake
-	url = https://github.com/TimothyZhang023/Riru-MiPushFake.git
-[submodule "ext_MiPushFakeGlobal"]
-	path = ext_MiPushFakeGlobal
-	url = https://github.com/Magisk-Modules-Repo/MiPushFake.git
