@@ -7,9 +7,6 @@
     <string name="end">结束</string>
 
 
-    <string name="perm_change_settings">管理推送服务</string>
-    <string name="perm_read_settings">获取推送设置</string>
-
     <!-- Event -->
     <string name="event_register">注册推送</string>
     <string name="event_register_result">收到注册结果</string>

@@ -25,6 +25,8 @@ android {
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'x86'
         }
+
+        buildConfigField "String", "GIT_TAG", "\"" + rootProject.ext.gitTag + "\""
     }
 
     buildTypes {
@@ -82,7 +84,16 @@ android {
     }
 }
 
+android.applicationVariants.all { variant ->
+    String taskName = String.format("remove%sStubClasses", variant.name.capitalize())
+    task "${taskName}" {
+        doLast { delete "${buildDir}/intermediates/classes/${variant.name}" + "/android" }
+    }
+    variant.processJavaResources.dependsOn(taskName)
+}
+
 dependencies {
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // Log
@@ -90,7 +101,6 @@ dependencies {
         exclude group: 'com.android.support'
     })
     // Hook
-    implementation 'me.weishu:epic:0.6.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
@@ -100,8 +110,155 @@ dependencies {
     implementation project(':provider')
     implementation project(':extenders')
     implementation "com.android.support:palette-v7:$supportLibraryVersion"
-    compileOnly 'de.robv.android.xposed:api:82'
 
     implementation 'com.catchingnow.icebox:SDK:1.0.5'
 
+    implementation('com.github.AndroidSnippet:SetupWizardLibCompat:0.3', {
+        exclude group: 'com.android.support'
+    })
+    // Recycler
+    implementation('me.drakeet.multitype:multitype:3.3.0', {
+        exclude group: 'com.android.support'
+    })
+    // Support
+    implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
+    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
+    // Preference
+    implementation 'moe.shizuku.preference:preference:2.2.3'
+    implementation 'moe.shizuku.preference:preference-switchcompat:2.2.3'
+    implementation 'moe.shizuku.preference:preference-dialog-android:2.2.3'
+    implementation 'moe.shizuku.preference:preference-simplemenu:2.2.3'
+
+    // Help
+    implementation('moe.shizuku.support:helplib:1.1.0', {
+        exclude group: 'moe.shizuku.preference'
+        exclude group: 'com.android.support'
+    })
+    // RxJava & RxAndroid
+    implementation("io.reactivex.rxjava2:rxandroid:$rxAndroidVersion", {
+        exclude group: 'com.android.support'
+    })
+    implementation("io.reactivex.rxjava2:rxjava:$rxVersion", {
+        exclude group: 'com.android.support'
+    })
+    // RxActivityResult
+    implementation('com.github.VictorAlbertos:RxActivityResult:0.4.5-2.x', {
+        exclude group: 'com.android.support'
+    })
+    // RxPermissions
+    implementation('com.github.tbruyelle:rxpermissions:0.10.2', {
+        exclude group: 'com.android.support'
+    })
+    // Work
+    implementation "android.arch.work:work-runtime:$work_version"
+
+}
+
+buildscript {
+    repositories {
+        jcenter()
+
+    }
+    dependencies {
+        classpath 'com.bryansharp:hibeaver:1.2.7'
+    }
+}
+
+apply plugin: 'hiBeaver'
+import com.bryansharp.gradle.hibeaver.utils.MethodLogAdapter
+import org.objectweb.asm.ClassVisitor
+import org.objectweb.asm.MethodVisitor
+import org.objectweb.asm.Opcodes
+
+//or you can import like bellow:
+//import org.objectweb.asm.*
+hiBeaver {
+    //this will determine the name of this hibeaver transform, no practical use.
+    hiBeaverModifyName = 'mipushHook'
+    //turn this on to make it print help content, default value is true
+    showHelp = true
+    //this flag will decide whether the log of the modifying process be printed or not, default value is false
+    keepQuiet = false
+    //this is a kit feature of the plugin, set it true to see the time consume of this build
+    watchTimeConsume = false
+
+    //this is the most important part
+    modifyMatchMaps = [
+            'com.xiaomi.channel.commonutils.android.MIUIUtils'             : [
+                    ['methodName': 'getIsMIUI', 'methodDesc': '()I', 'adapter': {
+                        ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
+
+                            MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions);
+                            MethodVisitor adapter = new MethodLogAdapter(methodVisitor) {
+
+                                @Override
+                                void visitCode() {
+                                    //super.visitCode()
+                                    methodVisitor.visitLdcInsn(name);
+                                    methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, MethodLogAdapter.className2Path("top.trumeet.mipushframework.Hook"), "hookXM", "(Ljava/lang/Object;)V");
+
+                                    methodVisitor.visitInsn(Opcodes.ICONST_1);
+                                    methodVisitor.visitVarInsn(Opcodes.ISTORE, 0);
+                                    methodVisitor.visitVarInsn(Opcodes.ILOAD, 0);
+                                    methodVisitor.visitInsn(Opcodes.IRETURN);
+                                    methodVisitor.visitEnd();
+                                }
+                            }
+                            return adapter;
+                    }]
+            ],
+            'com.xiaomi.channel.commonutils.android.DeviceInfo'            : [
+                    ['methodName': 'quicklyGetIMEI', 'methodDesc': '(Landroid/content/Context;)Ljava/lang/String;', 'adapter': {
+                        ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
+
+                            MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions);
+                            MethodVisitor adapter = new MethodLogAdapter(methodVisitor) {
+
+                                @Override
+                                void visitCode() {
+                                    //super.visitCode()
+                                    methodVisitor.visitLdcInsn(name);
+                                    methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, MethodLogAdapter.className2Path("top.trumeet.mipushframework.Hook"), "hookXM", "(Ljava/lang/Object;)V");
+
+                                    methodVisitor.visitLdcInsn("");
+                                    methodVisitor.visitVarInsn(Opcodes.ASTORE, 1);
+                                    methodVisitor.visitVarInsn(Opcodes.ALOAD, 1);
+                                    methodVisitor.visitInsn(Opcodes.ARETURN);
+                                    methodVisitor.visitMaxs(1, 2);
+                                    methodVisitor.visitEnd();
+                                }
+                            }
+                            return adapter;
+                    }]
+            ]
+            /*,
+            'com.xiaomi.*|top.trumeet.*|!top.trumeet.mipushframework.Hook*': [
+                    ['methodName': '*|!toString|!hookX*|!compareTo', 'methodDesc': '*', 'adapter': {
+                        ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
+
+                            MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions);
+                            MethodVisitor adapter = new MethodLogAdapter(methodVisitor) {
+
+                                @Override
+                                void visitCode() {
+                                    super.visitCode()
+                                    if (name.equals("<init>")) {
+                                        return
+                                    }
+
+                                    if ((access & Opcodes.ACC_STATIC) != 0) {
+                                        methodVisitor.visitLdcInsn("===");
+                                    } else {
+                                        methodVisitor.visitVarInsn(Opcodes.ALOAD, 0);
+                                    }
+
+                                    methodVisitor.visitLdcInsn(name + desc);
+                                    methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, MethodLogAdapter.className2Path("top.trumeet.mipushframework.Hook"), "hookXM2", "(Ljava/lang/Object;Ljava/lang/Object;)V");
+                                }
+                            }
+                            return adapter;
+                    }]
+            ]*/
+    ]
+    modifyTasks = ["${rootDir.absolutePath}/libs/miuipushsdkshared.jar": modifyMatchMaps]
 }

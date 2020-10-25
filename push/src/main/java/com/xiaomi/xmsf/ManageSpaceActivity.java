@@ -1,13 +1,11 @@
 package com.xiaomi.xmsf;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
-import android.preference.TwoStatePreference;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
@@ -21,8 +19,6 @@ import java.util.Date;
 import top.trumeet.common.Constants;
 import top.trumeet.common.db.EventDb;
 import top.trumeet.common.utils.Utils;
-
-import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
 
 
 public class ManageSpaceActivity extends PreferenceActivity {
@@ -73,22 +69,6 @@ public class ManageSpaceActivity extends PreferenceActivity {
                 String title = context.getString(R.string.debug_test_title);
                 String description = context.getString(R.string.debug_test_content) + date.toString();
                 NotificationController.test(context, packageName, title, description);
-                return true;
-            });
-
-
-            PackageManager pm = context.getPackageManager();
-            ComponentName componentName = new ComponentName(Constants.SERVICE_APP_NAME, EmptyActivity.OnePlus.class.getName());
-            boolean disabled = pm.getComponentEnabledSetting(componentName) == COMPONENT_ENABLED_STATE_DISABLED;
-
-            TwoStatePreference preferencePushIcon = (TwoStatePreference) getPreferenceScreen().findPreference("activity_push_icon");
-            preferencePushIcon.setChecked(!disabled);
-            preferencePushIcon.setOnPreferenceClickListener(preference -> {
-                TwoStatePreference switchPreference = (TwoStatePreference) preference;
-                boolean enableLauncher = switchPreference.isChecked();
-                pm.setComponentEnabledSetting(componentName,
-                        enableLauncher ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED,
-                        PackageManager.DONT_KILL_APP);
                 return true;
             });
 

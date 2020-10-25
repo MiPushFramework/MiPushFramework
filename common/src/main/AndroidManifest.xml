@@ -1,6 +1,4 @@
 <manifest package="top.trumeet.common"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="top.trumeet.mipush.permissions.READ_SETTINGS" />
-    <uses-permission android:name="top.trumeet.mipush.permissions.WRITE_SETTINGS" />
 </manifest>

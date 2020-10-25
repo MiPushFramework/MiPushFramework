@@ -1,22 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="top.trumeet.mipush.provider">
 
-    <uses-permission android:name="top.trumeet.mipush.permissions.WRITE_SETTINGS" />
-    <uses-permission android:name="top.trumeet.mipush.permissions.READ_SETTINGS" />
-
     <application>
         <provider
             android:authorities="top.trumeet.mipush.providers.AppProvider"
             android:name="top.trumeet.mipush.provider.register.AppProvider"
-            android:exported="true"
-            android:readPermission="top.trumeet.mipush.permissions.READ_SETTINGS"
-            android:writePermission="top.trumeet.mipush.permissions.WRITE_SETTINGS"/>
+            android:exported="false" />
 
         <provider
             android:authorities="top.trumeet.mipush.providers.EventProvider"
             android:name="top.trumeet.mipush.provider.event.EventProvider"
-            android:exported="true"
-            android:readPermission="top.trumeet.mipush.permissions.READ_SETTINGS"
-            android:writePermission="top.trumeet.mipush.permissions.WRITE_SETTINGS"/>
+            android:exported="false" />
     </application>
 </manifest>

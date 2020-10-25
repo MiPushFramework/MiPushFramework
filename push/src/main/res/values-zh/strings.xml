@@ -1,93 +1,241 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="common_err">%1$s</string>
+    <eat-comment />
 
-    <!-- Xposed -->
-    <string name="xposed_description">小米推送机型伪装插件，如需使用请开启</string>
+    <plurals name="date_minutes">
+        <item quantity="one">分钟</item>
+        <item quantity="other">分钟</item>
+    </plurals>
 
     <!-- Auth -->
-    <string name="auth_message"><![CDATA[要允许 <b>%1$s</b> 推送消息吗？如果您不确定，可尝试 <b>允许一次</b>。]]></string>
-    <string name="allow">允许</string>
-    <string name="deny">拒绝</string>
-    <string name="allow_once">允许一次</string>
+    <plurals name="date_hours">
+        <item quantity="one">小时</item>
+        <item quantity="other">小时</item>
+    </plurals>
+    <plurals name="date_days">
+        <item quantity="one">天</item>
+        <item quantity="other">天</item>
+    </plurals>
+    <string name="common_err">%1$s</string>
 
     <!-- Log -->
+    <string name="allow">允许</string>
+    <string name="deny">拒绝</string>
+
+    <!-- Notification -->
     <string name="log_push_err">Push 服务异常, 请尝试取消对管理器应用的唤醒拦截、关闭 ROM 的高级优化功能。</string>
     <string name="log_none">尚无日志</string>
     <string name="log_share_error">无法分享日志：%1$s</string>
     <string name="log_clear_done">清空日志成功</string>
+    <string name="activity_intent_not_found">没有应用可以处理请求.</string>
+    <string name="log_share_title">分享</string>
 
-
-    <!-- Notification -->
     <string name="notification_group_config">配置</string>
-    <string name="notification_category_alive">Push 状态</string>
-    <string name="notification_category_warning">警告</string>
-    <string name="notification_alive">小米推送运行中</string>
-
-    <string name="notification_group_applications">应用程序</string>
 
     <!-- Stats permission guide -->
     <!-- TOOD: Need a simple explanation to users -->
-    <string name="notification_stats_permission_title">请授予“使用情况”权限</string>
-    <string name="notification_stats_permission_text">我们需要“使用情况”权限才能正常运行，请授权。</string>
+    <string name="notification_category_alive">Push 状态</string>
+    <string name="notification_category_warning">警告</string>
 
+    <string name="notification_alive">推送服务运行中</string>
+
+    <string name="notification_group_applications">应用程序</string>
+    <string name="notification_stats_permission_title">请授予“使用情况”权限</string>
+
+    <string name="notification_stats_permission_text">我们需要“使用情况”权限才能正常运行，请授权。</string>
     <string name="title_activity_keepalive">Push 后台活动支持</string>
 
     <string name="activity_rom_keepalive">您的 ROM 可能拦截推送服务的正常运行，请在您的 ROM 的有关设置中将 Push 应用加入白名单（如电池优化、唤醒拦截等功能）。\n您也可尝试打开系统的“最近任务”界面，将本界面“锁定”以保持服务的后台运行。</string>
-    <string name="see_pass_though_msg">穿透消息，请打开应用查看</string>
 
-    <string name="notification_registerAllowed">已允许 %1$s 注册小米推送</string>
-    <string name="notification_registerRejected">已拒绝 %1$s 注册小米推送</string>
+    <string name="see_pass_though_msg">穿透消息，请打开应用查看</string>
+    <string name="notification_registerAllowed">已允许 %1$s 注册推送</string>
+    <string name="notification_registerRejected">已拒绝 %1$s 注册推送</string>
 
     <string name="settings_clear">清理</string>
-
     <string name="title_activity_advance_setting">高级配置</string>
+
     <string name="settings_clear_history_summary">清理超过 7 天的消息记录</string>
+
     <string name="settings_clear_history">清理记录</string>
 
+
     <string name="settings_clear_log">清空日志</string>
+
     <string name="settings_clear_log_summary">清空日志文件</string>
-
     <string name="accessibility_desc">前台应用检测模式-辅助模式，相比默认模式有更高的兼容性，但性能较差。如果使用未遇到问题，无需开启。</string>
-
-
-    <string name="settings_summary_push_icon">开启图标可以解决部分应用和系统找不到 Push 应用的问题（例如小米手环推送、一加应用锁管理等）</string>
-    <string name="settings_push_icon">不隐藏 Push 应用图标</string>
-
-
     <string name="settings_auto_register">自动注册应用</string>
-
-
     <string name="settings_options">配置</string>
-
     <string name="pref_title_access_mode">前台应用检测模式</string>
     <string name="pref_summary_access_mode">在点击通知时，检测应用是否在前台的技术方式</string>
     <string name="settings_mock_notification">模拟通知消息</string>
+
     <string name="settings_mock_notification_summary">点击模拟通知到达消息</string>
+
     <string name="debug_test_title">这是一个测试标题</string>
+
+
     <string name="debug_test_content">这是一个测试内容</string>
     <string name="settings_notify_on_register">应用注册时显示通知</string>
-
-    <string-array name="pref_title_access_mode_list_titles">
-        <item>使用情况访问 API（性能好，推荐）</item>
-        <item>辅助模式（兼容性更好）</item>
-    </string-array>
-
-    <string-array name="pref_title_access_mode_list_values">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
-
-
 
     <string name="settings_icebox_permission">开启冰箱(IceBox)自动解冻支持</string>
     <string name="settings_icebox_permission_summary">点击通知栏时自动解冻冻结的App。
          需要安装的冰箱版本号 >= 3.6.0
     </string>
 
+
     <string name="icebox_permission_granted">已经赋权冰箱自动解冻</string>
+
     <string name="settings_icebox_not_installed">冰箱尚未安装，暂不支持</string>
+    <string name="app_name">推送服务</string>
+    <string name="enable">启用</string>
+    <string name="fail">失败</string>
+    <string name="apply">应用</string>
+
+    <!-- Preference -->
+    <string name="retry">重试</string>
+    <string name="exit">退出</string>
+    <string name="preference_title">推送设置</string>
+    <string name="main_event">记录</string>
+
+    <!-- Message when change enable status -->
+    <string name="main_apps">应用</string>
+    <string name="main_settings">设置</string>
+
+    <!-- About -->
+    <string name="action_about">关于</string>
+
+    <!-- Wizard -->
+
+    <string name="wizard_descr"><![CDATA[这是一个让任何设备都能使用小米系统级推送的项目，它能接管其它应用的推送（通知），以达到省电的效果。更多详情访问本项目项目于 GitHub 的页面：<a href="https://github.com/MiPushFramework/MiPushFramework">MiPushFramework</a>]]></string>
+    <string name="wizard_connect">正在连接</string>
+
+    <string name="wizard_title_run_in_background">允许后台活动</string>
+    <string name="wizard_descr_run_in_background">您禁用了推送服务的后台运行权限，它将无法正常完成后台推送，您%1$s，然后点按下一步。</string>
+    <string name="run_in_background_appops_root">需要使用 Root 解除禁用（我们可以自动完成）</string>
+
+    <string name="run_in_background_rikka_appops"><![CDATA[
+需要打开 <b>App Ops</b> 工具，并为其授予 <b>在后台运行或被唤醒</b> 权限
+    ]]></string>
+    <string name="rikka_appops_help_toast"><![CDATA[
+请授予 <b>在后台运行或被唤醒</b> 权限
+    ]]></string>
+
+    <string name="wizard_title_stats_permission">使用情况统计</string>
+
+    <string name="wizard_title_stats_permission_text">您需要授予“使用情况”权限，否则您无法接收通知。</string>
+    <string name="wizard_descr_finish">大功告成！本软件已准备就绪。</string>
+    <string name="status_ok">成功</string>
+
+    <!-- Date parse -->
+    <string name="status_deny_disable">禁用推送，已拒绝</string>
+    <!-- Date format -->
+    <!-- Just, < 1 min -->
+    <string name="status_deny_user">您已拒绝</string>
+    <!-- 1 Minute ago, >= 1 Minute, < 60 Minutes -->
+    <string name="date_just">刚刚</string>
+    <!-- 1 Hours ago, >= 1 hour, < 24 hours -->
+    <string name="date_format_normal">%1$s %2$s前</string>
+    <!-- 1 Day ago, >= 1 day, < days -->
+    <string name="date_format_just">%1$s</string>
+    <!-- For non-just and non-long format -->
+    <string name="date_format_long">%1$s</string>
+    <!-- For Just format -->
+    <string name="action_edit_permission">修改权限</string>
+    <!-- For Long ago format -->
+    <string name="permissions">权限</string>
+
+    <!-- Permission -->
+    <string name="permission_allow_receive">接收通知栏消息</string>
+    <string name="permission_allow_receive_command">接收命令消息（无通知栏提醒）</string>
+    <string name="permission_allow_receive_register_result">接收注册结果（暂时无效）</string>
+    <string name="permission_notification_on_register">注册时显示通知</string>
+    <string name="permission_summary_notification_on_register">需要在设置-高级配置中打开全局注册通知开关</string>
+    <string name="permission_register_type">注册方式</string>
+    <string name="register_type_allow">允许并自动注册</string>
+
+    <string name="register_type_deny">阻止注册</string>
+    <string name="register_type_ask">询问（默认）</string>
+    <string name="settings_enhance">增强</string>
+    <string name="settings_service_setting">服务配置</string>
+    <string name="settings_service_advance_setting">高级配置</string>
+
+    <!-- Settings -->
+    <string name="settings_summary_service_advance_setting">进入高级配置界面</string>
+    <string name="settings_get_log">获取日志</string>
+    <string name="settings_get_log_summary">点按分享日志，必要时请随 Issue 一起提交。</string>
+    <string name="helplib_action_about">关于</string>
+
+    <string name="helplib_action_issue">问题反馈</string>
+    <string name="helplib_action_telegram_group">加入 Telegram 群组</string>
+    <string name="helplib_title">帮助和支持</string>
+    <string name="helplib_title_contact">联系我们</string>
+    <string name="helplib_title_faq">常见问题</string>
+    <string name="recent_activity_view">查看近期活动</string>
+    <string name="recent_activity_title">近期活动</string>
+    <string name="action_help">帮助</string>
+
+
+    <!-- Recent Activity -->
+    <string name="action_update">检查更新</string>
+    <string name="update_toast">您可以从 Releases 页面下载最新版本的两份 APK 文件用以安装。</string>
+
+    <!-- Update -->
+    <string name="application_info_label">应用信息</string>
+    <string name="connect_fail_doze">需要关闭电池优化</string>
+
+
+    <string name="about_version">版本 %1$s</string>
+    <string name="app_registered">已注册</string>
+
+
+    <string name="app_registered_error">注册异常</string>
+
+
+    <string name="request_battery_whitelist">Push 应用需要被加入“电池优化”白名单才能正常运行</string>
+    <string name="status_app_not_registered">使用系统推送，但尚未注册</string>
+    <string name="footer_app_ignored_not_registered">已忽略 %1$s 个未使用系统推送的应用</string>
+
+    <string name="status_app_not_registered_detail_without_fake_suggest"><![CDATA[
+应用是否注册由其自行决定，应用一般在其启动时自动注册。部分应用只在MIUI设备上发起注册。\n如有疑问，欢迎参阅 <b><a href="https://github.com/MiPushFramework/MiPushFramework/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BC%8F%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">应用程序注册问题解决方案</a></b> 和 <b><a href="https://github.com/MiPushFramework/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E5%BA%94%E7%94%A8%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98">[帮助] 应用注册问题</a></b>。
+    ]]></string>
+
+    <string name="status_app_not_registered_detail_with_fake_suggest"><![CDATA[
+应用是否注册由其自行决定，应用一般在其启动时自动注册。部分应用只在MIUI设备上发起注册，使用 <b><a href="https://github.com/Magisk-Modules-Repo/MiPushFake">Magisk 全局伪装模块</a></b> 和 <b><a href="https://github.com/TimothyZhang023/Riru-MiPushFake">Magisk 单应用伪装</a></b> 可以增加注册几率。如有疑问，欢迎参阅 <b><a href="https://github.com/MiPushFramework/MiPushFramework/wiki/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BC%8F%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">应用程序注册问题解决方案</a></b> 和 <b><a href="https://github.com/MiPushFramework/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E5%BA%94%E7%94%A8%E6%B3%A8%E5%86%8C%E9%97%AE%E9%A2%98">[帮助] 应用注册问题</a></b>。
+    ]]></string>
+    <string name="status_app_registered_error_desc"><![CDATA[
+注册异常一般是应用注册后又进行了反注册（可能是应用中的推送设置已停用从而主动取消注册），或者应用已存储的推送注册信息与推送服务的注册信息不匹配。如果您不需要该应用的推送，或者该应用仍然正常推送消息，可以忽略此问题。另请参阅 <b><a href="https://github.com/MiPushFramework/MiPushFramework/wiki/%5B%E5%B8%AE%E5%8A%A9%5D-%E6%B3%A8%E5%86%8C%E5%BC%82%E5%B8%B8">[帮助] 注册异常</a></b>。
+    ]]></string>
+    <string name="status_app_not_registered_title">未注册</string>
+    <string name="status_app_registered_error_title">注册异常</string>
+    <string name="fake_enable_title">伪装为MIUI设备</string>
+    <string name="fake_global_enable_title">全局伪装为MIUI设备</string>
+    <string name="fake_enable_detail">通过 Xposed 伪装模块或 Magisk 单应用伪装模块，使其他应用误认本机为MIUI设备，从而增加注册的数量（需要 ROOT 权限）</string>
+
+    <string name="fake_enable_detail_not_suggested">不建议对此应用开启，可能影响正常运行</string>
+    <string name="fake_enable_global">全局伪装已开启</string>
+    <string name="settings_debug">调试</string>
+    <string name="help_article_can_not_receive_push">无法收到推送</string>
+    <string name="help_article_register_error">注册异常</string>
+    <string name="help_article_no_register">注册列表为空</string>
+
+    <string name="settings_manage_app_notifications">管理通知</string>
+    <string name="settings_manage_app_notifications_summary">控制本应用所发通知的声音、重要度等细节。</string>
+    <string-array name="pref_title_access_mode_list_titles">
+        <item>使用情况访问 API（性能好，推荐）</item>
+        <item>辅助模式（兼容性更好）</item>
+    </string-array>
+
+
+    <string-array name="pref_title_access_mode_list_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="register_types">
+        <item>@string/register_type_ask</item>
+        <item>@string/register_type_allow</item>
+        <item>@string/register_type_deny</item>
+    </string-array>
 
 
 </resources>
