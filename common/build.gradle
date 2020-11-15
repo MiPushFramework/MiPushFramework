@@ -43,4 +43,14 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation "com.android.support:support-v4:$supportLibraryVersion"
+
+    if (project.hasProperty('kapt')) {
+        kapt 'javax.xml.bind:jaxb-api:2.3.1'
+        kapt 'com.sun.xml.bind:jaxb-core:2.3.0.1'
+        kapt 'com.sun.xml.bind:jaxb-impl:2.3.2'
+    }
+
+    annotationProcessor 'javax.xml.bind:jaxb-api:2.3.1'
+    annotationProcessor 'com.sun.xml.bind:jaxb-core:2.3.0.1'
+    annotationProcessor 'com.sun.xml.bind:jaxb-impl:2.3.2'
 }
