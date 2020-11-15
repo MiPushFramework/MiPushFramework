@@ -14,7 +14,7 @@ android {
         applicationId "com.xiaomi.xmsf"
         minSdkVersion rootProject.ext.minSdkVersion
         // Keep alive
-        targetSdkVersion 23
+        targetSdkVersion 30
         // XMPush sdk requires XMPushService not exported, but sdk will start exported XMPushService after
         // XMSF version code 106. SDK will also check version code must >= 105.
         versionCode 105
