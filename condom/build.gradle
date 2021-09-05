@@ -31,12 +31,12 @@ android {
 }
 
 dependencies {
-    compile 'com.google.code.findbugs:jsr305:3.0.1'
-    compile "com.android.support:support-annotations:$supportLibraryVersion"
+    api 'com.google.code.findbugs:jsr305:3.0.1'
+    api "com.android.support:support-annotations:$supportLibraryVersion"
 
-    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 }
 
 android.libraryVariants.all { variant ->

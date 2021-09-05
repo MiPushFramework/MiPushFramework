@@ -9,8 +9,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
-        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2'
+        classpath 'com.android.tools.build:gradle:3.6.4'
+        classpath 'org.greenrobot:greendao-gradle-plugin:3.3.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -27,7 +27,7 @@ allprojects {
 
     gradle.taskGraph.whenReady {
         tasks.each { task ->
-            if (task.name.equals('mockableAndroidJar')) {
+            if (task.name == 'mockableAndroidJar') {
                 task.enabled = false
             }
         }
@@ -48,7 +48,7 @@ def currentVersionCode = (majorVersion + 1) * 200 + minorVersion * 20 + buildVer
 
 def baseVersionName = "${majorVersion}.${minorVersion}.${buildVersion}"
 
-def releaseTime() {
+static def releaseTime() {
     return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
 }
 
@@ -70,7 +70,7 @@ ext {
     rxVersion = "2.1.16"
     rxAndroidVersion = "2.0.2"
     // Work
-    work_version = "1.0.0-alpha05"
+    work_version = '1.0.1'
 }
 
 task exportVersion(type: Exec) {

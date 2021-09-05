@@ -95,6 +95,7 @@ android.applicationVariants.all { variant ->
 dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    //noinspection GradleDependency
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // Log
     implementation('com.elvishew:xlog:1.6.1', {
@@ -102,8 +103,8 @@ dependencies {
     })
     // Hook
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation project(':common')
     implementation project(':condom')
     implementation "com.android.support:support-v4:$supportLibraryVersion"
@@ -156,11 +157,14 @@ dependencies {
 
 buildscript {
     repositories {
+        //noinspection JcenterRepositoryObsolete
         jcenter()
-
+        flatDir {
+            dirs 'libs'
+        }
     }
     dependencies {
-        classpath 'com.bryansharp:hibeaver:1.2.7'
+        classpath 'com.bryansharp:hibeaver:1.2.8-SNAPSHOT'
     }
 }
 
@@ -184,7 +188,7 @@ hiBeaver {
 
     //this is the most important part
     modifyMatchMaps = [
-            'com.xiaomi.channel.commonutils.android.MIUIUtils'             : [
+            'com.xiaomi.channel.commonutils.android.MIUIUtils' : [
                     ['methodName': 'getIsMIUI', 'methodDesc': '()I', 'adapter': {
                         ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
 
@@ -195,7 +199,7 @@ hiBeaver {
                                 void visitCode() {
                                     //super.visitCode()
                                     methodVisitor.visitLdcInsn(name);
-                                    methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, MethodLogAdapter.className2Path("top.trumeet.mipushframework.Hook"), "hookXM", "(Ljava/lang/Object;)V");
+                                    methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, className2Path("top.trumeet.mipushframework.Hook"), "hookXM", "(Ljava/lang/Object;)V");
 
                                     methodVisitor.visitInsn(Opcodes.ICONST_1);
                                     methodVisitor.visitVarInsn(Opcodes.ISTORE, 0);
@@ -207,7 +211,7 @@ hiBeaver {
                             return adapter;
                     }]
             ],
-            'com.xiaomi.channel.commonutils.android.DeviceInfo'            : [
+            'com.xiaomi.channel.commonutils.android.DeviceInfo': [
                     ['methodName': 'quicklyGetIMEI', 'methodDesc': '(Landroid/content/Context;)Ljava/lang/String;', 'adapter': {
                         ClassVisitor cv, int access, String name, String desc, String signature, String[] exceptions ->
 
@@ -218,7 +222,7 @@ hiBeaver {
                                 void visitCode() {
                                     //super.visitCode()
                                     methodVisitor.visitLdcInsn(name);
-                                    methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, MethodLogAdapter.className2Path("top.trumeet.mipushframework.Hook"), "hookXM", "(Ljava/lang/Object;)V");
+                                    methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, className2Path("top.trumeet.mipushframework.Hook"), "hookXM", "(Ljava/lang/Object;)V");
 
                                     methodVisitor.visitLdcInsn("");
                                     methodVisitor.visitVarInsn(Opcodes.ASTORE, 1);
