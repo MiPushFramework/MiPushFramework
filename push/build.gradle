@@ -2,19 +2,18 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 repositories {
-    maven { url 'https://dl.bintray.com/heruoxin/icebox' }
+    maven { url 'https://jitpack.io' }
 }
 
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "com.xiaomi.xmsf"
         minSdkVersion rootProject.ext.minSdkVersion
         // Keep alive
-        targetSdkVersion 23
+        targetSdkVersion 31
         // XMPush sdk requires XMPushService not exported, but sdk will start exported XMPushService after
         // XMSF version code 106. SDK will also check version code must >= 105.
         versionCode 105
@@ -112,7 +111,7 @@ dependencies {
     implementation project(':extenders')
     implementation "com.android.support:palette-v7:$supportLibraryVersion"
 
-    implementation 'com.catchingnow.icebox:SDK:1.0.5'
+    implementation 'com.github.heruoxin:IceBox-SDK:55dd857d74'
 
     implementation('com.github.AndroidSnippet:SetupWizardLibCompat:0.3', {
         exclude group: 'com.android.support'
@@ -131,7 +130,7 @@ dependencies {
     implementation 'moe.shizuku.preference:preference-simplemenu:2.2.3'
 
     // Help
-    implementation('moe.shizuku.support:helplib:1.1.0', {
+    implementation('com.github.yfdyh000.RikkaX:helplib:mipush_helplib-SNAPSHOT', {
         exclude group: 'moe.shizuku.preference'
         exclude group: 'com.android.support'
     })
